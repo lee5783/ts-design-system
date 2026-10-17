@@ -1,0 +1,34 @@
+import SwiftUI
+
+public struct TSIcon: View {
+    let name: TSIconName
+    let size: TSIconSize
+    let label: String?
+
+    public init(_ name: TSIconName, size: TSIconSize = .md, label: String? = nil) {
+        self.name = name
+        self.size = size
+        self.label = label
+    }
+
+    public var body: some View {
+        let resolved = TSIconStyleSpec.resolve(.init(size: size, hasLabel: label != nil))
+        image
+            .frame(width: resolved.pointSize, height: resolved.pointSize)
+            .flipsForRightToLeftLayoutDirection(name.flipsForRightToLeftLayoutDirection)
+            .accessibilityHidden(!resolved.isAccessibilityElement)
+            .accessibilityLabel(Text(label ?? ""))
+    }
+
+    @ViewBuilder
+    private var image: some View {
+        if let uiImage = name.image() {
+            Image(uiImage: uiImage)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+        } else {
+            Color.clear
+        }
+    }
+}
