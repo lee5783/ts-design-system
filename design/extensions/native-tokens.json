@@ -1,0 +1,442 @@
+{
+  "name": "TinySolution native extensions",
+  "version": 1,
+  "color": {
+    "tokens": [
+      {
+        "name": "danger-pressed",
+        "value": {
+          "light": "#b91c1c",
+          "dark": "#cd2323"
+        },
+        "usage": "Pressed fill of the danger Button, always with a text-on-accent label (light 6.5:1, dark 5.4:1). Dark is danger-solid at brightness .93, matching the web brightness(.92) feedback while keeping 3:1 against background-primary.",
+        "upstream": "pending",
+        "origin": "C-12"
+      },
+      {
+        "name": "switch-thumb",
+        "value": {
+          "light": "#ffffff",
+          "dark": "#ffffff"
+        },
+        "usage": "Switch thumb on the border-strong (off) and accent-primary (on) track. Replaces the hard-coded #ffffff in bundle.css.",
+        "upstream": "pending",
+        "origin": "C-12; analysis Switch open question"
+      },
+      {
+        "name": "success-on-inverse",
+        "value": {
+          "light": "#4ade80",
+          "dark": "#15803d"
+        },
+        "usage": "Success tone icon on surface-inverse (Toast). The opposite theme success value. Icons only (non-text 3:1).",
+        "upstream": "pending",
+        "origin": "C-26"
+      },
+      {
+        "name": "warning-on-inverse",
+        "value": {
+          "light": "#fbbf24",
+          "dark": "#b45309"
+        },
+        "usage": "Warning tone icon on surface-inverse (Toast). The opposite theme warning value. Icons only (non-text 3:1).",
+        "upstream": "pending",
+        "origin": "C-26"
+      },
+      {
+        "name": "danger-on-inverse",
+        "value": {
+          "light": "#f87171",
+          "dark": "#b91c1c"
+        },
+        "usage": "Danger tone icon on surface-inverse (Toast). The opposite theme danger value. Icons only (non-text 3:1).",
+        "upstream": "pending",
+        "origin": "C-26"
+      },
+      {
+        "name": "info-on-inverse",
+        "value": {
+          "light": "#60a5fa",
+          "dark": "#2563eb"
+        },
+        "usage": "Info tone icon on surface-inverse (Toast). The opposite theme info value. Icons only (non-text 3:1).",
+        "upstream": "pending",
+        "origin": "C-26"
+      }
+    ]
+  },
+  "duration": {
+    "tokens": [
+      {
+        "name": "duration-fast",
+        "value": "120ms",
+        "usage": "Colour transitions on press: Button, IconButton, ListItem.",
+        "upstream": "pending",
+        "origin": "C-13"
+      },
+      {
+        "name": "duration-base",
+        "value": "150ms",
+        "usage": "Switch thumb travel and track colour, Card elevation, Tabs indicator.",
+        "upstream": "pending",
+        "origin": "C-13"
+      },
+      {
+        "name": "duration-slow",
+        "value": "200ms",
+        "usage": "Larger moves: Toast and Dialog enter and exit. Native sheets keep the platform spring.",
+        "upstream": "pending",
+        "origin": "C-13"
+      }
+    ]
+  },
+  "easing": {
+    "tokens": [
+      {
+        "name": "easing-standard",
+        "value": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+        "usage": "Every DS transition. The CSS default ease that bundle.css transitions use. Skip the animation when reduce motion is on.",
+        "upstream": "pending",
+        "origin": "C-13"
+      }
+    ]
+  },
+  "component": {
+    "tokens": [
+      {
+        "name": "button-sm-font-size",
+        "component": "button",
+        "type": "dimension",
+        "value": "13px",
+        "usage": "Button sm label size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "avatar-xs-font-size",
+        "component": "avatar",
+        "type": "dimension",
+        "value": "10px",
+        "usage": "Avatar xs (24) initials size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "avatar-sm-font-size",
+        "component": "avatar",
+        "type": "dimension",
+        "value": "12px",
+        "usage": "Avatar sm (32) initials size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "avatar-md-font-size",
+        "component": "avatar",
+        "type": "dimension",
+        "value": "14px",
+        "usage": "Avatar md (40) initials size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "avatar-lg-font-size",
+        "component": "avatar",
+        "type": "dimension",
+        "value": "20px",
+        "usage": "Avatar lg (56) initials size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-badge-font-size",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "10px",
+        "usage": "BottomNav badge count size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-badge-font-weight",
+        "component": "bottom-nav",
+        "type": "font-weight",
+        "value": "600",
+        "usage": "BottomNav badge count weight.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-badge-size",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "16px",
+        "usage": "BottomNav badge height and min width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-badge-offset-top",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "6px",
+        "usage": "BottomNav badge offset from the item top.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-badge-offset-start",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "6px",
+        "usage": "BottomNav badge offset from the item centre toward the trailing edge.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-label-font-weight",
+        "component": "bottom-nav",
+        "type": "font-weight",
+        "value": "500",
+        "usage": "BottomNav label weight (the caption style is 400).",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-pill-width",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "56px",
+        "usage": "BottomNav selected indicator width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "bottom-nav-pill-height",
+        "component": "bottom-nav",
+        "type": "dimension",
+        "value": "28px",
+        "usage": "BottomNav selected indicator height.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "alert-title-font-weight",
+        "component": "alert",
+        "type": "font-weight",
+        "value": "600",
+        "usage": "Alert title weight (the label style is 500).",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "toast-action-font-weight",
+        "component": "toast",
+        "type": "font-weight",
+        "value": "600",
+        "usage": "Toast action label weight.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "toast-max-width",
+        "component": "toast",
+        "type": "dimension",
+        "value": "420px",
+        "usage": "Toast maximum width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "switch-track-width",
+        "component": "switch",
+        "type": "dimension",
+        "value": "44px",
+        "usage": "Switch track width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "switch-track-height",
+        "component": "switch",
+        "type": "dimension",
+        "value": "26px",
+        "usage": "Switch track height.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "switch-thumb-size",
+        "component": "switch",
+        "type": "dimension",
+        "value": "20px",
+        "usage": "Switch thumb diameter.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "switch-thumb-inset",
+        "component": "switch",
+        "type": "dimension",
+        "value": "3px",
+        "usage": "Switch thumb inset from the track edge.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "switch-thumb-travel",
+        "component": "switch",
+        "type": "dimension",
+        "value": "18px",
+        "usage": "Switch thumb travel from off to on.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "checkbox-size",
+        "component": "checkbox",
+        "type": "dimension",
+        "value": "20px",
+        "usage": "Checkbox mark width and height.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "checkbox-border-width",
+        "component": "checkbox",
+        "type": "dimension",
+        "value": "1.5px",
+        "usage": "Checkbox mark border width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "badge-height",
+        "component": "badge",
+        "type": "dimension",
+        "value": "22px",
+        "usage": "Badge height.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "badge-dot-size",
+        "component": "badge",
+        "type": "dimension",
+        "value": "6px",
+        "usage": "Badge dot diameter.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "tabs-segmented-track-padding",
+        "component": "tabs",
+        "type": "dimension",
+        "value": "3px",
+        "usage": "Segmented Tabs track padding.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "tabs-segment-padding-vertical",
+        "component": "tabs",
+        "type": "dimension",
+        "value": "6px",
+        "usage": "Segmented Tabs segment vertical padding.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "tabs-segment-padding-horizontal",
+        "component": "tabs",
+        "type": "dimension",
+        "value": "16px",
+        "usage": "Segmented Tabs segment horizontal padding.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "list-item-tile-size",
+        "component": "list-item",
+        "type": "dimension",
+        "value": "36px",
+        "usage": "ListItem leading tile size.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "dialog-max-width",
+        "component": "dialog",
+        "type": "dimension",
+        "value": "440px",
+        "usage": "Dialog maximum width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "sheet-grabber-width",
+        "component": "dialog",
+        "type": "dimension",
+        "value": "36px",
+        "usage": "Bottom sheet grabber width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "sheet-grabber-height",
+        "component": "dialog",
+        "type": "dimension",
+        "value": "4px",
+        "usage": "Bottom sheet grabber height.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "text-field-padding-vertical",
+        "component": "text-field",
+        "type": "dimension",
+        "value": "10px",
+        "usage": "TextField input vertical padding.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "spinner-size",
+        "component": "spinner",
+        "type": "dimension",
+        "value": "16px",
+        "usage": "Spinner diameter.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "spinner-stroke-width",
+        "component": "spinner",
+        "type": "dimension",
+        "value": "2px",
+        "usage": "Spinner ring width.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "spinner-rotation-duration",
+        "component": "spinner",
+        "type": "duration",
+        "value": "700ms",
+        "usage": "Spinner time per revolution, linear. Not gated on reduce motion: it shows progress.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      },
+      {
+        "name": "card-subtitle-spacing",
+        "component": "card",
+        "type": "dimension",
+        "value": "2px",
+        "usage": "Card subtitle top margin.",
+        "upstream": "pending",
+        "origin": "analysis off-token values (bundle.css)"
+      }
+    ]
+  },
+  "renames": {}
+}

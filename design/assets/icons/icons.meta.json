@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "icons": {
+    "alert": {
+      "mirrorsInRTL": false
+    },
+    "arrow-left": {
+      "mirrorsInRTL": true
+    },
+    "arrow-right": {
+      "mirrorsInRTL": true
+    },
+    "bell": {
+      "mirrorsInRTL": false
+    },
+    "calendar": {
+      "mirrorsInRTL": false
+    },
+    "check": {
+      "mirrorsInRTL": false
+    },
+    "check-circle": {
+      "mirrorsInRTL": false
+    },
+    "chevron-down": {
+      "mirrorsInRTL": false
+    },
+    "chevron-left": {
+      "mirrorsInRTL": true
+    },
+    "chevron-right": {
+      "mirrorsInRTL": true
+    },
+    "chevron-up": {
+      "mirrorsInRTL": false
+    },
+    "close": {
+      "mirrorsInRTL": false
+    },
+    "download": {
+      "mirrorsInRTL": false
+    },
+    "edit": {
+      "mirrorsInRTL": false
+    },
+    "eye": {
+      "mirrorsInRTL": false
+    },
+    "filter": {
+      "mirrorsInRTL": false
+    },
+    "grid": {
+      "mirrorsInRTL": false
+    },
+    "heart": {
+      "mirrorsInRTL": false
+    },
+    "home": {
+      "mirrorsInRTL": false
+    },
+    "info": {
+      "mirrorsInRTL": false
+    },
+    "lock": {
+      "mirrorsInRTL": false
+    },
+    "logout": {
+      "mirrorsInRTL": true
+    },
+    "mail": {
+      "mirrorsInRTL": false
+    },
+    "menu": {
+      "mirrorsInRTL": false
+    },
+    "more": {
+      "mirrorsInRTL": false
+    },
+    "plus": {
+      "mirrorsInRTL": false
+    },
+    "search": {
+      "mirrorsInRTL": false
+    },
+    "settings": {
+      "mirrorsInRTL": false
+    },
+    "star": {
+      "mirrorsInRTL": false
+    },
+    "trash": {
+      "mirrorsInRTL": false
+    },
+    "upload": {
+      "mirrorsInRTL": false
+    },
+    "user": {
+      "mirrorsInRTL": false
+    },
+    "x-circle": {
+      "mirrorsInRTL": false
+    }
+  }
+}

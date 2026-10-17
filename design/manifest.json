@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "artifact": {
+    "id": "X6CsvK4dLQo638zkNcA2cj",
+    "url": "https://claude.ai/artifact/X6CsvK4dLQo638zkNcA2cj",
+    "title": "TinySolution",
+    "version": "1792078910-43d8"
+  },
+  "syncedAt": "2026-10-15T16:45:04.160Z",
+  "sourceDir": "design/source",
+  "files": {
+    "README.md": {
+      "sha256": "308fd6ab1b85641783b56dcce34fa17d6f583315257c6c566d70244ac72a2e84",
+      "size": 7497
+    },
+    "assets/Icons/README.md": {
+      "sha256": "a18c382650c407aacef89af22693193e4f5392ae3ee17f34881d13a84be010f3",
+      "size": 834
+    },
+    "assets/Logos/README.md": {
+      "sha256": "d776c41590370cbb2321b3f9b7cfb74092ea8ec6550685c940a91d4df2a05405",
+      "size": 632
+    },
+    "components/Alert/README.md": {
+      "sha256": "2d2fc1daac6269102e34bafa6c1d17eaf0a54652d4c56706e677284300c108a6",
+      "size": 506
+    },
+    "components/Avatar/README.md": {
+      "sha256": "9346f2d601f7ca4fb0d59a80efbce675b667f35b6056e6c45604fb944107f260",
+      "size": 347
+    },
+    "components/Badge/README.md": {
+      "sha256": "793324652c4a57d98a33ae4a68a5ef5049b96d6b5d96f6c09a328746025f2901",
+      "size": 459
+    },
+    "components/BottomNav/README.md": {
+      "sha256": "ca86c2b2b4f7f10ecdb18ae07bff2e9548b45965e412025dfea45273c6ede5e0",
+      "size": 499
+    },
+    "components/Button/README.md": {
+      "sha256": "2375f283e13203743b4ceff6a3d825d307d7947d235ed47e9974aec6b3f427b0",
+      "size": 1025
+    },
+    "components/Button/preview.html": {
+      "sha256": "79e25d4f785129db6b63b91b85f0cdb85d6ee682da2639739a1dd66bc180aff3",
+      "size": 953
+    },
+    "components/Card/README.md": {
+      "sha256": "3836ba71de11254e34bef4555ce5a057fc7b38a0cb7a5172c3877885ff33782a",
+      "size": 569
+    },
+    "components/Card/preview.html": {
+      "sha256": "1f3f3addd9d8923490dd1284ed968ebb49b81328b92da3623e7d4b58c13903c2",
+      "size": 847
+    },
+    "components/Checkbox/README.md": {
+      "sha256": "c92290429a9c6c6ee7b6b94f02fd58b3c4dd0f4ca1eb48d66baa34d99964e2b4",
+      "size": 411
+    },
+    "components/Dialog/README.md": {
+      "sha256": "063ed9768a90ff946671acf0ba0608ec9f6489c07d07b411cbeb2dd0b3cd55b7",
+      "size": 659
+    },
+    "components/Icon/README.md": {
+      "sha256": "e8d6ff15bf2aa1bad40dc7f751e09b19209d5ca6d3b2e0271796cb4a6927e28c",
+      "size": 762
+    },
+    "components/IconButton/README.md": {
+      "sha256": "bff7d4659f78d9d5e49a94a655e71a7c4d70c16c060f97726830dae51d62aadc",
+      "size": 622
+    },
+    "components/ListItem/README.md": {
+      "sha256": "b8f9d1fdb9397c6c6f535f442f7afc852b521ff725ae6679b5c9afea10c456ea",
+      "size": 591
+    },
+    "components/Switch/README.md": {
+      "sha256": "5cb0a7ca358599b0fecfce11ffb60007ee12e1d61394f5616effcbaba2852c6c",
+      "size": 412
+    },
+    "components/Tabs/README.md": {
+      "sha256": "e989610ece67b80f21091bf9d07814ca67e790b2479d766e1d90cd9e26de89b9",
+      "size": 599
+    },
+    "components/TextField/README.md": {
+      "sha256": "838790a42e68edd6ad458fc2f7c1f6dee834c06caa7d254979665d648c88c1d9",
+      "size": 735
+    },
+    "components/TextField/preview.html": {
+      "sha256": "ec89d20e37e21dc9adf8b7588e9e62ee0e464d7c741fa1ed13772347e6e443f1",
+      "size": 683
+    },
+    "components/Toast/README.md": {
+      "sha256": "4a930757305fddd8ca7fe06ce61ac2fc29428126b2702091fb713df24a458abc",
+      "size": 509
+    },
+    "components/bundle.css": {
+      "sha256": "5178c54da68887c4bdf3fe336310d2662f0f92eee0125fee18ee6ccb8a92c7bb",
+      "size": 16010
+    },
+    "components/index.d.ts": {
+      "sha256": "0335936363350d7a2b9b7c6abd5d08a5e36e7e493d931bbd71c27715268b1c10",
+      "size": 4965
+    },
+    "design-system.json": {
+      "sha256": "07c2a28998c99aeba4cc7bf6bbead911d40b3a03921a4a5842040fc6f50cd1c6",
+      "size": 8593
+    },
+    "tokens.json": {
+      "sha256": "b3ed4347ac6f1174ee0a77077212224eb755b6d21c3e8df175dfe5ad2e16dff7",
+      "size": 19649
+    }
+  },
+  "assets": [
+    {
+      "group": "Icons",
+      "name": "alert.svg",
+      "blob": "4f897db2f0ed460d81378c440016644f",
+      "indexedSize": 297,
+      "path": "design/assets/icons/source/alert.svg",
+      "sha256": "1dd89d9b95e46cc3dafe4972d71d345ed8ddb63ab7ae8201652f665689405845",
+      "size": 316
+    },
+    {
+      "group": "Icons",
+      "name": "arrow-left.svg",
+      "blob": "e36b9c2019a54f91ab77273975215280",
+      "indexedSize": 220,
+      "path": "design/assets/icons/source/arrow-left.svg",
+      "sha256": "a1ee0ba07500434f94e9ee326fcc50c4b557d6031ac6022ef07218baffca313e",
+      "size": 225
+    },
+    {
+      "group": "Icons",
+      "name": "arrow-right.svg",
+      "blob": "fd0aa40fd12406d77beddff03d5cf3f4",
+      "indexedSize": 219,
+      "path": "design/assets/icons/source/arrow-right.svg",
+      "sha256": "e2ece69fb1aba680f72b7f960f9e3bfeaf4f2cee3a3807522c15af36087fb81e",
+      "size": 224
+    },
+    {
+      "group": "Icons",
+      "name": "bell.svg",
+      "blob": "cb544a8b85eadcb467dc0c8021667191",
+      "indexedSize": 250,
+      "path": "design/assets/icons/source/bell.svg",
+      "sha256": "00d8c974cbc43ed55ade66fac8641613c68d619f8e2d6f1ae13a65db4f1d35bb",
+      "size": 261
+    },
+    {
+      "group": "Icons",
+      "name": "calendar.svg",
+      "blob": "d5650d6551b9914fd793d99d6a0ee680",
+      "indexedSize": 268,
+      "path": "design/assets/icons/source/calendar.svg",
+      "sha256": "fda49bcea8f967dc5beed355c56678fcb69d8e22f9b06cd15d676389f5409ea2",
+      "size": 279
+    },
+    {
+      "group": "Icons",
+      "name": "check-circle.svg",
+      "blob": "affba8af031eefce7e389b58f6f06070",
+      "indexedSize": 244,
+      "path": "design/assets/icons/source/check-circle.svg",
+      "sha256": "ddf6e2ac39f2db35fbb90faae80fc80863691de6e539e3cb0c0f605d1efc51a9",
+      "size": 257
+    },
+    {
+      "group": "Icons",
+      "name": "check.svg",
+      "blob": "0d68be23a7e07e44cf1d9b274b2136b4",
+      "indexedSize": 218,
+      "path": "design/assets/icons/source/check.svg",
+      "sha256": "ec7080a4f53d53156d580b081e94710785b2e709575ff8867ce92e211410f200",
+      "size": 223
+    },
+    {
+      "group": "Icons",
+      "name": "chevron-down.svg",
+      "blob": "a19e700c9287fb409dc857fe0ed8c138",
+      "indexedSize": 210,
+      "path": "design/assets/icons/source/chevron-down.svg",
+      "sha256": "9344033828eb6f39b1dbe453fdd761d8dc12acb6efcddf8f10332518dcf13fc7",
+      "size": 215
+    },
+    {
+      "group": "Icons",
+      "name": "chevron-left.svg",
+      "blob": "3bcda86d2bc6ec69d39948eee618a7d3",
+      "indexedSize": 212,
+      "path": "design/assets/icons/source/chevron-left.svg",
+      "sha256": "c5fc5cd2c707bc1f47e4da4d225743229717a53241ccb232e0587b1e455a1057",
+      "size": 217
+    },
+    {
+      "group": "Icons",
+      "name": "chevron-right.svg",
+      "blob": "cf6955262fdf1a9b5d801c4597620a77",
+      "indexedSize": 210,
+      "path": "design/assets/icons/source/chevron-right.svg",
+      "sha256": "406a60518faa75774a7a805cf83baaa44c4f655ad2c3fed116f7f24380744d98",
+      "size": 215
+    },
+    {
+      "group": "Icons",
+      "name": "chevron-up.svg",
+      "blob": "8581e40248d2bd1b6b7933689387bb63",
+      "indexedSize": 211,
+      "path": "design/assets/icons/source/chevron-up.svg",
+      "sha256": "f088dcddb697e4d2729f86ddaffcd6e1f3f32d8f55e0d11c001715a34ce5ec94",
+      "size": 216
+    },
+    {
+      "group": "Icons",
+      "name": "close.svg",
+      "blob": "df7ef2028b18b78cbb39d84369957e97",
+      "indexedSize": 218,
+      "path": "design/assets/icons/source/close.svg",
+      "sha256": "3748da55c6be58a94575f00c7c6b82c04ac700222f06b3ff1ab1bb2da21e2331",
+      "size": 223
+    },
+    {
+      "group": "Icons",
+      "name": "download.svg",
+      "blob": "61a485828aadd49df7653d5743b19cab",
+      "indexedSize": 272,
+      "path": "design/assets/icons/source/download.svg",
+      "sha256": "bf9f6ca27d65922f08b3a0543d71cdf296d839d95d42d8dadc922ba6e6364979",
+      "size": 283
+    },
+    {
+      "group": "Icons",
+      "name": "edit.svg",
+      "blob": "dda8b52e87937708cd8389ff65d476f8",
+      "indexedSize": 242,
+      "path": "design/assets/icons/source/edit.svg",
+      "sha256": "96a8f654866027a21e84b715c699decc912cba4d306da9ccf5cce31f11899a19",
+      "size": 253
+    },
+    {
+      "group": "Icons",
+      "name": "eye.svg",
+      "blob": "ff90b81b50175084e1086a20fd3c44c3",
+      "indexedSize": 277,
+      "path": "design/assets/icons/source/eye.svg",
+      "sha256": "e0229a1d8fe9e5000ac17df9c61b555b752a950f3c5515c9a69416af7ae9b57e",
+      "size": 290
+    },
+    {
+      "group": "Icons",
+      "name": "filter.svg",
+      "blob": "0bfb2525c80f13c266238fdfbc11c5d5",
+      "indexedSize": 221,
+      "path": "design/assets/icons/source/filter.svg",
+      "sha256": "932d680c75b514bfee2dec3af8e98192e0a4c23bcedc569638a26d1b11a7dc5e",
+      "size": 226
+    },
+    {
+      "group": "Icons",
+      "name": "grid.svg",
+      "blob": "f40a7789b5b2cfaec25cebcd6e94855d",
+      "indexedSize": 386,
+      "path": "design/assets/icons/source/grid.svg",
+      "sha256": "5248c0e91244a2471a70245f931b1f9a49e73bebe12d96309b7c0c9cc2e3b38d",
+      "size": 409
+    },
+    {
+      "group": "Icons",
+      "name": "heart.svg",
+      "blob": "86b1bff7015e84c72b6a0e73c3413cf9",
+      "indexedSize": 265,
+      "path": "design/assets/icons/source/heart.svg",
+      "sha256": "2499301437c295d716b2e4032f711e94888c5b723d6de19a9e3162b350167844",
+      "size": 270
+    },
+    {
+      "group": "Icons",
+      "name": "home.svg",
+      "blob": "d66b06a2ba90487c0e13d136d16e46ef",
+      "indexedSize": 265,
+      "path": "design/assets/icons/source/home.svg",
+      "sha256": "c13b8c2472f1d6f602cd65f964028203e5eebdf35fc6260e7841f61da82d13c6",
+      "size": 282
+    },
+    {
+      "group": "Icons",
+      "name": "info.svg",
+      "blob": "31940fc359f56d6a8122314c54636b18",
+      "indexedSize": 299,
+      "path": "design/assets/icons/source/info.svg",
+      "sha256": "6c3957cbe8bc15a278f0f0f210d25e75d007348d36d88d017924c6a8bcbb748b",
+      "size": 320
+    },
+    {
+      "group": "Icons",
+      "name": "lock.svg",
+      "blob": "4cd34ba086d5a8949df6679390df7ddc",
+      "indexedSize": 271,
+      "path": "design/assets/icons/source/lock.svg",
+      "sha256": "dfe783799310ab0cdf7972d5c911fa9bcf0a69ad4d9c2ae3ef5b988274edbc98",
+      "size": 282
+    },
+    {
+      "group": "Icons",
+      "name": "logout.svg",
+      "blob": "c43ded0359608be5a1111865593cf7dc",
+      "indexedSize": 270,
+      "path": "design/assets/icons/source/logout.svg",
+      "sha256": "7fbcf58f45a7358a3d1c4a97a3df9489161d7b7b8e89df2ca80c6b9add603ec5",
+      "size": 281
+    },
+    {
+      "group": "Icons",
+      "name": "mail.svg",
+      "blob": "1abf51cc9ba6f40caf856a24b10a6516",
+      "indexedSize": 259,
+      "path": "design/assets/icons/source/mail.svg",
+      "sha256": "12e12e96b88265abfc2ef68740f6380605c9f9f2ec2f00c2e0de9a60e415c167",
+      "size": 270
+    },
+    {
+      "group": "Icons",
+      "name": "menu.svg",
+      "blob": "7bc6f4f1ba3029cf4b72786ac1405d62",
+      "indexedSize": 221,
+      "path": "design/assets/icons/source/menu.svg",
+      "sha256": "9a921fa3cf894f1fa5cb5c0eacc145f2a8b6b6e00a425a0b906e8feb5b5f73b0",
+      "size": 226
+    },
+    {
+      "group": "Icons",
+      "name": "more.svg",
+      "blob": "02fc8f77474375e4ce0edcf8eaadf579",
+      "indexedSize": 374,
+      "path": "design/assets/icons/source/more.svg",
+      "sha256": "1ab4ec7b4f9d67b434917d49037b40652659baeba93d3feedf6d5c162ab08334",
+      "size": 397
+    },
+    {
+      "group": "Icons",
+      "name": "plus.svg",
+      "blob": "b2f87dc28b027acf3eeebd40d6728361",
+      "indexedSize": 214,
+      "path": "design/assets/icons/source/plus.svg",
+      "sha256": "cc35721b5b88d8bca50e70f7d03970597aa24dd051fc8a6b761bbc59eb2af2a1",
+      "size": 219
+    },
+    {
+      "group": "Icons",
+      "name": "search.svg",
+      "blob": "136ed04d733a7a4b4158498d65206864",
+      "indexedSize": 240,
+      "path": "design/assets/icons/source/search.svg",
+      "sha256": "b676a74769e3752ba277b3deed75d819d29c95fed65c03f2e6d5bf47ebc977a5",
+      "size": 253
+    },
+    {
+      "group": "Icons",
+      "name": "settings.svg",
+      "blob": "c809ed0a7bd4fd3dd347f8c11283de43",
+      "indexedSize": 333,
+      "path": "design/assets/icons/source/settings.svg",
+      "sha256": "c13219480f682efbc84e22fe90e8dfdb2c50ba5d88c3fc8af9891713aaa32639",
+      "size": 362
+    },
+    {
+      "group": "Icons",
+      "name": "star.svg",
+      "blob": "f3d7b186ec47b53a8cf1ddfc1218672a",
+      "indexedSize": 272,
+      "path": "design/assets/icons/source/star.svg",
+      "sha256": "ba685a6a3a8c3b4530f2f5ec80d9eb3540079bcfeba32ec4e0fc027e298a3205",
+      "size": 277
+    },
+    {
+      "group": "Icons",
+      "name": "trash.svg",
+      "blob": "1e27b21235f9727b189b9826f22b28fc",
+      "indexedSize": 248,
+      "path": "design/assets/icons/source/trash.svg",
+      "sha256": "d8794015b2495eb6fa735c25c9e859aea6a7697919784ed323dfd5ec3347d8a8",
+      "size": 253
+    },
+    {
+      "group": "Icons",
+      "name": "upload.svg",
+      "blob": "38277e98778b117f996d7f66d0f93b28",
+      "indexedSize": 271,
+      "path": "design/assets/icons/source/upload.svg",
+      "sha256": "44b4f82b93a0823cfa96ae919f32e0a47adcde26d07275b3ddc352f17ff6cf9c",
+      "size": 282
+    },
+    {
+      "group": "Icons",
+      "name": "user.svg",
+      "blob": "fc838950e11dd2432f73e5fe70128aa7",
+      "indexedSize": 248,
+      "path": "design/assets/icons/source/user.svg",
+      "sha256": "cfc5d39408e5e9ac36d1145674ac868ef8bb492557e9924e4585125e09fe8f1a",
+      "size": 261
+    },
+    {
+      "group": "Icons",
+      "name": "x-circle.svg",
+      "blob": "e9bbf28f3fbb9dc8acc1bf809383ea96",
+      "indexedSize": 247,
+      "path": "design/assets/icons/source/x-circle.svg",
+      "sha256": "981925ca292258e9247a8d684c56b1408edf440d6f7c641c1ea0bcdc14f88f9f",
+      "size": 260
+    },
+    {
+      "group": "Logos",
+      "name": "ts-app-icon.svg",
+      "blob": "da14a0d55b7600df3627243e3686d1c3",
+      "indexedSize": 404,
+      "path": "design/assets/logos/source/ts-app-icon.svg",
+      "sha256": "ff5a03014b0fb20a7c788844e589def23376d95770cee9e8cd31e31db215f1b8",
+      "size": 405
+    },
+    {
+      "group": "Logos",
+      "name": "ts-monogram.svg",
+      "blob": "6db2a7b7b7ac30811bf5d2e687ff4ecf",
+      "indexedSize": 399,
+      "path": "design/assets/logos/source/ts-monogram.svg",
+      "sha256": "5c809e99d573e5c99baf4f63dac2e0f206fa616deff66b98b68261045131874f",
+      "size": 400
+    },
+    {
+      "group": "Logos",
+      "name": "ts-wordmark-dark.svg",
+      "blob": "68ec4753525116dc267c6a6485b4cbbb",
+      "indexedSize": 636,
+      "path": "design/assets/logos/source/ts-wordmark-dark.svg",
+      "sha256": "ce6614b4c1be76888e1947416993dbd7f9d3a262871354cc81509c885acc275f",
+      "size": 633
+    },
+    {
+      "group": "Logos",
+      "name": "ts-wordmark-light.svg",
+      "blob": "ea57aaed26141d065ac07edbd27d9014",
+      "indexedSize": 636,
+      "path": "design/assets/logos/source/ts-wordmark-light.svg",
+      "sha256": "9fea46971bc0e13a247aa4e1964cfe661ab6d0c0b0df45fbf5fb1e4df5a9aa6a",
+      "size": 633
+    }
+  ]
+}

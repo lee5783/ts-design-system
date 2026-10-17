@@ -1,0 +1,13 @@
+<!-- @dsCard group="Forms" height=260 -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>TextField — preview</title>
+</head>
+<body>
+<div id="root" class="ts-stack"></div>
+<script>
+  var T = window.TS, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(T.TextField, {label:'Email', placeholder:'you@company.com', leadingIcon:'mail', hint:'We never share your email.'}), h(T.TextField, {label:'Password', type:'password', defaultValue:'secret', error:'Must be at least 8 characters.'}), h(T.TextField, {label:'Project name', placeholder:'Disabled field', disabled:true})));
+</script>
+</body>
+</html>
