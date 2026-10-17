@@ -1,0 +1,20 @@
+plugins {
+    alias(libs.plugins.ds.android.library)
+    alias(libs.plugins.ds.android.compose)
+    alias(libs.plugins.ds.android.testing)
+    alias(libs.plugins.ds.publishing)
+    alias(libs.plugins.ds.api.validation)
+}
+
+android {
+    namespace = "com.ts.ds.compose"
+}
+
+dependencies {
+    api(project(":core"))
+    api(libs.compose.ui)
+    api(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.activity)
+    testImplementation(project(":test-support"))
+}

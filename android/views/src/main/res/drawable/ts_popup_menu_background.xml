@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="?attr/tsColorSurfaceElevated" />
+    <corners android:radius="@dimen/ts_radius_xs" />
+    <padding
+        android:bottom="@dimen/ts_space_2"
+        android:top="@dimen/ts_space_2" />
+</shape>

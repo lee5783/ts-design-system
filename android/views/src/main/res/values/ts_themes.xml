@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <style name="Theme.TS" parent="Base.Theme.TS">
+        <item name="colorPrimary">?attr/tsColorAccentPrimary</item>
+        <item name="colorOnPrimary">?attr/tsColorTextOnAccent</item>
+        <item name="colorPrimaryContainer">?attr/tsColorAccentSubtle</item>
+        <item name="colorOnPrimaryContainer">?attr/tsColorAccentText</item>
+        <item name="colorPrimaryInverse">?attr/tsColorAccentSubtle</item>
+        <item name="colorSecondary">?attr/tsColorAccentPrimary</item>
+        <item name="colorOnSecondary">?attr/tsColorTextOnAccent</item>
+        <item name="colorSecondaryContainer">?attr/tsColorAccentSubtle</item>
+        <item name="colorOnSecondaryContainer">?attr/tsColorAccentText</item>
+        <item name="colorTertiary">?attr/tsColorInfo</item>
+        <item name="colorOnTertiary">?attr/tsColorTextOnAccent</item>
+        <item name="colorTertiaryContainer">?attr/tsColorInfoSubtle</item>
+        <item name="colorOnTertiaryContainer">?attr/tsColorInfo</item>
+        <item name="colorError">?attr/tsColorDanger</item>
+        <item name="colorOnError">?attr/tsColorTextOnAccent</item>
+        <item name="colorErrorContainer">?attr/tsColorDangerSubtle</item>
+        <item name="colorOnErrorContainer">?attr/tsColorDanger</item>
+        <item name="android:colorBackground">?attr/tsColorBackgroundPrimary</item>
+        <item name="colorOnBackground">?attr/tsColorTextPrimary</item>
+        <item name="colorSurface">?attr/tsColorSurfaceCard</item>
+        <item name="colorOnSurface">?attr/tsColorTextPrimary</item>
+        <item name="colorSurfaceVariant">?attr/tsColorBackgroundSecondary</item>
+        <item name="colorOnSurfaceVariant">?attr/tsColorTextSecondary</item>
+        <item name="colorSurfaceBright">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceDim">?attr/tsColorBackgroundSecondary</item>
+        <item name="colorSurfaceContainerLowest">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainerLow">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainer">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainerHigh">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceContainerHighest">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceInverse">?attr/tsColorSurfaceInverse</item>
+        <item name="colorOnSurfaceInverse">?attr/tsColorTextInverse</item>
+        <item name="colorOutline">?attr/tsColorBorderStrong</item>
+        <item name="colorOutlineVariant">?attr/tsColorBorderSubtle</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="elevationOverlayColor">@android:color/transparent</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.TS.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.TS.MaterialAlertDialog</item>
+        <item name="popupMenuBackground">@drawable/ts_popup_menu_background</item>
+        <item name="textAppearanceLineHeightEnabled">true</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.TS.Title1</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.TS.Title1</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.TS.Title2</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.TS.Title2</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.TS.Title3</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.TS.Label</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.TS.BodyLg</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.TS.Body</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.TS.BodySm</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.TS.Label</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.TS.Caption</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.TS.Overline</item>
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.TS.Xs</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.TS.Sm</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.TS.Md</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.TS.Lg</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.TS.Xl</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.TS.Sm</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.TS.Md</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.TS.Lg</item>
+    </style>
+
+    <style name="ThemeOverlay.TS" parent="Base.ThemeOverlay.TS">
+        <item name="colorPrimary">?attr/tsColorAccentPrimary</item>
+        <item name="colorOnPrimary">?attr/tsColorTextOnAccent</item>
+        <item name="colorPrimaryContainer">?attr/tsColorAccentSubtle</item>
+        <item name="colorOnPrimaryContainer">?attr/tsColorAccentText</item>
+        <item name="colorPrimaryInverse">?attr/tsColorAccentSubtle</item>
+        <item name="colorSecondary">?attr/tsColorAccentPrimary</item>
+        <item name="colorOnSecondary">?attr/tsColorTextOnAccent</item>
+        <item name="colorSecondaryContainer">?attr/tsColorAccentSubtle</item>
+        <item name="colorOnSecondaryContainer">?attr/tsColorAccentText</item>
+        <item name="colorTertiary">?attr/tsColorInfo</item>
+        <item name="colorOnTertiary">?attr/tsColorTextOnAccent</item>
+        <item name="colorTertiaryContainer">?attr/tsColorInfoSubtle</item>
+        <item name="colorOnTertiaryContainer">?attr/tsColorInfo</item>
+        <item name="colorError">?attr/tsColorDanger</item>
+        <item name="colorOnError">?attr/tsColorTextOnAccent</item>
+        <item name="colorErrorContainer">?attr/tsColorDangerSubtle</item>
+        <item name="colorOnErrorContainer">?attr/tsColorDanger</item>
+        <item name="android:colorBackground">?attr/tsColorBackgroundPrimary</item>
+        <item name="colorOnBackground">?attr/tsColorTextPrimary</item>
+        <item name="colorSurface">?attr/tsColorSurfaceCard</item>
+        <item name="colorOnSurface">?attr/tsColorTextPrimary</item>
+        <item name="colorSurfaceVariant">?attr/tsColorBackgroundSecondary</item>
+        <item name="colorOnSurfaceVariant">?attr/tsColorTextSecondary</item>
+        <item name="colorSurfaceBright">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceDim">?attr/tsColorBackgroundSecondary</item>
+        <item name="colorSurfaceContainerLowest">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainerLow">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainer">?attr/tsColorSurfaceCard</item>
+        <item name="colorSurfaceContainerHigh">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceContainerHighest">?attr/tsColorSurfaceElevated</item>
+        <item name="colorSurfaceInverse">?attr/tsColorSurfaceInverse</item>
+        <item name="colorOnSurfaceInverse">?attr/tsColorTextInverse</item>
+        <item name="colorOutline">?attr/tsColorBorderStrong</item>
+        <item name="colorOutlineVariant">?attr/tsColorBorderSubtle</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="elevationOverlayColor">@android:color/transparent</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.TS.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.TS.MaterialAlertDialog</item>
+        <item name="popupMenuBackground">@drawable/ts_popup_menu_background</item>
+        <item name="textAppearanceLineHeightEnabled">true</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.TS.Display</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.TS.Title1</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.TS.Title1</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.TS.Title2</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.TS.Title2</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.TS.Title3</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.TS.Label</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.TS.BodyLg</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.TS.Body</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.TS.BodySm</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.TS.Label</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.TS.Caption</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.TS.Overline</item>
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.TS.Xs</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.TS.Sm</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.TS.Md</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.TS.Lg</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.TS.Xl</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.TS.Sm</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.TS.Md</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.TS.Lg</item>
+    </style>
+
+    <style name="ThemeOverlay.TS.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.TS.BottomSheet.Modal</item>
+    </style>
+
+    <style name="Widget.TS.BottomSheet.Modal" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">?attr/tsColorSurfaceElevated</item>
+    </style>
+
+    <style name="ThemeOverlay.TS.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.TS</item>
+    </style>
+
+    <style name="MaterialAlertDialog.TS" parent="MaterialAlertDialog.Material3">
+        <item name="backgroundTint">?attr/tsColorSurfaceElevated</item>
+    </style>
+
+    <style name="ThemeOverlay.TS.CenterDialog" parent="">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.TS.DialogFade</item>
+    </style>
+
+    <style name="Animation.TS.DialogFade" parent="">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+</resources>

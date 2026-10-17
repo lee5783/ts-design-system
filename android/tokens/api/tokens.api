@@ -1,0 +1,227 @@
+public final class com/ts/ds/tokens/TSCubicBezierValues {
+	public final fun getX1 ()F
+	public final fun getX2 ()F
+	public final fun getY1 ()F
+	public final fun getY2 ()F
+}
+
+public final class com/ts/ds/tokens/TSShadowValues {
+	public final fun getDarkColor ()J
+	public final fun getElevation ()F
+	public final fun getLightColor ()J
+}
+
+public final class com/ts/ds/tokens/TSTokenValues {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues;
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Component {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Component;
+	public static final field alertTitleFontWeight I
+	public static final field avatarLgFontSize F
+	public static final field avatarMdFontSize F
+	public static final field avatarSmFontSize F
+	public static final field avatarXsFontSize F
+	public static final field badgeDotSize F
+	public static final field badgeHeight F
+	public static final field bottomNavBadgeFontSize F
+	public static final field bottomNavBadgeFontWeight I
+	public static final field bottomNavBadgeOffsetStart F
+	public static final field bottomNavBadgeOffsetTop F
+	public static final field bottomNavBadgeSize F
+	public static final field bottomNavLabelFontWeight I
+	public static final field bottomNavPillHeight F
+	public static final field bottomNavPillWidth F
+	public static final field buttonSmFontSize F
+	public static final field cardSubtitleSpacing F
+	public static final field checkboxBorderWidth F
+	public static final field checkboxSize F
+	public static final field dialogMaxWidth F
+	public static final field listItemTileSize F
+	public static final field sheetGrabberHeight F
+	public static final field sheetGrabberWidth F
+	public static final field spinnerRotationDuration I
+	public static final field spinnerSize F
+	public static final field spinnerStrokeWidth F
+	public static final field switchThumbInset F
+	public static final field switchThumbSize F
+	public static final field switchThumbTravel F
+	public static final field switchTrackHeight F
+	public static final field switchTrackWidth F
+	public static final field tabsSegmentPaddingHorizontal F
+	public static final field tabsSegmentPaddingVertical F
+	public static final field tabsSegmentedTrackPadding F
+	public static final field textFieldPaddingVertical F
+	public static final field toastActionFontWeight I
+	public static final field toastMaxWidth F
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$DarkColors {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$DarkColors;
+	public static final field accentHover J
+	public static final field accentPressed J
+	public static final field accentPrimary J
+	public static final field accentSubtle J
+	public static final field accentText J
+	public static final field backgroundPrimary J
+	public static final field backgroundSecondary J
+	public static final field borderStrong J
+	public static final field borderSubtle J
+	public static final field danger J
+	public static final field dangerOnInverse J
+	public static final field dangerPressed J
+	public static final field dangerSolid J
+	public static final field dangerSubtle J
+	public static final field focus J
+	public static final field info J
+	public static final field infoOnInverse J
+	public static final field infoSubtle J
+	public static final field overlay J
+	public static final field success J
+	public static final field successOnInverse J
+	public static final field successSubtle J
+	public static final field surfaceCard J
+	public static final field surfaceElevated J
+	public static final field surfaceHover J
+	public static final field surfaceInverse J
+	public static final field surfacePressed J
+	public static final field switchThumb J
+	public static final field textDisabled J
+	public static final field textInverse J
+	public static final field textMuted J
+	public static final field textOnAccent J
+	public static final field textPrimary J
+	public static final field textSecondary J
+	public static final field warning J
+	public static final field warningOnInverse J
+	public static final field warningSubtle J
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Duration {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Duration;
+	public static final field durationBase I
+	public static final field durationFast I
+	public static final field durationSlow I
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Easing {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Easing;
+	public final fun getEasingStandard ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$LightColors {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$LightColors;
+	public static final field accentHover J
+	public static final field accentPressed J
+	public static final field accentPrimary J
+	public static final field accentSubtle J
+	public static final field accentText J
+	public static final field backgroundPrimary J
+	public static final field backgroundSecondary J
+	public static final field borderStrong J
+	public static final field borderSubtle J
+	public static final field danger J
+	public static final field dangerOnInverse J
+	public static final field dangerPressed J
+	public static final field dangerSolid J
+	public static final field dangerSubtle J
+	public static final field focus J
+	public static final field info J
+	public static final field infoOnInverse J
+	public static final field infoSubtle J
+	public static final field overlay J
+	public static final field success J
+	public static final field successOnInverse J
+	public static final field successSubtle J
+	public static final field surfaceCard J
+	public static final field surfaceElevated J
+	public static final field surfaceHover J
+	public static final field surfaceInverse J
+	public static final field surfacePressed J
+	public static final field switchThumb J
+	public static final field textDisabled J
+	public static final field textInverse J
+	public static final field textMuted J
+	public static final field textOnAccent J
+	public static final field textPrimary J
+	public static final field textSecondary J
+	public static final field warning J
+	public static final field warningOnInverse J
+	public static final field warningSubtle J
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Opacity {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Opacity;
+	public static final field opacityDisabled F
+	public static final field opacityPressed F
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Radius {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Radius;
+	public static final field radiusFull F
+	public static final field radiusLg F
+	public static final field radiusMd F
+	public static final field radiusSm F
+	public static final field radiusXl F
+	public static final field radiusXs F
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Shadow {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Shadow;
+	public final fun getShadowLg ()Lcom/ts/ds/tokens/TSShadowValues;
+	public final fun getShadowMd ()Lcom/ts/ds/tokens/TSShadowValues;
+	public final fun getShadowSm ()Lcom/ts/ds/tokens/TSShadowValues;
+	public final fun getShadowXs ()Lcom/ts/ds/tokens/TSShadowValues;
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Size {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Size;
+	public static final field contentMax F
+	public static final field controlLg F
+	public static final field controlMd F
+	public static final field controlSm F
+	public static final field iconLg F
+	public static final field iconMd F
+	public static final field iconSm F
+	public static final field navBar F
+	public static final field tabBar F
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Spacing {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Spacing;
+	public static final field space0_5 F
+	public static final field space1 F
+	public static final field space10 F
+	public static final field space12 F
+	public static final field space16 F
+	public static final field space2 F
+	public static final field space3 F
+	public static final field space4 F
+	public static final field space5 F
+	public static final field space6 F
+	public static final field space8 F
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$Typography {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Typography;
+	public final fun getBody ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getBodyLg ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getBodySm ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getCaption ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getCode ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getDisplay ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getLabel ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getOverline ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getTitle1 ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getTitle2 ()Lcom/ts/ds/tokens/TSTypeValues;
+	public final fun getTitle3 ()Lcom/ts/ds/tokens/TSTypeValues;
+}
+
+public final class com/ts/ds/tokens/TSTypeValues {
+	public final fun getFontSize ()F
+	public final fun getFontWeight ()I
+	public final fun getLetterSpacingEm ()F
+	public final fun getLineHeight ()F
+	public final fun getMonospace ()Z
+}
+

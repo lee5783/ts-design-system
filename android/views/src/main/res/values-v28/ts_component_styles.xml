@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <style name="TextAppearance.TS.Component.AvatarInitials" parent="">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textFontWeight">600</item>
+    </style>
+    <style name="TextAppearance.TS.Component.AlertTitle" parent="">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textFontWeight">600</item>
+    </style>
+</resources>

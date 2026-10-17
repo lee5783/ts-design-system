@@ -1,0 +1,1880 @@
+public abstract interface annotation class com/ts/ds/core/ExperimentalTSApi : java/lang/annotation/Annotation {
+}
+
+public final class com/ts/ds/core/haptics/DsHapticEvent : java/lang/Enum {
+	public static final field Confirm Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static final field Reject Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static final field Selection Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static final field ToggleOff Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static final field ToggleOn Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public static fun values ()[Lcom/ts/ds/core/haptics/DsHapticEvent;
+}
+
+public final class com/ts/ds/core/haptics/DsHaptics {
+	public static final field INSTANCE Lcom/ts/ds/core/haptics/DsHaptics;
+	public final fun constantFor (Lcom/ts/ds/core/haptics/DsHapticEvent;I)I
+	public static synthetic fun constantFor$default (Lcom/ts/ds/core/haptics/DsHaptics;Lcom/ts/ds/core/haptics/DsHapticEvent;IILjava/lang/Object;)I
+	public final fun toggleEvent (Z)Lcom/ts/ds/core/haptics/DsHapticEvent;
+}
+
+public final class com/ts/ds/core/icon/TSIcon : java/lang/Enum {
+	public static final field Alert Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ArrowLeft Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ArrowRight Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Bell Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Calendar Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Check Lcom/ts/ds/core/icon/TSIcon;
+	public static final field CheckCircle Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ChevronDown Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ChevronLeft Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ChevronRight Lcom/ts/ds/core/icon/TSIcon;
+	public static final field ChevronUp Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Close Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Download Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Edit Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Eye Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Filter Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Grid Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Heart Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Home Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Info Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Lock Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Logout Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Mail Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Menu Lcom/ts/ds/core/icon/TSIcon;
+	public static final field More Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Plus Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Search Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Settings Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Star Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Trash Lcom/ts/ds/core/icon/TSIcon;
+	public static final field Upload Lcom/ts/ds/core/icon/TSIcon;
+	public static final field User Lcom/ts/ds/core/icon/TSIcon;
+	public static final field XCircle Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getAutoMirrored ()Z
+	public final fun getDrawableRes ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/icon/TSIcon;
+	public static fun values ()[Lcom/ts/ds/core/icon/TSIcon;
+}
+
+public final class com/ts/ds/core/icon/TSIcons {
+	public static final field INSTANCE Lcom/ts/ds/core/icon/TSIcons;
+	public final fun fromDsName (Ljava/lang/String;)Lcom/ts/ds/core/icon/TSIcon;
+}
+
+public final class com/ts/ds/core/icon/TSIconsKt {
+	public static final fun getDsName (Lcom/ts/ds/core/icon/TSIcon;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/input/TSCapitalization : java/lang/Enum {
+	public static final field Characters Lcom/ts/ds/core/input/TSCapitalization;
+	public static final field None Lcom/ts/ds/core/input/TSCapitalization;
+	public static final field Sentences Lcom/ts/ds/core/input/TSCapitalization;
+	public static final field Words Lcom/ts/ds/core/input/TSCapitalization;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/input/TSCapitalization;
+	public static fun values ()[Lcom/ts/ds/core/input/TSCapitalization;
+}
+
+public final class com/ts/ds/core/input/TSImeAction : java/lang/Enum {
+	public static final field Default Lcom/ts/ds/core/input/TSImeAction;
+	public static final field Done Lcom/ts/ds/core/input/TSImeAction;
+	public static final field Go Lcom/ts/ds/core/input/TSImeAction;
+	public static final field Next Lcom/ts/ds/core/input/TSImeAction;
+	public static final field Search Lcom/ts/ds/core/input/TSImeAction;
+	public static final field Send Lcom/ts/ds/core/input/TSImeAction;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/input/TSImeAction;
+	public static fun values ()[Lcom/ts/ds/core/input/TSImeAction;
+}
+
+public final class com/ts/ds/core/input/TSKeyboardType : java/lang/Enum {
+	public static final field Decimal Lcom/ts/ds/core/input/TSKeyboardType;
+	public static final field Email Lcom/ts/ds/core/input/TSKeyboardType;
+	public static final field Number Lcom/ts/ds/core/input/TSKeyboardType;
+	public static final field Phone Lcom/ts/ds/core/input/TSKeyboardType;
+	public static final field Text Lcom/ts/ds/core/input/TSKeyboardType;
+	public static final field Uri Lcom/ts/ds/core/input/TSKeyboardType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/input/TSKeyboardType;
+	public static fun values ()[Lcom/ts/ds/core/input/TSKeyboardType;
+}
+
+public final class com/ts/ds/core/input/TSTextInputTraits {
+	public static final field AUTOFILL_HINT_NEW_PASSWORD Ljava/lang/String;
+	public static final field AUTOFILL_HINT_SMS_OTP Ljava/lang/String;
+	public static final field Companion Lcom/ts/ds/core/input/TSTextInputTraits$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/input/TSKeyboardType;Lcom/ts/ds/core/input/TSImeAction;Lcom/ts/ds/core/input/TSCapitalization;ZLjava/util/List;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/input/TSKeyboardType;Lcom/ts/ds/core/input/TSImeAction;Lcom/ts/ds/core/input/TSCapitalization;ZLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/input/TSKeyboardType;
+	public final fun component2 ()Lcom/ts/ds/core/input/TSImeAction;
+	public final fun component3 ()Lcom/ts/ds/core/input/TSCapitalization;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/util/List;
+	public final fun copy (Lcom/ts/ds/core/input/TSKeyboardType;Lcom/ts/ds/core/input/TSImeAction;Lcom/ts/ds/core/input/TSCapitalization;ZLjava/util/List;)Lcom/ts/ds/core/input/TSTextInputTraits;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/input/TSTextInputTraits;Lcom/ts/ds/core/input/TSKeyboardType;Lcom/ts/ds/core/input/TSImeAction;Lcom/ts/ds/core/input/TSCapitalization;ZLjava/util/List;ILjava/lang/Object;)Lcom/ts/ds/core/input/TSTextInputTraits;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAutoCorrect ()Z
+	public final fun getAutofillHints ()Ljava/util/List;
+	public final fun getCapitalization ()Lcom/ts/ds/core/input/TSCapitalization;
+	public final fun getImeAction ()Lcom/ts/ds/core/input/TSImeAction;
+	public final fun getKeyboardType ()Lcom/ts/ds/core/input/TSKeyboardType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/input/TSTextInputTraits$Companion {
+	public final fun getDecimal ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getDefault ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getEmail ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getName ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getNewPassword ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getNumber ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getOneTimeCode ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getPassword ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getPhone ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getSearch ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getUrl ()Lcom/ts/ds/core/input/TSTextInputTraits;
+	public final fun getUsername ()Lcom/ts/ds/core/input/TSTextInputTraits;
+}
+
+public final class com/ts/ds/core/logic/TSAlertAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSAlertAccessibility;
+	public final fun label (Landroid/content/Context;Lcom/ts/ds/core/style/TSAlertTone;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+	public final fun toneName (Landroid/content/Context;Lcom/ts/ds/core/style/TSAlertTone;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSAvatarImage {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSAvatarImage;
+	public final fun usable (Landroid/graphics/drawable/Drawable;)Landroid/graphics/drawable/Drawable;
+	public final fun usableSize (FF)Z
+}
+
+public final class com/ts/ds/core/logic/TSBadgeCountFormatter {
+	public static final field DEFAULT_MAX_COUNT I
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSBadgeCountFormatter;
+	public final fun format (IILkotlin/jvm/functions/Function1;)Ljava/lang/String;
+	public final fun format (Landroid/content/Context;II)Ljava/lang/String;
+	public static synthetic fun format$default (Lcom/ts/ds/core/logic/TSBadgeCountFormatter;IILkotlin/jvm/functions/Function1;ILjava/lang/Object;)Ljava/lang/String;
+	public static synthetic fun format$default (Lcom/ts/ds/core/logic/TSBadgeCountFormatter;Landroid/content/Context;IIILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSBottomNavAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSBottomNavAccessibility;
+	public final fun badgeText (Landroid/content/Context;Ljava/lang/Integer;)Ljava/lang/String;
+	public final fun value (Landroid/content/Context;IILjava/lang/Integer;Z)Ljava/lang/String;
+	public static synthetic fun value$default (Lcom/ts/ds/core/logic/TSBottomNavAccessibility;Landroid/content/Context;IILjava/lang/Integer;ZILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSCardAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSCardAccessibility;
+	public final fun customActions (Ljava/util/List;Ljava/util/List;ZLcom/ts/ds/core/logic/TSCardAccessory;)Ljava/util/List;
+	public static synthetic fun customActions$default (Lcom/ts/ds/core/logic/TSCardAccessibility;Ljava/util/List;Ljava/util/List;ZLcom/ts/ds/core/logic/TSCardAccessory;ILjava/lang/Object;)Ljava/util/List;
+	public final fun label (Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+	public static synthetic fun label$default (Lcom/ts/ds/core/logic/TSCardAccessibility;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun value (Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+}
+
+public abstract interface class com/ts/ds/core/logic/TSCardAccessory {
+	public abstract fun getCustomAction ()Lcom/ts/ds/core/logic/TSCardAction;
+}
+
+public final class com/ts/ds/core/logic/TSCardAccessory$IconButton : com/ts/ds/core/logic/TSCardAccessory {
+	public fun <init> (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public fun getCustomAction ()Lcom/ts/ds/core/logic/TSCardAction;
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+}
+
+public final class com/ts/ds/core/logic/TSCardAction {
+	public fun <init> (Ljava/lang/String;Lcom/ts/ds/core/style/TSButtonVariant;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/ts/ds/core/style/TSButtonVariant;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSButtonVariant;
+}
+
+public final class com/ts/ds/core/logic/TSDialogAction {
+	public fun <init> (Ljava/lang/String;Lcom/ts/ds/core/style/TSButtonVariant;ZLkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/ts/ds/core/style/TSButtonVariant;ZLkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDismisses ()Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSButtonVariant;
+}
+
+public final class com/ts/ds/core/logic/TSDialogLayout {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSDialogLayout;
+	public final fun orderedActions (Ljava/util/List;Z)Ljava/util/List;
+}
+
+public final class com/ts/ds/core/logic/TSDialogPresenter {
+	public static final field Companion Lcom/ts/ds/core/logic/TSDialogPresenter$Companion;
+	public fun <init> ()V
+	public final fun addListener (Lkotlin/jvm/functions/Function1;)V
+	public final fun begin (Ljava/lang/Object;)Z
+	public final fun end (Ljava/lang/Object;)V
+	public final fun getRefusedCount ()I
+	public final fun isActive (Ljava/lang/Object;)Z
+	public final fun isPresenting ()Z
+	public final fun removeListener (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/ts/ds/core/logic/TSDialogPresenter$Companion {
+	public final fun getShared ()Lcom/ts/ds/core/logic/TSDialogPresenter;
+}
+
+public final class com/ts/ds/core/logic/TSInitials {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSInitials;
+	public static final field MAX_LETTERS I
+	public final fun from (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSListItemAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSListItemAccessibility;
+	public final fun hint (Landroid/content/Context;Lcom/ts/ds/core/logic/TSListItemRole;)Ljava/lang/String;
+	public final fun label (Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSListItemRole : java/lang/Enum {
+	public static final field Action Lcom/ts/ds/core/logic/TSListItemRole;
+	public static final field Companion Lcom/ts/ds/core/logic/TSListItemRole$Companion;
+	public static final field Navigation Lcom/ts/ds/core/logic/TSListItemRole;
+	public static final field Plain Lcom/ts/ds/core/logic/TSListItemRole;
+	public static final field Toggle Lcom/ts/ds/core/logic/TSListItemRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun isPressable ()Z
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/logic/TSListItemRole;
+	public static fun values ()[Lcom/ts/ds/core/logic/TSListItemRole;
+}
+
+public final class com/ts/ds/core/logic/TSListItemRole$Companion {
+	public final fun make (ZZZ)Lcom/ts/ds/core/logic/TSListItemRole;
+}
+
+public final class com/ts/ds/core/logic/TSTabsAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSTabsAccessibility;
+	public final fun position (Landroid/content/Context;IIZ)Ljava/lang/String;
+	public static synthetic fun position$default (Lcom/ts/ds/core/logic/TSTabsAccessibility;Landroid/content/Context;IIZILjava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSTextFieldAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSTextFieldAccessibility;
+	public final fun errorDescription (Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;
+	public final fun hasError (Ljava/lang/String;)Z
+	public final fun hint (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+	public final fun toggleLabel (Landroid/content/Context;Z)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSToastAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToastAccessibility;
+	public final fun announcement (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastMessage;)Ljava/lang/String;
+	public final fun label (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastTone;Ljava/lang/CharSequence;)Ljava/lang/String;
+	public final fun toneName (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastTone;)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/logic/TSToastEntry {
+	public final fun getAutoDismisses ()Z
+	public final fun getId ()J
+	public final fun getMessage ()Lcom/ts/ds/core/logic/TSToastMessage;
+	public final fun getTimeoutMillis ()Ljava/lang/Long;
+}
+
+public final class com/ts/ds/core/logic/TSToastMessage {
+	public fun <init> (Ljava/lang/String;Lcom/ts/ds/core/logic/TSToastTone;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/ts/ds/core/logic/TSToastTone;Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getActionLabel ()Ljava/lang/String;
+	public final fun getHasAction ()Z
+	public final fun getOnAction ()Lkotlin/jvm/functions/Function0;
+	public final fun getText ()Ljava/lang/String;
+	public final fun getTone ()Lcom/ts/ds/core/logic/TSToastTone;
+}
+
+public final class com/ts/ds/core/logic/TSToastPresenter {
+	public fun <init> (Lcom/ts/ds/core/logic/TSToastQueue;Lcom/ts/ds/core/logic/TSToastScheduler;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/logic/TSToastQueue;Lcom/ts/ds/core/logic/TSToastScheduler;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun dismiss (Lcom/ts/ds/core/logic/TSToastEntry;)Z
+	public final fun getCurrent ()Lcom/ts/ds/core/logic/TSToastEntry;
+	public final fun getQueue ()Lcom/ts/ds/core/logic/TSToastQueue;
+	public final fun isStarted ()Z
+	public final fun performAction (Lcom/ts/ds/core/logic/TSToastEntry;)Z
+	public final fun start ()V
+	public final fun stop ()V
+}
+
+public final class com/ts/ds/core/logic/TSToastQueue {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final fun addListener (Lkotlin/jvm/functions/Function1;)V
+	public final fun clear ()V
+	public final fun dismiss (J)Z
+	public final fun dismissCurrent ()Z
+	public final fun enqueue (Lcom/ts/ds/core/logic/TSToastMessage;)Lcom/ts/ds/core/logic/TSToastEntry;
+	public final fun getCurrent ()Lcom/ts/ds/core/logic/TSToastEntry;
+	public final fun getPending ()Ljava/util/List;
+	public final fun getSize ()I
+	public final fun performAction (J)Z
+	public final fun removeListener (Lkotlin/jvm/functions/Function1;)V
+}
+
+public abstract interface class com/ts/ds/core/logic/TSToastScheduler {
+	public static final field Companion Lcom/ts/ds/core/logic/TSToastScheduler$Companion;
+	public abstract fun schedule (JLkotlin/jvm/functions/Function0;)Lcom/ts/ds/core/logic/TSToastScheduler$Cancellable;
+}
+
+public abstract interface class com/ts/ds/core/logic/TSToastScheduler$Cancellable {
+	public abstract fun cancel ()V
+}
+
+public final class com/ts/ds/core/logic/TSToastScheduler$Companion {
+	public final fun getMain ()Lcom/ts/ds/core/logic/TSToastScheduler;
+	public final fun handler (Landroid/os/Handler;)Lcom/ts/ds/core/logic/TSToastScheduler;
+}
+
+public final class com/ts/ds/core/logic/TSToastTimeouts {
+	public static final field DEFAULT_MILLIS J
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToastTimeouts;
+	public static final field RECOMMENDED_TIMEOUT_MIN_SDK I
+	public static final field SCREEN_READER_MILLIS J
+	public final fun resolve (Landroid/content/Context;Z)Ljava/lang/Long;
+	public final fun resolve (ZZILkotlin/jvm/functions/Function1;)Ljava/lang/Long;
+	public final fun timeoutFor (Landroid/content/Context;)Lkotlin/jvm/functions/Function1;
+}
+
+public final class com/ts/ds/core/logic/TSToastTone : java/lang/Enum {
+	public static final field Danger Lcom/ts/ds/core/logic/TSToastTone;
+	public static final field Info Lcom/ts/ds/core/logic/TSToastTone;
+	public static final field Neutral Lcom/ts/ds/core/logic/TSToastTone;
+	public static final field Success Lcom/ts/ds/core/logic/TSToastTone;
+	public static final field Warning Lcom/ts/ds/core/logic/TSToastTone;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/logic/TSToastTone;
+	public static fun values ()[Lcom/ts/ds/core/logic/TSToastTone;
+}
+
+public final class com/ts/ds/core/logic/TSToggleAccessibility {
+	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToggleAccessibility;
+	public final fun checkboxState (Landroid/content/Context;Z)Ljava/lang/String;
+	public final fun switchState (Landroid/content/Context;Z)Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/motion/TSReduceMotion {
+	public static final field INSTANCE Lcom/ts/ds/core/motion/TSReduceMotion;
+	public final fun durationMillis (IZ)I
+	public final fun isEnabled ()Z
+}
+
+public final class com/ts/ds/core/style/TSAlertStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSAlertStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun fill (Lcom/ts/ds/core/style/TSAlertTone;)Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun icon (Lcom/ts/ds/core/style/TSAlertTone;)Lcom/ts/ds/core/icon/TSIcon;
+	public final fun iconColor (Lcom/ts/ds/core/style/TSAlertTone;)Lcom/ts/ds/core/style/TSColorRole;
+	public fun resolve (Lcom/ts/ds/core/style/TSAlertStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSAlertStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSAlertStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSAlertTone;ZZ)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSAlertTone;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSAlertTone;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSAlertTone;ZZ)Lcom/ts/ds/core/style/TSAlertStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSAlertStyleSpec$Configuration;Lcom/ts/ds/core/style/TSAlertTone;ZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSAlertStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasTitle ()Z
+	public final fun getTone ()Lcom/ts/ds/core/style/TSAlertTone;
+	public fun hashCode ()I
+	public final fun isDismissible ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSAlertStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()Z
+	public final fun component11 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component12 ()I
+	public final fun component13 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component14 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component15 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component16 ()Z
+	public final fun component17 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component18 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun component19 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component2 ()F
+	public final fun component20 ()F
+	public final fun component21 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component8 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FF)Lcom/ts/ds/core/style/TSAlertStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSAlertStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FFILjava/lang/Object;)Lcom/ts/ds/core/style/TSAlertStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorderWidthDp ()F
+	public final fun getContentHorizontalInsetDp ()F
+	public final fun getContentVerticalInsetDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getDismissColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getDismissIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getDismissIconSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getDismissPressedOpacity ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getIconColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getMessageColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMessageTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMinTouchTargetDp ()F
+	public final fun getShowsDismiss ()Z
+	public final fun getShowsTitle ()Z
+	public final fun getSpacingDp ()F
+	public final fun getTitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTitleFontWeight ()I
+	public final fun getTitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSAlertTone : java/lang/Enum {
+	public static final field Danger Lcom/ts/ds/core/style/TSAlertTone;
+	public static final field Info Lcom/ts/ds/core/style/TSAlertTone;
+	public static final field Success Lcom/ts/ds/core/style/TSAlertTone;
+	public static final field Warning Lcom/ts/ds/core/style/TSAlertTone;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSAlertTone;
+	public static fun values ()[Lcom/ts/ds/core/style/TSAlertTone;
+}
+
+public final class com/ts/ds/core/style/TSAvatarContent : java/lang/Enum {
+	public static final field Companion Lcom/ts/ds/core/style/TSAvatarContent$Companion;
+	public static final field Image Lcom/ts/ds/core/style/TSAvatarContent;
+	public static final field Initials Lcom/ts/ds/core/style/TSAvatarContent;
+	public static final field Placeholder Lcom/ts/ds/core/style/TSAvatarContent;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSAvatarContent;
+	public static fun values ()[Lcom/ts/ds/core/style/TSAvatarContent;
+}
+
+public final class com/ts/ds/core/style/TSAvatarContent$Companion {
+	public final fun make (Ljava/lang/String;Z)Lcom/ts/ds/core/style/TSAvatarContent;
+}
+
+public final class com/ts/ds/core/style/TSAvatarSize : java/lang/Enum {
+	public static final field Lg Lcom/ts/ds/core/style/TSAvatarSize;
+	public static final field Md Lcom/ts/ds/core/style/TSAvatarSize;
+	public static final field Sm Lcom/ts/ds/core/style/TSAvatarSize;
+	public static final field Xs Lcom/ts/ds/core/style/TSAvatarSize;
+	public final fun getDiameterDp ()F
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSAvatarSize;
+	public static fun values ()[Lcom/ts/ds/core/style/TSAvatarSize;
+}
+
+public final class com/ts/ds/core/style/TSAvatarStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSAvatarStyleSpec;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun initialsFontSize (Lcom/ts/ds/core/style/TSAvatarSize;)F
+	public final fun placeholderIconSize (Lcom/ts/ds/core/style/TSAvatarSize;)Lcom/ts/ds/core/style/TSIconSize;
+	public fun resolve (Lcom/ts/ds/core/style/TSAvatarStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSAvatarStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSAvatarStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSAvatarSize;Lcom/ts/ds/core/style/TSAvatarContent;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSAvatarSize;Lcom/ts/ds/core/style/TSAvatarContent;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSAvatarSize;
+	public final fun component2 ()Lcom/ts/ds/core/style/TSAvatarContent;
+	public final fun copy (Lcom/ts/ds/core/style/TSAvatarSize;Lcom/ts/ds/core/style/TSAvatarContent;)Lcom/ts/ds/core/style/TSAvatarStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSAvatarStyleSpec$Configuration;Lcom/ts/ds/core/style/TSAvatarSize;Lcom/ts/ds/core/style/TSAvatarContent;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSAvatarStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Lcom/ts/ds/core/style/TSAvatarContent;
+	public final fun getSize ()Lcom/ts/ds/core/style/TSAvatarSize;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSAvatarStyleSpec$Resolved {
+	public fun <init> (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFZZZF)V
+	public final fun component1 ()F
+	public final fun component10 ()Z
+	public final fun component11 ()Z
+	public final fun component12 ()F
+	public final fun component2 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component5 ()F
+	public final fun component6 ()I
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()Z
+	public final fun copy (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFZZZF)Lcom/ts/ds/core/style/TSAvatarStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSAvatarStyleSpec$Resolved;FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFZZZFILjava/lang/Object;)Lcom/ts/ds/core/style/TSAvatarStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentInsetDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getDiameterDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getForeground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getInitialsFontSizeDp ()F
+	public final fun getInitialsFontWeight ()I
+	public final fun getInitialsMinimumScaleFactor ()F
+	public final fun getPlaceholderIconSizeDp ()F
+	public final fun getShowsImage ()Z
+	public final fun getShowsInitials ()Z
+	public final fun getShowsPlaceholder ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBadgeStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSBadgeStyleSpec;
+	public final fun fill (Lcom/ts/ds/core/style/TSBadgeTone;)Lcom/ts/ds/core/style/TSColorRole;
+	public final fun foreground (Lcom/ts/ds/core/style/TSBadgeTone;)Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getConfigurations ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSBadgeStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSBadgeStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSBadgeStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSBadgeTone;ZZ)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSBadgeTone;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSBadgeTone;
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSBadgeTone;ZZ)Lcom/ts/ds/core/style/TSBadgeStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBadgeStyleSpec$Configuration;Lcom/ts/ds/core/style/TSBadgeTone;ZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSBadgeStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasDot ()Z
+	public final fun getHasIcon ()Z
+	public final fun getTone ()Lcom/ts/ds/core/style/TSBadgeTone;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBadgeStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;IIFFFFFZFZF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component11 ()F
+	public final fun component12 ()F
+	public final fun component13 ()Z
+	public final fun component14 ()F
+	public final fun component15 ()Z
+	public final fun component16 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun component5 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component6 ()I
+	public final fun component7 ()I
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;IIFFFFFZFZF)Lcom/ts/ds/core/style/TSBadgeStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBadgeStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;IIFFFFFZFZFILjava/lang/Object;)Lcom/ts/ds/core/style/TSBadgeStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getDotSizeDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getFontWeight ()I
+	public final fun getForeground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getIconSizeDp ()F
+	public final fun getMaxLines ()I
+	public final fun getMinHeightDp ()F
+	public final fun getShowsDot ()Z
+	public final fun getShowsIcon ()Z
+	public final fun getSpacingDp ()F
+	public final fun getTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBadgeTone : java/lang/Enum {
+	public static final field Accent Lcom/ts/ds/core/style/TSBadgeTone;
+	public static final field Danger Lcom/ts/ds/core/style/TSBadgeTone;
+	public static final field Info Lcom/ts/ds/core/style/TSBadgeTone;
+	public static final field Neutral Lcom/ts/ds/core/style/TSBadgeTone;
+	public static final field Success Lcom/ts/ds/core/style/TSBadgeTone;
+	public static final field Warning Lcom/ts/ds/core/style/TSBadgeTone;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSBadgeTone;
+	public static fun values ()[Lcom/ts/ds/core/style/TSBadgeTone;
+}
+
+public final class com/ts/ds/core/style/TSBottomNavItem {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun badged (Ljava/lang/Integer;)Lcom/ts/ds/core/style/TSBottomNavItem;
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/Integer;)Lcom/ts/ds/core/style/TSBottomNavItem;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBottomNavItem;Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSBottomNavItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBadge ()Ljava/lang/Integer;
+	public final fun getBadgeText ()Ljava/lang/String;
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBottomNavStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field BORDER_WIDTH_DP F
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSBottomNavStyleSpec;
+	public static final field LABEL_MAX_FONT_SCALE F
+	public final fun getBadge ()Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Badge;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getContainer ()Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Container;
+	public final fun getDefaultContentInsetDp ()F
+	public final fun getItemCountRange ()Lkotlin/ranges/IntRange;
+	public final fun getStates ()Ljava/util/List;
+	public final fun labelFontScale (F)F
+	public fun resolve (Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+	public final fun selectedIndex (Ljava/util/List;Ljava/lang/String;)I
+}
+
+public final class com/ts/ds/core/style/TSBottomNavStyleSpec$Badge {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFFFFFF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component11 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()F
+	public final fun component4 ()I
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFFFFFF)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Badge;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Badge;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FIFFFFFFFILjava/lang/Object;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Badge;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getFontSizeDp ()F
+	public final fun getFontWeight ()I
+	public final fun getForeground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHeightDp ()F
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getMinWidthDp ()F
+	public final fun getOffsetStartDp ()F
+	public final fun getOffsetTopDp ()F
+	public final fun getTopFromPillDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBottomNavStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Configuration;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSelected ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBottomNavStyleSpec$Container {
+	public fun <init> (FLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;F)V
+	public final fun component1 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun copy (FLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;F)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Container;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Container;FLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FILjava/lang/Object;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Container;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHeightDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSBottomNavStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component10 ()F
+	public final fun component11 ()Z
+	public final fun component12 ()I
+	public final fun component13 ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun component2 ()I
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Resolved;Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSBottomNavStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnimationDurationMillis ()I
+	public final fun getAnimationEasing ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun getForeground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSizeDp ()F
+	public final fun getLabelFontWeight ()I
+	public final fun getLabelTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getOpacity ()F
+	public final fun getPillCornerRadiusDp ()F
+	public final fun getPillFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getPillHeightDp ()F
+	public final fun getPillWidthDp ()F
+	public final fun getShowsFocusRing ()Z
+	public final fun getSpacingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSButtonSize : java/lang/Enum {
+	public static final field Lg Lcom/ts/ds/core/style/TSButtonSize;
+	public static final field Md Lcom/ts/ds/core/style/TSButtonSize;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSButtonSize;
+	public static fun values ()[Lcom/ts/ds/core/style/TSButtonSize;
+}
+
+public final class com/ts/ds/core/style/TSButtonStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSButtonStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public final fun horizontalPadding (Lcom/ts/ds/core/style/TSButtonSize;)F
+	public final fun minHeight (Lcom/ts/ds/core/style/TSButtonSize;)F
+	public fun resolve (Lcom/ts/ds/core/style/TSButtonStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSButtonStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+	public final fun typeRole (Lcom/ts/ds/core/style/TSButtonSize;)Lcom/ts/ds/core/style/TSTypeRole;
+}
+
+public final class com/ts/ds/core/style/TSButtonStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSButtonVariant;
+	public final fun component2 ()Lcom/ts/ds/core/style/TSButtonSize;
+	public final fun copy (Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;)Lcom/ts/ds/core/style/TSButtonStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSButtonStyleSpec$Configuration;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSButtonStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSize ()Lcom/ts/ds/core/style/TSButtonSize;
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSButtonVariant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSButtonStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;IFFFFFFFFIFZZZF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component11 ()F
+	public final fun component12 ()F
+	public final fun component13 ()F
+	public final fun component14 ()F
+	public final fun component15 ()F
+	public final fun component16 ()I
+	public final fun component17 ()F
+	public final fun component18 ()Z
+	public final fun component19 ()Z
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component20 ()Z
+	public final fun component21 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun component5 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component6 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component7 ()I
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;IFFFFFFFFIFZZZF)Lcom/ts/ds/core/style/TSButtonStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSButtonStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;IFFFFFFFFIFZZZFILjava/lang/Object;)Lcom/ts/ds/core/style/TSButtonStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getFontWeight ()I
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getIconSizeDp ()F
+	public final fun getIconSpacingDp ()F
+	public final fun getLabel ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMinHeightDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsFocusRing ()Z
+	public final fun getShowsSpinner ()Z
+	public final fun getSpinnerRotationMillis ()I
+	public final fun getSpinnerSizeDp ()F
+	public final fun getSpinnerStrokeWidthDp ()F
+	public final fun getTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getUnderlined ()Z
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSButtonVariant : java/lang/Enum {
+	public static final field Danger Lcom/ts/ds/core/style/TSButtonVariant;
+	public static final field Ghost Lcom/ts/ds/core/style/TSButtonVariant;
+	public static final field Link Lcom/ts/ds/core/style/TSButtonVariant;
+	public static final field Primary Lcom/ts/ds/core/style/TSButtonVariant;
+	public static final field Secondary Lcom/ts/ds/core/style/TSButtonVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSButtonVariant;
+	public static fun values ()[Lcom/ts/ds/core/style/TSButtonVariant;
+}
+
+public final class com/ts/ds/core/style/TSCardStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSCardStyleSpec;
+	public static final field STACKED_FOOTER_FONT_SCALE F
+	public static final field STACK_SPACING_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSCardStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSCardStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+	public final fun stacksFooter (F)Z
+}
+
+public final class com/ts/ds/core/style/TSCardStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (ZZ)V
+	public synthetic fun <init> (ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun copy (ZZ)Lcom/ts/ds/core/style/TSCardStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSCardStyleSpec$Configuration;ZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSCardStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public final fun isInteractive ()Z
+	public final fun isRaised ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSCardStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSShadowRole;ZFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/style/TSColorRole;F)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component12 ()F
+	public final fun component13 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component14 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component15 ()F
+	public final fun component16 ()F
+	public final fun component17 ()F
+	public final fun component18 ()F
+	public final fun component19 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component20 ()Lcom/ts/ds/core/style/TSButtonVariant;
+	public final fun component21 ()Lcom/ts/ds/core/style/TSButtonSize;
+	public final fun component22 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component23 ()F
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component6 ()Z
+	public final fun component7 ()F
+	public final fun component8 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSShadowRole;ZFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/style/TSColorRole;F)Lcom/ts/ds/core/style/TSCardStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSCardStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSShadowRole;ZFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFLcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/style/TSColorRole;FILjava/lang/Object;)Lcom/ts/ds/core/style/TSCardStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBodyColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBodyTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getDivider ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getDividerThicknessDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getFooterButtonSize ()Lcom/ts/ds/core/style/TSButtonSize;
+	public final fun getFooterButtonVariant ()Lcom/ts/ds/core/style/TSButtonVariant;
+	public final fun getFooterHorizontalPaddingDp ()F
+	public final fun getFooterSpacingDp ()F
+	public final fun getFooterVerticalPaddingDp ()F
+	public final fun getHeaderSpacingDp ()F
+	public final fun getOpacity ()F
+	public final fun getPaddingDp ()F
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsFocusRing ()Z
+	public final fun getSubtitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getSubtitleSpacingDp ()F
+	public final fun getSubtitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getTitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSCheckboxStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSCheckboxStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSCheckboxStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Configuration;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChecked ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSCheckboxStyleSpec$Resolved {
+	public fun <init> (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZ)V
+	public final fun component1 ()F
+	public final fun component10 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component12 ()F
+	public final fun component13 ()F
+	public final fun component14 ()F
+	public final fun component15 ()Z
+	public final fun component2 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component5 ()F
+	public final fun component6 ()Z
+	public final fun component7 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component8 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component9 ()F
+	public final fun copy (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZ)Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Resolved;FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZILjava/lang/Object;)Lcom/ts/ds/core/style/TSCheckboxStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCheckColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getCheckIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getCheckSizeDp ()F
+	public final fun getLabelColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getLabelTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMarkBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMarkBorderWidthDp ()F
+	public final fun getMarkCornerRadiusDp ()F
+	public final fun getMarkFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMarkSizeDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getShowsCheck ()Z
+	public final fun getShowsFocusRing ()Z
+	public final fun getSpacingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSColorRole : java/lang/Enum {
+	public static final field AccentHover Lcom/ts/ds/core/style/TSColorRole;
+	public static final field AccentPressed Lcom/ts/ds/core/style/TSColorRole;
+	public static final field AccentPrimary Lcom/ts/ds/core/style/TSColorRole;
+	public static final field AccentSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public static final field AccentText Lcom/ts/ds/core/style/TSColorRole;
+	public static final field BackgroundPrimary Lcom/ts/ds/core/style/TSColorRole;
+	public static final field BackgroundSecondary Lcom/ts/ds/core/style/TSColorRole;
+	public static final field BorderStrong Lcom/ts/ds/core/style/TSColorRole;
+	public static final field BorderSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Danger Lcom/ts/ds/core/style/TSColorRole;
+	public static final field DangerOnInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field DangerPressed Lcom/ts/ds/core/style/TSColorRole;
+	public static final field DangerSolid Lcom/ts/ds/core/style/TSColorRole;
+	public static final field DangerSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Focus Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Info Lcom/ts/ds/core/style/TSColorRole;
+	public static final field InfoOnInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field InfoSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Overlay Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Success Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SuccessOnInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SuccessSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SurfaceCard Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SurfaceElevated Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SurfaceHover Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SurfaceInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SurfacePressed Lcom/ts/ds/core/style/TSColorRole;
+	public static final field SwitchThumb Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextDisabled Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextMuted Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextOnAccent Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextPrimary Lcom/ts/ds/core/style/TSColorRole;
+	public static final field TextSecondary Lcom/ts/ds/core/style/TSColorRole;
+	public static final field Warning Lcom/ts/ds/core/style/TSColorRole;
+	public static final field WarningOnInverse Lcom/ts/ds/core/style/TSColorRole;
+	public static final field WarningSubtle Lcom/ts/ds/core/style/TSColorRole;
+	public final fun argb (Z)J
+	public final fun getDark ()J
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getLight ()J
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSColorRole;
+	public static fun values ()[Lcom/ts/ds/core/style/TSColorRole;
+}
+
+public final class com/ts/ds/core/style/TSControlState {
+	public static final field Companion Lcom/ts/ds/core/style/TSControlState$Companion;
+	public fun <init> ()V
+	public fun <init> (ZZZZZZ)V
+	public synthetic fun <init> (ZZZZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Z
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Z
+	public final fun copy (ZZZZZZ)Lcom/ts/ds/core/style/TSControlState;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSControlState;ZZZZZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSControlState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDimmed ()Z
+	public final fun getEnabled ()Z
+	public final fun getError ()Z
+	public final fun getFocused ()Z
+	public final fun getInteractive ()Z
+	public final fun getLoading ()Z
+	public final fun getPressed ()Z
+	public final fun getSelected ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSControlState$Companion {
+	public final fun getDefault ()Lcom/ts/ds/core/style/TSControlState;
+	public final fun getDisabled ()Lcom/ts/ds/core/style/TSControlState;
+	public final fun getFocused ()Lcom/ts/ds/core/style/TSControlState;
+	public final fun getLoading ()Lcom/ts/ds/core/style/TSControlState;
+	public final fun getPressed ()Lcom/ts/ds/core/style/TSControlState;
+	public final fun make (ZZZZ)Lcom/ts/ds/core/style/TSControlState;
+	public static synthetic fun make$default (Lcom/ts/ds/core/style/TSControlState$Companion;ZZZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSControlState;
+}
+
+public final class com/ts/ds/core/style/TSDialogActionsAxis : java/lang/Enum {
+	public static final field Horizontal Lcom/ts/ds/core/style/TSDialogActionsAxis;
+	public static final field Vertical Lcom/ts/ds/core/style/TSDialogActionsAxis;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSDialogActionsAxis;
+	public static fun values ()[Lcom/ts/ds/core/style/TSDialogActionsAxis;
+}
+
+public final class com/ts/ds/core/style/TSDialogStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field ACCESSIBILITY_FONT_SCALE F
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSDialogStyleSpec;
+	public static final field PREDICTIVE_BACK_MIN_SCALE F
+	public final fun configuration (Lcom/ts/ds/core/style/TSDialogVariant;F)Lcom/ts/ds/core/style/TSDialogStyleSpec$Configuration;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun isAccessibilitySize (F)Z
+	public final fun predictiveBackScale (F)F
+	public fun resolve (Lcom/ts/ds/core/style/TSDialogStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSDialogStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSDialogStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSDialogVariant;Z)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSDialogVariant;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSDialogVariant;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSDialogVariant;Z)Lcom/ts/ds/core/style/TSDialogStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSDialogStyleSpec$Configuration;Lcom/ts/ds/core/style/TSDialogVariant;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSDialogStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSDialogVariant;
+	public fun hashCode ()I
+	public final fun isAccessibilitySize ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSDialogStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/style/TSShadowRole;Ljava/lang/Float;FFFFZFFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSDialogActionsAxis;ZZ)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component11 ()Z
+	public final fun component12 ()F
+	public final fun component13 ()F
+	public final fun component14 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component15 ()F
+	public final fun component16 ()F
+	public final fun component17 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component18 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component19 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component20 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component21 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component22 ()F
+	public final fun component23 ()F
+	public final fun component24 ()Lcom/ts/ds/core/style/TSDialogActionsAxis;
+	public final fun component25 ()Z
+	public final fun component26 ()Z
+	public final fun component3 ()F
+	public final fun component4 ()Z
+	public final fun component5 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component6 ()Ljava/lang/Float;
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/style/TSShadowRole;Ljava/lang/Float;FFFFZFFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSDialogActionsAxis;ZZ)Lcom/ts/ds/core/style/TSDialogStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSDialogStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FZLcom/ts/ds/core/style/TSShadowRole;Ljava/lang/Float;FFFFZFFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSDialogActionsAxis;ZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSDialogStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionsAxis ()Lcom/ts/ds/core/style/TSDialogActionsAxis;
+	public final fun getActionsSpacingDp ()F
+	public final fun getActionsTopSpacingDp ()F
+	public final fun getBlockActions ()Z
+	public final fun getBodyColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBodyTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getContentTopInsetDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getGrabberColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getGrabberHeightDp ()F
+	public final fun getGrabberSpacingDp ()F
+	public final fun getGrabberWidthDp ()F
+	public final fun getMaxWidthDp ()Ljava/lang/Float;
+	public final fun getOuterMarginDp ()F
+	public final fun getPaddingBottomDp ()F
+	public final fun getPaddingHorizontalDp ()F
+	public final fun getPaddingTopDp ()F
+	public final fun getPrimaryActionFirst ()Z
+	public final fun getRoundsBottomCorners ()Z
+	public final fun getScrim ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsGrabber ()Z
+	public final fun getTitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTitleSpacingDp ()F
+	public final fun getTitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSDialogVariant : java/lang/Enum {
+	public static final field Center Lcom/ts/ds/core/style/TSDialogVariant;
+	public static final field Sheet Lcom/ts/ds/core/style/TSDialogVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSDialogVariant;
+	public static fun values ()[Lcom/ts/ds/core/style/TSDialogVariant;
+}
+
+public final class com/ts/ds/core/style/TSIconButtonStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSIconButtonStyleSpec;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSIconButtonStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSIconButtonVariant;Z)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSIconButtonVariant;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSIconButtonVariant;Z)Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Configuration;Lcom/ts/ds/core/style/TSIconButtonVariant;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRound ()Z
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSIconButtonStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFZF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFZF)Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFZFILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconButtonStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIcon ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSizeDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getShowsFocusRing ()Z
+	public final fun getSizeDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSIconButtonVariant : java/lang/Enum {
+	public static final field Ghost Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public static final field Primary Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public static final field Secondary Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSIconButtonVariant;
+	public static fun values ()[Lcom/ts/ds/core/style/TSIconButtonVariant;
+}
+
+public final class com/ts/ds/core/style/TSIconSize : java/lang/Enum {
+	public static final field Lg Lcom/ts/ds/core/style/TSIconSize;
+	public static final field Md Lcom/ts/ds/core/style/TSIconSize;
+	public static final field Sm Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getDp ()F
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSIconSize;
+	public static fun values ()[Lcom/ts/ds/core/style/TSIconSize;
+}
+
+public final class com/ts/ds/core/style/TSIconStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSIconStyleSpec;
+	public final fun getConfigurations ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSIconStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSIconSize;Z)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSIconSize;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSIconSize;Z)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;Lcom/ts/ds/core/style/TSIconSize;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasLabel ()Z
+	public final fun getSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSIconStyleSpec$Resolved {
+	public fun <init> (FZ)V
+	public final fun component1 ()F
+	public final fun component2 ()Z
+	public final fun copy (FZ)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;FZILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImportantForAccessibility ()Z
+	public final fun getSizeDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSListGroupPosition : java/lang/Enum {
+	public static final field Companion Lcom/ts/ds/core/style/TSListGroupPosition$Companion;
+	public static final field First Lcom/ts/ds/core/style/TSListGroupPosition;
+	public static final field Last Lcom/ts/ds/core/style/TSListGroupPosition;
+	public static final field Middle Lcom/ts/ds/core/style/TSListGroupPosition;
+	public static final field Single Lcom/ts/ds/core/style/TSListGroupPosition;
+	public final fun getDrawsTopDivider ()Z
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getRoundsBottom ()Z
+	public final fun getRoundsTop ()Z
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSListGroupPosition;
+	public static fun values ()[Lcom/ts/ds/core/style/TSListGroupPosition;
+}
+
+public final class com/ts/ds/core/style/TSListGroupPosition$Companion {
+	public final fun make (II)Lcom/ts/ds/core/style/TSListGroupPosition;
+}
+
+public final class com/ts/ds/core/style/TSListItemLayout : java/lang/Enum {
+	public static final field Companion Lcom/ts/ds/core/style/TSListItemLayout$Companion;
+	public static final field Horizontal Lcom/ts/ds/core/style/TSListItemLayout;
+	public static final field STACKED_FONT_SCALE F
+	public static final field Stacked Lcom/ts/ds/core/style/TSListItemLayout;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSListItemLayout;
+	public static fun values ()[Lcom/ts/ds/core/style/TSListItemLayout;
+}
+
+public final class com/ts/ds/core/style/TSListItemLayout$Companion {
+	public final fun make (F)Lcom/ts/ds/core/style/TSListItemLayout;
+}
+
+public final class com/ts/ds/core/style/TSListItemStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSListItemStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getGroup ()Lcom/ts/ds/core/style/TSListItemStyleSpec$Group;
+	public final fun getStates ()Ljava/util/List;
+	public final fun getTile ()Lcom/ts/ds/core/style/TSListItemStyleSpec$Tile;
+	public fun resolve (Lcom/ts/ds/core/style/TSListItemStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSListItemStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (ZZLcom/ts/ds/core/style/TSListItemLayout;)V
+	public synthetic fun <init> (ZZLcom/ts/ds/core/style/TSListItemLayout;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Lcom/ts/ds/core/style/TSListItemLayout;
+	public final fun copy (ZZLcom/ts/ds/core/style/TSListItemLayout;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSListItemStyleSpec$Configuration;ZZLcom/ts/ds/core/style/TSListItemLayout;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasSubtitle ()Z
+	public final fun getLayout ()Lcom/ts/ds/core/style/TSListItemLayout;
+	public fun hashCode ()I
+	public final fun isInteractive ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSListItemStyleSpec$Group {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component11 ()F
+	public final fun component12 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFF)Lcom/ts/ds/core/style/TSListItemStyleSpec$Group;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSListItemStyleSpec$Group;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSColorRole;FFLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFILjava/lang/Object;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Group;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getDivider ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getDividerInsetDp ()F
+	public final fun getDividerThicknessDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHeaderColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHeaderHorizontalPaddingDp ()F
+	public final fun getHeaderSpacingDp ()F
+	public final fun getHeaderTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getSectionSpacingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSListItemStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;ZLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FFFZFFFF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component12 ()F
+	public final fun component13 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component14 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun component15 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component16 ()F
+	public final fun component17 ()F
+	public final fun component18 ()F
+	public final fun component19 ()Z
+	public final fun component2 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component20 ()F
+	public final fun component21 ()F
+	public final fun component22 ()F
+	public final fun component23 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Z
+	public final fun component6 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component7 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component8 ()Ljava/lang/Integer;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;ZLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FFFZFFFF)Lcom/ts/ds/core/style/TSListItemStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSListItemStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;ZLcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Ljava/lang/Integer;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;FFFZFFFFILjava/lang/Object;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBackground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getChevron ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getChevronColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getChevronSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getLeadingColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMinHeightDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getShowsSubtitle ()Z
+	public final fun getSpacingDp ()F
+	public final fun getStackedSpacingDp ()F
+	public final fun getSubtitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getSubtitleMaxLines ()Ljava/lang/Integer;
+	public final fun getSubtitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getTitleColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTitleMaxLines ()Ljava/lang/Integer;
+	public final fun getTitleTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getTrailingColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTrailingSpacingDp ()F
+	public final fun getTrailingTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public final fun isStacked ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSListItemStyleSpec$Tile {
+	public fun <init> (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSIconSize;)V
+	public final fun component1 ()F
+	public final fun component2 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component5 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun copy (FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSIconSize;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Tile;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSListItemStyleSpec$Tile;FFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSIconSize;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSListItemStyleSpec$Tile;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getForeground ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getSizeDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSShadowRole : java/lang/Enum {
+	public static final field Lg Lcom/ts/ds/core/style/TSShadowRole;
+	public static final field Md Lcom/ts/ds/core/style/TSShadowRole;
+	public static final field Sm Lcom/ts/ds/core/style/TSShadowRole;
+	public static final field Xs Lcom/ts/ds/core/style/TSShadowRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValues ()Lcom/ts/ds/tokens/TSShadowValues;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSShadowRole;
+	public static fun values ()[Lcom/ts/ds/core/style/TSShadowRole;
+}
+
+public abstract interface class com/ts/ds/core/style/TSStyleSpec {
+	public abstract fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSStyleSpecKt {
+	public static final fun resolve (Lcom/ts/ds/core/style/TSStyleSpec;Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSSwitchStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSSwitchStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSSwitchStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSSwitchStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSSwitchStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcom/ts/ds/core/style/TSSwitchStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSSwitchStyleSpec$Configuration;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSSwitchStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChecked ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSSwitchStyleSpec$Resolved {
+	public fun <init> (FFLcom/ts/ds/core/style/TSColorRole;FFFFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZILcom/ts/ds/tokens/TSCubicBezierValues;)V
+	public final fun component1 ()F
+	public final fun component10 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component12 ()F
+	public final fun component13 ()F
+	public final fun component14 ()F
+	public final fun component15 ()Z
+	public final fun component16 ()I
+	public final fun component17 ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun component2 ()F
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun copy (FFLcom/ts/ds/core/style/TSColorRole;FFFFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZILcom/ts/ds/tokens/TSCubicBezierValues;)Lcom/ts/ds/core/style/TSSwitchStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSSwitchStyleSpec$Resolved;FFLcom/ts/ds/core/style/TSColorRole;FFFFLcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;FFFZILcom/ts/ds/tokens/TSCubicBezierValues;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSSwitchStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnimationDurationMillis ()I
+	public final fun getAnimationEasing ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun getLabelColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getLabelTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getShowsFocusRing ()Z
+	public final fun getSpacingDp ()F
+	public final fun getThumbColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getThumbInsetDp ()F
+	public final fun getThumbShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getThumbSizeDp ()F
+	public final fun getThumbStartOffsetDp ()F
+	public final fun getTrackColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getTrackCornerRadiusDp ()F
+	public final fun getTrackHeightDp ()F
+	public final fun getTrackOpacity ()F
+	public final fun getTrackWidthDp ()F
+	public fun hashCode ()I
+	public final fun thumbLeftDp (Z)F
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTabItem {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/ts/ds/core/style/TSTabItem;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTabItem;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSTabItem;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLabel ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTabsStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field BORDER_WIDTH_DP F
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSTabsStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public static final field SEGMENTED_HEIGHT_DP F
+	public static final field UNDERLINE_HEIGHT_DP F
+	public final fun container (Lcom/ts/ds/core/style/TSTabsVariant;Z)Lcom/ts/ds/core/style/TSTabsStyleSpec$Container;
+	public static synthetic fun container$default (Lcom/ts/ds/core/style/TSTabsStyleSpec;Lcom/ts/ds/core/style/TSTabsVariant;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Container;
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public fun resolve (Lcom/ts/ds/core/style/TSTabsStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+	public final fun selectedIndex (Ljava/util/List;Ljava/lang/String;)I
+}
+
+public final class com/ts/ds/core/style/TSTabsStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/style/TSTabsVariant;Z)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSTabsVariant;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSTabsVariant;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSTabsVariant;Z)Lcom/ts/ds/core/style/TSTabsStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTabsStyleSpec$Configuration;Lcom/ts/ds/core/style/TSTabsVariant;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSelected ()Z
+	public final fun getVariant ()Lcom/ts/ds/core/style/TSTabsVariant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTabsStyleSpec$Container {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZF)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()F
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()Z
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZF)Lcom/ts/ds/core/style/TSTabsStyleSpec$Container;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTabsStyleSpec$Container;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFZFILjava/lang/Object;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Container;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getContentInsetDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMinHeightDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getPaddingDp ()F
+	public final fun getScrollable ()Z
+	public final fun getSpacingDp ()F
+	public final fun getTouchOutsetDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTabsStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component10 ()F
+	public final fun component11 ()F
+	public final fun component12 ()F
+	public final fun component13 ()Z
+	public final fun component14 ()I
+	public final fun component15 ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component5 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()F
+	public final fun copy (Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTabsStyleSpec$Resolved;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSColorRole;FFFFFFFZILcom/ts/ds/tokens/TSCubicBezierValues;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSTabsStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAnimationDurationMillis ()I
+	public final fun getAnimationEasing ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIndicatorColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIndicatorHeightDp ()F
+	public final fun getLabelColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getLabelTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMinHeightDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOpacity ()F
+	public final fun getPaddingHorizontalDp ()F
+	public final fun getPaddingVerticalDp ()F
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsFocusRing ()Z
+	public final fun getTouchOutsetDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTabsVariant : java/lang/Enum {
+	public static final field Segmented Lcom/ts/ds/core/style/TSTabsVariant;
+	public static final field Underline Lcom/ts/ds/core/style/TSTabsVariant;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSTabsVariant;
+	public static fun values ()[Lcom/ts/ds/core/style/TSTabsVariant;
+}
+
+public final class com/ts/ds/core/style/TSTextFieldStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field FOCUSED_BORDER_WIDTH_DP F
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSTextFieldStyleSpec;
+	public static final field MASK_CHARACTER C
+	public static final field MAXIMUM_LINES I
+	public static final field MINIMUM_LINES I
+	public static final field MIN_TOUCH_TARGET_DP F
+	public static final field UNFOCUSED_BORDER_WIDTH_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun getStates ()Ljava/util/List;
+	public final fun maskedText (Ljava/lang/String;Z)Ljava/lang/String;
+	public final fun passwordToggle (Z)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$PasswordToggle;
+	public fun resolve (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+	public final fun state (ZZZ)Lcom/ts/ds/core/style/TSControlState;
+	public static synthetic fun state$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec;ZZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSControlState;
+}
+
+public final class com/ts/ds/core/style/TSTextFieldStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReadOnly ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTextFieldStyleSpec$PasswordToggle {
+	public fun <init> (Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFZ)V
+	public final fun component1 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component3 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()Z
+	public final fun copy (Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFZ)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$PasswordToggle;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$PasswordToggle;Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FFFFZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$PasswordToggle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCornerRadiusDp ()F
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getIconColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSizeDp ()F
+	public final fun getMinTouchTargetDp ()F
+	public final fun getSelected ()Z
+	public final fun getSizeDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTextFieldStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZFFLcom/ts/ds/core/style/TSColorRole;FFFFFFFFZZZ)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component12 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component13 ()Z
+	public final fun component14 ()F
+	public final fun component15 ()F
+	public final fun component16 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component17 ()F
+	public final fun component18 ()F
+	public final fun component19 ()F
+	public final fun component2 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component20 ()F
+	public final fun component21 ()F
+	public final fun component22 ()F
+	public final fun component23 ()F
+	public final fun component24 ()F
+	public final fun component25 ()Z
+	public final fun component26 ()Z
+	public final fun component27 ()Z
+	public final fun component3 ()F
+	public final fun component4 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component5 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component6 ()I
+	public final fun component7 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component8 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component9 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZFFLcom/ts/ds/core/style/TSColorRole;FFFFFFFFZZZ)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;Lcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZFFLcom/ts/ds/core/style/TSColorRole;FFFFFFFFZZZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBorder ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getBorderWidthDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getEditable ()Z
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getInputColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getInputTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getLabelColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getLabelFontWeight ()I
+	public final fun getLabelSpacingDp ()F
+	public final fun getLabelTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getLeadingIconColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getLeadingIconSizeDp ()F
+	public final fun getMessageColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMessageIconSizeDp ()F
+	public final fun getMessageSpacingDp ()F
+	public final fun getMessageTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMinHeightDp ()F
+	public final fun getOpacity ()F
+	public final fun getPlaceholderColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getSelectable ()Z
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsErrorIcon ()Z
+	public final fun getShowsFocusRing ()Z
+	public final fun getSpacingDp ()F
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSToastStyleSpec : com/ts/ds/core/style/TSStyleSpec {
+	public static final field INSTANCE Lcom/ts/ds/core/style/TSToastStyleSpec;
+	public static final field MIN_TOUCH_TARGET_DP F
+	public final fun getConfigurations ()Ljava/util/List;
+	public final fun hapticEvent (Lcom/ts/ds/core/logic/TSToastTone;)Lcom/ts/ds/core/haptics/DsHapticEvent;
+	public final fun icon (Lcom/ts/ds/core/logic/TSToastTone;)Lcom/ts/ds/core/icon/TSIcon;
+	public final fun iconColor (Lcom/ts/ds/core/logic/TSToastTone;)Lcom/ts/ds/core/style/TSColorRole;
+	public fun resolve (Lcom/ts/ds/core/style/TSToastStyleSpec$Configuration;Lcom/ts/ds/core/style/TSControlState;)Lcom/ts/ds/core/style/TSToastStyleSpec$Resolved;
+	public synthetic fun resolve (Ljava/lang/Object;Lcom/ts/ds/core/style/TSControlState;)Ljava/lang/Object;
+}
+
+public final class com/ts/ds/core/style/TSToastStyleSpec$Configuration {
+	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/logic/TSToastTone;Z)V
+	public synthetic fun <init> (Lcom/ts/ds/core/logic/TSToastTone;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/ts/ds/core/logic/TSToastTone;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/ts/ds/core/logic/TSToastTone;Z)Lcom/ts/ds/core/style/TSToastStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSToastStyleSpec$Configuration;Lcom/ts/ds/core/logic/TSToastTone;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSToastStyleSpec$Configuration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHasAction ()Z
+	public final fun getTone ()Lcom/ts/ds/core/logic/TSToastTone;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSToastStyleSpec$Resolved {
+	public fun <init> (Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;ZFFFFII)V
+	public final fun component1 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component10 ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun component11 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component12 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component13 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component14 ()Z
+	public final fun component15 ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun component16 ()I
+	public final fun component17 ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun component18 ()Z
+	public final fun component19 ()F
+	public final fun component2 ()F
+	public final fun component20 ()F
+	public final fun component21 ()F
+	public final fun component22 ()F
+	public final fun component23 ()I
+	public final fun component24 ()I
+	public final fun component3 ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun component4 ()F
+	public final fun component5 ()F
+	public final fun component6 ()F
+	public final fun component7 ()F
+	public final fun component8 ()F
+	public final fun component9 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun copy (Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;ZFFFFII)Lcom/ts/ds/core/style/TSToastStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSToastStyleSpec$Resolved;Lcom/ts/ds/core/style/TSColorRole;FLcom/ts/ds/core/style/TSShadowRole;FFFFFLcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/style/TSIconSize;Lcom/ts/ds/core/style/TSColorRole;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSColorRole;ZLcom/ts/ds/core/style/TSTypeRole;ILcom/ts/ds/core/style/TSColorRole;ZFFFFIIILjava/lang/Object;)Lcom/ts/ds/core/style/TSToastStyleSpec$Resolved;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActionColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getActionFontWeight ()I
+	public final fun getActionHorizontalPaddingDp ()F
+	public final fun getActionIsUnderlined ()Z
+	public final fun getActionPressedOpacity ()F
+	public final fun getActionTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getActionVerticalPaddingDp ()F
+	public final fun getCornerRadiusDp ()F
+	public final fun getEnterDurationMillis ()I
+	public final fun getExitDurationMillis ()I
+	public final fun getFill ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getHorizontalPaddingDp ()F
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getIconColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getIconSize ()Lcom/ts/ds/core/style/TSIconSize;
+	public final fun getMaxWidthDp ()F
+	public final fun getMessageColor ()Lcom/ts/ds/core/style/TSColorRole;
+	public final fun getMessageTypeRole ()Lcom/ts/ds/core/style/TSTypeRole;
+	public final fun getMinTouchTargetDp ()F
+	public final fun getOuterMarginDp ()F
+	public final fun getShadow ()Lcom/ts/ds/core/style/TSShadowRole;
+	public final fun getShowsAction ()Z
+	public final fun getSpacingDp ()F
+	public final fun getVerticalPaddingDp ()F
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/core/style/TSTypeRole : java/lang/Enum {
+	public static final field Body Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field BodyLg Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field BodySm Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Caption Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Code Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Display Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Label Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Overline Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Title1 Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Title2 Lcom/ts/ds/core/style/TSTypeRole;
+	public static final field Title3 Lcom/ts/ds/core/style/TSTypeRole;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValues ()Lcom/ts/ds/tokens/TSTypeValues;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSTypeRole;
+	public static fun values ()[Lcom/ts/ds/core/style/TSTypeRole;
+}
+

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="ts_touch_target_listener" type="id" />
+    <item name="ts_initial_padding" type="id" />
+    <item name="ts_toast_host" type="id" />
+</resources>

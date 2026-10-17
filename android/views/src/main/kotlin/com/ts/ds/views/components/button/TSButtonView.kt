@@ -1,0 +1,244 @@
+package com.ts.ds.views.components.button
+
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.util.AttributeSet
+import android.view.Gravity
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.widget.ImageViewCompat
+import com.google.android.material.textview.MaterialTextView
+import com.ts.ds.core.R as CoreR
+import com.ts.ds.core.icon.TSIcon
+import com.ts.ds.core.icon.TSIcons
+import com.ts.ds.core.style.TSButtonSize
+import com.ts.ds.core.style.TSButtonStyleSpec
+import com.ts.ds.core.style.TSButtonVariant
+import com.ts.ds.core.style.TSColorRole
+import com.ts.ds.core.style.TSControlState
+import com.ts.ds.views.R
+import com.ts.ds.views.components.shared.TSControlBackground
+import com.ts.ds.views.components.shared.TSSpinnerDrawable
+import com.ts.ds.views.components.shared.dpToPx
+import com.ts.ds.views.components.shared.expandToTouchTarget
+import com.ts.ds.views.theme.textAppearance
+import com.ts.ds.views.theme.tsColor
+
+public class TSButtonView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : LinearLayout(context, attrs, defStyleAttr) {
+    private val leadingView = AppCompatImageView(context)
+    private val labelView = MaterialTextView(context)
+    private val trailingView = AppCompatImageView(context)
+    private val chrome = TSControlBackground()
+    private val spinner: TSSpinnerDrawable
+    private val minTouchTarget = resources.getDimensionPixelSize(R.dimen.ts_min_touch_target)
+    private val focusRingWidth = resources.getDimension(R.dimen.ts_focus_ring_width)
+    private var userEnabled = true
+    private var ready = false
+
+    public var text: CharSequence
+        get() = labelView.text
+        set(value) {
+            labelView.text = value
+        }
+
+    public var variant: TSButtonVariant = TSButtonVariant.Primary
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    public var size: TSButtonSize = TSButtonSize.Md
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    internal var isDimmedByContainer: Boolean = false
+        set(value) {
+            field = value
+            applyState()
+        }
+
+    public var leadingIcon: TSIcon? = null
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    public var trailingIcon: TSIcon? = null
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    public var isLoading: Boolean = false
+        set(value) {
+            field = value
+            super.setEnabled(userEnabled && !value)
+            ViewCompat.setStateDescription(this, if (value) loadingDescription else null)
+            applyConfiguration()
+        }
+
+    public var loadingDescription: CharSequence = context.getString(CoreR.string.ts_loading)
+        set(value) {
+            field = value
+            if (isLoading) ViewCompat.setStateDescription(this, value)
+        }
+
+    init {
+        val initial = TSButtonStyleSpec.resolve(TSButtonStyleSpec.Configuration(), TSControlState.Default)
+        spinner = TSSpinnerDrawable(
+            size = dpToPx(initial.spinnerSizeDp),
+            slotSize = dpToPx(initial.iconSizeDp),
+            strokeWidth = dpToPx(initial.spinnerStrokeWidthDp).toFloat(),
+            rotationMillis = initial.spinnerRotationMillis.toLong(),
+        )
+        orientation = HORIZONTAL
+        gravity = Gravity.CENTER
+        isClickable = true
+        isFocusable = true
+        background = chrome
+        val iconSize = dpToPx(initial.iconSizeDp)
+        listOf(leadingView, labelView, trailingView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
+        addView(leadingView, LayoutParams(iconSize, iconSize).apply { marginEnd = dpToPx(initial.iconSpacingDp) })
+        addView(labelView, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        addView(trailingView, LayoutParams(iconSize, iconSize).apply { marginStart = dpToPx(initial.iconSpacingDp) })
+        labelView.gravity = Gravity.CENTER
+        ViewCompat.setAccessibilityDelegate(
+            this,
+            object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.className = Button::class.java.name
+                    info.text = text
+                }
+            },
+        )
+        context.obtainStyledAttributes(attrs, R.styleable.TSButtonView, defStyleAttr, 0).apply {
+            text = getText(R.styleable.TSButtonView_android_text) ?: ""
+            variant = TSButtonVariant.entries[getInt(R.styleable.TSButtonView_tsVariant, TSButtonVariant.Primary.ordinal)]
+            size = TSButtonSize.entries[getInt(R.styleable.TSButtonView_tsSize, TSButtonSize.Md.ordinal)]
+            leadingIcon = getString(R.styleable.TSButtonView_tsLeadingIcon)?.let(TSIcons::fromDsName)
+            trailingIcon = getString(R.styleable.TSButtonView_tsTrailingIcon)?.let(TSIcons::fromDsName)
+            userEnabled = isEnabled
+            isLoading = getBoolean(R.styleable.TSButtonView_tsLoading, false)
+            recycle()
+        }
+        ready = true
+        applyConfiguration()
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        userEnabled = enabled
+        super.setEnabled(enabled && !isLoading)
+        if (ready) applyState()
+    }
+
+    override fun drawableStateChanged() {
+        super.drawableStateChanged()
+        if (ready) applyState()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        if (ready && isLoading) spinner.start()
+    }
+
+    override fun onDetachedFromWindow() {
+        spinner.stop()
+        super.onDetachedFromWindow()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        chrome.setBounds(0, 0, w, h)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val visualWidth = measuredWidth
+        val visualHeight = measuredHeight
+        chrome.setVisualSize(visualWidth, visualHeight)
+        setMeasuredDimension(
+            expandToTouchTarget(visualWidth, widthMeasureSpec, minTouchTarget),
+            expandToTouchTarget(visualHeight, heightMeasureSpec, minTouchTarget),
+        )
+    }
+
+    internal val currentState: TSControlState
+        get() = TSControlState.make(pressed = isPressed, enabled = userEnabled, loading = isLoading, focused = isFocused)
+
+    internal val resolved: TSButtonStyleSpec.Resolved
+        get() = TSButtonStyleSpec.resolve(TSButtonStyleSpec.Configuration(variant, size), currentState)
+
+    private fun applyConfiguration() {
+        if (!ready) return
+        val resolved = resolved
+        val labelColor = ColorStateList.valueOf(tsColor(resolved.label))
+        labelView.setTextAppearance(resolved.typeRole.textAppearance)
+        labelView.typeface = Typeface.create(MEDIUM_FAMILY, Typeface.NORMAL)
+        labelView.setTextColor(labelColor)
+        labelView.paintFlags = if (resolved.underlined) {
+            labelView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        } else {
+            labelView.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+        }
+        val horizontal = dpToPx(resolved.horizontalPaddingDp)
+        val vertical = dpToPx(resolved.verticalPaddingDp)
+        setPaddingRelative(horizontal, vertical, horizontal, vertical)
+        minimumHeight = dpToPx(resolved.minHeightDp)
+        elevation = resolved.shadow?.let { dpToPx(it.values.elevation).toFloat() } ?: 0f
+        spinner.color = labelColor.defaultColor
+        when {
+            resolved.showsSpinner -> {
+                leadingView.setImageDrawable(spinner)
+                leadingView.visibility = VISIBLE
+                if (isAttachedToWindow) spinner.start()
+            }
+            leadingIcon != null -> {
+                spinner.stop()
+                leadingView.setImageResource(requireNotNull(leadingIcon).drawableRes)
+                leadingView.visibility = VISIBLE
+            }
+            else -> {
+                spinner.stop()
+                leadingView.setImageDrawable(null)
+                leadingView.visibility = GONE
+            }
+        }
+        trailingView.visibility = if (trailingIcon == null) GONE else VISIBLE
+        trailingIcon?.let { trailingView.setImageResource(it.drawableRes) }
+        listOf(leadingView, trailingView).forEach { ImageViewCompat.setImageTintList(it, labelColor) }
+        applyState()
+    }
+
+    private fun applyState() {
+        val resolved = resolved
+        chrome.update(
+            fillColor = resolved.fill?.let(::tsColor) ?: 0,
+            borderColor = resolved.border?.let(::tsColor) ?: 0,
+            borderWidth = dpToPx(resolved.borderWidthDp).toFloat(),
+            cornerRadius = dpToPx(resolved.cornerRadiusDp).toFloat(),
+            ringColor = tsColor(TSColorRole.Focus),
+            ringGapColor = tsColor(TSColorRole.BackgroundPrimary),
+            ringWidth = focusRingWidth,
+            showsRing = resolved.showsFocusRing,
+        )
+        alpha = if (isDimmedByContainer) 1f else resolved.opacity
+    }
+
+    private companion object {
+        const val MEDIUM_FAMILY = "sans-serif-medium"
+    }
+}

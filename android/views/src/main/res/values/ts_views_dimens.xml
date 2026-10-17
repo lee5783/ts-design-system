@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ts_min_touch_target">48dp</dimen>
+    <dimen name="ts_focus_ring_width">2dp</dimen>
+</resources>

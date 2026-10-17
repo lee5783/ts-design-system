@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <attr name="tsVariant" format="enum">
+        <enum name="primary" value="0" />
+        <enum name="secondary" value="1" />
+        <enum name="ghost" value="2" />
+        <enum name="danger" value="3" />
+        <enum name="link" value="4" />
+    </attr>
+    <attr name="tsSize" format="enum">
+        <enum name="md" value="0" />
+        <enum name="lg" value="1" />
+    </attr>
+    <attr name="tsIcon" format="string" />
+    <attr name="tsLeadingIcon" format="string" />
+    <attr name="tsTrailingIcon" format="string" />
+    <attr name="tsLoading" format="boolean" />
+    <attr name="tsRound" format="boolean" />
+    <attr name="tsBadgeTone" format="enum">
+        <enum name="neutral" value="0" />
+        <enum name="accent" value="1" />
+        <enum name="success" value="2" />
+        <enum name="warning" value="3" />
+        <enum name="danger" value="4" />
+        <enum name="info" value="5" />
+    </attr>
+    <attr name="tsShowsDot" format="boolean" />
+    <attr name="tsAvatarSize" format="enum">
+        <enum name="xs" value="0" />
+        <enum name="sm" value="1" />
+        <enum name="md" value="2" />
+        <enum name="lg" value="3" />
+    </attr>
+    <attr name="tsName" format="string" />
+    <attr name="tsLabel" format="string" />
+    <attr name="tsPlaceholder" format="string" />
+    <attr name="tsHint" format="string" />
+    <attr name="tsError" format="string" />
+    <attr name="tsSecure" format="boolean" />
+    <attr name="tsMultiline" format="boolean" />
+    <attr name="tsReadOnly" format="boolean" />
+    <attr name="tsLabelHidden" format="boolean" />
+    <attr name="tsTabsVariant" format="enum">
+        <enum name="underline" value="0" />
+        <enum name="segmented" value="1" />
+    </attr>
+    <attr name="tsBlock" format="boolean" />
+    <attr name="tsTitle" format="string" />
+    <attr name="tsSubtitle" format="string" />
+    <attr name="tsTrailingText" format="string" />
+    <attr name="tsShowsChevron" format="boolean" />
+    <attr name="tsBodyText" format="string" />
+    <attr name="tsRaised" format="boolean" />
+    <attr name="tsAlertTone" format="enum">
+        <enum name="info" value="0" />
+        <enum name="success" value="1" />
+        <enum name="warning" value="2" />
+        <enum name="danger" value="3" />
+    </attr>
+    <attr name="tsMessage" format="string" />
+    <attr name="tsAnnouncesWhenShown" format="boolean" />
+    <attr name="tsToastTone" format="enum">
+        <enum name="neutral" value="0" />
+        <enum name="success" value="1" />
+        <enum name="warning" value="2" />
+        <enum name="danger" value="3" />
+        <enum name="info" value="4" />
+    </attr>
+    <attr name="tsActionLabel" format="string" />
+    <attr name="tsInputTraits" format="enum">
+        <enum name="plain" value="0" />
+        <enum name="name" value="1" />
+        <enum name="email" value="2" />
+        <enum name="username" value="3" />
+        <enum name="password" value="4" />
+        <enum name="newPassword" value="5" />
+        <enum name="oneTimeCode" value="6" />
+        <enum name="phone" value="7" />
+        <enum name="number" value="8" />
+        <enum name="decimal" value="9" />
+        <enum name="url" value="10" />
+        <enum name="search" value="11" />
+    </attr>
+
+    <declare-styleable name="TSButtonView">
+        <attr name="android:text" />
+        <attr name="tsVariant" />
+        <attr name="tsSize" />
+        <attr name="tsLeadingIcon" />
+        <attr name="tsTrailingIcon" />
+        <attr name="tsLoading" />
+    </declare-styleable>
+
+    <declare-styleable name="TSIconButtonView">
+        <attr name="android:contentDescription" />
+        <attr name="tsVariant" />
+        <attr name="tsIcon" />
+        <attr name="tsRound" />
+    </declare-styleable>
+
+    <declare-styleable name="TSBadgeView">
+        <attr name="android:text" />
+        <attr name="tsBadgeTone" />
+        <attr name="tsShowsDot" />
+        <attr name="tsIcon" />
+    </declare-styleable>
+
+    <declare-styleable name="TSAvatarView">
+        <attr name="android:src" />
+        <attr name="tsName" />
+        <attr name="tsAvatarSize" />
+    </declare-styleable>
+
+    <declare-styleable name="TSTextFieldView">
+        <attr name="android:enabled" />
+        <attr name="android:text" />
+        <attr name="tsLabel" />
+        <attr name="tsPlaceholder" />
+        <attr name="tsHint" />
+        <attr name="tsError" />
+        <attr name="tsLeadingIcon" />
+        <attr name="tsSecure" />
+        <attr name="tsMultiline" />
+        <attr name="tsReadOnly" />
+        <attr name="tsInputTraits" />
+    </declare-styleable>
+
+    <declare-styleable name="TSCheckboxView">
+        <attr name="android:text" />
+        <attr name="android:checked" />
+        <attr name="tsLabelHidden" />
+    </declare-styleable>
+
+    <declare-styleable name="TSSwitchView">
+        <attr name="android:text" />
+        <attr name="android:checked" />
+        <attr name="tsLabelHidden" />
+    </declare-styleable>
+
+    <declare-styleable name="TSTabsView">
+        <attr name="android:entries" />
+        <attr name="android:enabled" />
+        <attr name="tsTabsVariant" />
+        <attr name="tsBlock" />
+        <attr name="tsLabel" />
+    </declare-styleable>
+
+    <declare-styleable name="TSBottomNavView">
+        <attr name="android:enabled" />
+        <attr name="tsLabel" />
+    </declare-styleable>
+
+    <declare-styleable name="TSListItemView">
+        <attr name="tsTitle" />
+        <attr name="tsSubtitle" />
+        <attr name="tsLeadingIcon" />
+        <attr name="tsName" />
+        <attr name="tsTrailingText" />
+        <attr name="tsShowsChevron" />
+    </declare-styleable>
+
+    <declare-styleable name="TSCardView">
+        <attr name="android:enabled" />
+        <attr name="tsTitle" />
+        <attr name="tsSubtitle" />
+        <attr name="tsBodyText" />
+        <attr name="tsRaised" />
+    </declare-styleable>
+
+    <declare-styleable name="TSAlertView">
+        <attr name="tsAlertTone" />
+        <attr name="tsTitle" />
+        <attr name="tsMessage" />
+        <attr name="tsIcon" />
+        <attr name="tsAnnouncesWhenShown" />
+    </declare-styleable>
+    <declare-styleable name="TSToastView">
+        <attr name="tsToastTone" />
+        <attr name="tsMessage" />
+        <attr name="tsActionLabel" />
+    </declare-styleable>
+</resources>
