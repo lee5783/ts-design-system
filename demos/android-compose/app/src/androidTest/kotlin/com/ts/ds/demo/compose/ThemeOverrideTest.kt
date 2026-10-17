@@ -174,10 +174,9 @@ class ThemeOverrideTest {
         setDeviceDark(true)
         launchWithTheme(DemoTheme.System).use { scenario ->
             composeRule.waitForIdle()
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             setDeviceDark(false)
-            composeRule.waitForIdle()
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = false)
             assertEquals(true, scenario.lightStatusBars())
         }
     }
