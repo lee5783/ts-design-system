@@ -1,10 +1,50 @@
 # TS Design System
 
-Native libraries for the TinySolution (TS) design system: tokens, icons and 15 components (Alert, Avatar, Badge, BottomNav, Button, Card, Checkbox, Dialog, Icon, IconButton, ListItem, Switch, Tabs, TextField, Toast), built natively for **SwiftUI, UIKit, Jetpack Compose and Android Views** from one checked-in copy of the design system. iOS 15+ and Android API 26+, light and dark, Dynamic Type and font scale, VoiceOver and TalkBack, RTL.
+**Analysis Date:** 2026-10-17
 
-One version covers both platforms (`VERSION`, currently `0.1.0`).
+## Project Summary
 
-## iOS (Swift Package Manager)
+- One-liner: native iOS and Android libraries for the TinySolution (TS) design system, built for **SwiftUI, UIKit, Jetpack Compose and Android Views** from one checked-in copy of the design source.
+- Primary capabilities:
+  - Generated tokens (color light/dark, type, spacing, radius, shadow, size, opacity) and icons for both platforms.
+  - 15 components in all four toolkits: Alert, Avatar, Badge, BottomNav, Button, Card, Checkbox, Dialog, Icon, IconButton, ListItem, Switch, Tabs, TextField, Toast.
+  - Light and dark, Dynamic Type and font scale, VoiceOver and TalkBack, RTL.
+  - Four demo apps, one per toolkit, each showing every token and every component variant, size and state.
+- Who it is for: iOS and Android app teams adopting the TS design system, and the maintainers who keep the libraries in step with the design source.
+
+One version covers both platforms (`VERSION`, currently `0.1.0`; history in `CHANGELOG.md`).
+
+## Goals and Non-Goals
+
+- Goals:
+  - One design source (`design/`) feeding generated tokens and assets for both platforms, so a DS update is a sync plus codegen, not hand edits.
+  - Native components per toolkit with the same tokens, sizes, states and accessibility contract (`design/specs/components/<name>.md`).
+  - A stable public API from the first tag, guarded by API checks on both platforms.
+- Non-goals (from `docs/stack.md`): CocoaPods, Maven Central, Kotlin Multiplatform and web distribution. iOS ships through SPM only, Android through GitHub Packages only.
+
+## Requirements
+
+- Runtime/Environment:
+  - Consumers: iOS 15+ (SwiftUI or UIKit apps); Android API 26+ (Compose or Views apps).
+  - Contributors: macOS with Xcode 26.6 (`.xcode-version`), JDK 21 and Node 22 (`mise.toml`; `mise install`).
+- Build/Tooling:
+  - Swift Package Manager (`Package.swift`, `ios/`).
+  - Gradle with a convention-plugin build (`android/build-logic/`).
+  - A Node/Vitest tools workspace (`tools/`) for sync, codegen, CI and release.
+  - `make` as the single entry point for every task (`Makefile`).
+- External services:
+  - GitHub Packages, the Android Maven repository; reading needs a token with `read:packages`.
+  - GitHub Actions for CI and release (`.github/workflows/`).
+  - Renovate for dependency PRs (`.github/renovate.json`).
+- Configuration notes:
+  - Android consumers put GitHub Packages credentials in Gradle properties (`gpr.user` / `gpr.key`). Never commit them.
+  - POM metadata is in `android/gradle.properties`.
+
+## Getting Started
+
+### Install
+
+**iOS (Swift Package Manager):**
 
 ```swift
 .package(url: "https://github.com/lee5783/ts-design-system.git", exact: "0.1.0")
@@ -20,11 +60,7 @@ One version covers both platforms (`VERSION`, currently `0.1.0`).
 .product(name: "TSDesignSystem", package: "ts-design-system")
 ```
 
-Full setup: [docs/consumers/ios-getting-started.md](docs/consumers/ios-getting-started.md).
-
-## Android (GitHub Packages)
-
-`settings.gradle.kts` (GitHub Packages needs a token with `read:packages`, even for public packages):
+**Android (GitHub Packages):** add the repository to `settings.gradle.kts`. GitHub Packages needs a token with `read:packages`, even for public packages.
 
 ```kotlin
 dependencyResolutionManagement {
@@ -43,52 +79,99 @@ dependencyResolutionManagement {
 }
 ```
 
-App `build.gradle.kts`:
+Then the dependencies in the app's `build.gradle.kts`:
 
 ```kotlin
 implementation(platform("com.ts.ds:bom:0.1.0"))
 implementation("com.ts.ds:compose")   // or "com.ts.ds:views"
 ```
 
-Full setup, CI credentials and local testing: [docs/consumers/android-getting-started.md](docs/consumers/android-getting-started.md). Theming and string overrides: [docs/consumers/theming.md](docs/consumers/theming.md).
+### Configure
 
-## Demo apps
+- **Android credentials:** set `gpr.user` and `gpr.key` in `~/.gradle/gradle.properties`, or in CI secrets. Full setup, including CI and local testing: `docs/consumers/android-getting-started.md`.
+- **iOS:** setup, including private-repository access: `docs/consumers/ios-getting-started.md`.
+- **Theming, Material interop and string overrides:** `docs/consumers/theming.md`.
 
-Each toolkit has its own demo app with every token and every component variant, size and state. They live in `demos/` and consume the library like an external app.
+### Run (Development)
+
+Contributor setup:
+
+```bash
+mise install          # Node 22, JDK 21, git-cliff
+make tools-deps       # install the tools workspace
+make help             # list every target
+```
+
+The demo apps live in `demos/` and consume the library like an external app:
 
 | App | Toolkit | Run |
 |---|---|---|
-| [`demos/ios-swiftui`](demos/ios-swiftui) | SwiftUI | `make demo-ios-swiftui-run` |
-| [`demos/ios-uikit`](demos/ios-uikit) | UIKit | `make demo-ios-uikit-run` |
-| [`demos/android-compose`](demos/android-compose) | Compose | `make demo-android-compose`, then install from Android Studio or `./gradlew :app:installDebug` |
-| [`demos/android-views`](demos/android-views) | Views | `make demo-android-views`, then install the same way |
+| `demos/ios-swiftui` | SwiftUI | `make demo-ios-swiftui-run` |
+| `demos/ios-uikit` | UIKit | `make demo-ios-uikit-run` |
+| `demos/android-compose` | Compose | `make demo-android-compose`, then install from Android Studio or `./gradlew :app:installDebug` |
+| `demos/android-views` | Views | `make demo-android-views`, then install the same way |
 
-Launch options, the theme toggle and deep links: [docs/guides/running-demos.md](docs/guides/running-demos.md).
+Launch options, the in-app theme toggle and the theme deep links are in `docs/guides/running-demos.md`.
 
-## Repository layout
+### Run (Production)
 
-| Path | Contents |
-|---|---|
-| `design/` | The DS source copy, assets, local token extensions, per-component specs (`design/specs/components/`) |
-| `tools/` | Sync, code generator, CI and release tooling (Node 22, Vitest) |
-| `ios/`, `Package.swift` | The Swift package |
-| `android/` | The Gradle project (`tokens`, `core`, `compose`, `views`, `bom`) |
-| `demos/` | The four demo apps |
-| `docs/` | Architecture, conventions, testing, maintainer and consumer guides |
+Not applicable: this repo ships libraries. Releases are cut from `master` by the `release` workflow (`.github/workflows/release.yml`). It creates the `X.Y.Z` tag that SPM resolves, and publishes the Android artifacts to GitHub Packages. Process: `docs/guides/release.md`.
 
-## Development
-
-Requirements: macOS, Xcode 26.6, JDK 21, Node 22 (`mise install`).
+### Test
 
 ```bash
-make help                              # every target
-make test                              # tools, codegen and sync checks, demo boundaries, iOS and Android suites
-make ios-snapshot-record               # record local snapshot references (git-ignored; or android-snapshot-record)
-make ios-snapshot-verify               # compare against them after a UI change (or android-snapshot-verify)
+make test                     # tools, codegen and sync checks, demo boundaries, iOS and Android suites
+make ios-test                 # iOS unit and behaviour tests (snapshot suites skipped)
+make android-test             # Android unit and behaviour tests (snapshots rendered, not compared)
+make api-check BASELINE=<tag> # public API compatibility on both platforms
 ```
 
-Start at [docs/README.md](docs/README.md). Updating the design system: [docs/guides/ds-update-flow.md](docs/guides/ds-update-flow.md). Releasing: [docs/guides/release.md](docs/guides/release.md).
+Snapshot references are git-ignored and checked locally only. Record them before a UI change with `make ios-snapshot-record` / `make android-snapshot-record`, then compare after it with `make ios-snapshot-verify` / `make android-snapshot-verify`. CI does not compare pixels. Workflow: `docs/guides/snapshot-workflow.md`.
+
+## Project Layout
+
+```
+ts-design-system/
+├── `design/`      - DS source copy, normalized assets, local token extensions, component specs (`design/specs/components/`)
+├── `tools/`       - Node 22 / Vitest workspace: DS sync, token codegen, CI, release, API and demo checks
+├── `ios/`         - Swift package sources and tests (`TSTokens`, `TSFoundation`, `TSDesignSystem`, `TSDesignSystemUIKit`)
+├── `Package.swift`- SPM manifest for the iOS products
+├── `android/`     - Gradle project: `tokens`, `core`, `compose`, `views`, `bom`, `test-support`, `build-logic`
+├── `demos/`       - Four demo apps plus a shared demo-support module per platform
+├── `docs/`        - Architecture, conventions, testing, maintainer guides and consumer pages
+├── `.github/`     - CI and release workflows, Renovate, CODEOWNERS, PR template
+└── `Makefile`     - Entry point for every build, test, codegen, demo and release task
+```
+
+## Documentation Map
+
+- `docs/README.md`: entry point and routing table for the whole corpus.
+- **Reference pages:**
+  - `docs/structure.md`: where code lives.
+  - `docs/architecture.md`: layers and data flow.
+  - `docs/conventions.md`: naming and style.
+  - `docs/testing.md`: test suites.
+  - `docs/integrations.md`: CI, publishing, credentials.
+  - `docs/stack.md`: versions.
+  - `docs/concerns.md`: known risks.
+- **Maintainer guides (`docs/guides/`):**
+  - `ds-update-flow.md`, `adding-a-component.md`
+  - `release.md`, `deprecation-policy.md`
+  - `toolchain-upgrades.md`, `snapshot-workflow.md`, `running-demos.md`
+- **Consumer pages (`docs/consumers/`):** `ios-getting-started.md`, `android-getting-started.md`, `theming.md`, `migration-guides.md`.
+- **Component contracts:** `design/specs/components/<name>.md`.
+- `docs/features/INDEX.md`: not present. Components are documented through the specs above.
+
+## Contributing
+
+- Branch from `master` and open a PR. Fill in `.github/pull_request_template.md`.
+- The checks to pass are `codegen-check-ok`, `ios-ok`, `android-ok` and `demos-ok`.
+- Use conventional commit messages (`feat(ios): …`, `fix(android): …`, `docs: …`). `CHANGELOG.md` is generated from them by git-cliff (`cliff.toml`).
+- Generated code is regenerated with `make codegen`, never edited by hand.
+- Public API changes must pass `make api-check`; Android changes need updated `api/*.api` dumps.
+- Visual changes are checked with the local snapshot verify targets.
+- Updating the design system: `docs/guides/ds-update-flow.md`. Adding a component: `docs/guides/adding-a-component.md`.
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT, see `LICENSE`.
