@@ -39,24 +39,12 @@ describe("release targets", () => {
     expect(callsOf(await stubs.run("release-notes", { env: { TAG: "1.2.3" } }), "npm", "release")).toEqual([[...RELEASE, "notes", "--tag", "1.2.3", "--out", ".build/release/notes.md"]]);
   });
 
-  it("creates the tag at the released commit with the GitHub release, from the notes", async () => {
-    const result = await stubs.run("release-github", { env: { TAG: "1.2.3", GITHUB_SHA: "0123abcd", RELEASE_TARGET: "" } });
+  it("creates the GitHub release for the pushed tag, from the notes", async () => {
+    const result = await stubs.run("release-github", { env: { TAG: "v1.2.3" } });
     expect(result.calls.filter((call) => call.includes("notes") || call[0] === "gh")).toEqual([
-      [...RELEASE, "notes", "--tag", "1.2.3", "--out", ".build/release/notes.md"],
-      ["gh", "release", "create", "1.2.3", "--target", "0123abcd", "--title", "1.2.3", "--notes-file", ".build/release/notes.md"],
+      [...RELEASE, "notes", "--tag", "v1.2.3", "--out", ".build/release/notes.md"],
+      ["gh", "release", "create", "v1.2.3", "--verify-tag", "--title", "v1.2.3", "--notes-file", ".build/release/notes.md"],
     ]);
-  });
-
-  it("prefers RELEASE_TARGET over GITHUB_SHA", async () => {
-    const result = await stubs.run("release-github", { env: { TAG: "1.2.3", GITHUB_SHA: "0123abcd", RELEASE_TARGET: "fedc" } });
-    expect(callsOf(result, "gh")).toEqual([["gh", "release", "create", "1.2.3", "--target", "fedc", "--title", "1.2.3", "--notes-file", ".build/release/notes.md"]]);
-  });
-
-  it("refuses to create a release without a target commit, before calling gh", async () => {
-    const result = await stubs.run("release-github", { env: { TAG: "1.2.3", GITHUB_SHA: "", RELEASE_TARGET: "" } });
-    expect(result.code).not.toBe(0);
-    expect(result.output).toContain("release-github: RELEASE_TARGET (default GITHUB_SHA) must name the commit to tag");
-    expect(callsOf(result, "gh")).toEqual([]);
   });
 });
 
@@ -68,6 +56,15 @@ describe("release CI targets", () => {
     expect(publish).not.toContain("./gradlew");
     expect(await dryRun("android-publish", "GRADLE_WORKERS=")).toContain("npm --prefix tools run --silent publish-android --\n");
     expect(await dryRun("android-publish-local")).toContain("cd android && ./gradlew publishToMavenLocal\n");
+  });
+
+  it("builds the Android demo APKs and library AARs into the release assets, named with VERSION", async () => {
+    const packages = await dryRun("release-android-packages", "VERSION=1.2.3", "RELEASE_ASSETS=out");
+    expect(packages).toContain("cd demos/android-compose && ./gradlew :app:assembleDebug\n");
+    expect(packages).toContain("cd demos/android-views && ./gradlew :app:assembleDebug\n");
+    expect(packages).toContain("cd android && ./gradlew :tokens:assembleRelease :core:assembleRelease :compose:assembleRelease :views:assembleRelease\n");
+    expect(packages).toContain("cp demos/android-compose/app/build/outputs/apk/debug/app-debug.apk 'out/ts-ds-demo-compose-1.2.3.apk'");
+    expect(packages).toContain("cp android/views/build/outputs/aar/views-release.aar 'out/ts-ds-views-1.2.3.aar'");
   });
 
   it("fails android-publish with a clear message when the credentials are missing", async () => {
@@ -107,6 +104,13 @@ describe("LAST_TAG_COMMAND", () => {
     await git("tag", "experiment");
     await git("commit", "-q", "--allow-empty", "-m", "third");
     expect(await lastTag()).toBe("0.1.0");
+  });
+
+  it("accepts v-prefixed release tags", async () => {
+    await git("tag", "v0.1.0");
+    await git("commit", "-q", "--allow-empty", "-m", "second");
+    await git("tag", "v0.2.0");
+    expect(await lastTag()).toBe("v0.1.0");
   });
 
   it("is empty before the first release", async () => {

@@ -67,7 +67,7 @@ struct ToastPage: View {
             actions: [
                 TSDialogAction(DemoStrings.string(.sampleClose)),
                 TSDialogAction(DemoStrings.string(.sampleCopyLink), variant: .primary, dismisses: false) {
-                    queue.enqueue(TSToastItem(message: DemoStrings.string(.sampleLinkCopied), tone: .success))
+                    queue.enqueue(TSToastItem(message: DemoStrings.string(.sampleLinkCopied), tone: .success, duration: TSToastTimeout.extended))
                 },
             ]
         )

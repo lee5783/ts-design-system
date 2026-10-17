@@ -69,7 +69,7 @@ class FormComponentsTest {
         val error = resources.getString(DemoR.string.demo_sample_email_error)
         launchDemo().use { scenario ->
             openPage(DemoPageId.TextField)
-            input().perform(scrollIntoView(), click(), typeText("ada"), closeSoftKeyboard())
+            input().perform(closeSoftKeyboard(), scrollIntoView(), click(), typeText("ada"), closeSoftKeyboard())
             assertEquals("ada", scenario.read { it.text.toString() })
             assertTrue(scenario.read { it.editText.isFocused })
             assertEquals(null, scenario.read { it.inputNode().error })

@@ -36,15 +36,27 @@ export interface Command {
 export class ReleaseError extends Error {}
 
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+const RELEASE_TAG = /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+export const TAG_PREFIX = "v";
 
 export function parseVersion(text: string): Version {
   const match = SEMVER.exec(text.trim());
-  if (!match) throw new ReleaseError(`"${text.trim()}" is not a release version: use a plain X.Y.Z semver such as 1.2.3 (no "v" prefix, no pre-release suffix), because SPM resolves plain tags`);
+  if (!match) throw new ReleaseError(`"${text.trim()}" is not a release version: use a plain X.Y.Z semver such as 1.2.3 (no "v" prefix, no pre-release suffix); only the release tag carries the "v"`);
   return { major: Number(match[1]), minor: Number(match[2]), patch: Number(match[3]) };
 }
 
 export function formatVersion(version: Version): string {
   return `${version.major}.${version.minor}.${version.patch}`;
+}
+
+export function releaseTag(version: string): string {
+  return `${TAG_PREFIX}${version}`;
+}
+
+export function tagVersion(tag: string): string {
+  const trimmed = tag.trim();
+  if (!trimmed.startsWith(TAG_PREFIX)) throw new ReleaseError(`tag ${trimmed} is not a release tag: use vX.Y.Z, such as v1.2.3`);
+  return formatVersion(parseVersion(trimmed.slice(TAG_PREFIX.length)));
 }
 
 export function compareVersions(left: Version, right: Version): number {
@@ -70,10 +82,10 @@ export function changelogSection(changelog: string, version: string): string | u
 }
 
 export function verifyTag(tag: string | undefined, version: string, changelog: string): string {
-  if (tag === undefined || tag.trim() === "") throw new ReleaseError("TAG is required: make release-verify TAG=X.Y.Z");
-  const parsed = formatVersion(parseVersion(tag));
-  if (parsed !== tag.trim()) throw new ReleaseError(`tag ${tag} is not a plain X.Y.Z version`);
-  if (parsed !== version.trim()) throw new ReleaseError(`tag ${parsed} does not match VERSION ${version.trim()}: run make release-bump V=${parsed}, merge it, and release from the commit that contains it`);
+  if (tag === undefined || tag.trim() === "") throw new ReleaseError("TAG is required: make release-verify TAG=vX.Y.Z");
+  const parsed = tagVersion(tag);
+  if (releaseTag(parsed) !== tag.trim()) throw new ReleaseError(`tag ${tag} is not a plain vX.Y.Z version`);
+  if (parsed !== version.trim()) throw new ReleaseError(`tag ${tag.trim()} does not match VERSION ${version.trim()}: run make release-bump V=${parsed}, merge it, and tag the commit that contains it`);
   if (changelogSection(changelog, parsed) === undefined) throw new ReleaseError(`CHANGELOG.md has no "## ${parsed}" section: run make release-bump V=${parsed}`);
   return parsed;
 }
@@ -137,14 +149,13 @@ export async function tagExists(root: string, tag: string): Promise<boolean> {
 }
 
 export async function releaseTags(root: string): Promise<string[]> {
-  return [...(await knownTags(root))].filter((tag) => SEMVER.test(tag)).sort();
+  return [...(await knownTags(root))].filter((tag) => RELEASE_TAG.test(tag)).sort();
 }
 
 export async function verifyReleaseContext(root: string, tag: string, ref: string | undefined): Promise<void> {
-  if (ref !== undefined && ref.trim() !== "" && ref.trim() !== `refs/heads/${RELEASE_BRANCH}`) {
-    throw new ReleaseError(`releases run only from ${RELEASE_BRANCH}, not ${ref.trim()}: start the release workflow on ${RELEASE_BRANCH}`);
+  if (ref !== undefined && ref.trim() !== "" && ref.trim() !== `refs/tags/${tag}`) {
+    throw new ReleaseError(`releases run only from the pushed tag refs/tags/${tag}, not ${ref.trim()}: push the tag ${tag} to start the release workflow`);
   }
-  if (await tagExists(root, tag)) throw new ReleaseError(`tag ${tag} already exists, so ${tag} is already released: bump to a new version`);
   if (!(await hasRemote(root, RELEASE_REMOTE))) return;
   const branch = `refs/remotes/${RELEASE_REMOTE}/${RELEASE_BRANCH}`;
   try {
@@ -176,7 +187,7 @@ export async function bump(root: string, next: string | undefined, dryRun: boole
   const current = (await readFile(path.join(root, VERSION_FILE), "utf8")).trim();
   const firstRelease = (await releaseTags(root)).length === 0;
   const to = formatVersion(validateBump(current, next, firstRelease));
-  if (await tagExists(root, to)) throw new ReleaseError(`tag ${to} already exists`);
+  if ((await tagExists(root, to)) || (await tagExists(root, releaseTag(to)))) throw new ReleaseError(`tag ${releaseTag(to)} already exists`);
   const gitCliff = await resolveGitCliff(root, env);
   const changelog = await generateChangelog(root, gitCliff, to);
   const section = changelogSection(changelog, to);
@@ -205,15 +216,15 @@ if (isEntryPoint) {
       process.stdout.write(result.section);
       const change = result.from === result.to ? `the first release ${result.to}` : `${result.from} -> ${result.to}`;
       console.log(dryRun ? `release-bump: dry run for ${change}; VERSION and CHANGELOG.md left unchanged` : `release-bump: ${change}: VERSION written, CHANGELOG.md regenerated`);
-      if (!dryRun) console.log(`Next: review, commit "chore(release): ${result.to}" and merge it, then run the release workflow on ${RELEASE_BRANCH} with version ${result.to}. It creates the tag after every gate and the Android publish pass.`);
+      if (!dryRun) console.log(`Next: review, commit "chore(release): ${result.to}" and merge it, then tag the merged commit on ${RELEASE_BRANCH} and push it: git tag ${releaseTag(result.to)} && git push origin ${releaseTag(result.to)}. The tag starts the release workflow.`);
     } else if (command === "verify") {
       const version = await readFile(path.join(root, VERSION_FILE), "utf8");
       const changelog = await readFile(path.join(root, CHANGELOG_FILE), "utf8");
       const tag = verifyTag(flag("--tag"), version, changelog);
-      await verifyReleaseContext(root, tag, flag("--ref"));
-      console.log(`release-verify: ${tag} matches VERSION, has a changelog section, is not tagged yet, and HEAD is on ${RELEASE_BRANCH}`);
+      await verifyReleaseContext(root, releaseTag(tag), flag("--ref"));
+      console.log(`release-verify: ${flag("--tag")?.trim()} matches VERSION ${tag}, has a changelog section, and HEAD is on ${RELEASE_BRANCH}`);
     } else if (command === "notes") {
-      const tag = formatVersion(parseVersion(flag("--tag") ?? ""));
+      const tag = tagVersion(flag("--tag") ?? "");
       const out = flag("--out");
       if (out === undefined) throw new ReleaseError("--out is required");
       const section = changelogSection(await readFile(path.join(root, CHANGELOG_FILE), "utf8"), tag);

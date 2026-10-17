@@ -1,7 +1,9 @@
 package com.ts.ds.demo.compose
 
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
@@ -39,6 +41,7 @@ class PageWalkTest {
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val resources = instrumentation.targetContext.resources
+    private val isPlaced = SemanticsMatcher("is placed") { it.layoutInfo.isPlaced }
 
     @After
     fun resetSettings() {
@@ -77,7 +80,7 @@ class PageWalkTest {
                     composeRule.onNodeWithText(playground).assertIsDisplayed()
                 }
                 list.performSemanticsAction(SemanticsActions.ScrollBy) { scrollBy -> scrollBy(0f, END_OF_PAGE_PX) }
-                val last = list.onChildren().onLast().getBoundsInRoot()
+                val last = list.onChildren().filter(isPlaced).onLast().getBoundsInRoot()
                 assertTrue("${page.id} scrolls its end above the navigation bar", last.bottom <= frame.heightDp - frame.navigationBarDp)
                 Espresso.pressBack()
                 composeRule.onNodeWithTag(DemoTags.CATALOG).assertIsDisplayed()

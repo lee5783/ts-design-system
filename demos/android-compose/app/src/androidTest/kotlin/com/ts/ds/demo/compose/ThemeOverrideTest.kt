@@ -3,7 +3,10 @@ package com.ts.ds.demo.compose
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.ParcelFileDescriptor
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -40,6 +43,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class ThemeOverrideTest {
@@ -82,8 +86,21 @@ class ThemeOverrideTest {
     }
 
     private fun SemanticsNodeInteraction.isDark(): Boolean {
-        val pixels = captureToImage().toPixelMap()
-        return pixels[2, 2].luminance() < 0.5f
+        val color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            captureToImage().toPixelMap()[SAMPLE_OFFSET, SAMPLE_OFFSET]
+        } else {
+            screenPixel(fetchSemanticsNode().positionOnScreen)
+        }
+        return color.luminance() < 0.5f
+    }
+
+    private fun screenPixel(origin: Offset): Color {
+        val screenshot = requireNotNull(instrumentation.uiAutomation.takeScreenshot())
+        try {
+            return Color(screenshot.getPixel(origin.x.roundToInt() + SAMPLE_OFFSET, origin.y.roundToInt() + SAMPLE_OFFSET))
+        } finally {
+            screenshot.recycle()
+        }
     }
 
     private fun ActivityScenario<MainActivity>.lightStatusBars(): Boolean {
@@ -128,12 +145,12 @@ class ThemeOverrideTest {
         launchWithTheme(DemoTheme.Dark).use { scenario ->
             composeRule.waitForIdle()
             assertEquals(DemoTheme.Dark, settingsStore.settings.theme)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             assertEquals(false, scenario.lightStatusBars())
             composeRule.assertThemeAction(DemoTheme.Dark)
 
             composeRule.openPage(DemoPageId.Button)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Button)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Button)).assertExistsAndIs(dark = true)
             composeRule.assertThemeAction(DemoTheme.Dark)
         }
     }
@@ -144,11 +161,11 @@ class ThemeOverrideTest {
         launchWithTheme(DemoTheme.Light).use { scenario ->
             composeRule.waitForIdle()
             assertEquals(DemoTheme.Light, settingsStore.settings.theme)
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = false)
             assertEquals(true, scenario.lightStatusBars())
 
             composeRule.openPage(DemoPageId.Card)
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Card)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Card)).assertExistsAndIs(dark = false)
         }
     }
 
@@ -157,10 +174,9 @@ class ThemeOverrideTest {
         setDeviceDark(true)
         launchWithTheme(DemoTheme.System).use { scenario ->
             composeRule.waitForIdle()
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             setDeviceDark(false)
-            composeRule.waitForIdle()
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = false)
             assertEquals(true, scenario.lightStatusBars())
         }
     }
@@ -177,7 +193,7 @@ class ThemeOverrideTest {
             composeRule.openPage(DemoPageId.Toast)
             composeRule.onNodeWithTag(DemoTags.ACTION_THEME).performClick()
             composeRule.assertThemeAction(DemoTheme.Dark)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Toast)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Toast)).assertExistsAndIs(dark = true)
 
             composeRule.onNodeWithTag(DemoTags.ACTION_SETTINGS).performClick()
             composeRule.onNodeWithTag(DemoTags.theme(DemoTheme.Dark)).assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
@@ -186,7 +202,7 @@ class ThemeOverrideTest {
         assertEquals(DemoTheme.Dark, DemoSettings.decode(persisted).theme)
         ActivityScenario.launch(MainActivity::class.java).use {
             composeRule.assertThemeAction(DemoTheme.Dark)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             composeRule.onNodeWithTag(DemoTags.ACTION_THEME).performClick()
             composeRule.assertThemeAction(DemoTheme.System)
             assertEquals(DemoTheme.System, settingsStore.settings.theme)
@@ -201,7 +217,7 @@ class ThemeOverrideTest {
             composeRule.openPage(DemoPageId.Dialog)
             composeRule.tap(DialogPageTags.OPEN_CENTER)
             composeRule.awaitText(title)
-            assertTrue(!composeRule.onNodeWithText(title).isDark())
+            composeRule.onNodeWithText(title).assertExistsAndIs(dark = false)
 
             scenario.openLink(DemoTheme.Dark)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = true)
@@ -220,7 +236,7 @@ class ThemeOverrideTest {
             composeRule.awaitText(title)
             composeRule.onNodeWithText(resources.getString(DemoR.string.demo_sample_copy_link)).performClick()
             composeRule.awaitDescription(toast)
-            assertTrue(composeRule.onNodeWithText(title).isDark())
+            composeRule.onNodeWithText(title).assertExistsAndIs(dark = true)
 
             scenario.openLink(DemoTheme.Light)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = false)
@@ -252,6 +268,7 @@ class ThemeOverrideTest {
 
     private companion object {
         const val WAIT_MILLIS = 8_000L
+        const val SAMPLE_OFFSET = 2
         const val PREFERENCES = "demo_settings"
         const val PREFERENCES_KEY = "settings"
     }
