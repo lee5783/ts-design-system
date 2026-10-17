@@ -3,6 +3,7 @@ package com.ts.ds.demo.compose
 import android.graphics.Rect
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityNodeInfo
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -30,6 +31,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class AccessibilityChecksTest {
@@ -46,7 +48,7 @@ class AccessibilityChecksTest {
             reason = "Short underline labels 16dp apart cannot each own a 48dp area; Compose trims the overlap to at least 44dp until the pending tab minimum-width decision",
         ) { element ->
             element != null &&
-                element.stateDescription?.toString()?.matches(TAB_POSITION) == true &&
+                element.boundsInScreen.let { bounds -> tabBounds.any { it.contains((bounds.left + bounds.right) / 2, (bounds.top + bounds.bottom) / 2) } } &&
                 element.boundsInScreen.width / density >= TRIMMED_TAB_MIN_DP &&
                 element.boundsInScreen.height / density >= MIN_TOUCH_TARGET_DP
         },
@@ -58,6 +60,8 @@ class AccessibilityChecksTest {
         ) { element -> element != null && scrolledViewportTop?.let { top -> element.boundsInScreen.top < top } == true }
     }
     private var scrolledViewportTop: Int? = null
+    private var tabBounds: List<Rect> = emptyList()
+    private val isTab = SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab)
     private val verticallyScrollable = SemanticsMatcher.keyIsDefined(SemanticsProperties.VerticalScrollAxisRange)
 
     @After
@@ -123,6 +127,7 @@ class AccessibilityChecksTest {
         composeRule.waitForIdle()
         val root = activeWindowRoot(screen)
         scrolledViewportTop = if (scrolled) viewportTop(root) else null
+        tabBounds = currentTabBounds()
         val hierarchy = AccessibilityHierarchyAndroid.newBuilder(root, instrumentation.targetContext).build()
         return checks
             .flatMap { it.runCheckOnHierarchy(hierarchy, null, Parameters()) }
@@ -134,6 +139,11 @@ class AccessibilityChecksTest {
                 val key = "$screen: ${result.sourceCheckClass.simpleName}: [$label]"
                 key to "$screen: ${result.sourceCheckClass.simpleName}: ${result.getMessage(Locale.ENGLISH)} [$label ${element?.boundsInScreen}]"
             }
+    }
+
+    private fun currentTabBounds(): List<Rect> = composeRule.onAllNodes(isTab, useUnmergedTree = true).fetchSemanticsNodes().map { node ->
+        val origin = node.positionOnScreen
+        Rect(origin.x.roundToInt(), origin.y.roundToInt(), (origin.x + node.size.width).roundToInt(), (origin.y + node.size.height).roundToInt())
     }
 
     private fun viewportTop(root: AccessibilityNodeInfo): Int? = root.selfAndDescendants()
@@ -176,6 +186,5 @@ class AccessibilityChecksTest {
         const val MAX_SCROLL_STEPS = 60
         const val VIEWPORT_STEP = 0.8f
         const val SCROLL_SETTLE_MS = 300L
-        val TAB_POSITION = Regex("\\d+ of \\d+")
     }
 }

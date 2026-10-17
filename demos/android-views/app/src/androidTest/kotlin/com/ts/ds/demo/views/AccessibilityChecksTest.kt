@@ -1,10 +1,12 @@
 package com.ts.ds.demo.views
 
 import android.graphics.Rect
+import android.os.Build
 import android.os.SystemClock
 import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.core.view.allViews
+import androidx.core.view.ancestors
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -41,9 +43,18 @@ class AccessibilityChecksTest {
             element?.text?.toString()?.matches(BADGE_COUNT) == true &&
                 element.boundsInScreen.let { bounds -> bottomNavBounds.any { it.contains(bounds.left, bounds.top, bounds.right, bounds.bottom) } }
         },
+        Suppression(
+            screen = null,
+            check = "TouchTargetSizeCheck",
+            reason = "Before API 29 AccessibilityNodeInfo cannot report TouchDelegate bounds, so ATF sees only the visual size of controls whose 48dp hit area comes from a TouchDelegate; ATF itself downgrades these to a warning when it can see the delegate, and the API 29+ run verifies the delegate size",
+        ) { element ->
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+                element?.boundsInScreen?.let { bounds -> touchDelegatedBounds.any { it.contains(bounds.left, bounds.top, bounds.right, bounds.bottom) } } == true
+        },
     )
     private lateinit var scenario: ActivityScenario<MainActivity>
     private var bottomNavBounds: List<Rect> = emptyList()
+    private var touchDelegatedBounds: List<Rect> = emptyList()
 
     @After
     fun resetSettings() {
@@ -121,9 +132,24 @@ class AccessibilityChecksTest {
         return bounds
     }
 
+    private fun currentTouchDelegatedBounds(): List<Rect> {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return emptyList()
+        val bounds = mutableListOf<Rect>()
+        scenario.onActivity { activity ->
+            activity.window.decorView.allViews
+                .filter { view -> view.isShown && view.isClickable && view.ancestors.any { (it as? View)?.touchDelegate != null } }
+                .forEach { view ->
+                    val location = IntArray(2).also(view::getLocationOnScreen)
+                    bounds += Rect(location[0], location[1], location[0] + view.width, location[1] + view.height)
+                }
+        }
+        return bounds
+    }
+
     private fun check(screen: String): List<Pair<String, String>> {
         instrumentation.waitForIdleSync()
         bottomNavBounds = currentBottomNavBounds()
+        touchDelegatedBounds = currentTouchDelegatedBounds()
         val root = activeWindowRoot(screen)
         val hierarchy = AccessibilityHierarchyAndroid.newBuilder(root, instrumentation.targetContext).build()
         return checks
@@ -150,13 +176,13 @@ class AccessibilityChecksTest {
     }
 
     private class Suppression(
-        val screen: String,
+        val screen: String?,
         val check: String,
         val reason: String,
         val applies: (ViewHierarchyElement?) -> Boolean,
     ) {
         fun matches(screen: String, result: AccessibilityHierarchyCheckResult): Boolean =
-            screen == this.screen && result.sourceCheckClass.simpleName == check && applies(result.element)
+            (this.screen == null || screen == this.screen) && result.sourceCheckClass.simpleName == check && applies(result.element)
     }
 
     private companion object {

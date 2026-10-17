@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         applySystemBarStyle()
         setContentView(R.layout.activity_main)
+        window.decorView.layoutDirection = resources.configuration.layoutDirection
         toastHost = TSToastHost.install(this, ViewModelProvider(this)[DemoSession::class.java].toasts)
         if (savedInstanceState == null) {
             launchOptions.page?.let { page ->

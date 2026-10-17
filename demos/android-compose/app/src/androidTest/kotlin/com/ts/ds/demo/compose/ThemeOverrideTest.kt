@@ -3,7 +3,10 @@ package com.ts.ds.demo.compose
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.ParcelFileDescriptor
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -40,6 +43,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class ThemeOverrideTest {
@@ -82,8 +86,21 @@ class ThemeOverrideTest {
     }
 
     private fun SemanticsNodeInteraction.isDark(): Boolean {
-        val pixels = captureToImage().toPixelMap()
-        return pixels[2, 2].luminance() < 0.5f
+        val color = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            captureToImage().toPixelMap()[SAMPLE_OFFSET, SAMPLE_OFFSET]
+        } else {
+            screenPixel(fetchSemanticsNode().positionOnScreen)
+        }
+        return color.luminance() < 0.5f
+    }
+
+    private fun screenPixel(origin: Offset): Color {
+        val screenshot = requireNotNull(instrumentation.uiAutomation.takeScreenshot())
+        try {
+            return Color(screenshot.getPixel(origin.x.roundToInt() + SAMPLE_OFFSET, origin.y.roundToInt() + SAMPLE_OFFSET))
+        } finally {
+            screenshot.recycle()
+        }
     }
 
     private fun ActivityScenario<MainActivity>.lightStatusBars(): Boolean {
@@ -252,6 +269,7 @@ class ThemeOverrideTest {
 
     private companion object {
         const val WAIT_MILLIS = 8_000L
+        const val SAMPLE_OFFSET = 2
         const val PREFERENCES = "demo_settings"
         const val PREFERENCES_KEY = "settings"
     }

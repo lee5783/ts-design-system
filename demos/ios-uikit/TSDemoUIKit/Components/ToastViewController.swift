@@ -104,7 +104,7 @@ final class ToastViewController: DemoPageViewController {
             actions: [
                 TSDialogAction(DemoStrings.string(.sampleClose)),
                 TSDialogAction(DemoStrings.string(.sampleCopyLink), variant: .primary, dismisses: false) { [weak self] in
-                    self?.queue.enqueue(TSToastItem(message: DemoStrings.string(.sampleLinkCopied), tone: .success))
+                    self?.queue.enqueue(TSToastItem(message: DemoStrings.string(.sampleLinkCopied), tone: .success, duration: TSToastTimeout.extended))
                 }
             ]
         )
