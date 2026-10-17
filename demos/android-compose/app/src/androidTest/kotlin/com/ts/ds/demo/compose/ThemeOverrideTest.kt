@@ -145,12 +145,12 @@ class ThemeOverrideTest {
         launchWithTheme(DemoTheme.Dark).use { scenario ->
             composeRule.waitForIdle()
             assertEquals(DemoTheme.Dark, settingsStore.settings.theme)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             assertEquals(false, scenario.lightStatusBars())
             composeRule.assertThemeAction(DemoTheme.Dark)
 
             composeRule.openPage(DemoPageId.Button)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Button)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Button)).assertExistsAndIs(dark = true)
             composeRule.assertThemeAction(DemoTheme.Dark)
         }
     }
@@ -161,11 +161,11 @@ class ThemeOverrideTest {
         launchWithTheme(DemoTheme.Light).use { scenario ->
             composeRule.waitForIdle()
             assertEquals(DemoTheme.Light, settingsStore.settings.theme)
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = false)
             assertEquals(true, scenario.lightStatusBars())
 
             composeRule.openPage(DemoPageId.Card)
-            assertTrue(!composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Card)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Card)).assertExistsAndIs(dark = false)
         }
     }
 
@@ -193,7 +193,7 @@ class ThemeOverrideTest {
             composeRule.openPage(DemoPageId.Toast)
             composeRule.onNodeWithTag(DemoTags.ACTION_THEME).performClick()
             composeRule.assertThemeAction(DemoTheme.Dark)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Toast)).isDark())
+            composeRule.onNodeWithTag(DemoTags.screen(DemoPageId.Toast)).assertExistsAndIs(dark = true)
 
             composeRule.onNodeWithTag(DemoTags.ACTION_SETTINGS).performClick()
             composeRule.onNodeWithTag(DemoTags.theme(DemoTheme.Dark)).assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
@@ -202,7 +202,7 @@ class ThemeOverrideTest {
         assertEquals(DemoTheme.Dark, DemoSettings.decode(persisted).theme)
         ActivityScenario.launch(MainActivity::class.java).use {
             composeRule.assertThemeAction(DemoTheme.Dark)
-            assertTrue(composeRule.onNodeWithTag(DemoTags.CATALOG).isDark())
+            composeRule.onNodeWithTag(DemoTags.CATALOG).assertExistsAndIs(dark = true)
             composeRule.onNodeWithTag(DemoTags.ACTION_THEME).performClick()
             composeRule.assertThemeAction(DemoTheme.System)
             assertEquals(DemoTheme.System, settingsStore.settings.theme)
@@ -217,7 +217,7 @@ class ThemeOverrideTest {
             composeRule.openPage(DemoPageId.Dialog)
             composeRule.tap(DialogPageTags.OPEN_CENTER)
             composeRule.awaitText(title)
-            assertTrue(!composeRule.onNodeWithText(title).isDark())
+            composeRule.onNodeWithText(title).assertExistsAndIs(dark = false)
 
             scenario.openLink(DemoTheme.Dark)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = true)
@@ -236,7 +236,7 @@ class ThemeOverrideTest {
             composeRule.awaitText(title)
             composeRule.onNodeWithText(resources.getString(DemoR.string.demo_sample_copy_link)).performClick()
             composeRule.awaitDescription(toast)
-            assertTrue(composeRule.onNodeWithText(title).isDark())
+            composeRule.onNodeWithText(title).assertExistsAndIs(dark = true)
 
             scenario.openLink(DemoTheme.Light)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = false)
