@@ -1,0 +1,234 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Etc/UTC",
+  "schedule": [
+    "* 0-5 1 * *"
+  ],
+  "dependencyDashboard": true,
+  "automerge": false,
+  "separateMajorMinor": true,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "gradle",
+        "gradle-wrapper"
+      ],
+      "addLabels": [
+        "android"
+      ]
+    },
+    {
+      "matchManagers": [
+        "swift"
+      ],
+      "addLabels": [
+        "ios"
+      ]
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "addLabels": [
+        "tools"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "action"
+      ],
+      "addLabels": [
+        "ci"
+      ]
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "androidx.*"
+      ],
+      "groupName": "AndroidX"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "com.android.tools.build:gradle",
+        "com.android.library{,:**}",
+        "com.android.application{,:**}",
+        "org.jetbrains.kotlin:**",
+        "org.jetbrains.kotlin.*",
+        "com.google.devtools.ksp{,:**}"
+      ],
+      "groupName": "AGP, Kotlin and KSP"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "com.google.android.material:material"
+      ],
+      "groupName": "Material Components"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "junit:junit",
+        "org.robolectric:**",
+        "io.github.takahirom.roborazzi{,:**,.**}",
+        "androidx.test:**",
+        "androidx.test.*:**",
+        "com.google.android.apps.common.testing.accessibility.framework:**",
+        "com.google.guava:guava"
+      ],
+      "groupName": "Android test libraries"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "com.google.guava:guava"
+      ],
+      "allowedVersions": "/-android$/"
+    },
+    {
+      "matchManagers": [
+        "gradle-wrapper"
+      ],
+      "groupName": "Gradle wrapper"
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "groupName": "npm tools"
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "canvaskit-wasm",
+        "opentype.js",
+        "style-dictionary"
+      ],
+      "groupName": "Codegen-sensitive npm packages",
+      "addLabels": [
+        "codegen"
+      ]
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "@types/node"
+      ],
+      "allowedVersions": "<23"
+    },
+    {
+      "matchManagers": [
+        "swift"
+      ],
+      "groupName": "SPM test dependencies"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDepTypes": [
+        "action"
+      ],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "groupName": null
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "androidx.compose:compose-bom"
+      ],
+      "groupName": "Compose BOM",
+      "separateMajorMinor": false
+    },
+    {
+      "matchManagers": [
+        "mise",
+        "github-actions"
+      ],
+      "matchDatasources": [
+        "node-version",
+        "github-releases"
+      ],
+      "matchDepNames": [
+        "node"
+      ],
+      "groupName": "Node toolchain",
+      "addLabels": [
+        "toolchain"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchManagers": [
+        "mise",
+        "github-actions"
+      ],
+      "matchDatasources": [
+        "java-version"
+      ],
+      "groupName": "JDK toolchain",
+      "addLabels": [
+        "toolchain"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchManagers": [
+        "mise"
+      ],
+      "matchDepNames": [
+        "git-cliff"
+      ],
+      "addLabels": [
+        "toolchain"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchDatasources": [
+        "github-runners"
+      ],
+      "groupName": "CI runner images",
+      "addLabels": [
+        "toolchain"
+      ],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}

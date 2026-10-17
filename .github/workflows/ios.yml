@@ -1,0 +1,104 @@
+name: ios
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      ios: ${{ steps.changes.outputs.ios }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - id: changes
+        run: make ci-changes
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+
+  test:
+    name: test (iOS ${{ matrix.runtime }})
+    needs: changes
+    if: needs.changes.outputs.ios == 'true'
+    runs-on: macos-26
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        runtime: [pinned, oldest]
+    env:
+      IOS_RUNTIMES: ${{ matrix.runtime }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: make ci-xcode
+      - run: make ci-ios-simulator
+      - uses: actions/cache@v6
+        with:
+          path: .build/xcode/SourcePackages
+          key: spm-library-${{ runner.os }}-${{ hashFiles('.xcode-version', 'Package.resolved') }}
+      - if: matrix.runtime == 'pinned'
+        run: make ios-build
+      - run: make ios-test
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-test-${{ matrix.runtime }}
+          path: .build/xcode/Logs/Test
+          if-no-files-found: ignore
+          retention-days: 14
+
+  api-check:
+    needs: changes
+    if: needs.changes.outputs.ios == 'true'
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - run: make ci-xcode
+      - if: github.event_name == 'pull_request'
+        run: make ios-api-check
+        env:
+          BASELINE: origin/${{ github.base_ref }}
+      - if: github.event_name != 'pull_request'
+        run: make ios-api-check-last-tag
+
+  ios-ok:
+    if: always()
+    needs: [changes, test, api-check]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - run: make ci-required
+        env:
+          NEEDS: ${{ toJSON(needs) }}

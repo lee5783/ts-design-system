@@ -1,0 +1,166 @@
+name: demos
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: demos-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  GRADLE_WORKERS: 2
+
+jobs:
+  changes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      boundaries: ${{ steps.changes.outputs.boundaries }}
+      ios_demos: ${{ steps.changes.outputs.ios_demos }}
+      android_demos: ${{ steps.changes.outputs.android_demos }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - id: changes
+        run: make ci-changes
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+
+  boundaries:
+    needs: changes
+    if: needs.changes.outputs.boundaries == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - run: make demos-check-boundaries
+
+  ios-demo-support:
+    needs: changes
+    if: needs.changes.outputs.ios_demos != '[]'
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      IOS_RUNTIMES: pinned
+    steps:
+      - uses: actions/checkout@v7
+      - run: make ci-xcode
+      - run: make ci-ios-simulator
+      - run: make demo-ios-support-test
+
+  ios-demo:
+    name: ios-demo (${{ matrix.demo }}, ${{ matrix.runtime }})
+    needs: changes
+    if: needs.changes.outputs.ios_demos != '[]'
+    runs-on: macos-26
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        demo: ${{ fromJSON(needs.changes.outputs.ios_demos) }}
+        runtime: [pinned, oldest]
+    env:
+      DEMO: ${{ matrix.demo }}
+      IOS_RUNTIMES: ${{ matrix.runtime }}
+      IOS_SIM_APPEARANCE: light
+    steps:
+      - uses: actions/checkout@v7
+      - run: make ci-xcode
+      - run: make ci-ios-simulator
+      - uses: actions/cache@v6
+        with:
+          path: .build/xcode-demos/SourcePackages
+          key: spm-demos-${{ runner.os }}-${{ hashFiles('.xcode-version', 'Package.resolved') }}
+      - if: matrix.runtime == 'pinned'
+        run: make "demo-ios-$DEMO"
+      - run: make "demo-ios-$DEMO-test"
+      - if: matrix.runtime == 'pinned'
+        run: make ci-ios-simulator
+        env:
+          IOS_SIM_APPEARANCE: dark
+      - if: matrix.runtime == 'pinned'
+        run: make "demo-ios-$DEMO-theme-test"
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-demo-${{ matrix.demo }}-${{ matrix.runtime }}
+          path: .build/xcode-demos/Logs/Test
+          if-no-files-found: ignore
+          retention-days: 14
+
+  android-demo:
+    name: android-demo (${{ matrix.demo }}, API ${{ matrix.api }})
+    needs: changes
+    if: needs.changes.outputs.android_demos != '[]'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        demo: ${{ fromJSON(needs.changes.outputs.android_demos) }}
+        api: [26, 36]
+    env:
+      DEMO: ${{ matrix.demo }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v6
+      - run: make ci-android-kvm
+      - if: matrix.api == 36
+        run: make "demo-android-$DEMO"
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
+          script: make "demo-android-$DEMO-test"
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-demo-${{ matrix.demo }}-api-${{ matrix.api }}
+          path: |
+            demos/android-${{ matrix.demo }}/app/build/reports
+            demos/android-${{ matrix.demo }}/app/build/outputs/androidTest-results
+            demos/android-demo-support/build/reports
+          if-no-files-found: ignore
+          retention-days: 14
+
+  demos-ok:
+    if: always()
+    needs: [changes, boundaries, ios-demo-support, ios-demo, android-demo]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - run: make ci-required
+        env:
+          NEEDS: ${{ toJSON(needs) }}
