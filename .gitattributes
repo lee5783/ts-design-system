@@ -1,0 +1,17 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.pdf binary
+gradlew text eol=lf
+*.bat text eol=crlf
+
+ios/Sources/TSTokens/Generated/** linguist-generated=true
+ios/Sources/TSFoundation/Resources/Icons.xcassets/** linguist-generated=true
+ios/Sources/TSFoundation/Resources/Logos.xcassets/** linguist-generated=true
+android/*/src/generated/** linguist-generated=true
+design/assets/icons/normalized/** linguist-generated=true
+design/assets/logos/normalized/** linguist-generated=true
+design/source/** linguist-vendored=true
+tools/package-lock.json linguist-generated=true
+android/*/api/*.api linguist-generated=true

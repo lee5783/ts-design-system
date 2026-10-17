@@ -1,0 +1,33 @@
+{
+  "name": "ts-design-system-tools",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "actionlint": "tsx ci/src/actionlint.ts",
+    "api-check-ios": "tsx api-check/src/ios.ts",
+    "ci-changes": "tsx ci/src/changes.ts",
+    "ci-required": "tsx ci/src/required.ts",
+    "codegen": "tsx codegen/src/cli.ts",
+    "demos-check-boundaries": "tsx demos/src/check-boundaries.ts",
+    "demos-check-catalog": "tsx demos/src/check-catalog.ts",
+    "ds-sync": "tsx ds-sync/src/verify.ts",
+    "publish-android": "tsx release/src/publish-android.ts",
+    "release": "tsx release/src/release.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "canvaskit-wasm": "0.42.0",
+    "opentype.js": "2.0.0",
+    "style-dictionary": "^4.4.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5",
+    "yaml": "^2.9.1"
+  }
+}

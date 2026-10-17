@@ -1,0 +1,50 @@
+[changelog]
+header = """
+# Changelog
+
+All notable changes to the TS Design System libraries (iOS and Android, released in lockstep) are listed here.
+"""
+body = """
+{% if version %}\
+## {{ version }} - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+## Unreleased
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+- {% if commit.scope %}**{{ commit.scope }}:** {% endif %}{% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message | split(pat="\n") | first | upper_first | trim }}\
+{% endfor %}
+{% endfor %}\n
+"""
+footer = ""
+trim = false
+postprocessors = [
+  { pattern = "\n{3,}", replace = "\n\n" },
+]
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+split_commits = false
+protect_breaking_commits = true
+filter_commits = false
+tag_pattern = "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+topo_order = false
+sort_commits = "oldest"
+commit_preprocessors = [
+  { pattern = "\\s*\\(#([0-9]+)\\)$", replace = " (#${1})" },
+]
+commit_parsers = [
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^Merge ", skip = true },
+  { message = "^feat", group = "<!-- 0 -->Features" },
+  { message = "^fix", group = "<!-- 1 -->Fixes" },
+  { message = "^perf", group = "<!-- 2 -->Performance" },
+  { message = "^refactor", group = "<!-- 3 -->Refactoring" },
+  { message = "^revert", group = "<!-- 4 -->Reverts" },
+  { message = "^docs", group = "<!-- 5 -->Documentation" },
+  { message = "^test", group = "<!-- 6 -->Tests" },
+  { message = "^(build|ci|chore|style|deps)", group = "<!-- 7 -->Maintenance" },
+  { message = ".*", group = "<!-- 8 -->Other" },
+]
