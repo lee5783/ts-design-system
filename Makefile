@@ -16,8 +16,10 @@ SNAPSHOT_ARTIFACTS ?=
 GRADLE_WORKERS ?=
 XCODE_VERSION := $(shell cat .xcode-version)
 CI_XCODE_APP ?= $(firstword $(wildcard $(foreach sep,_ -,/Applications/Xcode$(sep)$(XCODE_VERSION).app /Applications/Xcode$(sep)$(XCODE_VERSION).0.app)))
-LAST_TAG_COMMAND := git describe --tags --abbrev=0 --match '[0-9]*.[0-9]*.[0-9]*' HEAD^ 2>/dev/null
+LAST_TAG_COMMAND := git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' --match '[0-9]*.[0-9]*.[0-9]*' HEAD^ 2>/dev/null
 RELEASE_NOTES ?= .build/release/notes.md
+RELEASE_ASSETS ?= .build/release/assets
+ANDROID_RELEASE_MODULES := tokens core compose views
 IOS_SNAPSHOT_TEST_TARGETS := TSDesignSystemTests TSDesignSystemUIKitTests
 DEMO_IOS_DERIVED_DATA ?= .build/xcode-demos
 DEMO_IOS_SUPPORT_DIR := demos/ios-demo-support
@@ -60,7 +62,7 @@ ios_no_older_runtime = $(if $(IOS_REQUIRE_OLDEST),printf '$(call ci_annotation,e
 	android-build android-test android-snapshot-verify android-snapshot-record \
 	android-publish-local android-publish \
 	api-check android-api-check ios-api-check ios-api-check-record ios-api-check-last-tag \
-	release-bump release-verify release-notes release-github \
+	release-bump release-verify release-notes release-android-packages release-github \
 	demo-ios-swiftui demo-ios-uikit demo-android-compose demo-android-views \
 	demos-build demos-test demos-audit demos-check-boundaries \
 	demo-ios-support-test demo-ios-swiftui-test demo-ios-swiftui-audit demo-ios-swiftui-theme-test demo-ios-swiftui-run demo-ios-app-icon \
@@ -95,9 +97,10 @@ help:
 		'ios-api-check-record' 'Acknowledge the current Swift API breaks against BASELINE=<ref> in ios/api/breaking-changes.txt' \
 		'ios-api-check-last-tag' 'Run ios-api-check against the latest release tag before HEAD, or skip when there is none' \
 		'release-bump' 'Bump VERSION and regenerate CHANGELOG.md with git-cliff (V=X.Y.Z, DRY_RUN=1)' \
-		'release-verify' 'Fail unless TAG=X.Y.Z equals VERSION, has a changelog section, is not tagged yet, and HEAD is on master (RELEASE_REF)' \
-		'release-notes' 'Write the CHANGELOG.md section of TAG=X.Y.Z to RELEASE_NOTES' \
-		'release-github' 'CI only: create the tag TAG=X.Y.Z at RELEASE_TARGET (GITHUB_SHA) and its GitHub release' \
+		'release-verify' 'Fail unless TAG=vX.Y.Z equals VERSION, has a changelog section, and HEAD is on master (RELEASE_REF=refs/tags/vX.Y.Z)' \
+		'release-notes' 'Write the CHANGELOG.md section of TAG=vX.Y.Z to RELEASE_NOTES' \
+		'release-android-packages' 'Build the Android demo APKs and library AARs into RELEASE_ASSETS, named with VERSION' \
+		'release-github' 'CI only: create the GitHub release for the pushed tag TAG=vX.Y.Z with the files in RELEASE_ASSETS' \
 		'demo-ios-swiftui' 'Build the SwiftUI demo app (demos/ios-swiftui)' \
 		'demo-ios-uikit' 'Build the UIKit demo app (demos/ios-uikit)' \
 		'demo-android-compose' 'Build the Compose demo app (demos/android-compose)' \
@@ -195,9 +198,17 @@ release-verify: $(TOOLS_DEPS)
 release-notes: $(TOOLS_DEPS)
 	npm --prefix tools run --silent release -- notes --tag "$$TAG" --out '$(RELEASE_NOTES)'
 
+release-android-packages:
+	cd demos/android-compose && ./gradlew :app:assembleDebug$(gradle_flags)
+	cd demos/android-views && ./gradlew :app:assembleDebug$(gradle_flags)
+	cd android && ./gradlew $(ANDROID_RELEASE_MODULES:%=:%:assembleRelease)$(gradle_flags)
+	mkdir -p '$(RELEASE_ASSETS)'
+	cp demos/android-compose/app/build/outputs/apk/debug/app-debug.apk '$(RELEASE_ASSETS)/ts-ds-demo-compose-$(VERSION).apk'
+	cp demos/android-views/app/build/outputs/apk/debug/app-debug.apk '$(RELEASE_ASSETS)/ts-ds-demo-views-$(VERSION).apk'
+	$(foreach module,$(ANDROID_RELEASE_MODULES),cp android/$(module)/build/outputs/aar/$(module)-release.aar '$(RELEASE_ASSETS)/ts-ds-$(module)-$(VERSION).aar' &&) true
+
 release-github: release-notes
-	@test -n "$${RELEASE_TARGET:-$$GITHUB_SHA}" || { printf 'release-github: RELEASE_TARGET (default GITHUB_SHA) must name the commit to tag; it runs from release.yml\n' >&2; exit 1; }
-	gh release create "$$TAG" --target "$${RELEASE_TARGET:-$$GITHUB_SHA}" --title "$$TAG" --notes-file '$(RELEASE_NOTES)'
+	gh release create "$$TAG" --verify-tag --title "$$TAG" --notes-file '$(RELEASE_NOTES)' $(wildcard $(RELEASE_ASSETS)/*)
 
 demo-ios-swiftui:
 	xcodebuild build -project $(DEMO_IOS_SWIFTUI_PROJECT) -scheme $(DEMO_IOS_SWIFTUI_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(DEMO_IOS_DERIVED_DATA)

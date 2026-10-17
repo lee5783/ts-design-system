@@ -158,8 +158,8 @@ describe("workflow files", () => {
     }
   });
 
-  it("uploads artifacts only on failure", () => {
-    for (const [file, name, entry] of allJobs()) {
+  it("uploads artifacts only on failure, except the release packages", () => {
+    for (const [file, name, entry] of allJobs().filter(([candidate, job]) => !(candidate === "release.yml" && job === "android-packages"))) {
       for (const step of entry.steps.filter((candidate) => candidate.uses?.startsWith("actions/upload-artifact@"))) {
         expect(step.if, `${file} ${name}`).toBe("failure()");
       }
@@ -439,16 +439,16 @@ describe("path filters", () => {
 describe("release workflow", () => {
   const release = workflow("release.yml");
 
-  it("runs only on a manual dispatch with a version input, one release at a time, never cancelled", () => {
-    expect(release.on).toEqual({ workflow_dispatch: { inputs: { version: { description: expect.any(String), required: true, type: "string" } } } });
+  it("runs only on a pushed vX.Y.Z tag, one release at a time, never cancelled", () => {
+    expect(release.on).toEqual({ push: { tags: ["v[0-9]+.[0-9]+.[0-9]+"] } });
     expect(release.concurrency).toEqual({ group: "release", "cancel-in-progress": false });
   });
 
-  it("verifies the version, the branch and that the tag does not exist yet, before anything else", () => {
+  it("verifies the tag against VERSION and that the tagged commit is on master, before anything else", () => {
     const verify = job("release.yml", "verify");
     expect(verify.needs).toBeUndefined();
     expect(makeTargets(verify)).toEqual(["release-verify"]);
-    expect(verify.steps.find((step) => step.run === "make release-verify")?.env).toEqual({ TAG: "${{ inputs.version }}", RELEASE_REF: "${{ github.ref }}" });
+    expect(verify.steps.find((step) => step.run === "make release-verify")?.env).toEqual({ TAG: "${{ github.ref_name }}", RELEASE_REF: "${{ github.ref }}" });
     expect(checkout(verify).with?.["fetch-depth"]).toBe(0);
   });
 
@@ -482,11 +482,19 @@ describe("release workflow", () => {
     expect(publish.steps.find((step) => step.run === "make android-publish")?.env).toEqual({ GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" });
   });
 
-  it("creates the tag and the GitHub release last, at the commit the gates ran on", () => {
+  it("builds the Android demo APKs and library AARs after every gate, and uploads them for the release", () => {
+    const packages = job("release.yml", "android-packages");
+    expect(packages.needs).toEqual(Object.keys(RELEASE_GATES));
+    expect(makeTargets(packages)).toEqual(["release-android-packages"]);
+    expect(packages.steps.find((step) => step.uses?.startsWith("actions/upload-artifact@"))?.with).toMatchObject({ name: "release-assets", path: ".build/release/assets", "if-no-files-found": "error" });
+  });
+
+  it("creates the GitHub release for the pushed tag last, with the release packages attached", () => {
     const github = job("release.yml", "github-release");
-    expect(github.needs).toBe("publish-android");
+    expect(github.needs).toEqual(["publish-android", "android-packages"]);
     expect(makeTargets(github)).toEqual(["tools-deps", "release-github"]);
-    expect(github.steps.find((step) => step.run === "make release-github")?.env).toEqual({ TAG: "${{ inputs.version }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" });
+    expect(github.steps.find((step) => step.uses?.startsWith("actions/download-artifact@"))?.with).toEqual({ name: "release-assets", path: ".build/release/assets" });
+    expect(github.steps.find((step) => step.run === "make release-github")?.env).toEqual({ TAG: "${{ github.ref_name }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" });
   });
 
   it("does not persist the checkout token in the write-scoped jobs", () => {

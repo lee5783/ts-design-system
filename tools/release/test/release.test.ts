@@ -66,19 +66,20 @@ describe("changelogSection", () => {
 
 describe("verifyTag", () => {
   it("passes when the tag equals VERSION and the changelog has its section", () => {
-    expect(verifyTag("1.1.0", "1.1.0\n", CHANGELOG)).toBe("1.1.0");
+    expect(verifyTag("v1.1.0", "1.1.0\n", CHANGELOG)).toBe("1.1.0");
   });
 
   it("fails when the tag differs from VERSION", () => {
-    expect(() => verifyTag("1.1.0", "1.0.0\n", CHANGELOG)).toThrow("tag 1.1.0 does not match VERSION 1.0.0");
+    expect(() => verifyTag("v1.1.0", "1.0.0\n", CHANGELOG)).toThrow("tag v1.1.0 does not match VERSION 1.0.0");
   });
 
-  it("fails for a tag that is not plain X.Y.Z", () => {
-    expect(() => verifyTag("v1.1.0", "1.1.0", CHANGELOG)).toThrow(ReleaseError);
+  it("fails for a tag that is not plain vX.Y.Z", () => {
+    expect(() => verifyTag("1.1.0", "1.1.0", CHANGELOG)).toThrow(ReleaseError);
+    expect(() => verifyTag("v1.1.0-rc.1", "1.1.0", CHANGELOG)).toThrow(ReleaseError);
   });
 
   it("fails when the changelog has no section for the tag", () => {
-    expect(() => verifyTag("1.2.0", "1.2.0", CHANGELOG)).toThrow('CHANGELOG.md has no "## 1.2.0" section');
+    expect(() => verifyTag("v1.2.0", "1.2.0", CHANGELOG)).toThrow('CHANGELOG.md has no "## 1.2.0" section');
   });
 
   it("requires TAG", () => {
@@ -139,7 +140,7 @@ describe("bump", () => {
   it("refuses a version whose tag already exists", async () => {
     await exec("git", ["-c", "user.name=t", "-c", "user.email=t@example.com", "commit", "-q", "--allow-empty", "-m", "init"], { cwd: root });
     await exec("git", ["tag", "0.2.0"], { cwd: root });
-    await expect(bump(root, "0.2.0", true, { GIT_CLIFF: fakeCliff })).rejects.toThrow("tag 0.2.0 already exists");
+    await expect(bump(root, "0.2.0", true, { GIT_CLIFF: fakeCliff })).rejects.toThrow("tag v0.2.0 already exists");
   });
 
   it("writes the first release at the current VERSION when no release tag exists", async () => {
@@ -229,25 +230,18 @@ describe("verifyReleaseContext", () => {
     await rm(base, { recursive: true, force: true });
   });
 
-  it("passes on master, for a version that is not tagged anywhere yet", async () => {
-    await expect(verifyReleaseContext(clone, "0.2.0", "refs/heads/master")).resolves.toBeUndefined();
+  it("passes for the pushed tag on a commit that is on master", async () => {
+    await expect(verifyReleaseContext(clone, "v0.2.0", "refs/tags/v0.2.0")).resolves.toBeUndefined();
   });
 
-  it("refuses a run that did not start on master", async () => {
-    await expect(verifyReleaseContext(clone, "0.2.0", "refs/heads/feature")).rejects.toThrow("releases run only from master, not refs/heads/feature");
-    await expect(verifyReleaseContext(clone, "0.2.0", "refs/tags/0.2.0")).rejects.toThrow(ReleaseError);
-  });
-
-  it("refuses a version that is already tagged, locally or on origin", async () => {
-    await git(clone, "tag", "0.2.0");
-    await git(clone, "push", "-q", "origin", "0.2.0");
-    await git(clone, "tag", "-d", "0.2.0");
-    await expect(verifyReleaseContext(clone, "0.2.0", "refs/heads/master")).rejects.toThrow("tag 0.2.0 already exists");
+  it("refuses a run that was not started by the release tag", async () => {
+    await expect(verifyReleaseContext(clone, "v0.2.0", "refs/heads/master")).rejects.toThrow("releases run only from the pushed tag refs/tags/v0.2.0, not refs/heads/master");
+    await expect(verifyReleaseContext(clone, "v0.2.0", "refs/tags/v0.3.0")).rejects.toThrow(ReleaseError);
   });
 
   it("refuses a commit that is not on origin/master", async () => {
     await git(clone, "checkout", "-q", "-b", "unmerged");
     await git(clone, "commit", "-q", "--allow-empty", "-m", "unmerged");
-    await expect(verifyReleaseContext(clone, "0.2.0", undefined)).rejects.toThrow("HEAD is not on origin/master");
+    await expect(verifyReleaseContext(clone, "v0.2.0", undefined)).rejects.toThrow("HEAD is not on origin/master");
   });
 });

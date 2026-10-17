@@ -1,6 +1,6 @@
 # iOS: getting started
 
-The TS design system ships as one Swift package with three products. Distribution is SPM only, from this repository's plain `X.Y.Z` tags.
+The TS design system ships as one Swift package with three products. Distribution is SPM only, from this repository's `vX.Y.Z` tags.
 
 **Verified** (T50, against a tagged `file://` copy of the repo, Xcode 26.6, iPhone 17 / iOS 26.5): adding the package by URL with an exact version, resolving, building and running both iOS demos from it, with only this package fetched. **Not executed yet:** a clone from `github.com` and a private-repository login, because no tag has been published; those steps are marked *(not executed)*.
 
@@ -14,7 +14,7 @@ The TS design system ships as one Swift package with three products. Distributio
 **Xcode:** File → Add Package Dependencies…, URL `https://github.com/lee5783/ts-design-system.git` *(not executed against github.com)*.
 
 - Version rule: **Exact Version** `0.1.0` (verified), or **Up to Next Minor Version**. While the version is 0.x, a minor release may break, so do not use "Up to Next Major".
-- Tags are plain `X.Y.Z`, with no `v` prefix.
+- Tags are `vX.Y.Z`; SPM strips the `v`, so version requirements stay plain (`0.1.0`).
 
 **`Package.swift`:**
 

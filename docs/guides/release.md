@@ -1,6 +1,6 @@
 # Release
 
-One lockstep version (`VERSION`, plain `X.Y.Z`) ships both platforms: SPM consumers resolve the git tag `X.Y.Z`, and Android consumers get `com.ts.ds:*:X.Y.Z` from GitHub Packages. Releases run from `master` through the `release` workflow; nothing public exists until every gate and the Android publish have passed, and the tag is created last.
+One lockstep version (`VERSION`, plain `X.Y.Z`) ships both platforms: SPM consumers resolve the git tag `vX.Y.Z` (SPM strips the `v`), and Android consumers get `com.ts.ds:*:X.Y.Z` from GitHub Packages. Pushing a `vX.Y.Z` tag on a `master` commit starts the `release` workflow; the Android publish and the GitHub release happen only after every gate has passed. The GitHub release carries the changelog section, the Compose and Views demo APKs and the library AARs.
 
 Tooling: `tools/release/src/release.ts` (bump, verify, notes), `tools/release/src/publish-android.ts` (publish), `cliff.toml` (changelog), `.github/workflows/release.yml`.
 
@@ -16,7 +16,7 @@ These are one-time user actions (tracker D-001, D-002, D-007, D-008, D-026):
 
 ## Steps
 
-1. **Pick the version.** Semver, plain `X.Y.Z` (no `v`, no pre-release suffix). Use `codegen diff-report` for token changes, `make api-check BASELINE=<last tag>` for API changes, and [deprecation-policy.md](deprecation-policy.md) for what is major. Before 1.0, minor releases may break.
+1. **Pick the version.** Semver `X.Y.Z` in `VERSION` (no pre-release suffix); the tag is the same version with a `v` prefix. Use `codegen diff-report` for token changes, `make api-check BASELINE=<last tag>` for API changes, and [deprecation-policy.md](deprecation-policy.md) for what is major. Before 1.0, minor releases may break.
 2. **Bump on a branch:**
 
    ```bash
@@ -25,22 +25,31 @@ These are one-time user actions (tracker D-001, D-002, D-007, D-008, D-026):
    make release-bump V=X.Y.Z             # writes VERSION and regenerates CHANGELOG.md
    ```
 
-   `release-bump` refuses a version that is not greater than `VERSION` (except the first release: while no `X.Y.Z` tag exists, `V` may equal `VERSION`, so `0.1.0` can be cut) and a tag that already exists locally or on `origin`. It regenerates the whole `CHANGELOG.md` with git-cliff, found in this order: `$GIT_CLIFF`, `git-cliff` on `PATH` (installed by `mise`), then `npx --yes git-cliff@2.14.2`.
+   `release-bump` refuses a version that is not greater than `VERSION` (except the first release: while no release tag exists, `V` may equal `VERSION`, so `0.1.0` can be cut) and a version whose tag (`vX.Y.Z` or `X.Y.Z`) already exists locally or on `origin`. It regenerates the whole `CHANGELOG.md` with git-cliff, found in this order: `$GIT_CLIFF`, `git-cliff` on `PATH` (installed by `mise`), then `npx --yes git-cliff@2.14.2`.
 3. **Commit** `chore(release): X.Y.Z` (skipped by the changelog), open the PR, merge it after the gates pass.
-4. **Dispatch the release:** GitHub → Actions → **release** → *Run workflow* on `master`, input `version` = `X.Y.Z`. The jobs run in order:
+4. **Tag the merged commit and push the tag:**
+
+   ```bash
+   git checkout master && git pull
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   ```
+
+   The tag push starts the `release` workflow. The jobs run in order:
 
    | Job | What it does | Permissions |
    |---|---|---|
-   | `verify` | `make release-verify TAG=X.Y.Z RELEASE_REF=refs/heads/master`: the tag equals `VERSION`, `CHANGELOG.md` has a `## X.Y.Z` section, the ref is `master`, the tag does not exist locally or on `origin`, HEAD is on `origin/master` | read |
-   | `codegen-check`, `ios`, `android`, `demos` | the four PR gate workflows, called as reusable workflows on the release commit | read |
+   | `verify` | `make release-verify TAG=vX.Y.Z RELEASE_REF=refs/tags/vX.Y.Z`: the tag is `v` + `VERSION`, `CHANGELOG.md` has a `## X.Y.Z` section, the run was started by that tag, and the tagged commit is on `origin/master` | read |
+   | `codegen-check`, `ios`, `android`, `demos` | the four PR gate workflows, called as reusable workflows on the tagged commit (every area runs) | read |
    | `publish-android` | `make android-publish`: probes each module's POM in GitHub Packages, skips the published ones, publishes the missing libraries in one Gradle run, then the BOM | `packages: write` |
-   | `github-release` | `make release-github`: `gh release create X.Y.Z --target $GITHUB_SHA` with the `CHANGELOG.md` section as notes (`make release-notes`), which creates the tag | `contents: write` |
+   | `android-packages` | `make release-android-packages`: builds the Compose and Views demo APKs (debug-signed, installable) and the library AARs into `.build/release/assets`, uploaded as the `release-assets` artifact | read |
+   | `github-release` | `make release-github`: `gh release create vX.Y.Z --verify-tag` with the `CHANGELOG.md` section as notes (`make release-notes`) and every file in `.build/release/assets` attached | `contents: write` |
 
 5. **After the release:** the tag becomes the iOS API baseline (`make ios-api-check-last-tag` on `master`). On the first release, do the one-time consumer smoke check: a real GitHub Packages download with a `read:packages` token and a real `github.com` SPM clone (D-055).
 
 ## Changelog groups
 
-`cliff.toml` groups commits by conventional type: Features (`feat`), Fixes (`fix`), Performance (`perf`), Refactoring (`refactor`), Reverts (`revert`), Documentation (`docs`), Tests (`test`), Maintenance (`build`, `ci`, `chore`, `style`, `deps`), Other (anything else). The scope is shown in bold, and breaking commits (`feat!:` or a `BREAKING CHANGE` footer) are marked `[**breaking**]`. `chore(release)` and merge commits are skipped. Only plain `X.Y.Z` tags count as releases.
+`cliff.toml` groups commits by conventional type: Features (`feat`), Fixes (`fix`), Performance (`perf`), Refactoring (`refactor`), Reverts (`revert`), Documentation (`docs`), Tests (`test`), Maintenance (`build`, `ci`, `chore`, `style`, `deps`), Other (anything else). The scope is shown in bold, and breaking commits (`feat!:` or a `BREAKING CHANGE` footer) are marked `[**breaking**]`. `chore(release)` and merge commits are skipped. Only `vX.Y.Z` (and legacy plain `X.Y.Z`) tags count as releases; the `v` is dropped from changelog headings.
 
 ## API acknowledgements
 
@@ -55,16 +64,17 @@ Commit `ios/api/breaking-changes.txt`. Each line is `<baseline VERSION> <breakag
 
 ## Recovery
 
-- **A gate fails:** nothing was published or tagged. Fix on `master` (a new commit; `VERSION` stays), then dispatch again.
-- **`publish-android` fails halfway:** re-run the failed job (or dispatch again). Modules whose POM is already in GitHub Packages (HTTP 200) are skipped; missing ones (404/410) are published; any other status stops with a token hint. The BOM is always published last.
+- **A gate fails:** nothing was published, but the tag exists. Fix on `master` (a new commit; `VERSION` stays), move the tag and push it again: `git tag -f vX.Y.Z && git push -f origin vX.Y.Z`. Only do this before any consumer could have resolved the tag.
+- **`publish-android` fails halfway:** re-run the failed jobs from the workflow run page. Modules whose POM is already in GitHub Packages (HTTP 200) are skipped; missing ones (404/410) are published; any other status stops with a token hint. The BOM is always published last.
 - **A module upload broke partway** (some files of the version uploaded, no POM): the re-run gets HTTP 409. Delete that package version in the GitHub Packages UI, then re-run (D-102).
-- **`github-release` fails:** the Android artifacts exist but the tag does not, so SPM consumers do not see the release yet. Re-run the job.
-- **A version can never be re-published.** GitHub Packages refuses to overwrite a version, and a tag is final. To fix a bad release, release a new patch.
+- **`android-packages` or `github-release` fails:** the Android artifacts exist and SPM already sees the tag, but there is no GitHub release page yet. Re-run the failed jobs.
+- **A version can never be re-published.** GitHub Packages refuses to overwrite a version, and a tag is final once published. To fix a bad release, release a new patch.
 
 ## Local dry runs
 
 - `make release-bump V=<next> DRY_RUN=1`: the changelog section only.
 - `make android-publish-local`: publishes all modules and the BOM to `~/.m2`; consume it with `-Pds.useLocal=false -Pds.mavenLocal=true -Pds.version=<v>` in the demos, or `mavenLocal()` in a scratch app.
-- `make release-notes TAG=X.Y.Z`: writes the section to `.build/release/notes.md`.
+- `make release-notes TAG=vX.Y.Z`: writes the section to `.build/release/notes.md`.
+- `make release-android-packages`: builds the demo APKs and AARs into `.build/release/assets`.
 
-The first real run of the workflow is still owed (D-052): it proves `packages: write` publishing, the 200/404 probe, the dispatch flow and the reusable-workflow fan-out.
+The first real run of the workflow is still owed (D-052): it proves `packages: write` publishing, the 200/404 probe, the tag-push flow and the reusable-workflow fan-out.

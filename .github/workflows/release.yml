@@ -1,12 +1,8 @@
 name: release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: The version to release (X.Y.Z). It must equal VERSION on master.
-        required: true
-        type: string
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 permissions:
   contents: read
@@ -20,7 +16,7 @@ env:
 
 jobs:
   verify:
-    name: on master, matches VERSION and CHANGELOG.md, not tagged yet
+    name: on master, matches VERSION and CHANGELOG.md
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -34,7 +30,7 @@ jobs:
           cache-dependency-path: tools/package-lock.json
       - run: make release-verify
         env:
-          TAG: ${{ inputs.version }}
+          TAG: ${{ github.ref_name }}
           RELEASE_REF: ${{ github.ref }}
 
   codegen-check:
@@ -80,9 +76,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  android-packages:
+    name: build Android demo APKs and library AARs
+    needs: [codegen-check, ios, android, demos]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v6
+      - run: make release-android-packages
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-assets
+          path: .build/release/assets
+          if-no-files-found: error
+          retention-days: 14
+
   github-release:
-    name: tag and GitHub release
-    needs: publish-android
+    name: GitHub release with packages
+    needs: [publish-android, android-packages]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -96,8 +114,12 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: tools/package-lock.json
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-assets
+          path: .build/release/assets
       - run: make tools-deps
       - run: make release-github
         env:
-          TAG: ${{ inputs.version }}
+          TAG: ${{ github.ref_name }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -9,7 +9,7 @@ import { callsOf, repoRoot, stubTools, type StubTools } from "./stub-tools.ts";
 
 const run = promisify(execFile);
 
-const UNTRUSTED_CONTEXT = /\$\{\{[^}]*\b(inputs\.|github\.(ref|base_ref|head_ref|event)\b|steps\.|needs\b|secrets\.)/;
+const UNTRUSTED_CONTEXT = /\$\{\{[^}]*\b(inputs\.|github\.(ref|ref_name|base_ref|head_ref|event)\b|steps\.|needs\b|secrets\.)/;
 const PAYLOADS = ["0.1.0'; echo INJECTED; '", "$(shell echo INJECTED >&2)0.1.0", '0.1.0"; echo INJECTED; "$(echo INJECTED)`echo INJECTED`'];
 
 type EnvBlock = Record<string, unknown> | undefined;
@@ -68,7 +68,7 @@ describe("recipes that take a value from the environment", () => {
   const cases: { target: string; env: (payload: string) => Record<string, string>; expected: (payload: string) => string[][]; tool?: string }[] = [
     { target: "release-verify", env: (value) => ({ TAG: value, RELEASE_REF: value }), expected: (value) => [["npm", "--prefix", "tools", "run", "--silent", "release", "--", "verify", "--tag", value, "--ref", value]] },
     { target: "release-notes", env: (value) => ({ TAG: value }), expected: (value) => [["npm", "--prefix", "tools", "run", "--silent", "release", "--", "notes", "--tag", value, "--out", ".build/release/notes.md"]] },
-    { target: "release-github", tool: "gh", env: (value) => ({ TAG: value, GITHUB_SHA: value }), expected: (value) => [["gh", "release", "create", value, "--target", value, "--title", value, "--notes-file", ".build/release/notes.md"]] },
+    { target: "release-github", tool: "gh", env: (value) => ({ TAG: value }), expected: (value) => [["gh", "release", "create", value, "--verify-tag", "--title", value, "--notes-file", ".build/release/notes.md"]] },
     { target: "release-bump", env: (value) => ({ V: value }), expected: (value) => [["npm", "--prefix", "tools", "run", "--silent", "release", "--", "bump", "--version", value]] },
     { target: "ios-api-check", env: (value) => ({ BASELINE: value }), expected: (value) => [["npm", "--prefix", "tools", "run", "--silent", "api-check-ios", "--", "--baseline", value]] },
     { target: "ios-api-check-record", env: (value) => ({ BASELINE: value }), expected: (value) => [["npm", "--prefix", "tools", "run", "--silent", "api-check-ios", "--", "--baseline", value, "--record"]] },
