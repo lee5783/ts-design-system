@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TS Views</string>
+    <string name="toolkit_name">Android Views</string>
+    <string name="demo_heading_tag" translatable="false">demo.heading</string>
+    <string name="demo_text_field_sample_email" translatable="false">ada@example.com</string>
+    <string name="demo_text_field_sample_short_password" translatable="false">abc</string>
+    <string name="demo_text_field_sample_name" translatable="false">Ada Lovelace</string>
+    <string name="demo_text_field_sample_account_id" translatable="false">TS-2048-7731</string>
+    <string name="demo_text_field_sample_search" translatable="false">Analytical</string>
+    <string-array name="demo_tabs_sections">
+        <item>@string/demo_sample_overview</item>
+        <item>@string/demo_sample_activity</item>
+        <item>@string/demo_sample_settings</item>
+    </string-array>
+    <string-array name="demo_tabs_short_ranges">
+        <item>@string/demo_sample_day</item>
+        <item>@string/demo_sample_week</item>
+        <item>@string/demo_sample_month</item>
+    </string-array>
+    <string-array name="demo_tabs_ranges">
+        <item>@string/demo_sample_day</item>
+        <item>@string/demo_sample_week</item>
+        <item>@string/demo_sample_month</item>
+        <item>@string/demo_sample_year</item>
+    </string-array>
+    <string-array name="demo_tabs_layouts">
+        <item>@string/demo_sample_grid</item>
+        <item>@string/demo_sample_list</item>
+    </string-array>
+</resources>

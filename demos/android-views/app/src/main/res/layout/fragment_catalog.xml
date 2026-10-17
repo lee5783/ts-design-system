@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_demo_toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/catalog_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/ts_space_4"
+        android:paddingTop="@dimen/ts_space_2"
+        android:paddingBottom="@dimen/ts_space_8" />
+</LinearLayout>

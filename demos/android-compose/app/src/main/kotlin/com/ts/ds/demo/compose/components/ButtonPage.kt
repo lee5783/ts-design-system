@@ -1,0 +1,134 @@
+package com.ts.ds.demo.compose.components
+
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import com.ts.ds.compose.components.button.TSButton
+import com.ts.ds.core.icon.TSIcon
+import com.ts.ds.core.style.TSButtonSize
+import com.ts.ds.core.style.TSButtonVariant
+import com.ts.ds.demo.compose.shell.OptionChip
+import com.ts.ds.demo.compose.shell.OptionGroup
+import com.ts.ds.demo.compose.shell.ToggleRow
+import com.ts.ds.demo.support.R as DemoR
+
+object ButtonPageTags {
+    const val PLAYGROUND_BUTTON = "demo.button.playground.button"
+    const val PLAYGROUND_COUNT = "demo.button.playground.count"
+    const val PLAYGROUND_LOADING = "demo.button.playground.loading"
+    const val PLAYGROUND_DISABLED = "demo.button.playground.disabled"
+    const val LINK = "demo.button.variants.link"
+
+    fun variant(variant: TSButtonVariant): String = "demo.button.playground.variant.${variant.name.lowercase()}"
+}
+
+fun LazyListScope.buttonPage() {
+    componentSection("button.variants", DemoR.string.demo_component_variants) {
+        TSButton(stringResource(DemoR.string.demo_sample_save), onClick = {}, variant = TSButtonVariant.Primary)
+        TSButton(stringResource(DemoR.string.demo_sample_cancel), onClick = {}, variant = TSButtonVariant.Secondary)
+        TSButton(stringResource(DemoR.string.demo_sample_add_item), onClick = {}, variant = TSButtonVariant.Ghost, leadingIcon = TSIcon.Plus)
+        TSButton(stringResource(DemoR.string.demo_sample_delete), onClick = {}, variant = TSButtonVariant.Danger, leadingIcon = TSIcon.Trash)
+        TSButton(
+            stringResource(DemoR.string.demo_sample_learn_more),
+            onClick = {},
+            variant = TSButtonVariant.Link,
+            modifier = Modifier.testTag(ButtonPageTags.LINK),
+        )
+    }
+    componentSection("button.sizes", DemoR.string.demo_component_sizes) {
+        TSButton(stringResource(DemoR.string.demo_sample_continue), onClick = {}, size = TSButtonSize.Md, trailingIcon = TSIcon.ArrowRight)
+        TSButton(stringResource(DemoR.string.demo_sample_get_started), onClick = {}, size = TSButtonSize.Lg)
+        TSButton(stringResource(DemoR.string.demo_component_block), onClick = {}, size = TSButtonSize.Lg, modifier = Modifier.fillMaxWidth())
+    }
+    componentSection("button.states", DemoR.string.demo_component_states) {
+        TSButtonVariant.entries.forEach { variant ->
+            TSButtonSize.entries.forEach { size ->
+                DemoCaption(text = "${variant.name.lowercase()} · ${size.name.lowercase()}")
+                DemoComponentRow {
+                    TSButton(stringResource(DemoR.string.demo_component_default), onClick = {}, variant = variant, size = size)
+                    TSButton(stringResource(DemoR.string.demo_component_disabled), onClick = {}, variant = variant, size = size, enabled = false)
+                    TSButton(stringResource(DemoR.string.demo_component_loading), onClick = {}, variant = variant, size = size, loading = true)
+                }
+            }
+        }
+    }
+    componentSection("button.icons", DemoR.string.demo_component_with_icons) {
+        TSButton(stringResource(DemoR.string.demo_component_leading_icon), onClick = {}, variant = TSButtonVariant.Secondary, leadingIcon = TSIcon.Download)
+        TSButton(stringResource(DemoR.string.demo_component_trailing_icon), onClick = {}, variant = TSButtonVariant.Secondary, trailingIcon = TSIcon.ChevronRight)
+        TSButton(
+            stringResource(DemoR.string.demo_component_both_icons),
+            onClick = {},
+            variant = TSButtonVariant.Secondary,
+            leadingIcon = TSIcon.Upload,
+            trailingIcon = TSIcon.ArrowRight,
+        )
+    }
+    componentSection("button.playground", DemoR.string.demo_component_playground) { ButtonPlayground() }
+}
+
+@Composable
+private fun ButtonPlayground() {
+    var variant by rememberSaveable { mutableStateOf(TSButtonVariant.Primary) }
+    var size by rememberSaveable { mutableStateOf(TSButtonSize.Md) }
+    var loading by rememberSaveable { mutableStateOf(false) }
+    var disabled by rememberSaveable { mutableStateOf(false) }
+    var block by rememberSaveable { mutableStateOf(false) }
+    var leading by rememberSaveable { mutableStateOf(false) }
+    var trailing by rememberSaveable { mutableStateOf(false) }
+    var taps by rememberSaveable { mutableIntStateOf(0) }
+
+    DemoCaption(text = stringResource(DemoR.string.demo_component_variant))
+    OptionGroup {
+        TSButtonVariant.entries.forEach { option ->
+            OptionChip(
+                label = option.name.lowercase(),
+                selected = variant == option,
+                onClick = { variant = option },
+                modifier = Modifier.testTag(ButtonPageTags.variant(option)),
+            )
+        }
+    }
+    DemoCaption(text = stringResource(DemoR.string.demo_component_size))
+    OptionGroup {
+        TSButtonSize.entries.forEach { option ->
+            OptionChip(label = option.name.lowercase(), selected = size == option, onClick = { size = option })
+        }
+    }
+    ToggleRow(
+        label = stringResource(DemoR.string.demo_component_loading),
+        checked = loading,
+        onCheckedChange = { loading = it },
+        modifier = Modifier.testTag(ButtonPageTags.PLAYGROUND_LOADING),
+    )
+    ToggleRow(
+        label = stringResource(DemoR.string.demo_component_disabled),
+        checked = disabled,
+        onCheckedChange = { disabled = it },
+        modifier = Modifier.testTag(ButtonPageTags.PLAYGROUND_DISABLED),
+    )
+    ToggleRow(label = stringResource(DemoR.string.demo_component_block), checked = block, onCheckedChange = { block = it })
+    ToggleRow(label = stringResource(DemoR.string.demo_component_leading_icon), checked = leading, onCheckedChange = { leading = it })
+    ToggleRow(label = stringResource(DemoR.string.demo_component_trailing_icon), checked = trailing, onCheckedChange = { trailing = it })
+    TSButton(
+        text = stringResource(DemoR.string.demo_sample_save),
+        onClick = { taps++ },
+        variant = variant,
+        size = size,
+        leadingIcon = if (leading) TSIcon.Check else null,
+        trailingIcon = if (trailing) TSIcon.ArrowRight else null,
+        enabled = !disabled,
+        loading = loading,
+        modifier = Modifier
+            .then(if (block) Modifier.fillMaxWidth() else Modifier)
+            .testTag(ButtonPageTags.PLAYGROUND_BUTTON),
+    )
+    DemoTapCounter(count = taps, tag = ButtonPageTags.PLAYGROUND_COUNT)
+}

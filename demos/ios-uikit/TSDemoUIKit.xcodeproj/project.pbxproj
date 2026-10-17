@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D5A200000000000000000101 /* TSDesignSystemUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = D5A200000000000000000501 /* TSDesignSystemUIKit */; };
+		D5A200000000000000000102 /* TSDemoSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D5A200000000000000000502 /* TSDemoSupport */; };
+		D5A200000000000000000103 /* VERSION in Resources */ = {isa = PBXBuildFile; fileRef = D5A200000000000000000203 /* VERSION */; };
+		D5A200000000000000000104 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D5A200000000000000000204 /* manifest.json */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D5A200000000000000000601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A200000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D5A200000000000000000401;
+			remoteInfo = TSDemoUIKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D5A200000000000000000201 /* TSDemoUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TSDemoUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5A200000000000000000202 /* TSDemoUIKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TSDemoUIKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5A200000000000000000203 /* VERSION */ = {isa = PBXFileReference; lastKnownFileType = text; name = VERSION; path = ../../VERSION; sourceTree = SOURCE_ROOT; };
+		D5A200000000000000000204 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../design/manifest.json; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D5A200000000000000000301 /* TSDemoUIKit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TSDemoUIKit;
+			sourceTree = "<group>";
+		};
+		D5A200000000000000000302 /* TSDemoUIKitUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TSDemoUIKitUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D5A200000000000000000701 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5A200000000000000000101 /* TSDesignSystemUIKit in Frameworks */,
+				D5A200000000000000000102 /* TSDemoSupport in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5A200000000000000000702 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D5A200000000000000000011 = {
+			isa = PBXGroup;
+			children = (
+				D5A200000000000000000301 /* TSDemoUIKit */,
+				D5A200000000000000000302 /* TSDemoUIKitUITests */,
+				D5A200000000000000000013 /* Build Info */,
+				D5A200000000000000000012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D5A200000000000000000012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D5A200000000000000000201 /* TSDemoUIKit.app */,
+				D5A200000000000000000202 /* TSDemoUIKitUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D5A200000000000000000013 /* Build Info */ = {
+			isa = PBXGroup;
+			children = (
+				D5A200000000000000000203 /* VERSION */,
+				D5A200000000000000000204 /* manifest.json */,
+			);
+			name = "Build Info";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D5A200000000000000000401 /* TSDemoUIKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5A200000000000000000902 /* Build configuration list for PBXNativeTarget "TSDemoUIKit" */;
+			buildPhases = (
+				D5A200000000000000000801 /* Sources */,
+				D5A200000000000000000701 /* Frameworks */,
+				D5A200000000000000000803 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				D5A200000000000000000301 /* TSDemoUIKit */,
+			);
+			name = TSDemoUIKit;
+			packageProductDependencies = (
+				D5A200000000000000000501 /* TSDesignSystemUIKit */,
+				D5A200000000000000000502 /* TSDemoSupport */,
+			);
+			productName = TSDemoUIKit;
+			productReference = D5A200000000000000000201 /* TSDemoUIKit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D5A200000000000000000402 /* TSDemoUIKitUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5A200000000000000000903 /* Build configuration list for PBXNativeTarget "TSDemoUIKitUITests" */;
+			buildPhases = (
+				D5A200000000000000000802 /* Sources */,
+				D5A200000000000000000702 /* Frameworks */,
+				D5A200000000000000000804 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D5A200000000000000000602 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D5A200000000000000000302 /* TSDemoUIKitUITests */,
+			);
+			name = TSDemoUIKitUITests;
+			packageProductDependencies = (
+			);
+			productName = TSDemoUIKitUITests;
+			productReference = D5A200000000000000000202 /* TSDemoUIKitUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D5A200000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					D5A200000000000000000401 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					D5A200000000000000000402 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = D5A200000000000000000401;
+					};
+				};
+			};
+			buildConfigurationList = D5A200000000000000000901 /* Build configuration list for PBXProject "TSDemoUIKit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D5A200000000000000000011;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D5A200000000000000000511 /* XCLocalSwiftPackageReference "../.." */,
+				D5A200000000000000000512 /* XCLocalSwiftPackageReference "../ios-demo-support" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D5A200000000000000000012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D5A200000000000000000401 /* TSDemoUIKit */,
+				D5A200000000000000000402 /* TSDemoUIKitUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D5A200000000000000000803 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5A200000000000000000103 /* VERSION in Resources */,
+				D5A200000000000000000104 /* manifest.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5A200000000000000000804 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D5A200000000000000000801 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5A200000000000000000802 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D5A200000000000000000602 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D5A200000000000000000401 /* TSDemoUIKit */;
+			targetProxy = D5A200000000000000000601 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D5A200000000000000000911 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		D5A200000000000000000912 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D5A200000000000000000921 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TSDemoUIKit-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "TS UIKit";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.ds.demo.uikit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D5A200000000000000000922 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TSDemoUIKit-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "TS UIKit";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.ds.demo.uikit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D5A200000000000000000931 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.ds.demo.uikit.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = TSDemoUIKit;
+			};
+			name = Debug;
+		};
+		D5A200000000000000000932 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.ds.demo.uikit.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = TSDemoUIKit;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D5A200000000000000000901 /* Build configuration list for PBXProject "TSDemoUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5A200000000000000000911 /* Debug */,
+				D5A200000000000000000912 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5A200000000000000000902 /* Build configuration list for PBXNativeTarget "TSDemoUIKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5A200000000000000000921 /* Debug */,
+				D5A200000000000000000922 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5A200000000000000000903 /* Build configuration list for PBXNativeTarget "TSDemoUIKitUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5A200000000000000000931 /* Debug */,
+				D5A200000000000000000932 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D5A200000000000000000511 /* XCLocalSwiftPackageReference "../.." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../..;
+		};
+		D5A200000000000000000512 /* XCLocalSwiftPackageReference "../ios-demo-support" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../ios-demo-support";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D5A200000000000000000501 /* TSDesignSystemUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5A200000000000000000511 /* XCLocalSwiftPackageReference "../.." */;
+			productName = TSDesignSystemUIKit;
+		};
+		D5A200000000000000000502 /* TSDemoSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5A200000000000000000512 /* XCLocalSwiftPackageReference "../ios-demo-support" */;
+			productName = TSDemoSupport;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D5A200000000000000000001 /* Project object */;
+}

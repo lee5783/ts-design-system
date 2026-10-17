@@ -1,0 +1,3162 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "demo.about.design-system-version" : {
+      "comment" : "About: design system artifact version row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Design system version"
+          }
+        }
+      }
+    },
+    "demo.about.library-version" : {
+      "comment" : "About: library version row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Library version"
+          }
+        }
+      }
+    },
+    "demo.about.title" : {
+      "comment" : "Title of the About screen.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "demo.about.unknown" : {
+      "comment" : "About: shown when a version cannot be read.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        }
+      }
+    },
+    "demo.app.title" : {
+      "comment" : "Navigation title of the demo catalog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TS Design System"
+          }
+        }
+      }
+    },
+    "demo.appearance.dark" : {
+      "comment" : "Column header for dark appearance values.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        }
+      }
+    },
+    "demo.appearance.light" : {
+      "comment" : "Column header for light appearance values.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        }
+      }
+    },
+    "demo.catalog.title" : {
+      "comment" : "Back button title of the demo catalog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog"
+          }
+        }
+      }
+    },
+    "demo.component.action" : {
+      "comment" : "Component demo label: show an action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Action"
+          }
+        }
+      }
+    },
+    "demo.component.badge" : {
+      "comment" : "Picker option for a trailing badge.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badge"
+          }
+        }
+      }
+    },
+    "demo.component.block" : {
+      "comment" : "Playground toggle and sample: block button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full width"
+          }
+        }
+      }
+    },
+    "demo.component.both-icons" : {
+      "comment" : "Sample: leading and trailing icons.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both icons"
+          }
+        }
+      }
+    },
+    "demo.component.center" : {
+      "comment" : "Dialog variant: centered panel.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Center"
+          }
+        }
+      }
+    },
+    "demo.component.chain" : {
+      "comment" : "Dialog demo button that opens a dialog whose action presents a follow-up dialog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete with undo"
+          }
+        }
+      }
+    },
+    "demo.component.checked" : {
+      "comment" : "Component state caption: checked.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checked"
+          }
+        }
+      }
+    },
+    "demo.component.chevron" : {
+      "comment" : "Playground toggle that shows the list row chevron.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chevron"
+          }
+        }
+      }
+    },
+    "demo.component.contents" : {
+      "comment" : "Component page section: avatar content kinds.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content"
+          }
+        }
+      }
+    },
+    "demo.component.default" : {
+      "comment" : "State name: resting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        }
+      }
+    },
+    "demo.component.disabled" : {
+      "comment" : "State name and playground toggle: disabled.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disabled"
+          }
+        }
+      }
+    },
+    "demo.component.dismissed" : {
+      "comment" : "Dialog result when closed by the scrim, escape or a drag.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismissed"
+          }
+        }
+      }
+    },
+    "demo.component.dismissible" : {
+      "comment" : "Component demo label: show a dismiss button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismissible"
+          }
+        }
+      }
+    },
+    "demo.component.dot" : {
+      "comment" : "Playground toggle: show a status dot.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dot"
+          }
+        }
+      }
+    },
+    "demo.component.error" : {
+      "comment" : "Component state and playground option: error.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "demo.component.filled" : {
+      "comment" : "Component state: filled in.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filled"
+          }
+        }
+      }
+    },
+    "demo.component.five-items" : {
+      "comment" : "Bottom navigation section caption.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 items"
+          }
+        }
+      }
+    },
+    "demo.component.footer" : {
+      "comment" : "Component demo label: show footer actions.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Footer"
+          }
+        }
+      }
+    },
+    "demo.component.four-items-badges" : {
+      "comment" : "Bottom navigation section caption.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "4 items with badges"
+          }
+        }
+      }
+    },
+    "demo.component.icon" : {
+      "comment" : "Playground toggle: show an icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon"
+          }
+        }
+      }
+    },
+    "demo.component.initials" : {
+      "comment" : "Avatar caption: initials content.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initials"
+          }
+        }
+      }
+    },
+    "demo.component.interactive" : {
+      "comment" : "Component demo label: an interactive (tappable) variant.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interactive"
+          }
+        }
+      }
+    },
+    "demo.component.item-count" : {
+      "comment" : "Playground control: number of bottom navigation items.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Items"
+          }
+        }
+      }
+    },
+    "demo.component.keyboard-types" : {
+      "comment" : "Component page section: keyboard and content types.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keyboard types"
+          }
+        }
+      }
+    },
+    "demo.component.label" : {
+      "comment" : "Icons page: labelled status icons.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labelled"
+          }
+        }
+      }
+    },
+    "demo.component.label-hidden" : {
+      "comment" : "Section title: control whose label is only read by VoiceOver.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without a visible label"
+          }
+        }
+      }
+    },
+    "demo.component.leading" : {
+      "comment" : "Playground picker title for the leading content of a list row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leading"
+          }
+        }
+      }
+    },
+    "demo.component.leading-icon" : {
+      "comment" : "Playground toggle and sample: leading icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leading icon"
+          }
+        }
+      }
+    },
+    "demo.component.loading" : {
+      "comment" : "State name and playground toggle: loading.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading"
+          }
+        }
+      }
+    },
+    "demo.component.long-content" : {
+      "comment" : "Playground toggle: use a long dialog body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long content"
+          }
+        }
+      }
+    },
+    "demo.component.multiline" : {
+      "comment" : "Component page section and playground option: multiline text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multiline"
+          }
+        }
+      }
+    },
+    "demo.component.no-action" : {
+      "comment" : "Caption for a list row that has no action and is not pressable.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No action"
+          }
+        }
+      }
+    },
+    "demo.component.no-name" : {
+      "comment" : "Avatar caption: placeholder shown when the name has no letters.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No name"
+          }
+        }
+      }
+    },
+    "demo.component.none" : {
+      "comment" : "Picker option for no content.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        }
+      }
+    },
+    "demo.component.off" : {
+      "comment" : "Component state caption: off.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
+    },
+    "demo.component.on" : {
+      "comment" : "Component state caption: on.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        }
+      }
+    },
+    "demo.component.open-another" : {
+      "comment" : "Dialog action that tries to present a second dialog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open another dialog"
+          }
+        }
+      }
+    },
+    "demo.component.open-dialog" : {
+      "comment" : "Button that presents a dialog.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open dialog"
+          }
+        }
+      }
+    },
+    "demo.component.open-sheet" : {
+      "comment" : "Button that presents a bottom sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open sheet"
+          }
+        }
+      }
+    },
+    "demo.component.open-shell" : {
+      "comment" : "Button that opens the bottom navigation shell demo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the shell"
+          }
+        }
+      }
+    },
+    "demo.component.over-sheet" : {
+      "comment" : "Toast section: a toast shown while a sheet is open.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Over a sheet"
+          }
+        }
+      }
+    },
+    "demo.component.overflow" : {
+      "comment" : "Demo section showing tabs that scroll when they do not fit.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overflow"
+          }
+        }
+      }
+    },
+    "demo.component.password" : {
+      "comment" : "Component page section: password fields.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
+    "demo.component.person" : {
+      "comment" : "Playground picker: the sample person.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Person"
+          }
+        }
+      }
+    },
+    "demo.component.photo" : {
+      "comment" : "Playground toggle and caption: show a photo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo"
+          }
+        }
+      }
+    },
+    "demo.component.playground" : {
+      "comment" : "Component page: interactive playground section.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Playground"
+          }
+        }
+      }
+    },
+    "demo.component.queue" : {
+      "comment" : "Toast section: several toasts shown one at a time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Queue"
+          }
+        }
+      }
+    },
+    "demo.component.raised" : {
+      "comment" : "Component demo label: the raised (shadowed) card variant.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raised"
+          }
+        }
+      }
+    },
+    "demo.component.read-only" : {
+      "comment" : "Component state and playground option: read-only.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read-only"
+          }
+        }
+      }
+    },
+    "demo.component.refused" : {
+      "comment" : "Dialog result when a presentation was refused because another dialog is open.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refused"
+          }
+        }
+      }
+    },
+    "demo.component.refused-count" : {
+      "comment" : "How many dialog presentations the presenter refused.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refused presentations: %lld"
+          }
+        }
+      }
+    },
+    "demo.component.result" : {
+      "comment" : "Dialog result caption. The argument is the chosen action or Dismissed.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Result: %@"
+          }
+        }
+      }
+    },
+    "demo.component.round" : {
+      "comment" : "Playground toggle: round icon button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round"
+          }
+        }
+      }
+    },
+    "demo.component.secure" : {
+      "comment" : "Playground option: secure text entry.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secure entry"
+          }
+        }
+      }
+    },
+    "demo.component.segmented" : {
+      "comment" : "Tabs variant name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segmented"
+          }
+        }
+      }
+    },
+    "demo.component.selected" : {
+      "comment" : "Caption prefix for the selected tab.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected"
+          }
+        }
+      }
+    },
+    "demo.component.shapes" : {
+      "comment" : "Component page: square and round shapes.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shapes"
+          }
+        }
+      }
+    },
+    "demo.component.sheet" : {
+      "comment" : "Dialog variant: bottom sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sheet"
+          }
+        }
+      }
+    },
+    "demo.component.shell" : {
+      "comment" : "Section title: a full app shell built with the component.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shell"
+          }
+        }
+      }
+    },
+    "demo.component.shell-caption" : {
+      "comment" : "Caption under the open shell button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A full screen with the bottom navigation. The system tab bar is hidden."
+          }
+        }
+      }
+    },
+    "demo.component.show-again" : {
+      "comment" : "Button that shows a dismissed component again.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show again"
+          }
+        }
+      }
+    },
+    "demo.component.show-three-toasts" : {
+      "comment" : "Toast: button that queues three toasts.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show three toasts"
+          }
+        }
+      }
+    },
+    "demo.component.show-toast" : {
+      "comment" : "Toast: button that queues a toast.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show toast"
+          }
+        }
+      }
+    },
+    "demo.component.size" : {
+      "comment" : "Playground: size picker label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Size"
+          }
+        }
+      }
+    },
+    "demo.component.sizes" : {
+      "comment" : "Component page: section listing every size.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sizes"
+          }
+        }
+      }
+    },
+    "demo.component.stacking" : {
+      "comment" : "Dialog section: a second presentation is refused.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stacking"
+          }
+        }
+      }
+    },
+    "demo.component.states" : {
+      "comment" : "Component page: section with the variant × size × state matrix.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "States"
+          }
+        }
+      }
+    },
+    "demo.component.subtitle" : {
+      "comment" : "Playground toggle that shows a list row subtitle.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subtitle"
+          }
+        }
+      }
+    },
+    "demo.component.switch" : {
+      "comment" : "Picker option for a trailing switch.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch"
+          }
+        }
+      }
+    },
+    "demo.component.tap-count" : {
+      "comment" : "Playground: how many times the component fired its action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapped %lld times"
+          }
+        }
+      }
+    },
+    "demo.component.text" : {
+      "comment" : "Picker option for trailing meta text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text"
+          }
+        }
+      }
+    },
+    "demo.component.three-items" : {
+      "comment" : "Bottom navigation section caption.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 items"
+          }
+        }
+      }
+    },
+    "demo.component.title" : {
+      "comment" : "Component demo label: show a title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title"
+          }
+        }
+      }
+    },
+    "demo.component.tone" : {
+      "comment" : "Playground picker: badge tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tone"
+          }
+        }
+      }
+    },
+    "demo.component.tones" : {
+      "comment" : "Component page section: the tone matrix.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tones"
+          }
+        }
+      }
+    },
+    "demo.component.trailing" : {
+      "comment" : "Playground picker title for the trailing content of a list row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trailing"
+          }
+        }
+      }
+    },
+    "demo.component.trailing-icon" : {
+      "comment" : "Playground toggle and sample: trailing icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trailing icon"
+          }
+        }
+      }
+    },
+    "demo.component.truncation" : {
+      "comment" : "Component page section: text that truncates.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long text"
+          }
+        }
+      }
+    },
+    "demo.component.unchecked" : {
+      "comment" : "Component state caption: unchecked.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unchecked"
+          }
+        }
+      }
+    },
+    "demo.component.underline" : {
+      "comment" : "Tabs variant name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Underline"
+          }
+        }
+      }
+    },
+    "demo.component.variant" : {
+      "comment" : "Playground: variant picker label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variant"
+          }
+        }
+      }
+    },
+    "demo.component.variants" : {
+      "comment" : "Component page: section listing every variant.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variants"
+          }
+        }
+      }
+    },
+    "demo.component.while-typing" : {
+      "comment" : "Toast section: a toast shown while the keyboard is up.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "While typing"
+          }
+        }
+      }
+    },
+    "demo.component.with-dot" : {
+      "comment" : "Component page section: badges with a status dot.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With dot"
+          }
+        }
+      }
+    },
+    "demo.component.with-icons" : {
+      "comment" : "Component page: section showing icon slots.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With icons"
+          }
+        }
+      }
+    },
+    "demo.component.with-input" : {
+      "comment" : "Dialog sample whose body holds a text field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With input"
+          }
+        }
+      }
+    },
+    "demo.component.wrapping" : {
+      "comment" : "Section title: labels that wrap onto several lines.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long labels"
+          }
+        }
+      }
+    },
+    "demo.done" : {
+      "comment" : "Button that closes a sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
+    },
+    "demo.icons.mirrors" : {
+      "comment" : "Icons page: marks icons that flip in right-to-left layouts.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mirrors in RTL"
+          }
+        }
+      }
+    },
+    "demo.page.alert" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert"
+          }
+        }
+      }
+    },
+    "demo.page.avatar" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avatar"
+          }
+        }
+      }
+    },
+    "demo.page.badge" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badge"
+          }
+        }
+      }
+    },
+    "demo.page.bottom-nav" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bottom navigation"
+          }
+        }
+      }
+    },
+    "demo.page.button" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Button"
+          }
+        }
+      }
+    },
+    "demo.page.card" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Card"
+          }
+        }
+      }
+    },
+    "demo.page.checkbox" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checkbox"
+          }
+        }
+      }
+    },
+    "demo.page.colors" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colors"
+          }
+        }
+      }
+    },
+    "demo.page.dialog" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dialog"
+          }
+        }
+      }
+    },
+    "demo.page.elevation" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elevation"
+          }
+        }
+      }
+    },
+    "demo.page.icon-button" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon button"
+          }
+        }
+      }
+    },
+    "demo.page.icons" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icons"
+          }
+        }
+      }
+    },
+    "demo.page.list-item" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List item"
+          }
+        }
+      }
+    },
+    "demo.page.opacity" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opacity"
+          }
+        }
+      }
+    },
+    "demo.page.radius" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Radius"
+          }
+        }
+      }
+    },
+    "demo.page.size" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Size"
+          }
+        }
+      }
+    },
+    "demo.page.spacing" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spacing"
+          }
+        }
+      }
+    },
+    "demo.page.switch" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch"
+          }
+        }
+      }
+    },
+    "demo.page.tabs" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tabs"
+          }
+        }
+      }
+    },
+    "demo.page.text-field" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text field"
+          }
+        }
+      }
+    },
+    "demo.page.toast" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toast"
+          }
+        }
+      }
+    },
+    "demo.page.typography" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Typography"
+          }
+        }
+      }
+    },
+    "demo.radius.capsule" : {
+      "comment" : "Radius page: the full radius renders as a capsule.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capsule"
+          }
+        }
+      }
+    },
+    "demo.sample.accept-terms" : {
+      "comment" : "Sample checkbox label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I accept the terms"
+          }
+        }
+      }
+    },
+    "demo.sample.account-id" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account ID"
+          }
+        }
+      }
+    },
+    "demo.sample.active" : {
+      "comment" : "Badge sample text for the success tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active"
+          }
+        }
+      }
+    },
+    "demo.sample.activity" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activity"
+          }
+        }
+      }
+    },
+    "demo.sample.add" : {
+      "comment" : "Icon button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
+    },
+    "demo.sample.add-hundred" : {
+      "comment" : "Button that adds 100 to the inbox badge.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add 100"
+          }
+        }
+      }
+    },
+    "demo.sample.add-item" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add item"
+          }
+        }
+      }
+    },
+    "demo.sample.album-shared" : {
+      "comment" : "Toast queue sample, second.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album shared"
+          }
+        }
+      }
+    },
+    "demo.sample.alerts" : {
+      "comment" : "Sample bottom navigation destination.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerts"
+          }
+        }
+      }
+    },
+    "demo.sample.amount" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount"
+          }
+        }
+      }
+    },
+    "demo.sample.archive" : {
+      "comment" : "Sample primary action that archives a project.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archive"
+          }
+        }
+      }
+    },
+    "demo.sample.archive-title" : {
+      "comment" : "Sample dialog title with a long body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archive this project?"
+          }
+        }
+      }
+    },
+    "demo.sample.backup-complete" : {
+      "comment" : "Toast queue sample, third.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup complete"
+          }
+        }
+      }
+    },
+    "demo.sample.beta" : {
+      "comment" : "Badge sample text for the info tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beta"
+          }
+        }
+      }
+    },
+    "demo.sample.billing" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Billing"
+          }
+        }
+      }
+    },
+    "demo.sample.bio" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bio"
+          }
+        }
+      }
+    },
+    "demo.sample.bio-hint" : {
+      "comment" : "Sample field hint for a multiline field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grows to 6 lines, then scrolls"
+          }
+        }
+      }
+    },
+    "demo.sample.bio-placeholder" : {
+      "comment" : "Sample field placeholder.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tell us about yourself"
+          }
+        }
+      }
+    },
+    "demo.sample.cancel" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "demo.sample.clear" : {
+      "comment" : "Sample button label: clear a field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        }
+      }
+    },
+    "demo.sample.close" : {
+      "comment" : "Icon button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
+    },
+    "demo.sample.code" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verification code"
+          }
+        }
+      }
+    },
+    "demo.sample.continue" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
+    },
+    "demo.sample.copy-hint" : {
+      "comment" : "Sample field hint for a read-only field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Long-press to copy"
+          }
+        }
+      }
+    },
+    "demo.sample.copy-link" : {
+      "comment" : "Toast: sheet action that shows a toast above the sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy link"
+          }
+        }
+      }
+    },
+    "demo.sample.dark-mode" : {
+      "comment" : "Sample switch label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark mode"
+          }
+        }
+      }
+    },
+    "demo.sample.day" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day"
+          }
+        }
+      }
+    },
+    "demo.sample.delete" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
+    },
+    "demo.sample.deleted-title" : {
+      "comment" : "Title of the follow-up dialog shown after deleting.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project deleted"
+          }
+        }
+      }
+    },
+    "demo.sample.draft" : {
+      "comment" : "Badge sample text for the neutral tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draft"
+          }
+        }
+      }
+    },
+    "demo.sample.email" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
+          }
+        }
+      }
+    },
+    "demo.sample.email-error" : {
+      "comment" : "Sample field error.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter an email like name@example.com"
+          }
+        }
+      }
+    },
+    "demo.sample.email-hint" : {
+      "comment" : "Sample field hint.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We never share your email."
+          }
+        }
+      }
+    },
+    "demo.sample.email-placeholder" : {
+      "comment" : "Sample field placeholder.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "you@example.com"
+          }
+        }
+      }
+    },
+    "demo.sample.email-updates" : {
+      "comment" : "Sample checkbox label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email me about updates"
+          }
+        }
+      }
+    },
+    "demo.sample.error" : {
+      "comment" : "Status icon label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
+    },
+    "demo.sample.failed" : {
+      "comment" : "Badge sample text for the danger tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed"
+          }
+        }
+      }
+    },
+    "demo.sample.full-name" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full name"
+          }
+        }
+      }
+    },
+    "demo.sample.get-started" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get started"
+          }
+        }
+      }
+    },
+    "demo.sample.grid" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grid"
+          }
+        }
+      }
+    },
+    "demo.sample.home" : {
+      "comment" : "Sample bottom navigation destination.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        }
+      }
+    },
+    "demo.sample.inbox" : {
+      "comment" : "Sample bottom navigation destination.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inbox"
+          }
+        }
+      }
+    },
+    "demo.sample.information" : {
+      "comment" : "Status icon label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information"
+          }
+        }
+      }
+    },
+    "demo.sample.integrations" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrations"
+          }
+        }
+      }
+    },
+    "demo.sample.invite-body" : {
+      "comment" : "Card sample body with footer actions.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Members can view and edit every project."
+          }
+        }
+      }
+    },
+    "demo.sample.invite-team" : {
+      "comment" : "Card sample title with footer actions.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invite your team"
+          }
+        }
+      }
+    },
+    "demo.sample.learn-more" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn more"
+          }
+        }
+      }
+    },
+    "demo.sample.link-copied" : {
+      "comment" : "Toast shown over a sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link copied"
+          }
+        }
+      }
+    },
+    "demo.sample.list" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List"
+          }
+        }
+      }
+    },
+    "demo.sample.long-consent" : {
+      "comment" : "Sample long checkbox label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email me about product updates, tips and occasional offers from the team"
+          }
+        }
+      }
+    },
+    "demo.sample.long-dialog-body" : {
+      "comment" : "Sample long dialog body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archiving moves the project out of everyone's sidebar. Its files, comments and history are kept, and an owner can restore it at any time from Settings. Members keep read-only access until the project is deleted, and shared links stop working right away."
+          }
+        }
+      }
+    },
+    "demo.sample.long-setting" : {
+      "comment" : "Sample long switch label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download updates automatically over mobile data when Wi-Fi is not available"
+          }
+        }
+      }
+    },
+    "demo.sample.long-toast" : {
+      "comment" : "Toast sample with a long message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A longer message that wraps onto a second line at larger text sizes"
+          }
+        }
+      }
+    },
+    "demo.sample.main-navigation" : {
+      "comment" : "Accessible name of the sample bottom navigation.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Main navigation"
+          }
+        }
+      }
+    },
+    "demo.sample.managed" : {
+      "comment" : "Sample field hint for a disabled field.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Managed by your organisation"
+          }
+        }
+      }
+    },
+    "demo.sample.mark-all-read" : {
+      "comment" : "Button that clears the inbox badge.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark all as read"
+          }
+        }
+      }
+    },
+    "demo.sample.members" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Members"
+          }
+        }
+      }
+    },
+    "demo.sample.month" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Month"
+          }
+        }
+      }
+    },
+    "demo.sample.more-options" : {
+      "comment" : "Icon button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More options"
+          }
+        }
+      }
+    },
+    "demo.sample.needs-review" : {
+      "comment" : "Badge sample text that is long enough to truncate.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Needs review by the design team"
+          }
+        }
+      }
+    },
+    "demo.sample.neutral" : {
+      "comment" : "Toast tone picker: no status icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neutral"
+          }
+        }
+      }
+    },
+    "demo.sample.new" : {
+      "comment" : "Badge sample text for the accent tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New"
+          }
+        }
+      }
+    },
+    "demo.sample.new-message" : {
+      "comment" : "Button that adds one to the inbox badge.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New message"
+          }
+        }
+      }
+    },
+    "demo.sample.notifications" : {
+      "comment" : "Sample switch label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
+          }
+        }
+      }
+    },
+    "demo.sample.online" : {
+      "comment" : "Sample trailing meta text of a person row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Online"
+          }
+        }
+      }
+    },
+    "demo.sample.open" : {
+      "comment" : "Card sample footer action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open"
+          }
+        }
+      }
+    },
+    "demo.sample.overview" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        }
+      }
+    },
+    "demo.sample.pangram" : {
+      "comment" : "Typography sample text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sphinx of black quartz, judge my vow"
+          }
+        }
+      }
+    },
+    "demo.sample.password" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
+    "demo.sample.password-error" : {
+      "comment" : "Sample field error.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Must be at least 8 characters"
+          }
+        }
+      }
+    },
+    "demo.sample.password-hint" : {
+      "comment" : "Sample field hint.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At least 8 characters"
+          }
+        }
+      }
+    },
+    "demo.sample.payment-body" : {
+      "comment" : "Danger alert sample message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update your card to continue."
+          }
+        }
+      }
+    },
+    "demo.sample.payment-title" : {
+      "comment" : "Danger alert sample title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment failed"
+          }
+        }
+      }
+    },
+    "demo.sample.pending" : {
+      "comment" : "Badge sample text for the warning tone.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pending"
+          }
+        }
+      }
+    },
+    "demo.sample.phone" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone"
+          }
+        }
+      }
+    },
+    "demo.sample.photo-uploaded" : {
+      "comment" : "Toast queue sample, first.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo uploaded"
+          }
+        }
+      }
+    },
+    "demo.sample.profile" : {
+      "comment" : "Sample bottom navigation destination.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile"
+          }
+        }
+      }
+    },
+    "demo.sample.project-archived" : {
+      "comment" : "Toast sample message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project archived"
+          }
+        }
+      }
+    },
+    "demo.sample.project-name" : {
+      "comment" : "Sample text field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project name"
+          }
+        }
+      }
+    },
+    "demo.sample.project-name-value" : {
+      "comment" : "Sample project name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q3 launch"
+          }
+        }
+      }
+    },
+    "demo.sample.project-sections" : {
+      "comment" : "Sample accessible name of a tab list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project sections"
+          }
+        }
+      }
+    },
+    "demo.sample.remember-me" : {
+      "comment" : "Sample checkbox label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remember me"
+          }
+        }
+      }
+    },
+    "demo.sample.rename" : {
+      "comment" : "Sample primary action that renames a project.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename"
+          }
+        }
+      }
+    },
+    "demo.sample.rename-title" : {
+      "comment" : "Sample dialog title for renaming a project.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename project"
+          }
+        }
+      }
+    },
+    "demo.sample.report-body" : {
+      "comment" : "Card sample body.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenue is up 12% on last week. Two invoices are still pending review."
+          }
+        }
+      }
+    },
+    "demo.sample.reports" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reports"
+          }
+        }
+      }
+    },
+    "demo.sample.save" : {
+      "comment" : "Button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save changes"
+          }
+        }
+      }
+    },
+    "demo.sample.search" : {
+      "comment" : "Icon button sample label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
+    },
+    "demo.sample.search-placeholder" : {
+      "comment" : "Sample field placeholder.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search components"
+          }
+        }
+      }
+    },
+    "demo.sample.security" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Security"
+          }
+        }
+      }
+    },
+    "demo.sample.send-invite" : {
+      "comment" : "Card sample footer action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send invite"
+          }
+        }
+      }
+    },
+    "demo.sample.settings" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "demo.sample.share" : {
+      "comment" : "Card sample footer action.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share"
+          }
+        }
+      }
+    },
+    "demo.sample.shell-body" : {
+      "comment" : "Body text of a bottom navigation shell tab.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch tabs with the bar below. Each tab keeps its own state."
+          }
+        }
+      }
+    },
+    "demo.sample.sign-in-body" : {
+      "comment" : "Info alert sample message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We noticed a sign-in from a new device."
+          }
+        }
+      }
+    },
+    "demo.sample.sign-in-title" : {
+      "comment" : "Info alert sample title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New sign-in"
+          }
+        }
+      }
+    },
+    "demo.sample.stacking-body" : {
+      "comment" : "Sample dialog body for the stacking demo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening a second dialog from here is refused, so dialogs never stack."
+          }
+        }
+      }
+    },
+    "demo.sample.stacking-title" : {
+      "comment" : "Sample dialog title for the stacking demo.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One dialog at a time"
+          }
+        }
+      }
+    },
+    "demo.sample.storage-body" : {
+      "comment" : "Warning alert sample message.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free up space to keep syncing."
+          }
+        }
+      }
+    },
+    "demo.sample.storage-title" : {
+      "comment" : "Warning alert sample title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Storage almost full"
+          }
+        }
+      }
+    },
+    "demo.sample.success" : {
+      "comment" : "Status icon label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Success"
+          }
+        }
+      }
+    },
+    "demo.sample.time-range" : {
+      "comment" : "Sample accessible name of a tab list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time range"
+          }
+        }
+      }
+    },
+    "demo.sample.toast-sheet-body" : {
+      "comment" : "Toast: body of the sheet used to show a toast above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a toast while this sheet is open. Taps outside the toast still reach the sheet."
+          }
+        }
+      }
+    },
+    "demo.sample.toast-sheet-title" : {
+      "comment" : "Toast: title of the sheet used to show a toast above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toasts sit above sheets"
+          }
+        }
+      }
+    },
+    "demo.sample.today" : {
+      "comment" : "Sample trailing meta text of a list row.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        }
+      }
+    },
+    "demo.sample.undo" : {
+      "comment" : "Toast action: undo the last change.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo"
+          }
+        }
+      }
+    },
+    "demo.sample.updated-today" : {
+      "comment" : "Card sample subtitle.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated today"
+          }
+        }
+      }
+    },
+    "demo.sample.warning" : {
+      "comment" : "Status icon label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warning"
+          }
+        }
+      }
+    },
+    "demo.sample.website" : {
+      "comment" : "Sample field label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website"
+          }
+        }
+      }
+    },
+    "demo.sample.week" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week"
+          }
+        }
+      }
+    },
+    "demo.sample.weekly-report" : {
+      "comment" : "Card sample title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekly report"
+          }
+        }
+      }
+    },
+    "demo.sample.wifi" : {
+      "comment" : "Sample switch label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wi-Fi"
+          }
+        }
+      }
+    },
+    "demo.sample.year" : {
+      "comment" : "Sample tab label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Year"
+          }
+        }
+      }
+    },
+    "demo.section.actions" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions"
+          }
+        }
+      }
+    },
+    "demo.section.content" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Content"
+          }
+        }
+      }
+    },
+    "demo.section.feedback" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback"
+          }
+        }
+      }
+    },
+    "demo.section.forms" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forms"
+          }
+        }
+      }
+    },
+    "demo.section.foundations" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Foundations"
+          }
+        }
+      }
+    },
+    "demo.section.navigation" : {
+      "comment" : "Catalog section title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation"
+          }
+        }
+      }
+    },
+    "demo.settings.reduce-motion" : {
+      "comment" : "Settings: reduce motion toggle.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reduce motion"
+          }
+        }
+      }
+    },
+    "demo.settings.reset" : {
+      "comment" : "Settings: reset button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset to system"
+          }
+        }
+      }
+    },
+    "demo.settings.right-to-left" : {
+      "comment" : "Settings: RTL toggle.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right-to-left layout"
+          }
+        }
+      }
+    },
+    "demo.settings.text-size" : {
+      "comment" : "Settings: text size picker label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text size"
+          }
+        }
+      }
+    },
+    "demo.settings.text-size.preview" : {
+      "comment" : "Settings: text size preview sentence.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The quick brown fox jumps over the lazy dog."
+          }
+        }
+      }
+    },
+    "demo.settings.theme" : {
+      "comment" : "Settings: theme picker label.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
+          }
+        }
+      }
+    },
+    "demo.settings.title" : {
+      "comment" : "Title of the demo settings sheet.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "demo.text-size.accessibility1" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility 1"
+          }
+        }
+      }
+    },
+    "demo.text-size.accessibility2" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility 2"
+          }
+        }
+      }
+    },
+    "demo.text-size.accessibility3" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility 3"
+          }
+        }
+      }
+    },
+    "demo.text-size.accessibility4" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility 4"
+          }
+        }
+      }
+    },
+    "demo.text-size.accessibility5" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility 5"
+          }
+        }
+      }
+    },
+    "demo.text-size.extraExtraExtraLarge" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra extra extra large"
+          }
+        }
+      }
+    },
+    "demo.text-size.extraExtraLarge" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra extra large"
+          }
+        }
+      }
+    },
+    "demo.text-size.extraLarge" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra large"
+          }
+        }
+      }
+    },
+    "demo.text-size.extraSmall" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra small"
+          }
+        }
+      }
+    },
+    "demo.text-size.large" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Large (default)"
+          }
+        }
+      }
+    },
+    "demo.text-size.medium" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        }
+      }
+    },
+    "demo.text-size.small" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Small"
+          }
+        }
+      }
+    },
+    "demo.text-size.system" : {
+      "comment" : "Settings: text size option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "demo.theme.dark" : {
+      "comment" : "Settings: theme option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        }
+      }
+    },
+    "demo.theme.light" : {
+      "comment" : "Settings: theme option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        }
+      }
+    },
+    "demo.theme.system" : {
+      "comment" : "Settings: theme option.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "demo.theme.toggle" : {
+      "comment" : "Accessibility label of the theme toggle in the navigation bar. The argument is the current theme (System, Light or Dark).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme: %@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

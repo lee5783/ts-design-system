@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_demo_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/page_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/page_rows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ts_space_4"
+            android:paddingTop="@dimen/ts_space_2"
+            android:paddingBottom="@dimen/ts_space_8">
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_states" />
+            <LinearLayout
+                android:id="@+id/toggle_states"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            <com.ts.ds.views.components.checkbox.TSCheckboxView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:text="@string/demo_sample_remember_me" />
+            <com.ts.ds.views.components.checkbox.TSCheckboxView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:checked="true"
+                android:text="@string/demo_sample_accept_terms" />
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_label_hidden" />
+            <LinearLayout
+                style="@style/Widget.Demo.ComponentSample"
+                android:orientation="horizontal">
+                <com.ts.ds.views.components.checkbox.TSCheckboxView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/ts_space_4"
+                    android:text="@string/demo_sample_remember_me"
+                    app:tsLabelHidden="true" />
+                <com.ts.ds.views.components.checkbox.TSCheckboxView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/demo_sample_accept_terms"
+                    app:tsLabelHidden="true" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_wrapping" />
+            <com.ts.ds.views.components.checkbox.TSCheckboxView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:checked="true"
+                android:text="@string/demo_sample_long_consent" />
+
+            <LinearLayout
+                android:id="@+id/toggle_playground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_demo_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/page_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/page_rows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ts_space_4"
+            android:paddingTop="@dimen/ts_space_2"
+            android:paddingBottom="@dimen/ts_space_8">
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_states" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                android:id="@+id/text_field_default"
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_component_default"
+                app:tsPlaceholder="@string/demo_sample_email_placeholder"
+                app:tsHint="@string/demo_sample_email_hint" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:text="@string/demo_text_field_sample_email"
+                app:tsLabel="@string/demo_component_filled" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:text="@string/demo_text_field_sample_short_password"
+                app:tsLabel="@string/demo_component_error"
+                app:tsHint="@string/demo_sample_password_hint"
+                app:tsError="@string/demo_sample_password_error" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:enabled="false"
+                android:text="@string/demo_text_field_sample_name"
+                app:tsLabel="@string/demo_component_disabled"
+                app:tsHint="@string/demo_sample_managed" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:text="@string/demo_text_field_sample_account_id"
+                app:tsLabel="@string/demo_component_read_only"
+                app:tsHint="@string/demo_sample_copy_hint"
+                app:tsReadOnly="true" />
+
+            <LinearLayout
+                android:id="@+id/text_field_with_icons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_password" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_password"
+                app:tsHint="@string/demo_sample_password_hint"
+                app:tsSecure="true"
+                app:tsInputTraits="newPassword" />
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_multiline" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:text="@string/demo_sample_pangram"
+                app:tsLabel="@string/demo_sample_bio"
+                app:tsPlaceholder="@string/demo_sample_bio_placeholder"
+                app:tsHint="@string/demo_sample_bio_hint"
+                app:tsMultiline="true" />
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_keyboard_types" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_email"
+                app:tsInputTraits="email" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_phone"
+                app:tsInputTraits="phone" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_amount"
+                app:tsInputTraits="decimal" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_website"
+                app:tsInputTraits="url" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                app:tsLabel="@string/demo_sample_code"
+                app:tsInputTraits="oneTimeCode" />
+
+            <LinearLayout
+                android:id="@+id/text_field_playground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_demo_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/page_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/page_rows"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ts_space_4"
+            android:paddingTop="@dimen/ts_space_2"
+            android:paddingBottom="@dimen/ts_space_8">
+
+            <LinearLayout
+                android:id="@+id/list_item_contents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            <LinearLayout
+                android:id="@+id/list_item_states"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_truncation" />
+            <com.ts.ds.views.components.listitem.TSListView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent">
+
+                <com.ts.ds.views.components.listitem.TSListItemView
+                    android:id="@+id/list_item_truncation_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tsLeadingIcon="download"
+                    app:tsShowsChevron="true"
+                    app:tsSubtitle="@string/demo_sample_downloads_subtitle"
+                    app:tsTitle="@string/demo_sample_long_setting"
+                    app:tsTrailingText="@string/demo_sample_today" />
+            </com.ts.ds.views.components.listitem.TSListView>
+            <LinearLayout
+                android:id="@+id/list_item_playground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

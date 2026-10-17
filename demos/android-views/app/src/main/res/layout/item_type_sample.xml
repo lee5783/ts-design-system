@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ts_space_3"
+    android:background="@drawable/demo_card_background"
+    android:orientation="vertical"
+    android:padding="@dimen/ts_space_3">
+
+    <TextView
+        android:id="@+id/type_spec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ts_space_1"
+        android:textAppearance="@style/TextAppearance.TS.Caption"
+        android:textColor="?attr/tsColorTextSecondary" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/type_sample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/demo_sample_pangram"
+        android:textColor="?attr/tsColorTextPrimary" />
+</LinearLayout>

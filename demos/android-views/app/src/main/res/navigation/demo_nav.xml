@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/demo_nav"
+    app:startDestination="@id/catalog">
+
+    <fragment
+        android:id="@+id/catalog"
+        android:name="com.ts.ds.demo.views.shell.CatalogFragment" />
+
+    <fragment
+        android:id="@+id/about"
+        android:name="com.ts.ds.demo.views.shell.AboutFragment" />
+
+    <dialog
+        android:id="@+id/settings"
+        android:name="com.ts.ds.demo.views.shell.DemoSettingsBottomSheet" />
+
+    <fragment
+        android:id="@+id/page_colors"
+        android:name="com.ts.ds.demo.views.foundations.ColorsFragment" />
+
+    <fragment
+        android:id="@+id/page_typography"
+        android:name="com.ts.ds.demo.views.foundations.TypographyFragment" />
+
+    <fragment
+        android:id="@+id/page_spacing"
+        android:name="com.ts.ds.demo.views.foundations.SpacingFragment" />
+
+    <fragment
+        android:id="@+id/page_radius"
+        android:name="com.ts.ds.demo.views.foundations.RadiusFragment" />
+
+    <fragment
+        android:id="@+id/page_size"
+        android:name="com.ts.ds.demo.views.foundations.SizeFragment" />
+
+    <fragment
+        android:id="@+id/page_opacity"
+        android:name="com.ts.ds.demo.views.foundations.OpacityFragment" />
+
+    <fragment
+        android:id="@+id/page_elevation"
+        android:name="com.ts.ds.demo.views.foundations.ElevationFragment" />
+
+    <fragment
+        android:id="@+id/page_icons"
+        android:name="com.ts.ds.demo.views.foundations.IconsFragment" />
+
+    <fragment
+        android:id="@+id/page_button"
+        android:name="com.ts.ds.demo.views.components.ButtonFragment" />
+
+    <fragment
+        android:id="@+id/page_icon_button"
+        android:name="com.ts.ds.demo.views.components.IconButtonFragment" />
+
+    <fragment
+        android:id="@+id/page_badge"
+        android:name="com.ts.ds.demo.views.components.BadgeFragment" />
+
+    <fragment
+        android:id="@+id/page_avatar"
+        android:name="com.ts.ds.demo.views.components.AvatarFragment" />
+
+    <fragment
+        android:id="@+id/page_text_field"
+        android:name="com.ts.ds.demo.views.components.TextFieldFragment" />
+
+    <fragment
+        android:id="@+id/page_checkbox"
+        android:name="com.ts.ds.demo.views.components.CheckboxFragment" />
+
+    <fragment
+        android:id="@+id/page_switch"
+        android:name="com.ts.ds.demo.views.components.SwitchFragment" />
+
+    <fragment
+        android:id="@+id/page_tabs"
+        android:name="com.ts.ds.demo.views.components.TabsFragment" />
+
+    <fragment
+        android:id="@+id/page_list_item"
+        android:name="com.ts.ds.demo.views.components.ListItemFragment" />
+
+    <fragment
+        android:id="@+id/page_card"
+        android:name="com.ts.ds.demo.views.components.CardFragment" />
+
+    <fragment
+        android:id="@+id/page_alert"
+        android:name="com.ts.ds.demo.views.components.AlertFragment" />
+
+    <fragment
+        android:id="@+id/page_dialog"
+        android:name="com.ts.ds.demo.views.components.DialogPageFragment" />
+
+    <fragment
+        android:id="@+id/page_toast"
+        android:name="com.ts.ds.demo.views.components.ToastFragment" />
+
+    <fragment
+        android:id="@+id/page_bottom_nav"
+        android:name="com.ts.ds.demo.views.components.BottomNavFragment" />
+
+    <fragment
+        android:id="@+id/bottom_nav_shell"
+        android:name="com.ts.ds.demo.views.components.BottomNavShellFragment" />
+
+    <fragment
+        android:id="@+id/page_pending_component"
+        android:name="com.ts.ds.demo.views.components.PendingComponentFragment">
+        <argument
+            android:name="pageId"
+            app:argType="string" />
+    </fragment>
+</navigation>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Demo.SectionHeader" parent="">
+        <item name="android:paddingTop">@dimen/ts_space_4</item>
+        <item name="android:paddingBottom">@dimen/ts_space_1</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">@style/TextAppearance.TS.Overline</item>
+        <item name="android:textColor">?attr/tsColorTextSecondary</item>
+    </style>
+
+    <style name="Widget.Demo.SettingSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="android:minHeight">@dimen/ts_min_touch_target</item>
+        <item name="android:textAppearance">@style/TextAppearance.TS.BodyLg</item>
+        <item name="android:textColor">?attr/tsColorTextPrimary</item>
+    </style>
+
+    <style name="Widget.Demo.ComponentSample" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/ts_space_2</item>
+    </style>
+</resources>

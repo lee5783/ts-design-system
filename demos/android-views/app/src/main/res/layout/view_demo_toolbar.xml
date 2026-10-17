@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/demo_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/ts_nav_bar"
+    app:navigationContentDescription="@string/demo_action_back"
+    app:navigationIconTint="?attr/tsColorTextPrimary"
+    app:titleTextAppearance="@style/TextAppearance.TS.Title2"
+    app:titleTextColor="?attr/tsColorTextPrimary" />
