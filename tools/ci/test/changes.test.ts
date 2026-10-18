@@ -23,7 +23,7 @@ describe("matchesPattern", () => {
 
 describe("path filters", () => {
   it("skips the Android library and demo jobs for an iOS-only change", () => {
-    const result = outputsFor(["ios/Sources/TSDesignSystem/Components/Button/TSButton.swift", "ios/Tests/TSDesignSystemTests/Snapshots/__Snapshots__/TSButtonSnapshotTests/light.png"]);
+    const result = outputsFor(["ios/Sources/TSDesignSystem/Components/Button/TSButton.swift", "ios/Tests/TSDesignSystemTests/Behavior/TSButtonBehaviorTests.swift"]);
     expect(result).toEqual({ ios: "true", android: "false", boundaries: "false", ios_demos: '["swiftui","uikit"]', android_demos: "[]" });
   });
 

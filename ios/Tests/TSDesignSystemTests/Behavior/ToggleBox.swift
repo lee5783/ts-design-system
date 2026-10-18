@@ -1,4 +1,3 @@
-import SnapshotTesting
 import SwiftUI
 import UIKit
 
@@ -19,12 +18,16 @@ final class ToggleBox {
 enum RenderedPixels {
     static func image(of view: some View, size: CGSize) -> UIImage? {
         let host = UIHostingController(rootView: view)
-        var rendered: UIImage?
-        Snapshotting<UIViewController, UIImage>
-            .image(on: ViewImageConfig(safeArea: .zero, size: size, traits: UITraitCollection()))
-            .snapshot(host)
-            .run { rendered = $0 }
-        return rendered
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        window.rootViewController = host
+        window.isHidden = false
+        host.view.frame = window.bounds
+        host.view.layoutIfNeeded()
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 2
+        return UIGraphicsImageRenderer(size: size, format: format).image {
+            host.view.layer.render(in: $0.cgContext)
+        }
     }
 
     static func isLight(_ image: UIImage?, at point: CGPoint) -> Bool {

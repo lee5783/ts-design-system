@@ -1,4 +1,3 @@
-import SnapshotTesting
 import Testing
 import TSDesignSystemUIKit
 import TSTestSupport
@@ -20,10 +19,5 @@ struct TSDesignSystemUIKitHarnessTests {
         }
         #expect(resolved.count == 2)
         #expect(resolved[0] != resolved[1])
-    }
-
-    @Test("Snapshot support is linked")
-    func snapshotSupportIsLinked() {
-        #expect(ViewImageConfig.iPhone13.size != nil)
     }
 }

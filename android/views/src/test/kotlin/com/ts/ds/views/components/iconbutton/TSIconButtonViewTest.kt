@@ -8,10 +8,10 @@ import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSIconButtonVariant
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
+import com.ts.ds.views.components.sampleController
 import com.ts.ds.views.components.shared.TSControlBackground
 import com.ts.ds.views.components.shared.TSIconSlotDrawable
 import com.ts.ds.views.components.tapCenter
-import com.ts.ds.views.snapshots.sampleController
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

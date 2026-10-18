@@ -15,5 +15,4 @@ dependencies {
     api(libs.material)
     api(libs.recyclerview)
     implementation(libs.androidx.core.ktx)
-    testImplementation(project(":test-support"))
 }

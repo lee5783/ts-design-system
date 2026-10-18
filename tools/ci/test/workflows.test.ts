@@ -177,7 +177,7 @@ describe("workflow files", () => {
   it("turns the hardware keyboard off before every iOS simulator test", () => {
     for (const [file, name, entry] of allJobs()) {
       const targets = makeTargets(entry);
-      const firstTest = targets.findIndex((target) => /^(ios-test|demo-ios-.*-(test|audit))$/.test(target));
+      const firstTest = targets.findIndex((target) => /^(ios-test|ios-test-only|demo-ios-.*-(test|test-only|audit))$/.test(target));
       if (firstTest < 0) continue;
       expect(targets.indexOf("ci-ios-simulator"), `${file} ${name}`).toBeGreaterThanOrEqual(0);
       expect(targets.indexOf("ci-ios-simulator"), `${file} ${name}`).toBeLessThan(firstTest);
@@ -335,17 +335,6 @@ describe("audit trigger", () => {
   it("always runs on the nightly schedule and on dispatch", () => {
     expect(auditRuns({ name: "schedule" })).toBe(true);
     expect(auditRuns({ name: "workflow_dispatch" })).toBe(true);
-  });
-});
-
-describe("snapshot references", () => {
-  it("never compares, records or downloads snapshot references in CI, since they are local and git-ignored", () => {
-    for (const [file, name, entry] of allJobs()) {
-      expect(makeTargets(entry).filter((target) => target.includes("snapshot")), `${file} ${name}`).toEqual([]);
-      for (const step of entry.steps.filter((candidate) => candidate.uses?.startsWith("actions/checkout@"))) expect(step.with?.lfs, `${file} ${name}`).toBeUndefined();
-      for (const step of entry.steps) expect(step.with?.path ?? "", `${file} ${name}`).not.toContain("snapshot");
-    }
-    for (const [file, source] of sources) expect(source, file).not.toMatch(/lfs|SNAPSHOT_ARTIFACTS|TS_SNAPSHOT_VERIFY|roborazzi\.test\.verify/i);
   });
 });
 

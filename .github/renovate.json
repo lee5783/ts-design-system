@@ -91,7 +91,6 @@
       "matchPackageNames": [
         "junit:junit",
         "org.robolectric:**",
-        "io.github.takahirom.roborazzi{,:**,.**}",
         "androidx.test:**",
         "androidx.test.*:**",
         "com.google.android.apps.common.testing.accessibility.framework:**",

@@ -3,16 +3,16 @@ SHELL := /bin/bash
 VERSION := $(shell cat VERSION)
 
 IOS_SCHEME := TSDesignSystem-Package
-IOS_SNAPSHOT_DEVICE_SWIFT ?= ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift
-IOS_PINNED_DEVICE := $(shell sed -nE 's/^ +public static let pinnedSimulator = "([^"]+)"$$/\1/p' '$(IOS_SNAPSHOT_DEVICE_SWIFT)' 2>/dev/null)
-IOS_PINNED_OS := $(shell sed -nE 's/^ +public static let pinnedOSVersion = "([^"]+)"$$/\1/p' '$(IOS_SNAPSHOT_DEVICE_SWIFT)' 2>/dev/null)
+IOS_SIMULATOR_FILE ?= .ios-simulator
+IOS_PINNED_DEVICE := $(shell sed -nE 's/^device=(.+)$$/\1/p' '$(IOS_SIMULATOR_FILE)' 2>/dev/null)
+IOS_PINNED_OS := $(shell sed -nE 's/^os=(.+)$$/\1/p' '$(IOS_SIMULATOR_FILE)' 2>/dev/null)
 IOS_SIM_DEVICE ?= $(IOS_PINNED_DEVICE)
 IOS_SIM_OS ?= $(IOS_PINNED_OS)
 IOS_DERIVED_DATA ?= .build/xcode
-IOS_RUNTIMES ?= pinned oldest
+IOS_RUNTIMES ?= pinned
+IOS_TESTS ?=
 IOS_REQUIRE_OLDEST ?=
 IOS_SIM_APPEARANCE ?=
-SNAPSHOT_ARTIFACTS ?=
 GRADLE_WORKERS ?=
 XCODE_VERSION := $(shell cat .xcode-version)
 CI_XCODE_APP ?= $(firstword $(wildcard $(foreach sep,_ -,/Applications/Xcode$(sep)$(XCODE_VERSION).app /Applications/Xcode$(sep)$(XCODE_VERSION).0.app)))
@@ -20,8 +20,10 @@ LAST_TAG_COMMAND := git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]
 RELEASE_NOTES ?= .build/release/notes.md
 RELEASE_ASSETS ?= .build/release/assets
 ANDROID_RELEASE_MODULES := tokens core compose views
-IOS_SNAPSHOT_TEST_TARGETS := TSDesignSystemTests TSDesignSystemUIKitTests
 DEMO_IOS_DERIVED_DATA ?= .build/xcode-demos
+DEMO_IOS_SUPPORT_TESTS ?=
+DEMO_IOS_SWIFTUI_TESTS ?=
+DEMO_IOS_UIKIT_TESTS ?=
 DEMO_IOS_SUPPORT_DIR := demos/ios-demo-support
 DEMO_IOS_SWIFTUI_PROJECT := demos/ios-swiftui/TSDemoSwiftUI.xcodeproj
 DEMO_IOS_SWIFTUI_SCHEME := TSDemoSwiftUI
@@ -39,15 +41,14 @@ XCRUN ?= xcrun
 IOS_OLDEST_OS = $(shell $(XCRUN) simctl list runtimes available 2>/dev/null | sed -nE 's/^iOS ([0-9.]+) .*/\1/p' | sort -t. -k1,1n -k2,2n | head -1)
 IOS_OLDEST_DEVICE ?= $(shell $(XCRUN) simctl list devices available 2>/dev/null | sed -nE '/^-- iOS $(IOS_OLDEST_OS) --$$/,/^-- /s/^ +(iPhone.*) [(][0-9A-F-]{36}[)] .*$$/\1/p' | head -1)
 
-snapshot_artifacts_env = $(if $(SNAPSHOT_ARTIFACTS),TEST_RUNNER_SNAPSHOT_ARTIFACTS='$(abspath $(SNAPSHOT_ARTIFACTS))' )
 gradle_flags = $(if $(GRADLE_WORKERS), -Dorg.gradle.workers.max=$(GRADLE_WORKERS))
 ci_annotation = $(if $(GITHUB_ACTIONS),::$(1)::)
 
-ios_test_on = printf 'ios-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test -scheme $(IOS_SCHEME) -destination 'platform=iOS Simulator,name=$(1),OS=$(2)' -derivedDataPath $(IOS_DERIVED_DATA)
+ios_test_on = printf 'ios-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test-without-building -scheme $(IOS_SCHEME) -destination 'platform=iOS Simulator,name=$(1),OS=$(2)' -derivedDataPath $(IOS_DERIVED_DATA) $(IOS_TESTS:%=-only-testing:%)
 ios_destination = platform=iOS Simulator,name=$(1),OS=$(2)
-demo_ios_support_test_on = printf 'demo-ios-support-test: %s on iOS %s\n' '$(1)' '$(2)' && cd $(DEMO_IOS_SUPPORT_DIR) && xcodebuild test -scheme TSDemoSupport -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(CURDIR)/$(DEMO_IOS_DERIVED_DATA)
-demo_ios_swiftui_test_on = printf 'demo-ios-swiftui-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test -project $(DEMO_IOS_SWIFTUI_PROJECT) -scheme $(DEMO_IOS_SWIFTUI_SCHEME) -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(DEMO_IOS_DERIVED_DATA) $(DEMO_IOS_TEST_SELECTION)
-demo_ios_uikit_test_on = printf 'demo-ios-uikit-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test -project $(DEMO_IOS_UIKIT_PROJECT) -scheme $(DEMO_IOS_UIKIT_SCHEME) -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(DEMO_IOS_DERIVED_DATA) $(DEMO_IOS_TEST_SELECTION)
+demo_ios_support_test_on = printf 'demo-ios-support-test: %s on iOS %s\n' '$(1)' '$(2)' && cd $(DEMO_IOS_SUPPORT_DIR) && xcodebuild test-without-building -scheme TSDemoSupport -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(CURDIR)/$(DEMO_IOS_DERIVED_DATA) $(DEMO_IOS_SUPPORT_TESTS:%=-only-testing:%)
+demo_ios_swiftui_test_on = printf 'demo-ios-swiftui-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test-without-building -project $(DEMO_IOS_SWIFTUI_PROJECT) -scheme $(DEMO_IOS_SWIFTUI_SCHEME) -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(DEMO_IOS_DERIVED_DATA) $(DEMO_IOS_TEST_SELECTION) $(DEMO_IOS_SWIFTUI_TESTS:%=-only-testing:%)
+demo_ios_uikit_test_on = printf 'demo-ios-uikit-test: %s on iOS %s\n' '$(1)' '$(2)' && xcodebuild test-without-building -project $(DEMO_IOS_UIKIT_PROJECT) -scheme $(DEMO_IOS_UIKIT_SCHEME) -destination '$(call ios_destination,$(1),$(2))' -derivedDataPath $(DEMO_IOS_DERIVED_DATA) $(DEMO_IOS_TEST_SELECTION) $(DEMO_IOS_UIKIT_TESTS:%=-only-testing:%)
 on_pinned_ios = $(if $(filter pinned,$(IOS_RUNTIMES)),$(call $(1),$(IOS_SIM_DEVICE),$(IOS_SIM_OS),pinned),true)
 on_oldest_ios = $(if $(filter oldest,$(IOS_RUNTIMES)),$(if $(filter-out $(IOS_SIM_OS),$(IOS_OLDEST_OS)),$(if $(IOS_OLDEST_DEVICE),$(call $(1),$(IOS_OLDEST_DEVICE),$(IOS_OLDEST_OS)),$(ios_skip_oldest)),$(ios_no_older_runtime)),true)
 ios_skip_oldest = printf '$(call ci_annotation,$(if $(IOS_REQUIRE_OLDEST),error,warning))ios-test: skipping iOS $(IOS_OLDEST_OS): no available iPhone simulator for that runtime; create one or set IOS_OLDEST_DEVICE\n' >&2$(if $(IOS_REQUIRE_OLDEST), && exit 1)
@@ -58,15 +59,16 @@ ios_no_older_runtime = $(if $(IOS_REQUIRE_OLDEST),printf '$(call ci_annotation,e
 .DEFAULT_GOAL := help
 
 .PHONY: help ds-sync codegen codegen-check test tools-deps tools-test \
-	ios-build ios-golden-typecheck ios-test ios-snapshot-verify ios-snapshot-record \
-	android-build android-test android-snapshot-verify android-snapshot-record \
+	ios-build ios-build-for-testing ios-golden-typecheck ios-test ios-test-only \
+	android-build android-test \
 	android-publish-local android-publish \
 	api-check android-api-check ios-api-check ios-api-check-record ios-api-check-last-tag \
 	release-bump release-verify release-notes release-android-packages release-github \
 	demo-ios-swiftui demo-ios-uikit demo-android-compose demo-android-views \
 	demos-build demos-test demos-audit demos-check-boundaries \
-	demo-ios-support-test demo-ios-swiftui-test demo-ios-swiftui-audit demo-ios-swiftui-theme-test demo-ios-swiftui-run demo-ios-app-icon \
-	demo-ios-uikit-test demo-ios-uikit-audit demo-ios-uikit-theme-test demo-ios-uikit-run \
+	demo-ios-support-build-for-testing demo-ios-support-test demo-ios-support-test-only \
+	demo-ios-swiftui-build-for-testing demo-ios-swiftui-test demo-ios-swiftui-test-only demo-ios-swiftui-audit demo-ios-swiftui-theme-test demo-ios-swiftui-run demo-ios-app-icon \
+	demo-ios-uikit-build-for-testing demo-ios-uikit-test demo-ios-uikit-test-only demo-ios-uikit-audit demo-ios-uikit-theme-test demo-ios-uikit-run \
 	demo-android-compose-test demo-android-views-test \
 	actionlint ci-changes ci-required ci-xcode ci-ios-simulator ci-android-kvm
 
@@ -82,13 +84,11 @@ help:
 		'tools-test' 'Run the Vitest suites in tools/' \
 		'ios-build' 'Build the Swift package for the iOS simulator' \
 		'ios-golden-typecheck' 'Type-check the Swift golden fixtures of tools/codegen at iOS 15' \
-		'ios-test' 'Run the iOS unit and behaviour tests; the snapshot suites skip (IOS_RUNTIMES=pinned|oldest)' \
-		'ios-snapshot-verify' 'Compare the iOS snapshot suites with the local references on the pinned simulator (SNAPSHOT_ARTIFACTS=<dir> keeps failures)' \
-		'ios-snapshot-record' 'Record the local iOS snapshot references (git-ignored, never committed)' \
+		'ios-build-for-testing' 'Build the Swift package tests once for the iOS simulator; ios-test and ios-test-only reuse the build' \
+		'ios-test' 'Run the iOS unit and behaviour tests (IOS_RUNTIMES=pinned|oldest, default pinned)' \
+		'ios-test-only' 'Run IOS_TESTS=<Target/Suite ...> on the iOS simulator without rebuilding; run ios-build-for-testing first' \
 		'android-build' 'Assemble the Android library modules' \
-		'android-test' 'Run the Android unit and behaviour tests; the snapshot tests render without comparing' \
-		'android-snapshot-verify' 'Run the Android tests and compare the snapshots with the local references' \
-		'android-snapshot-record' 'Record the local Android snapshot references (git-ignored, never committed)' \
+		'android-test' 'Run the Android unit and behaviour tests' \
 		'android-publish-local' 'Publish the Android artifacts and the BOM to ~/.m2 (mavenLocal)' \
 		'android-publish' 'CI only: publish the Android modules not yet in GitHub Packages, the BOM last (GITHUB_ACTOR, GITHUB_TOKEN)' \
 		'api-check' 'Check iOS and Android public API (BASELINE=<tag-or-ref> for iOS)' \
@@ -144,29 +144,22 @@ ios-build:
 ios-golden-typecheck:
 	$(XCRUN) --sdk iphonesimulator swiftc -typecheck -swift-version 6 -target $(shell uname -m)-apple-ios15.0-simulator $(SWIFT_GOLDENS_DIR)/*.swift
 
-ios-test: ios-golden-typecheck
+ios-build-for-testing:
+	xcodebuild build-for-testing -scheme $(IOS_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(IOS_DERIVED_DATA)
+
+ios-test: ios-golden-typecheck ios-build-for-testing
 	@$(call on_pinned_ios,ios_test_on)
 	@$(call on_oldest_ios,ios_test_on)
 
-ios-snapshot-verify:
-	@printf 'ios-snapshot-verify: comparing with the local references on %s / iOS %s\n' '$(IOS_SIM_DEVICE)' '$(IOS_SIM_OS)'
-	TEST_RUNNER_TS_SNAPSHOT_VERIFY=1 TEST_RUNNER_TS_SNAPSHOT_REQUIRE_PINNED=1 $(snapshot_artifacts_env)xcodebuild test -scheme $(IOS_SCHEME) -destination 'platform=iOS Simulator,name=$(IOS_SIM_DEVICE),OS=$(IOS_SIM_OS)' -derivedDataPath $(IOS_DERIVED_DATA) $(IOS_SNAPSHOT_TEST_TARGETS:%=-only-testing:%)
-
-ios-snapshot-record:
-	@printf 'ios-snapshot-record: recording on %s / iOS %s\n' '$(IOS_SIM_DEVICE)' '$(IOS_SIM_OS)'
-	TEST_RUNNER_TS_SNAPSHOT_RECORD=1 xcodebuild test -scheme $(IOS_SCHEME) -destination 'platform=iOS Simulator,name=$(IOS_SIM_DEVICE),OS=$(IOS_SIM_OS)' -derivedDataPath $(IOS_DERIVED_DATA) $(IOS_SNAPSHOT_TEST_TARGETS:%=-only-testing:%)
+ios-test-only:
+	@$(call on_pinned_ios,ios_test_on)
+	@$(call on_oldest_ios,ios_test_on)
 
 android-build:
 	cd android && ./gradlew assemble lint apiCheck$(gradle_flags)
 
 android-test:
 	cd android && ./gradlew test$(gradle_flags)
-
-android-snapshot-verify:
-	cd android && ./gradlew test -Proborazzi.test.verify=true$(gradle_flags)
-
-android-snapshot-record:
-	cd android && ./gradlew recordRoborazziDebug$(gradle_flags)
 
 android-publish-local:
 	cd android && ./gradlew publishToMavenLocal$(gradle_flags)
@@ -219,20 +212,37 @@ demo-ios-swiftui-run:
 	$(XCRUN) simctl install booted $(DEMO_IOS_DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(DEMO_IOS_SWIFTUI_SCHEME).app
 	$(XCRUN) simctl launch booted $(DEMO_IOS_SWIFTUI_BUNDLE_ID) $(DEMO_ARGS)
 
-demo-ios-support-test:
+demo-ios-support-build-for-testing:
+	cd $(DEMO_IOS_SUPPORT_DIR) && xcodebuild build-for-testing -scheme TSDemoSupport -destination 'generic/platform=iOS Simulator' -derivedDataPath $(CURDIR)/$(DEMO_IOS_DERIVED_DATA)
+
+demo-ios-support-test: demo-ios-support-build-for-testing
 	@$(call on_pinned_ios,demo_ios_support_test_on)
 	@$(call on_oldest_ios,demo_ios_support_test_on)
 
-demo-ios-swiftui-test: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_SWIFTUI_AUDITS)
+demo-ios-support-test-only:
+	@$(call on_pinned_ios,demo_ios_support_test_on)
+	@$(call on_oldest_ios,demo_ios_support_test_on)
+
+demo-ios-swiftui-build-for-testing:
+	xcodebuild build-for-testing -project $(DEMO_IOS_SWIFTUI_PROJECT) -scheme $(DEMO_IOS_SWIFTUI_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(DEMO_IOS_DERIVED_DATA)
+
+demo-ios-swiftui-test demo-ios-swiftui-test-only: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_SWIFTUI_AUDITS)
+demo-ios-swiftui-test: demo-ios-swiftui-build-for-testing
 demo-ios-swiftui-test:
 	@$(call on_pinned_ios,demo_ios_swiftui_test_on)
 	@$(call on_oldest_ios,demo_ios_swiftui_test_on)
 
+demo-ios-swiftui-test-only:
+	@$(call on_pinned_ios,demo_ios_swiftui_test_on)
+	@$(call on_oldest_ios,demo_ios_swiftui_test_on)
+
 demo-ios-swiftui-audit: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_SWIFTUI_AUDITS)
+demo-ios-swiftui-audit: demo-ios-swiftui-build-for-testing
 demo-ios-swiftui-audit:
 	@$(call demo_ios_swiftui_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
 demo-ios-swiftui-theme-test: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_SWIFTUI_THEME_TESTS)
+demo-ios-swiftui-theme-test: demo-ios-swiftui-build-for-testing
 demo-ios-swiftui-theme-test:
 	@$(call demo_ios_swiftui_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
@@ -249,16 +259,26 @@ demo-ios-uikit-run:
 	$(XCRUN) simctl install booted $(DEMO_IOS_DERIVED_DATA)/Build/Products/Debug-iphonesimulator/$(DEMO_IOS_UIKIT_SCHEME).app
 	$(XCRUN) simctl launch booted $(DEMO_IOS_UIKIT_BUNDLE_ID) $(DEMO_ARGS)
 
-demo-ios-uikit-test: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_UIKIT_AUDITS)
+demo-ios-uikit-build-for-testing:
+	xcodebuild build-for-testing -project $(DEMO_IOS_UIKIT_PROJECT) -scheme $(DEMO_IOS_UIKIT_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(DEMO_IOS_DERIVED_DATA)
+
+demo-ios-uikit-test demo-ios-uikit-test-only: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_UIKIT_AUDITS)
+demo-ios-uikit-test: demo-ios-uikit-build-for-testing
 demo-ios-uikit-test:
 	@$(call on_pinned_ios,demo_ios_uikit_test_on)
 	@$(call on_oldest_ios,demo_ios_uikit_test_on)
 
+demo-ios-uikit-test-only:
+	@$(call on_pinned_ios,demo_ios_uikit_test_on)
+	@$(call on_oldest_ios,demo_ios_uikit_test_on)
+
 demo-ios-uikit-audit: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_UIKIT_AUDITS)
+demo-ios-uikit-audit: demo-ios-uikit-build-for-testing
 demo-ios-uikit-audit:
 	@$(call demo_ios_uikit_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
 demo-ios-uikit-theme-test: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_UIKIT_THEME_TESTS)
+demo-ios-uikit-theme-test: demo-ios-uikit-build-for-testing
 demo-ios-uikit-theme-test:
 	@$(call demo_ios_uikit_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
@@ -300,7 +320,7 @@ ci-xcode:
 
 ci-ios-simulator:
 	defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
-	@if [ -n '$(filter pinned,$(IOS_RUNTIMES))' ] && ! $(XCRUN) simctl list devices available | sed -nE '/^-- iOS $(IOS_SIM_OS) --$$/,/^-- /p' | grep -qF '    $(IOS_SIM_DEVICE) ('; then printf 'ci-ios-simulator: no available %s simulator on iOS %s; the snapshots are pinned to it. Runtimes:\n' '$(IOS_SIM_DEVICE)' '$(IOS_SIM_OS)' >&2; $(XCRUN) simctl list runtimes >&2; exit 1; fi
+	@if [ -n '$(filter pinned,$(IOS_RUNTIMES))' ] && ! $(XCRUN) simctl list devices available | sed -nE '/^-- iOS $(IOS_SIM_OS) --$$/,/^-- /p' | grep -qF '    $(IOS_SIM_DEVICE) ('; then printf 'ci-ios-simulator: no available %s simulator on iOS %s; it is the pinned simulator in .ios-simulator. Runtimes:\n' '$(IOS_SIM_DEVICE)' '$(IOS_SIM_OS)' >&2; $(XCRUN) simctl list runtimes >&2; exit 1; fi
 	@$(if $(IOS_SIM_APPEARANCE),$(if $(filter-out light dark,$(IOS_SIM_APPEARANCE)),printf 'ci-ios-simulator: IOS_SIM_APPEARANCE must be light or dark; got %s\n' '$(IOS_SIM_APPEARANCE)' >&2; exit 1,$(if $(filter pinned,$(IOS_RUNTIMES)),$(ios_sim_appearance),true)),true)
 
 ci-android-kvm:

@@ -14,7 +14,6 @@ let package = Package(
         .library(name: "TSTokens", targets: ["TSTokens"])
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", .upToNextMinor(from: "1.19.6")),
         .package(url: "https://github.com/nalexn/ViewInspector", .upToNextMinor(from: "0.10.5"))
     ],
     targets: [
@@ -42,10 +41,7 @@ let package = Package(
         ),
         .target(
             name: "TSTestSupport",
-            dependencies: [
-                "TSTokens",
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
-            ],
+            dependencies: ["TSTokens"],
             path: "ios/Tests/TSTestSupport"
         ),
         .testTarget(
@@ -63,18 +59,13 @@ let package = Package(
             dependencies: [
                 "TSDesignSystem",
                 "TSTestSupport",
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 .product(name: "ViewInspector", package: "ViewInspector")
             ],
             path: "ios/Tests/TSDesignSystemTests"
         ),
         .testTarget(
             name: "TSDesignSystemUIKitTests",
-            dependencies: [
-                "TSDesignSystemUIKit",
-                "TSTestSupport",
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
-            ],
+            dependencies: ["TSDesignSystemUIKit", "TSTestSupport"],
             path: "ios/Tests/TSDesignSystemUIKitTests"
         )
     ],
