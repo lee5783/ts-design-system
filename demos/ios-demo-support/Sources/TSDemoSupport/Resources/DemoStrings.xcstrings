@@ -253,6 +253,18 @@
         }
       }
     },
+    "demo.component.disclosure" : {
+      "comment" : "Demo section title: rows that expand to show more text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disclosure rows"
+          }
+        }
+      }
+    },
     "demo.component.dismissed" : {
       "comment" : "Dialog result when closed by the scrim, escape or a drag.",
       "extractionState" : "manual",
@@ -361,6 +373,18 @@
         }
       }
     },
+    "demo.component.in-context" : {
+      "comment" : "Demo section title: the component inside a typical screen element.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In context"
+          }
+        }
+      }
+    },
     "demo.component.initials" : {
       "comment" : "Avatar caption: initials content.",
       "extractionState" : "manual",
@@ -429,6 +453,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Without a visible label"
+          }
+        }
+      }
+    },
+    "demo.component.lazy-divider" : {
+      "comment" : "Demo section title: rows in a lazy list separated by dividers.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Divider outside a list"
           }
         }
       }
@@ -985,6 +1021,18 @@
         }
       }
     },
+    "demo.component.text-colors" : {
+      "comment" : "Demo section title: every text colour.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text colours"
+          }
+        }
+      }
+    },
     "demo.component.three-items" : {
       "comment" : "Bottom navigation section caption.",
       "extractionState" : "manual",
@@ -1065,6 +1113,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Long text"
+          }
+        }
+      }
+    },
+    "demo.component.type-roles" : {
+      "comment" : "Demo section title: every type role.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type roles"
           }
         }
       }
@@ -1405,6 +1465,18 @@
         }
       }
     },
+    "demo.page.spinner" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spinner"
+          }
+        }
+      }
+    },
     "demo.page.switch" : {
       "comment" : "Catalog page title.",
       "extractionState" : "manual",
@@ -1425,6 +1497,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tabs"
+          }
+        }
+      }
+    },
+    "demo.page.text" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text"
           }
         }
       }
@@ -2101,6 +2185,78 @@
         }
       }
     },
+    "demo.sample.licence-apache" : {
+      "comment" : "Sample licence name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apache License 2.0"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-apache-body" : {
+      "comment" : "Sample licence text shown when a notices row expands.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licensed under the Apache License, Version 2.0. You may not use this file except in compliance with the License. Distributed on an AS IS basis, without warranties or conditions of any kind."
+          }
+        }
+      }
+    },
+    "demo.sample.licence-kotlin" : {
+      "comment" : "Sample library name in an open-source notices list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kotlin"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-mit" : {
+      "comment" : "Sample licence name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIT License"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-mit-body" : {
+      "comment" : "Sample licence text shown when a notices row expands.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software, to deal in the software without restriction, subject to the conditions of the MIT License."
+          }
+        }
+      }
+    },
+    "demo.sample.licence-snapshot" : {
+      "comment" : "Sample library name in an open-source notices list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SnapshotTesting"
+          }
+        }
+      }
+    },
     "demo.sample.link-copied" : {
       "comment" : "Toast shown over a sheet.",
       "extractionState" : "manual",
@@ -2121,6 +2277,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "List"
+          }
+        }
+      }
+    },
+    "demo.sample.loading-messages" : {
+      "comment" : "Sample accessibility label of a spinner while messages load.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading messages"
           }
         }
       }

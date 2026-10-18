@@ -225,6 +225,18 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleAddHundred = "demo.sample.add-hundred"
     case sampleMarkAllRead = "demo.sample.mark-all-read"
     case sampleShellBody = "demo.sample.shell-body"
+    case typeRoles = "demo.component.type-roles"
+    case textColors = "demo.component.text-colors"
+    case inContext = "demo.component.in-context"
+    case lazyDivider = "demo.component.lazy-divider"
+    case disclosure = "demo.component.disclosure"
+    case sampleLoadingMessages = "demo.sample.loading-messages"
+    case sampleLicenceKotlin = "demo.sample.licence-kotlin"
+    case sampleLicenceSnapshot = "demo.sample.licence-snapshot"
+    case sampleLicenceApache = "demo.sample.licence-apache"
+    case sampleLicenceMIT = "demo.sample.licence-mit"
+    case sampleLicenceApacheBody = "demo.sample.licence-apache-body"
+    case sampleLicenceMITBody = "demo.sample.licence-mit-body"
 }
 
 public enum DemoStrings {

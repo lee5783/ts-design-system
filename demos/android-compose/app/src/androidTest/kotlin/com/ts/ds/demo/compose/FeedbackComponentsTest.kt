@@ -20,6 +20,10 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ts.ds.demo.compose.components.AlertPageTags
+import com.ts.ds.demo.compose.components.SpinnerPageTags
+import com.ts.ds.core.style.TSSpinnerSize
+import com.ts.ds.core.style.TSSpinnerTone
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
@@ -74,6 +78,28 @@ class FeedbackComponentsTest {
     private fun ComposeTestRule.assertCount(tag: String, count: Int) {
         scrollTo(tag)
         onNodeWithTag(tag).assertTextEquals(resources.getQuantityString(DemoR.plurals.demo_component_tap_count, count, count))
+    }
+
+    @Test
+    fun spinnerPageShowsSpinnersLabelledLoading() {
+        launchDemo().use {
+            composeRule.openPage(DemoPageId.Spinner)
+            val loading = resources.getString(com.ts.ds.core.R.string.ts_loading)
+            TSSpinnerSize.entries.forEach { size ->
+                composeRule.onNodeWithTag(SpinnerPageTags.size(size))
+                    .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(loading)))
+                    .assert(SemanticsMatcher.expectValue(SemanticsProperties.ProgressBarRangeInfo, ProgressBarRangeInfo.Indeterminate))
+            }
+            TSSpinnerTone.entries.forEach { tone ->
+                composeRule.onNodeWithTag(SpinnerPageTags.tone(tone))
+                    .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(loading)))
+            }
+            val messages = resources.getString(DemoR.string.demo_sample_loading_messages)
+            composeRule.scrollTo(SpinnerPageTags.LABELLED)
+            composeRule.onNodeWithTag(SpinnerPageTags.LABELLED)
+                .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(messages)))
+            composeRule.onNodeWithTag(SpinnerPageTags.IN_CONTEXT).assertTextEquals(messages)
+        }
     }
 
     @Test

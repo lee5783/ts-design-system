@@ -13,6 +13,7 @@ struct ListItemPage: View {
     @State private var trailing: ListItemSample.Trailing = .none
     @State private var isPlaygroundOn = false
     @State private var tapCount = 0
+    @State private var expandedLicence: String?
 
     var body: some View {
         DemoPage(page: .listItem) {
@@ -58,6 +59,29 @@ struct ListItemPage: View {
                 }
                 DemoTapCounter(count: stateTapCount, identifier: "demo.list-item.state.count")
             }
+            DemoComponentSection(.lazyDivider) {
+                LazyVStack(spacing: 0) {
+                    ForEach(Array(SampleListRows.all.enumerated()), id: \.element.id) { index, row in
+                        if index > 0 {
+                            TSDivider()
+                        }
+                        TSListItem(row.title, subtitle: row.subtitle)
+                    }
+                }
+                .background(TSColor.surfaceCard.color)
+                .accessibilityIdentifier("demo.list-item.lazy-divider")
+            }
+            DemoComponentSection(.disclosure) {
+                TSList {
+                    ForEach(ListItemSample.licences, id: \.title) { licence in
+                        TSDisclosureListItem(licence.title, subtitle: licence.licence, isExpanded: expansion(licence.title)) {
+                            TSText(licence.body, role: .bodySm, color: .secondary)
+                                .accessibilityIdentifier("demo.list-item.disclosure.body")
+                        }
+                        .accessibilityIdentifier("demo.list-item.disclosure.\(licence.id)")
+                    }
+                }
+            }
             DemoComponentSection(.truncation) {
                 TSList {
                     TSListItem(DemoStrings.string(.sampleLongSetting), subtitle: ListItemSample.downloads.subtitle, showsChevron: true, action: {}) {
@@ -96,6 +120,13 @@ struct ListItemPage: View {
             .toggleStyle(SwitchToggleStyle(tint: TSColor.accentPrimary.color))
             .foregroundColor(TSColor.textPrimary.color)
         }
+    }
+
+    private func expansion(_ title: String) -> Binding<Bool> {
+        Binding(
+            get: { expandedLicence == title },
+            set: { expandedLicence = $0 ? title : nil }
+        )
     }
 
     @ViewBuilder
@@ -178,6 +209,17 @@ enum ListItemSample {
     static let downloads = row("downloads")
     static let settings = row("settings")
     static let person = SamplePeople.all[0]
+    static let licences = [
+        Licence(id: "kotlin", title: DemoStrings.string(.sampleLicenceKotlin), licence: DemoStrings.string(.sampleLicenceApache), body: DemoStrings.string(.sampleLicenceApacheBody)),
+        Licence(id: "snapshot", title: DemoStrings.string(.sampleLicenceSnapshot), licence: DemoStrings.string(.sampleLicenceMIT), body: DemoStrings.string(.sampleLicenceMITBody))
+    ]
+
+    struct Licence {
+        let id: String
+        let title: String
+        let licence: String
+        let body: String
+    }
 
     private static func row(_ id: String) -> SampleListRow {
         SampleListRows.all.first { $0.id == id } ?? SampleListRows.all[0]

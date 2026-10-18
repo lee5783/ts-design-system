@@ -67,6 +67,11 @@ public class TSListView @JvmOverloads constructor(
 
     private fun updateGroupPositions() {
         val positions = groupPositions()
-        visibleChildren().forEachIndexed { index, child -> (child as? TSListItemView)?.groupPosition = positions[index] }
+        visibleChildren().forEachIndexed { index, child ->
+            when (child) {
+                is TSListItemView -> child.groupPosition = positions[index]
+                is TSDisclosureListItemView -> child.groupPosition = positions[index]
+            }
+        }
     }
 }

@@ -31,6 +31,8 @@
     <string name="demo_page_dialog">Dialog</string>
     <string name="demo_page_toast">Toast</string>
     <string name="demo_page_bottom_nav">Bottom Navigation</string>
+    <string name="demo_page_spinner">Spinner</string>
+    <string name="demo_page_text">Text</string>
 
     <string name="demo_page_pending">This component page arrives with the component.</string>
 
@@ -292,4 +294,16 @@
     <string name="demo_sample_mark_all_read">Mark all as read</string>
     <string name="demo_sample_shell_body">Switch tabs with the bar below. Each tab keeps its own state.</string>
     <string name="demo_sample_message_sent">Message sent</string>
+    <string name="demo_component_type_roles">Type roles</string>
+    <string name="demo_component_text_colors">Text colours</string>
+    <string name="demo_component_in_context">In context</string>
+    <string name="demo_component_lazy_divider">Divider outside a list</string>
+    <string name="demo_component_disclosure">Disclosure rows</string>
+    <string name="demo_sample_loading_messages">Loading messages</string>
+    <string name="demo_sample_licence_kotlin">Kotlin</string>
+    <string name="demo_sample_licence_snapshot">SnapshotTesting</string>
+    <string name="demo_sample_licence_apache">Apache License 2.0</string>
+    <string name="demo_sample_licence_mit">MIT License</string>
+    <string name="demo_sample_licence_apache_body">Licensed under the Apache License, Version 2.0. You may not use this file except in compliance with the License. Distributed on an AS IS basis, without warranties or conditions of any kind.</string>
+    <string name="demo_sample_licence_mit_body">Permission is hereby granted, free of charge, to any person obtaining a copy of this software, to deal in the software without restriction, subject to the conditions of the MIT License.</string>
 </resources>

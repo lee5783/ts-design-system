@@ -7,16 +7,22 @@ import android.widget.TextView
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
 import com.ts.ds.core.style.TSBadgeTone
+import com.ts.ds.core.style.TSColorRole
+import com.ts.ds.core.style.TSTypeRole
 import com.ts.ds.demo.support.R as DemoR
 import com.ts.ds.demo.support.catalog.DemoPageId
 import com.ts.ds.demo.support.sample.SampleData
 import com.ts.ds.demo.support.sample.SampleListRow
 import com.ts.ds.demo.views.R
 import com.ts.ds.demo.views.shell.DemoPageFragment
+import com.ts.ds.views.components.listitem.TSDisclosureListItemView
+import com.ts.ds.views.components.listitem.TSDividerView
 import com.ts.ds.views.components.listitem.TSListItemLeading
 import com.ts.ds.views.components.listitem.TSListItemTrailing
 import com.ts.ds.views.components.listitem.TSListItemView
 import com.ts.ds.views.components.listitem.TSListView
+import com.ts.ds.views.theme.textAppearance
+import com.ts.ds.views.theme.tsColor
 
 class ListItemFragment : DemoPageFragment(R.layout.page_list_item) {
     override val page: DemoPageId = DemoPageId.ListItem
@@ -43,6 +49,8 @@ class ListItemFragment : DemoPageFragment(R.layout.page_list_item) {
         rows.markSectionHeadings()
         bindContents(rows.findViewById(R.id.list_item_contents))
         bindStates(rows.findViewById(R.id.list_item_states))
+        bindDivider(rows.findViewById(R.id.list_item_divider))
+        bindDisclosure(rows.findViewById(R.id.list_item_disclosure))
         rows.findViewById<TSListItemView>(R.id.list_item_truncation_row).setOnClickListener {}
         bindPlayground(rows.findViewById(R.id.list_item_playground))
     }
@@ -131,6 +139,56 @@ class ListItemFragment : DemoPageFragment(R.layout.page_list_item) {
         counter = section.addTapCounter(STATE_COUNT)
     }
 
+    private fun bindDivider(section: LinearLayout) {
+        section.addSectionHeader(DemoR.string.demo_component_lazy_divider)
+        val stack = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(context.tsColor(TSColorRole.SurfaceCard))
+            tag = LAZY_DIVIDER
+        }
+        SampleData.listRows.forEachIndexed { index, row ->
+            if (index > 0) stack.addView(TSDividerView(requireContext()), matchWidth())
+            stack.addView(item(getString(row.titleRes)) { subtitle = row.subtitleRes?.let(::getString) }, matchWidth())
+        }
+        section.addSpaced(stack, matchWidth = true)
+    }
+
+    private fun bindDisclosure(section: LinearLayout) {
+        section.addSectionHeader(DemoR.string.demo_component_disclosure)
+        val rows = licences.map { licence ->
+            TSDisclosureListItemView(requireContext()).apply {
+                title = getString(licence.titleRes)
+                subtitle = getString(licence.licenceRes)
+                tag = disclosure(licence.id)
+                addView(
+                    TextView(context).apply {
+                        setTextAppearance(TSTypeRole.BodySm.textAppearance)
+                        setTextColor(context.tsColor(TSColorRole.TextSecondary))
+                        textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+                        text = getString(licence.bodyRes)
+                        tag = DISCLOSURE_BODY
+                    },
+                )
+            }
+        }
+        rows.forEach { row ->
+            row.setOnExpandedChangeListener { _, expanded ->
+                if (expanded) rows.filter { it !== row }.forEach { it.isExpanded = false }
+            }
+        }
+        section.addSpaced(TSListView(requireContext()).apply { rows.forEach { addView(it, matchWidth()) } }, matchWidth = true)
+    }
+
+    private fun matchWidth(): LinearLayout.LayoutParams =
+        LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+    private class Licence(val id: String, val titleRes: Int, val licenceRes: Int, val bodyRes: Int)
+
+    private val licences = listOf(
+        Licence("kotlin", DemoR.string.demo_sample_licence_kotlin, DemoR.string.demo_sample_licence_apache, DemoR.string.demo_sample_licence_apache_body),
+        Licence("snapshot", DemoR.string.demo_sample_licence_snapshot, DemoR.string.demo_sample_licence_mit, DemoR.string.demo_sample_licence_mit_body),
+    )
+
     private fun bindPlayground(section: LinearLayout) {
         section.addSectionHeader(DemoR.string.demo_component_playground)
         val row = item(getString(SampleData.listRow("inbox").titleRes)) {
@@ -195,5 +253,9 @@ class ListItemFragment : DemoPageFragment(R.layout.page_list_item) {
         const val PLAYGROUND_ROW = "demo.list-item.playground.row"
         const val PLAYGROUND_VALUE = "demo.list-item.playground.value"
         const val PLAYGROUND_COUNT = "demo.list-item.playground.count"
+        const val LAZY_DIVIDER = "demo.list-item.lazy-divider"
+        const val DISCLOSURE_BODY = "demo.list-item.disclosure.body"
+
+        fun disclosure(id: String): String = "demo.list-item.disclosure.$id"
     }
 }

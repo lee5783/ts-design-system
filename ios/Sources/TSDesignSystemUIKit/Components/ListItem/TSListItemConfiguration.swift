@@ -29,6 +29,7 @@ public struct TSListItemConfiguration: UIContentConfiguration {
     public var onToggle: (@MainActor (Bool) -> Void)?
     public internal(set) var isHighlighted = false
     public internal(set) var isFocused = false
+    var expansionState: Bool?
 
     public init(
         title: String,

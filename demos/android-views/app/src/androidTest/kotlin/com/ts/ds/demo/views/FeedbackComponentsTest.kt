@@ -19,6 +19,9 @@ import com.ts.ds.demo.support.R as DemoR
 import com.ts.ds.demo.support.catalog.DemoPageId
 import com.ts.ds.demo.support.sample.SampleData
 import com.ts.ds.demo.views.components.AlertFragment
+import com.ts.ds.demo.views.components.SpinnerFragment
+import com.ts.ds.core.style.TSSpinnerSize
+import com.ts.ds.core.style.TSSpinnerTone
 import com.ts.ds.demo.views.components.ToastFragment
 import com.ts.ds.views.components.toast.TSToastHost
 import android.os.SystemClock
@@ -79,6 +82,29 @@ class FeedbackComponentsTest {
             result = Triple(alert.visibility, info, message?.let(ViewCompat::getAccessibilityLiveRegion))
         }
         return requireNotNull(result)
+    }
+
+    @Test
+    fun spinnerPageShowsSpinnersLabelledLoading() {
+        val loading = resources.getString(com.ts.ds.core.R.string.ts_loading)
+        launchDemo().use { scenario ->
+            openPage(DemoPageId.Spinner)
+            val tags = TSSpinnerSize.entries.map(SpinnerFragment::size) + TSSpinnerTone.entries.map(SpinnerFragment::tone)
+            tags.forEach { tag ->
+                onView(withTag(tag)).perform(scrollIntoView())
+                scenario.onActivity { activity ->
+                    val view = activity.window.decorView.findViewWithTag<View>(tag)
+                    val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
+                    assertEquals(loading, info.contentDescription.toString())
+                    assertEquals(android.widget.ProgressBar::class.java.name, info.className)
+                }
+            }
+            onView(withTag(SpinnerFragment.LABELLED)).perform(scrollIntoView())
+            scenario.onActivity { activity ->
+                val view = activity.window.decorView.findViewWithTag<View>(SpinnerFragment.LABELLED)
+                assertEquals(resources.getString(DemoR.string.demo_sample_loading_messages), view.contentDescription.toString())
+            }
+        }
     }
 
     @Test

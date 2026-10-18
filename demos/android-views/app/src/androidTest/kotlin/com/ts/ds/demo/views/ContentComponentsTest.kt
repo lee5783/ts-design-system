@@ -1,6 +1,7 @@
 package com.ts.ds.demo.views
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,6 +27,9 @@ import com.ts.ds.demo.views.components.AvatarFragment
 import com.ts.ds.demo.views.components.BadgeFragment
 import com.ts.ds.demo.views.components.CardFragment
 import com.ts.ds.demo.views.components.ListItemFragment
+import com.ts.ds.demo.views.components.TextFragment
+import com.ts.ds.core.style.TSTextColor
+import com.ts.ds.core.style.TSTypeRole
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -55,6 +59,78 @@ class ContentComponentsTest {
             result = view to info
         }
         return requireNotNull(result)
+    }
+
+    private fun ActivityScenario<MainActivity>.disclosureHeader(tag: String): Pair<View, AccessibilityNodeInfoCompat> {
+        onView(withTag(tag)).perform(scrollIntoView())
+        var result: Pair<View, AccessibilityNodeInfoCompat>? = null
+        onActivity { activity ->
+            val header = (activity.window.decorView.findViewWithTag<View>(tag) as ViewGroup).getChildAt(0)
+            val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(header, it) }
+            result = header to info
+        }
+        return requireNotNull(result)
+    }
+
+    private fun tapHeaderOf(tag: String) {
+        val coordinates = CoordinatesProvider { view ->
+            val location = IntArray(2).also(view::getLocationOnScreen)
+            floatArrayOf(location[0] + view.width * 0.3f, location[1] + 24 * view.resources.displayMetrics.density)
+        }
+        onView(withTag(tag)).perform(scrollIntoView(), GeneralClickAction(Tap.SINGLE, coordinates, Press.FINGER, 0, 0))
+    }
+
+    private fun ActivityScenario<MainActivity>.bodyIsShown(): Boolean {
+        var shown = false
+        onActivity { activity -> shown = activity.window.decorView.findViewWithTag<View>(ListItemFragment.DISCLOSURE_BODY)?.isShown == true }
+        return shown
+    }
+
+    @Test
+    fun listItemDisclosureRowExpandsItsBody() {
+        val kotlin = ListItemFragment.disclosure("kotlin")
+        val snapshot = ListItemFragment.disclosure("snapshot")
+        launchDemo().use { scenario ->
+            openPage(DemoPageId.ListItem)
+            val (_, collapsed) = scenario.disclosureHeader(kotlin)
+            assertEquals("Kotlin, Apache License 2.0", collapsed.text.toString())
+            assertEquals(Button::class.java.name, collapsed.className)
+            assertEquals("Collapsed", collapsed.stateDescription.toString())
+            assertFalse(scenario.bodyIsShown())
+
+            tapHeaderOf(kotlin)
+
+            assertEquals("Expanded", scenario.disclosureHeader(kotlin).second.stateDescription.toString())
+            assertTrue(scenario.bodyIsShown())
+
+            tapHeaderOf(snapshot)
+
+            assertEquals("Expanded", scenario.disclosureHeader(snapshot).second.stateDescription.toString())
+            assertEquals("Collapsed", scenario.disclosureHeader(kotlin).second.stateDescription.toString())
+
+            tapHeaderOf(snapshot)
+
+            assertEquals("Collapsed", scenario.disclosureHeader(snapshot).second.stateDescription.toString())
+            assertFalse(scenario.bodyIsShown())
+        }
+    }
+
+    @Test
+    fun textPageShowsEveryTypeRoleAndTextColor() {
+        val pangram = resources.getString(DemoR.string.demo_sample_pangram)
+        launchDemo().use { scenario ->
+            openPage(DemoPageId.Text)
+            TSTypeRole.entries.forEach { role ->
+                val (view, _) = scenario.nodeOf(TextFragment.role(role))
+                assertEquals(pangram, (view as TextView).text.toString())
+            }
+            TSTextColor.entries.forEach { color ->
+                val (view, _) = scenario.nodeOf(TextFragment.color(color))
+                assertEquals(color.name.lowercase(), (view as TextView).text.toString())
+            }
+            val (truncated, _) = scenario.nodeOf(TextFragment.TRUNCATED)
+            assertEquals(1, (truncated as TextView).lineCount)
+        }
     }
 
     @Test

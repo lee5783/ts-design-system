@@ -49,6 +49,10 @@ enum DemoPageFactory {
             ToastViewController()
         case .bottomNav:
             BottomNavViewController()
+        case .spinner:
+            SpinnerViewController()
+        case .text:
+            TextViewController()
         }
     }
 }

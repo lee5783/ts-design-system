@@ -40,7 +40,7 @@ final class ListItemViewController: DemoPageViewController {
     }
 
     override func makeContentViews() -> [UIView] {
-        [contentsSection(), statesSection(), truncationSection(), playgroundSection()]
+        [contentsSection(), statesSection(), dividerSection(), disclosureSection(), truncationSection(), playgroundSection()]
     }
 
     private func contentsSection() -> UIView {
@@ -117,6 +117,42 @@ final class ListItemViewController: DemoPageViewController {
         let section = DemoComponentSectionView(.states, views: [])
         section.addFullWidth(list)
         section.addArrangedSubview(stateCounter)
+        return section
+    }
+
+    private func dividerSection() -> UIView {
+        var rows: [UIView] = []
+        for (index, row) in SampleListRows.all.enumerated() {
+            if index > 0 {
+                rows.append(TSDividerView())
+            }
+            rows.append(TSListItemView(configuration: TSListItemConfiguration(title: row.title, subtitle: row.subtitle)))
+        }
+        let stack = UIStackView(arrangedSubviews: rows)
+        stack.axis = .vertical
+        stack.backgroundColor = TSColor.surfaceCard.uiColor
+        stack.accessibilityIdentifier = "demo.list-item.lazy-divider"
+        let section = DemoComponentSectionView(.lazyDivider, views: [])
+        section.addFullWidth(stack)
+        return section
+    }
+
+    private func disclosureSection() -> UIView {
+        let rows = ListItemSample.licences.map { licence in
+            let body = DemoLabel(licence.body, font: TSTypeRole.bodySm.font, color: TSTextColor.secondary.color)
+            body.accessibilityIdentifier = "demo.list-item.disclosure.body"
+            let row = TSDisclosureListItemView(title: licence.title, subtitle: licence.licence, bodyView: body)
+            row.accessibilityIdentifier = "demo.list-item.disclosure.\(licence.id)"
+            return row
+        }
+        rows.forEach { row in
+            row.addAction(UIAction { _ in
+                guard row.isExpanded else { return }
+                rows.filter { $0 !== row }.forEach { $0.isExpanded = false }
+            }, for: .valueChanged)
+        }
+        let section = DemoComponentSectionView(.disclosure, views: [])
+        section.addFullWidth(TSListView(items: rows))
         return section
     }
 
@@ -249,6 +285,17 @@ enum ListItemSample {
     static let downloads = row("downloads")
     static let settings = row("settings")
     static let person = SamplePeople.all[0]
+    static let licences = [
+        Licence(id: "kotlin", title: DemoStrings.string(.sampleLicenceKotlin), licence: DemoStrings.string(.sampleLicenceApache), body: DemoStrings.string(.sampleLicenceApacheBody)),
+        Licence(id: "snapshot", title: DemoStrings.string(.sampleLicenceSnapshot), licence: DemoStrings.string(.sampleLicenceMIT), body: DemoStrings.string(.sampleLicenceMITBody))
+    ]
+
+    struct Licence {
+        let id: String
+        let title: String
+        let licence: String
+        let body: String
+    }
 
     private static func row(_ id: String) -> SampleListRow {
         SampleListRows.all.first { $0.id == id } ?? SampleListRows.all[0]

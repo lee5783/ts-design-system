@@ -11,3 +11,12 @@ struct TSListItemSnapshotTests {
         assertTSSnapshot(of: ListItemGalleryView(kind: kind), configuration: configuration, named: kind.rawValue)
     }
 }
+
+@MainActor
+@Suite("SwiftUI ListItem disclosure and divider snapshots", .enabled(if: TSSnapshotDevice.isEnabled, TSSnapshotDevice.skipReason))
+struct TSListItemExtrasSnapshotTests {
+    @Test("Disclosure rows collapsed, expanded, pressed and disabled, and TSDivider next to a TSList", arguments: ListItemExtrasKind.allCases, TSSnapshotConfiguration.standardMatrix)
+    func listItem(kind: ListItemExtrasKind, configuration: TSSnapshotConfiguration) {
+        assertTSSnapshot(of: ListItemExtrasGalleryView(kind: kind), configuration: configuration, named: kind.rawValue)
+    }
+}

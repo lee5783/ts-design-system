@@ -28,4 +28,8 @@ public enum TSListItemAccessibility {
     public static func hint(for role: TSListItemRole) -> String? {
         role == .navigation ? TSStrings.listItemNavigates : nil
     }
+
+    public static func expansionValue(isExpanded: Bool) -> String {
+        isExpanded ? TSStrings.listItemExpanded : TSStrings.listItemCollapsed
+    }
 }

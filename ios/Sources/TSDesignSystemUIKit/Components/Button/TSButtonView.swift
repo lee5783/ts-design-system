@@ -53,7 +53,7 @@ public final class TSButtonView: UIButton {
         didSet { setNeedsUpdateConfiguration() }
     }
 
-    private let spinner = TSSpinnerView()
+    private let spinner = TSSpinnerView(frame: .zero)
     private let trailingIconView = TSIconView(.chevronRight, size: .md)
 
     public init(

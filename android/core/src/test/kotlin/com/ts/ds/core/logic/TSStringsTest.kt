@@ -76,6 +76,12 @@ class TSStringsTest {
     }
 
     @Test
+    fun listItemExpansionStateNamesExpandedAndCollapsed() {
+        assertEquals("Expanded", TSListItemAccessibility.expansionState(context, expanded = true))
+        assertEquals("Collapsed", TSListItemAccessibility.expansionState(context, expanded = false))
+    }
+
+    @Test
     fun alertToneNamesAndLabel() {
         assertEquals("Information", TSAlertAccessibility.toneName(context, TSAlertTone.Info))
         assertEquals("Success", TSAlertAccessibility.toneName(context, TSAlertTone.Success))

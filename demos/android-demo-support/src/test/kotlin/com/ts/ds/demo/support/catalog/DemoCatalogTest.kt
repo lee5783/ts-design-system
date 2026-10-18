@@ -33,7 +33,7 @@ class DemoCatalogTest {
         assertEquals(
             setOf(
                 "button", "icon-button", "badge", "avatar", "text-field", "checkbox", "switch",
-                "tabs", "list-item", "card", "alert", "dialog", "toast", "bottom-nav",
+                "tabs", "list-item", "card", "alert", "dialog", "toast", "bottom-nav", "spinner", "text",
             ),
             DemoCatalog.componentPages.map { it.id }.toSet(),
         )

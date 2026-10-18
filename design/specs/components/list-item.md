@@ -1,6 +1,6 @@
 # ListItem and list group
 
-Cross-toolkit contract for the TS ListItem and its grouped list (`.ts-list`). Source: `design/source/components/ListItem/README.md`, `bundle.css` (`.ts-list`, `.ts-list-item*`), `index.d.ts` (`ListItemProps`). Tokens: `control-md`, `space-2/3/4`, `body`, `body-sm`, `overline`, `text-primary/secondary/muted`, `surface-card`, `surface-pressed`, `surface-hover`, `border-subtle`, `accent-subtle`, `accent-text`, `radius-md`, `radius-lg`, `list-item-tile-size` (`design/extensions/native-tokens.json`).
+Cross-toolkit contract for the TS ListItem and its grouped list (`.ts-list`). Source: `design/source/components/ListItem/README.md`, `bundle.css` (`.ts-list`, `.ts-list-item*`), `index.d.ts` (`ListItemProps`). Tokens: `control-md`, `duration-base`, `easing-standard`, `space-2/3/4`, `body`, `body-sm`, `overline`, `text-primary/secondary/muted`, `surface-card`, `surface-pressed`, `surface-hover`, `border-subtle`, `accent-subtle`, `accent-text`, `radius-md`, `radius-lg`, `list-item-tile-size` (`design/extensions/native-tokens.json`).
 
 ## API mapping
 
@@ -16,6 +16,8 @@ Cross-toolkit contract for the TS ListItem and its grouped list (`.ts-list`). So
 | `onClick` / `href` | `Configuration.isInteractive`, `TSListItemRole` | `action:` | `isInteractive` (+ cell selection, or `.primaryActionTriggered` on `TSListItemView`) | `onClick` | `setOnClickListener` (a listener makes the row interactive) |
 | disabled (not in the DS) | `TSControlState.disabled` | `.disabled(_:)` | `isEnabled` (configuration or control) | `enabled` | `isEnabled` |
 | `.ts-list` | `TSListItemStyleSpec.group` | `TSList { … }`, `TSListSection(header) { … }` on `LazyVStack` | `TSListView(items:)` (stack); `TSListLayout.section/makeLayout` + `TSListSectionHeaderView` (collection view) | `TSList { … }`, `TSListSection(header) { … }` (`Column` card) | `TSListView` (stacked card), `TSListDecoration(context, positionOf)` + `TSListSectionHeaderView` (`RecyclerView`) |
+| divider outside a `TSList` (lazy lists, issue #6) | `TSListItemStyleSpec.group` (`divider`, `dividerThickness`, `dividerInset`) | `TSDivider()` | `TSDividerView` | `TSDivider(modifier)` | `TSDividerView : View` (or `TSListDecoration` on a `RecyclerView`) |
+| disclosure row (not in the DS, issue #6) | `TSListItemStyleSpec.disclosure`, `TSListItemAccessibility` expansion state | `TSDisclosureListItem(_ title:, subtitle:, isExpanded: Binding<Bool>, leading:, content:)` | `TSDisclosureListItemView: UIControl` (`title`, `subtitle`, `leading`, `bodyView`, `isExpanded`; `.valueChanged` on user toggles) | `TSDisclosureListItem(title, expanded, onExpandedChange, modifier, subtitle, enabled, interactionSource, leading, content)` | `TSDisclosureListItemView : LinearLayout` (`title`, `subtitle`, `isExpanded` / `app:tsExpanded`, `setOnExpandedChangeListener`; XML children become the body) |
 
 ## Matrix
 
@@ -41,12 +43,28 @@ Geometry: padding 12 / 16, gap 12, minimum height 44 (`control-md`). Title `body
 
 Dynamic Type: at accessibility sizes (`dynamicTypeSize.isAccessibilitySize` / `isAccessibilityCategory`) the row reflows to the **stacked** layout — leading, then text, then trailing, stacked with 8 pt gaps, chevron still at the trailing edge — and title, subtitle and trailing text wrap. At other sizes the title and subtitle are one line, truncated. No `ViewThatFits` (iOS 16).
 
+## Divider
+
+A full-width divider for rows that are not inside a `TSList` / `TSListView` (for example rows in a `LazyColumn`, a SwiftUI `LazyVStack` or a plain stack). It is the `TSList` divider: `border-subtle`, 1 pt / dp thick, inset 0 (`TSListItemStyleSpec.group`). Place it between rows; it draws nothing else (no card, border or corners). It is never an accessibility element. Inside a `TSList` the rows already draw their dividers, so do not add one there.
+
+## Disclosure row
+
+`TSDisclosureListItem` is a row whose title toggles a body below it (for example a third-party-notices screen: library name → licence text). C-027: a separate component, not a slot on `TSListItem`.
+
+- **Header:** a list row with the title, optional subtitle and optional leading content, always interactive (pressed / focused fills as for a row with an action), with the chevron at the trailing edge. Heights as for a row with an action (48, 68 with a subtitle).
+- **Chevron:** `chevron-right`, `icon-md`, `text-muted`; it rotates from 0° (collapsed, pointing to the trailing edge) to 90° (expanded, pointing down) over `duration-base` (150 ms) with `easing-standard`; instantly under reduce motion. In RTL the glyph is mirrored, so it rotates by -90° to point down (`TSListItemStyleSpec.disclosure.rotationDegrees(expanded, rightToLeft)`); SwiftUI mirrors `rotationEffect` together with the glyph, so it always passes `isRightToLeft: false`.
+- **Body:** the consumer's content (use `TSText` / `TSFont` styles), shown only when expanded, below the header, padded 16 at the sides and 12 at the bottom (`horizontalPadding`, `verticalPadding` of the row). The body appears and disappears without a height animation [est].
+- **State:** controlled. Compose `expanded` + `onExpandedChange`, SwiftUI `Binding<Bool>`, UIKit `isExpanded` (+ `.valueChanged` when the user toggles), Views `isExpanded` (+ listener on user toggles only). Disabled rows do not toggle and dim to 0.45.
+- **In a group:** inside `TSList` the header draws the group divider above it like any row; the body belongs to the same row, so no divider separates header and body.
+
 ## Accessibility
 
 - One element per row. Label = "title, subtitle". Trailing text or badge text is the value.
 - Row with an action: button trait. With a chevron, the hint "Opens another screen" (`ts.list-item.navigates`).
 - Row with a trailing switch: switch semantics on the row (value "On"/"Off", toggle trait on iOS 17+, button trait on 15–16, never selected — `TSAccessibilityTraitsCompat`); activating the row toggles the switch. The row itself is not tappable; only the switch (44 pt hit area) is.
 - Disabled rows add not-enabled and block their action or switch.
+- Disclosure row: the header is one button element, label "title, subtitle", value "Expanded" / "Collapsed" (`ts.list-item.expanded` / `ts.list-item.collapsed`, `ts_list_item_expanded` / `ts_list_item_collapsed`); activating it toggles. Compose also exposes `expand` / `collapse` actions; Views sets the state description and `AccessibilityAction.ACTION_EXPAND` / `ACTION_COLLAPSE`. The body is separate elements after the header, in reading order.
+- Divider: hidden from accessibility on every toolkit.
 - UIKit: the hosting cell or `TSListItemView` is the element (so `accessibilityIdentifier` works); the content view is not.
 - Views: `TSListItemView` builds its accessibility node through view overrides, so it keeps its label, state and actions when a `RecyclerView` recycles the row (`TSRecycledAccessibilityTest`).
 
@@ -64,6 +82,7 @@ Dynamic Type: at accessibility sizes (`dynamicTypeSize.isAccessibilitySize` / `i
 | Views | `android/views/src/test/.../listitem/TSListItemViewTest.kt` (sdk 26/36) | click; disabled; plain never presses; Button/View/SwitchCompat class; label, state description, hint; switch activation + listener + haptic; touch delegate 48 × 48; heights; fontScale 2 stacking; RTL chevron; group-shaped pressed background |
 | Views list | `TSListDecorationTest`, `TSListViewTest` | `RecyclerView` binding/recycling (state rebinds after scroll, holders reused, press cleared); offsets (24 below the last row); group runs and full-width 1 dp divider bounds; open edges when a group is cut by the viewport; `TSListView` positions and dividers |
 | Snapshots (Android) | `TSListItemSnapshotTest`, `TSListItemViewSnapshotTest` (`contents_*`, `states_*`) | same galleries as iOS; standard matrix incl. fontScale 2 and RTL (16 + 16) |
+| Divider / disclosure (#6) | spec tests above (`disclosure` rotation, duration, expansion strings); `TSDividerTest`, `TSDisclosureListItemTest` (Compose), `TSDividerViewTest`, `TSDisclosureListItemViewTest` (Views), `TSDisclosureListItemBehaviorTests` (SwiftUI), `TSDisclosureListItemViewBehaviorTests` (UIKit); snapshots `disclosure_*` / `listItem.disclosure-*` and `divider_*` / `listItem.divider-*` in the ListItem snapshot suites | divider colour, thickness and full width equal to the `TSList` divider; tap toggles; chevron rotation (mirrored in RTL); collapsed / expanded accessibility value; disabled blocks |
 | Demo | `ContentComponentsTests` (both iOS demos): `testListItemRowsPressOnlyWithAnAction`, `testListItemSwitchRowExposesSwitchSemantics`, `testListItemPlaygroundTapCountsAndSwitchTrailing`; `CatalogSmokeTests` (catalog built from ListItem). Android: `ContentComponentsTest` (both demos) `listItemRowsPressOnlyWithAnAction`, `listItemSwitchRowExposesSwitchSemantics`, `listItemPlaygroundTapCountsAndSwitchTrailing`; `CatalogSmokeTest` | |
 
 ## Platform notes

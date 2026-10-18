@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import TSTokens
 
 public enum TSListItemLayout: String, CaseIterable, Hashable, Sendable {
@@ -78,6 +79,20 @@ public enum TSListItemStyleSpec: TSStyleSpec {
         public let sectionSpacing: CGFloat
     }
 
+    public struct Disclosure: Equatable, Sendable {
+        public let collapsedRotationDegrees: Double
+        public let expandedRotationDegrees: Double
+        public let animationDuration: TimeInterval
+        public let animationEasing: TSCubicBezier
+        public let bodyHorizontalPadding: CGFloat
+        public let bodyBottomPadding: CGFloat
+
+        public func rotationDegrees(isExpanded: Bool, isRightToLeft: Bool) -> Double {
+            guard isExpanded else { return collapsedRotationDegrees }
+            return isRightToLeft ? -expandedRotationDegrees : expandedRotationDegrees
+        }
+    }
+
     public static let states: [TSControlState] = [.normal, .pressed, .disabled, .focused]
 
     public static let allConfigurations: [Configuration] = [false, true].flatMap { hasSubtitle in
@@ -109,6 +124,15 @@ public enum TSListItemStyleSpec: TSStyleSpec {
         headerSpacing: TSSpacing.space2,
         headerHorizontalPadding: TSSpacing.space4,
         sectionSpacing: TSSpacing.space6
+    )
+
+    public static let disclosure = Disclosure(
+        collapsedRotationDegrees: 0,
+        expandedRotationDegrees: 90,
+        animationDuration: TSMotion.durationBase,
+        animationEasing: TSMotion.easingStandard,
+        bodyHorizontalPadding: TSSpacing.space4,
+        bodyBottomPadding: TSSpacing.space3
     )
 
     public static func resolve(_ configuration: Configuration) -> Resolved {

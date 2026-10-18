@@ -18,8 +18,8 @@ public object DemoCatalog {
         DemoSection(DemoSectionId.Actions, listOf(DemoPageId.Button, DemoPageId.IconButton)),
         DemoSection(DemoSectionId.Forms, listOf(DemoPageId.TextField, DemoPageId.Checkbox, DemoPageId.Switch)),
         DemoSection(DemoSectionId.Navigation, listOf(DemoPageId.Tabs, DemoPageId.BottomNav)),
-        DemoSection(DemoSectionId.Content, listOf(DemoPageId.Badge, DemoPageId.Avatar, DemoPageId.ListItem, DemoPageId.Card)),
-        DemoSection(DemoSectionId.Feedback, listOf(DemoPageId.Alert, DemoPageId.Dialog, DemoPageId.Toast)),
+        DemoSection(DemoSectionId.Content, listOf(DemoPageId.Text, DemoPageId.Badge, DemoPageId.Avatar, DemoPageId.ListItem, DemoPageId.Card)),
+        DemoSection(DemoSectionId.Feedback, listOf(DemoPageId.Alert, DemoPageId.Dialog, DemoPageId.Toast, DemoPageId.Spinner)),
     )
 
     public val allPages: List<DemoPageId>

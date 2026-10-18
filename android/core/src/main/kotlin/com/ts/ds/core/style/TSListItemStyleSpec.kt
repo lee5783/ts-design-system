@@ -1,6 +1,7 @@
 package com.ts.ds.core.style
 
 import com.ts.ds.core.icon.TSIcon
+import com.ts.ds.tokens.TSCubicBezierValues
 import com.ts.ds.tokens.TSTokenValues
 
 public enum class TSListItemLayout {
@@ -99,6 +100,23 @@ public object TSListItemStyleSpec : TSStyleSpec<TSListItemStyleSpec.Configuratio
         public val sectionSpacingDp: Float,
     )
 
+    public data class Disclosure(
+        public val collapsedRotationDegrees: Float,
+        public val expandedRotationDegrees: Float,
+        public val animationDurationMillis: Int,
+        public val animationEasing: TSCubicBezierValues,
+        public val bodyHorizontalPaddingDp: Float,
+        public val bodyBottomPaddingDp: Float,
+    ) {
+        public fun rotationDegrees(expanded: Boolean, rightToLeft: Boolean): Float = when {
+            !expanded -> collapsedRotationDegrees
+            rightToLeft -> -expandedRotationDegrees
+            else -> expandedRotationDegrees
+        }
+
+        public fun animationDurationMillis(reduceMotion: Boolean): Int = if (reduceMotion) 0 else animationDurationMillis
+    }
+
     public val states: List<TSControlState> = listOf(
         TSControlState.Default,
         TSControlState.Pressed,
@@ -133,6 +151,15 @@ public object TSListItemStyleSpec : TSStyleSpec<TSListItemStyleSpec.Configuratio
         headerSpacingDp = TSTokenValues.Spacing.space2,
         headerHorizontalPaddingDp = TSTokenValues.Spacing.space4,
         sectionSpacingDp = TSTokenValues.Spacing.space6,
+    )
+
+    public val disclosure: Disclosure = Disclosure(
+        collapsedRotationDegrees = 0f,
+        expandedRotationDegrees = 90f,
+        animationDurationMillis = TSTokenValues.Duration.durationBase,
+        animationEasing = TSTokenValues.Easing.easingStandard,
+        bodyHorizontalPaddingDp = TSTokenValues.Spacing.space4,
+        bodyBottomPaddingDp = TSTokenValues.Spacing.space3,
     )
 
     override fun resolve(configuration: Configuration, state: TSControlState): Resolved {

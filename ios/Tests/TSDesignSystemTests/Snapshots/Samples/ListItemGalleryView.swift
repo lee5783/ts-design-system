@@ -63,3 +63,69 @@ struct ListItemGalleryView: View {
         }
     }
 }
+
+enum ListItemExtrasKind: String, CaseIterable {
+    case disclosure
+    case divider
+}
+
+struct ListItemExtrasGalleryView: View {
+    let kind: ListItemExtrasKind
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: TSSpacing.space6) {
+            switch kind {
+            case .disclosure:
+                disclosure
+            case .divider:
+                divider
+            }
+        }
+        .padding(TSSpacing.space4)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var disclosure: some View {
+        Group {
+            TSList {
+                TSDisclosureListItem("Collapsed", isExpanded: .constant(false)) {
+                    TSText("Hidden body", role: .bodySm, color: .secondary)
+                }
+                TSDisclosureListItem("Kotlin", subtitle: "Apache License 2.0", isExpanded: .constant(true)) {
+                    TSListItemIcon(.info)
+                } content: {
+                    TSText(ListItemSample.longSubtitle, role: .bodySm, color: .secondary)
+                }
+                TSDisclosureListItem("Pressed", isExpanded: .constant(false)) {
+                    TSText("Hidden body", role: .bodySm)
+                }
+                .forcingState(.pressed)
+                TSDisclosureListItem("Disabled", isExpanded: .constant(true)) {
+                    TSText("Dimmed body", role: .bodySm, color: .secondary)
+                }
+                .disabled(true)
+            }
+            TSDisclosureListItem("Standalone", isExpanded: .constant(true)) {
+                TSText("Outside a list", role: .bodySm, color: .secondary)
+            }
+        }
+    }
+
+    private var divider: some View {
+        Group {
+            VStack(spacing: 0) {
+                TSListItem("First row")
+                TSDivider()
+                TSListItem("Second row", subtitle: "Divided with TSDivider")
+                TSDivider()
+                TSListItem("Third row")
+            }
+            .background(TSColor.surfaceCard.color)
+            TSList {
+                TSListItem("First row")
+                TSListItem("Second row", subtitle: "Divided inside TSList")
+                TSListItem("Third row")
+            }
+        }
+    }
+}
