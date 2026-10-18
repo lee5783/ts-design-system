@@ -49,27 +49,17 @@ describe("release targets", () => {
 });
 
 describe("release CI targets", () => {
-  it("publishes to GitHub Packages through the re-runnable tool, only with the CI credentials, and to mavenLocal without", async () => {
-    const publish = await dryRun("android-publish", "GRADLE_WORKERS=2");
-    expect(publish).toContain('test -n "$GITHUB_REPOSITORY" -a -n "$GITHUB_ACTOR" -a -n "$GITHUB_TOKEN"');
-    expect(publish).toContain("npm --prefix tools run --silent publish-android -- --workers '2'\n");
-    expect(publish).not.toContain("./gradlew");
-    expect(await dryRun("android-publish", "GRADLE_WORKERS=")).toContain("npm --prefix tools run --silent publish-android --\n");
+  it("publishes to mavenLocal without credentials", async () => {
     expect(await dryRun("android-publish-local")).toContain("cd android && ./gradlew publishToMavenLocal\n");
   });
 
-  it("builds the Android demo APKs and library AARs into the release assets, named with VERSION", async () => {
+  it("builds only the Android demo APKs into the release assets, named with VERSION", async () => {
     const packages = await dryRun("release-android-packages", "VERSION=1.2.3", "RELEASE_ASSETS=out");
     expect(packages).toContain("cd demos/android-compose && ./gradlew :app:assembleDebug\n");
     expect(packages).toContain("cd demos/android-views && ./gradlew :app:assembleDebug\n");
-    expect(packages).toContain("cd android && ./gradlew :tokens:assembleRelease :core:assembleRelease :compose:assembleRelease :views:assembleRelease\n");
     expect(packages).toContain("cp demos/android-compose/app/build/outputs/apk/debug/app-debug.apk 'out/ts-ds-demo-compose-1.2.3.apk'");
-    expect(packages).toContain("cp android/views/build/outputs/aar/views-release.aar 'out/ts-ds-views-1.2.3.aar'");
-  });
-
-  it("fails android-publish with a clear message when the credentials are missing", async () => {
-    const env = { ...process.env, GITHUB_REPOSITORY: "", GITHUB_ACTOR: "", GITHUB_TOKEN: "" };
-    await expect(run("make", ["-s", "android-publish"], { cwd: repoRoot, env })).rejects.toMatchObject({ stderr: expect.stringContaining("GITHUB_REPOSITORY, GITHUB_ACTOR and GITHUB_TOKEN must be set") });
+    expect(packages).toContain("cp demos/android-views/app/build/outputs/apk/debug/app-debug.apk 'out/ts-ds-demo-views-1.2.3.apk'");
+    expect(packages).not.toContain(".aar");
   });
 });
 

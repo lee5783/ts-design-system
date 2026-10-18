@@ -77,7 +77,6 @@ function allJobs(): [string, string, Job][] {
 const RELEASE_GATES = { "codegen-check": "codegen-check.yml", ios: "ios.yml", android: "android.yml", demos: "demos.yml" } as const;
 const AGGREGATORS: Record<string, string> = { "codegen-check.yml": "codegen-check-ok", "ios.yml": "ios-ok", "android.yml": "android-ok", "demos.yml": "demos-ok" };
 const RELEASE_WRITE_PERMISSIONS: Record<string, Record<string, string>> = {
-  "publish-android": { contents: "read", packages: "write" },
   "github-release": { contents: "write" },
 };
 
@@ -369,7 +368,7 @@ describe("path filters", () => {
   });
 
   it("skips the iOS library and demo jobs for an Android-only change", () => {
-    const androidOnly = ["android/views/src/main/kotlin/com/ts/ds/views/components/badge/TSBadgeView.kt"];
+    const androidOnly = ["android/views/src/main/kotlin/com/tinysol/designsystem/views/components/badge/TSBadgeView.kt"];
     expect(runs("ios.yml", "test", androidOnly)).toBe(false);
     expect(runs("demos.yml", "ios-demo", androidOnly)).toBe(false);
     expect(runs("android.yml", "test", androidOnly)).toBe(true);
@@ -421,23 +420,16 @@ describe("release workflow", () => {
     }
   });
 
-  it("publishes Android only after every gate, with GITHUB_TOKEN and packages: write", () => {
-    const publish = job("release.yml", "publish-android");
-    expect(publish.needs).toEqual(Object.keys(RELEASE_GATES));
-    expect(makeTargets(publish)).toEqual(["tools-deps", "android-publish"]);
-    expect(publish.steps.find((step) => step.run === "make android-publish")?.env).toEqual({ GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" });
-  });
-
-  it("builds the Android demo APKs and library AARs after every gate, and uploads them for the release", () => {
+  it("builds the Android demo APKs after every gate, and uploads them for the release", () => {
     const packages = job("release.yml", "android-packages");
     expect(packages.needs).toEqual(Object.keys(RELEASE_GATES));
     expect(makeTargets(packages)).toEqual(["release-android-packages"]);
     expect(packages.steps.find((step) => step.uses?.startsWith("actions/upload-artifact@"))?.with).toMatchObject({ name: "release-assets", path: ".build/release/assets", "if-no-files-found": "error" });
   });
 
-  it("creates the GitHub release for the pushed tag last, with the release packages attached", () => {
+  it("creates the GitHub release for the pushed tag last, with the demo APKs attached", () => {
     const github = job("release.yml", "github-release");
-    expect(github.needs).toEqual(["publish-android", "android-packages"]);
+    expect(github.needs).toBe("android-packages");
     expect(makeTargets(github)).toEqual(["tools-deps", "release-github"]);
     expect(github.steps.find((step) => step.uses?.startsWith("actions/download-artifact@"))?.with).toEqual({ name: "release-assets", path: ".build/release/assets" });
     expect(github.steps.find((step) => step.run === "make release-github")?.env).toEqual({ TAG: "${{ github.ref_name }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" });
@@ -460,11 +452,11 @@ describe("release workflow", () => {
     }
   });
 
-  it("passes the token only to the steps that publish", () => {
+  it("passes the token only to the step that creates the release", () => {
     const tokenSteps = allJobs()
       .filter(([file]) => file === "release.yml")
       .flatMap(([, name, entry]) => entry.steps.filter((step) => JSON.stringify(step.env ?? {}).includes("secrets.")).map((step) => `${name}: ${step.run ?? ""}`));
-    expect(tokenSteps).toEqual(["publish-android: make android-publish", "github-release: make release-github"]);
+    expect(tokenSteps).toEqual(["github-release: make release-github"]);
   });
 
   it("is the only workflow that can push a tag", () => {

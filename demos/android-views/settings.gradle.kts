@@ -8,27 +8,15 @@ pluginManagement {
 
 val dsUseLocal = providers.gradleProperty("ds.useLocal").map(String::toBoolean).getOrElse(true)
 val dsMavenLocal = providers.gradleProperty("ds.mavenLocal").map(String::toBoolean).getOrElse(false)
-val dsGithubRepository = providers.environmentVariable("GITHUB_REPOSITORY")
-    .orElse(providers.gradleProperty("ds.githubRepository"))
-    .orElse("unconfigured/ts-design-system")
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        if (!dsUseLocal) {
-            if (dsMavenLocal) {
-                mavenLocal {
-                    content { includeGroup("com.ts.ds") }
-                }
-            } else {
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/${dsGithubRepository.get()}")
-                    credentials(PasswordCredentials::class)
-                    content { includeGroup("com.ts.ds") }
-                }
+        if (!dsUseLocal && dsMavenLocal) {
+            mavenLocal {
+                content { includeGroup("com.tinysol.designsystem") }
             }
         }
     }

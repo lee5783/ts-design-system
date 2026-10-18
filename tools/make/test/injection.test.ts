@@ -40,7 +40,7 @@ async function workflowFedVariables(): Promise<string[]> {
 
 describe("workflow-fed variables", () => {
   it("are the ones this suite expects", async () => {
-    expect(await workflowFedVariables()).toEqual(["BASE", "BASELINE", "GH_TOKEN", "GITHUB_TOKEN", "NEEDS", "RELEASE_REF", "TAG"]);
+    expect(await workflowFedVariables()).toEqual(["BASE", "BASELINE", "GH_TOKEN", "NEEDS", "RELEASE_REF", "TAG"]);
   });
 
   it("are never expanded by make, only read by the shell, so neither a quote nor a $(...) in them can reach the recipe text", async () => {

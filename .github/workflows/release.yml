@@ -49,35 +49,8 @@ jobs:
     needs: verify
     uses: ./.github/workflows/demos.yml
 
-  publish-android:
-    name: publish Android to GitHub Packages
-    needs: [codegen-check, ios, android, demos]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: tools/package-lock.json
-      - run: make tools-deps
-      - run: make android-publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   android-packages:
-    name: build Android demo APKs and library AARs
+    name: build Android demo APKs
     needs: [codegen-check, ios, android, demos]
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -99,8 +72,8 @@ jobs:
           retention-days: 14
 
   github-release:
-    name: GitHub release with packages
-    needs: [publish-android, android-packages]
+    name: GitHub release with demo APKs
+    needs: android-packages
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:

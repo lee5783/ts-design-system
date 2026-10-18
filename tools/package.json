@@ -15,7 +15,6 @@
     "demos-check-boundaries": "tsx demos/src/check-boundaries.ts",
     "demos-check-catalog": "tsx demos/src/check-catalog.ts",
     "ds-sync": "tsx ds-sync/src/verify.ts",
-    "publish-android": "tsx release/src/publish-android.ts",
     "release": "tsx release/src/release.ts",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"

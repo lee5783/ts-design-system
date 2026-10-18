@@ -12,7 +12,7 @@ class DsAndroidLibraryPlugin : Plugin<Project> {
             pluginManager.apply("com.android.library")
             pluginManager.apply("org.jetbrains.kotlin.android")
 
-            group = DsBuildConstants.GROUP
+            group = dsGroup()
             version = dsVersion()
 
             extensions.configure<LibraryExtension> {
