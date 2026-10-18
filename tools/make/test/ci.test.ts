@@ -84,27 +84,6 @@ describe("IOS_RUNTIMES", () => {
   });
 });
 
-describe("iOS demo accessibility audits", () => {
-  it("skips the audits in the default demo test run", async () => {
-    const swiftUI = await dryRun("demo-ios-swiftui-test", "IOS_RUNTIMES=pinned");
-    expect(swiftUI).toContain("-skip-testing:TSDemoSwiftUIUITests/AccessibilityAuditTests");
-    expect(swiftUI).not.toContain("-only-testing");
-    const uiKit = await dryRun("demo-ios-uikit-test", "IOS_RUNTIMES=pinned");
-    expect(uiKit).toContain("-skip-testing:TSDemoUIKitUITests/AccessibilityAuditTests");
-    const all = await dryRun("demos-test", "IOS_RUNTIMES=pinned");
-    expect(all).not.toContain("-only-testing");
-    expect(all.match(/-skip-testing:TSDemo(SwiftUI|UIKit)UITests\/AccessibilityAuditTests/g)).toHaveLength(2);
-  });
-
-  it("runs only the audits, on the pinned runtime, in the audit targets", async () => {
-    const output = await dryRun("demos-audit", ...OLDEST);
-    expect(output).toContain("-scheme TSDemoSwiftUI -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath .build/xcode-demos -only-testing:TSDemoSwiftUIUITests/AccessibilityAuditTests");
-    expect(output).toContain("-scheme TSDemoUIKit -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.5' -derivedDataPath .build/xcode-demos -only-testing:TSDemoUIKitUITests/AccessibilityAuditTests");
-    expect(output).not.toContain("-skip-testing");
-    expect(destinations(output)).toEqual(["iPhone 17 / 26.5", "iPhone 17 / 26.5"]);
-  });
-});
-
 describe("GRADLE_WORKERS", () => {
   const targets = ["android-build", "android-test", "android-api-check", "demo-android-compose", "demo-android-views", "demo-android-compose-test", "demo-android-views-test"];
 

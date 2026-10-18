@@ -42,7 +42,6 @@ class DsAndroidTestingPlugin : Plugin<Project> {
                 add("testImplementation", libs.library("androidx-test-core"))
                 add("testImplementation", libs.library("androidx-test-ext-junit"))
                 add("testImplementation", libs.library("espresso-core"))
-                add("testImplementation", libs.library("accessibility-test-framework"))
             }
 
             pluginManager.withPlugin("org.jetbrains.kotlin.plugin.compose") {

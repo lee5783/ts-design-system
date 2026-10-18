@@ -22,7 +22,3 @@ What changed and why, in one to three sentences.
 ## Evidence
 
 Screenshots for visual changes. Logs for tooling changes.
-
-## Accessibility audits
-
-Add the `a11y-audit` label to run the iOS demo accessibility audits (about two hours on macOS runners). They also run nightly on `master`.

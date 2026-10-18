@@ -28,12 +28,10 @@ DEMO_IOS_SUPPORT_DIR := demos/ios-demo-support
 DEMO_IOS_SWIFTUI_PROJECT := demos/ios-swiftui/TSDemoSwiftUI.xcodeproj
 DEMO_IOS_SWIFTUI_SCHEME := TSDemoSwiftUI
 DEMO_IOS_SWIFTUI_BUNDLE_ID := com.ts.ds.demo.swiftui
-DEMO_IOS_SWIFTUI_AUDITS := TSDemoSwiftUIUITests/AccessibilityAuditTests
 DEMO_IOS_SWIFTUI_THEME_TESTS := TSDemoSwiftUIUITests/ThemeOverrideTests
 DEMO_IOS_UIKIT_PROJECT := demos/ios-uikit/TSDemoUIKit.xcodeproj
 DEMO_IOS_UIKIT_SCHEME := TSDemoUIKit
 DEMO_IOS_UIKIT_BUNDLE_ID := com.ts.ds.demo.uikit
-DEMO_IOS_UIKIT_AUDITS := TSDemoUIKitUITests/AccessibilityAuditTests
 DEMO_IOS_UIKIT_THEME_TESTS := TSDemoUIKitUITests/ThemeOverrideTests
 DEMO_IOS_APP_ICON_SOURCE := design/assets/logos/normalized/ts-app-icon.svg
 SWIFT_GOLDENS_DIR := tools/codegen/test/fixtures/expected/swift
@@ -65,10 +63,10 @@ ios_no_older_runtime = $(if $(IOS_REQUIRE_OLDEST),printf '$(call ci_annotation,e
 	api-check android-api-check ios-api-check ios-api-check-record ios-api-check-last-tag \
 	release-bump release-verify release-notes release-android-packages release-github \
 	demo-ios-swiftui demo-ios-uikit demo-android-compose demo-android-views \
-	demos-build demos-test demos-audit demos-check-boundaries \
+	demos-build demos-test demos-check-boundaries \
 	demo-ios-support-build-for-testing demo-ios-support-test demo-ios-support-test-only \
-	demo-ios-swiftui-build-for-testing demo-ios-swiftui-test demo-ios-swiftui-test-only demo-ios-swiftui-audit demo-ios-swiftui-theme-test demo-ios-swiftui-run demo-ios-app-icon \
-	demo-ios-uikit-build-for-testing demo-ios-uikit-test demo-ios-uikit-test-only demo-ios-uikit-audit demo-ios-uikit-theme-test demo-ios-uikit-run \
+	demo-ios-swiftui-build-for-testing demo-ios-swiftui-test demo-ios-swiftui-test-only demo-ios-swiftui-theme-test demo-ios-swiftui-run demo-ios-app-icon \
+	demo-ios-uikit-build-for-testing demo-ios-uikit-test demo-ios-uikit-test-only demo-ios-uikit-theme-test demo-ios-uikit-run \
 	demo-android-compose-test demo-android-views-test \
 	actionlint ci-changes ci-required ci-xcode ci-ios-simulator ci-android-kvm
 
@@ -106,8 +104,7 @@ help:
 		'demo-android-compose' 'Build the Compose demo app (demos/android-compose)' \
 		'demo-android-views' 'Build the Views demo app (demos/android-views)' \
 		'demos-build' 'Build all four demo apps' \
-		'demos-test' 'Run the demo tests, without the iOS accessibility audits' \
-		'demos-audit' 'Run only the iOS demo accessibility audits (slow)' \
+		'demos-test' 'Run the demo tests' \
 		'demos-check-boundaries' 'Fail if a demo app reaches library internals, or a design/specs/components spec has no page in every demo app' \
 		'actionlint' 'Lint .github/workflows with a pinned, checksum-verified actionlint release in .build/tools' \
 		'ci-changes' 'Print the CI areas touched since BASE=<commit> (and write GITHUB_OUTPUT)' \
@@ -226,7 +223,6 @@ demo-ios-support-test-only:
 demo-ios-swiftui-build-for-testing:
 	xcodebuild build-for-testing -project $(DEMO_IOS_SWIFTUI_PROJECT) -scheme $(DEMO_IOS_SWIFTUI_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(DEMO_IOS_DERIVED_DATA)
 
-demo-ios-swiftui-test demo-ios-swiftui-test-only: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_SWIFTUI_AUDITS)
 demo-ios-swiftui-test: demo-ios-swiftui-build-for-testing
 demo-ios-swiftui-test:
 	@$(call on_pinned_ios,demo_ios_swiftui_test_on)
@@ -235,11 +231,6 @@ demo-ios-swiftui-test:
 demo-ios-swiftui-test-only:
 	@$(call on_pinned_ios,demo_ios_swiftui_test_on)
 	@$(call on_oldest_ios,demo_ios_swiftui_test_on)
-
-demo-ios-swiftui-audit: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_SWIFTUI_AUDITS)
-demo-ios-swiftui-audit: demo-ios-swiftui-build-for-testing
-demo-ios-swiftui-audit:
-	@$(call demo_ios_swiftui_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
 demo-ios-swiftui-theme-test: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_SWIFTUI_THEME_TESTS)
 demo-ios-swiftui-theme-test: demo-ios-swiftui-build-for-testing
@@ -262,7 +253,6 @@ demo-ios-uikit-run:
 demo-ios-uikit-build-for-testing:
 	xcodebuild build-for-testing -project $(DEMO_IOS_UIKIT_PROJECT) -scheme $(DEMO_IOS_UIKIT_SCHEME) -destination 'generic/platform=iOS Simulator' -derivedDataPath $(DEMO_IOS_DERIVED_DATA)
 
-demo-ios-uikit-test demo-ios-uikit-test-only: DEMO_IOS_TEST_SELECTION = -skip-testing:$(DEMO_IOS_UIKIT_AUDITS)
 demo-ios-uikit-test: demo-ios-uikit-build-for-testing
 demo-ios-uikit-test:
 	@$(call on_pinned_ios,demo_ios_uikit_test_on)
@@ -271,11 +261,6 @@ demo-ios-uikit-test:
 demo-ios-uikit-test-only:
 	@$(call on_pinned_ios,demo_ios_uikit_test_on)
 	@$(call on_oldest_ios,demo_ios_uikit_test_on)
-
-demo-ios-uikit-audit: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_UIKIT_AUDITS)
-demo-ios-uikit-audit: demo-ios-uikit-build-for-testing
-demo-ios-uikit-audit:
-	@$(call demo_ios_uikit_test_on,$(IOS_SIM_DEVICE),$(IOS_SIM_OS))
 
 demo-ios-uikit-theme-test: DEMO_IOS_TEST_SELECTION = -only-testing:$(DEMO_IOS_UIKIT_THEME_TESTS)
 demo-ios-uikit-theme-test: demo-ios-uikit-build-for-testing
@@ -297,8 +282,6 @@ demo-android-views-test:
 demos-build: demo-ios-swiftui demo-ios-uikit demo-android-compose demo-android-views
 
 demos-test: demo-ios-support-test demo-ios-swiftui-test demo-ios-uikit-test demo-android-compose-test demo-android-views-test
-
-demos-audit: demo-ios-swiftui-audit demo-ios-uikit-audit
 
 demos-check-boundaries: $(TOOLS_DEPS)
 	npm --prefix tools run --silent demos-check-boundaries

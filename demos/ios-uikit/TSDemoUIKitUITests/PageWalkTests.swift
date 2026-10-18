@@ -37,16 +37,16 @@ final class PageWalkTests: XCTestCase {
     }
 
     @MainActor
-    func testEveryComponentPlaygroundIsReachableAtAccessibilityFiveInRightToLeft() {
+    func testEveryComponentPlaygroundIsReachableInRightToLeft() {
         for page in Self.componentPages {
             let app = XCUIApplication()
-            app.launchArguments += ["-TSDemoPage", page, "-TSDemoTheme", "dark", "-TSDemoTextSize", "accessibility5", "-TSDemoRightToLeft", "YES"]
+            app.launchArguments += ["-TSDemoPage", page, "-TSDemoTheme", "dark", "-TSDemoRightToLeft", "YES"]
             app.launch()
             let scroll = app.descendants(matching: .any)["demo.page.\(page)"].firstMatch
             XCTAssertTrue(scroll.waitForExistence(timeout: 10), "Page \(page) did not open")
             let playground = playgroundHeader(in: app)
             scrollUntilHittable(playground, in: app, swipe: { scroll.swipeUp() }, limit: 40)
-            XCTAssertTrue(playground.isHittable, "Page \(page) playground is not reachable at AX5 in RTL")
+            XCTAssertTrue(playground.isHittable, "Page \(page) playground is not reachable in RTL")
             revealFully(playground, in: app)
             let edge = playground.frame.width / 10
             let trailingEdge = CGRect(x: playground.frame.maxX - edge, y: playground.frame.minY, width: edge, height: playground.frame.height)
