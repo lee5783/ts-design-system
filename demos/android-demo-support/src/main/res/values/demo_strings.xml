@@ -97,6 +97,7 @@
     <string name="demo_component_password">Password</string>
     <string name="demo_component_multiline">Multiline</string>
     <string name="demo_component_keyboard_types">Keyboard types</string>
+    <string name="demo_component_code_entry">Code entry</string>
     <string name="demo_component_secure">Secure entry</string>
     <string name="demo_component_checked">Checked</string>
     <string name="demo_component_unchecked">Unchecked</string>
@@ -161,6 +162,9 @@
     <string name="demo_sample_amount">Amount</string>
     <string name="demo_sample_website">Website</string>
     <string name="demo_sample_code">Verification code</string>
+    <string name="demo_sample_join_code">Join code</string>
+    <string name="demo_sample_join_code_hint">6 letters or digits</string>
+    <string name="demo_sample_join_code_placeholder">ABCDEF</string>
     <string name="demo_sample_remember_me">Remember me</string>
     <string name="demo_sample_email_updates">Email me about updates</string>
     <string name="demo_sample_accept_terms">I accept the terms</string>

@@ -92,6 +92,7 @@ public final class com/ts/ds/core/input/TSImeAction : java/lang/Enum {
 }
 
 public final class com/ts/ds/core/input/TSKeyboardType : java/lang/Enum {
+	public static final field Ascii Lcom/ts/ds/core/input/TSKeyboardType;
 	public static final field Decimal Lcom/ts/ds/core/input/TSKeyboardType;
 	public static final field Email Lcom/ts/ds/core/input/TSKeyboardType;
 	public static final field Number Lcom/ts/ds/core/input/TSKeyboardType;
@@ -128,6 +129,7 @@ public final class com/ts/ds/core/input/TSTextInputTraits {
 }
 
 public final class com/ts/ds/core/input/TSTextInputTraits$Companion {
+	public final fun getCode ()Lcom/ts/ds/core/input/TSTextInputTraits;
 	public final fun getDecimal ()Lcom/ts/ds/core/input/TSTextInputTraits;
 	public final fun getDefault ()Lcom/ts/ds/core/input/TSTextInputTraits;
 	public final fun getEmail ()Lcom/ts/ds/core/input/TSTextInputTraits;
@@ -1658,6 +1660,14 @@ public final class com/ts/ds/core/style/TSTabsVariant : java/lang/Enum {
 	public static fun values ()[Lcom/ts/ds/core/style/TSTabsVariant;
 }
 
+public final class com/ts/ds/core/style/TSTextFieldContentStyle : java/lang/Enum {
+	public static final field Code Lcom/ts/ds/core/style/TSTextFieldContentStyle;
+	public static final field Default Lcom/ts/ds/core/style/TSTextFieldContentStyle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/style/TSTextFieldContentStyle;
+	public static fun values ()[Lcom/ts/ds/core/style/TSTextFieldContentStyle;
+}
+
 public final class com/ts/ds/core/style/TSTextFieldStyleSpec : com/ts/ds/core/style/TSStyleSpec {
 	public static final field FOCUSED_BORDER_WIDTH_DP F
 	public static final field INSTANCE Lcom/ts/ds/core/style/TSTextFieldStyleSpec;
@@ -1678,12 +1688,14 @@ public final class com/ts/ds/core/style/TSTextFieldStyleSpec : com/ts/ds/core/st
 
 public final class com/ts/ds/core/style/TSTextFieldStyleSpec$Configuration {
 	public fun <init> ()V
-	public fun <init> (Z)V
-	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (ZLcom/ts/ds/core/style/TSTextFieldContentStyle;)V
+	public synthetic fun <init> (ZLcom/ts/ds/core/style/TSTextFieldContentStyle;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Z
-	public final fun copy (Z)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
-	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
+	public final fun component2 ()Lcom/ts/ds/core/style/TSTextFieldContentStyle;
+	public final fun copy (ZLcom/ts/ds/core/style/TSTextFieldContentStyle;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;ZLcom/ts/ds/core/style/TSTextFieldContentStyle;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSTextFieldStyleSpec$Configuration;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContentStyle ()Lcom/ts/ds/core/style/TSTextFieldContentStyle;
 	public final fun getReadOnly ()Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

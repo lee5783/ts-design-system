@@ -60,6 +60,10 @@ public final class TSTextFieldView: UIControl {
         didSet { applyStyle() }
     }
 
+    public var contentStyle: TSTextFieldContentStyle = .default {
+        didSet { applyStyle() }
+    }
+
     override public var isEnabled: Bool {
         didSet { applyStyle() }
     }
@@ -142,7 +146,7 @@ public final class TSTextFieldView: UIControl {
     }
 
     var resolved: TSTextFieldStyleSpec.Resolved {
-        TSTextFieldStyleSpec.resolve(.init(state: controlState, isReadOnly: isReadOnly))
+        TSTextFieldStyleSpec.resolve(.init(state: controlState, isReadOnly: isReadOnly, contentStyle: contentStyle))
     }
 
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

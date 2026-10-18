@@ -406,6 +406,7 @@ public final class com/ts/ds/views/components/textfield/TSTextFieldView : androi
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContentStyle ()Lcom/ts/ds/core/style/TSTextFieldContentStyle;
 	public final fun getEditText ()Landroid/widget/EditText;
 	public final fun getErrorMessage ()Ljava/lang/CharSequence;
 	public final fun getHint ()Ljava/lang/CharSequence;
@@ -418,6 +419,7 @@ public final class com/ts/ds/views/components/textfield/TSTextFieldView : androi
 	public final fun isMultiline ()Z
 	public final fun isReadOnly ()Z
 	public final fun isSecure ()Z
+	public final fun setContentStyle (Lcom/ts/ds/core/style/TSTextFieldContentStyle;)V
 	public fun setEnabled (Z)V
 	public final fun setErrorMessage (Ljava/lang/CharSequence;)V
 	public final fun setHint (Ljava/lang/CharSequence;)V

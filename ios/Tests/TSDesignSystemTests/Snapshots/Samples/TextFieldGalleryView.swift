@@ -4,6 +4,7 @@ import SwiftUI
 enum TextFieldGalleryPage: String, CaseIterable {
     case states
     case content
+    case code
 }
 
 enum TextFieldSample {
@@ -21,6 +22,8 @@ struct TextFieldGalleryView: View {
                 states
             case .content:
                 content
+            case .code:
+                code
             }
         }
         .padding(TSSpacing.space4)
@@ -55,5 +58,16 @@ struct TextFieldGalleryView: View {
             .usingMultilinePath(.native)
         TSTextField("Notes (iOS 15)", text: .constant(TextFieldSample.longText), isMultiline: true)
             .usingMultilinePath(.fallback)
+    }
+
+    @ViewBuilder
+    private var code: some View {
+        TSTextField("Idle", text: .constant(""), placeholder: "ABCDEF", hint: "6 characters, letters and digits", inputTraits: .code, contentStyle: .code)
+        TSTextField("Filled", text: .constant("0O1I5S"), hint: "6 characters, letters and digits", inputTraits: .code, contentStyle: .code)
+        TSTextField("Focused", text: .constant("0O1I5S"), hint: "6 characters, letters and digits", inputTraits: .code, contentStyle: .code)
+            .forcingState(.focused)
+        TSTextField("Error", text: .constant("0O1"), hint: "6 characters, letters and digits", error: "Enter all 6 characters", inputTraits: .code, contentStyle: .code)
+        TSTextField("Disabled", text: .constant("0O1I5S"), hint: "6 characters, letters and digits", inputTraits: .code, contentStyle: .code)
+            .disabled(true)
     }
 }

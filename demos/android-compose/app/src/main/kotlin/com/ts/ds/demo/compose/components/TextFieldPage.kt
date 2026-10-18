@@ -13,6 +13,7 @@ import com.ts.ds.compose.components.iconbutton.TSIconButton
 import com.ts.ds.compose.components.textfield.TSTextField
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSTextInputTraits
+import com.ts.ds.core.style.TSTextFieldContentStyle
 import com.ts.ds.demo.compose.shell.ToggleRow
 import com.ts.ds.demo.support.R as DemoR
 import com.ts.ds.demo.support.sample.SampleData
@@ -25,6 +26,7 @@ object TextFieldPageTags {
     const val PLAYGROUND_LEADING_ICON = "demo.text-field.playground.leading-icon"
     const val PLAYGROUND_SECURE = "demo.text-field.playground.secure"
     const val PLAYGROUND_MULTILINE = "demo.text-field.playground.multiline"
+    const val CODE_FIELD = "demo.text-field.code.field"
 }
 
 private object TextFieldSample {
@@ -41,6 +43,7 @@ fun LazyListScope.textFieldPage() {
     componentSection("text-field.password", DemoR.string.demo_component_password) { TextFieldPassword() }
     componentSection("text-field.multiline", DemoR.string.demo_component_multiline) { TextFieldMultiline() }
     componentSection("text-field.keyboard-types", DemoR.string.demo_component_keyboard_types) { TextFieldKeyboardTypes() }
+    componentSection("text-field.code", DemoR.string.demo_component_code_entry) { TextFieldCode() }
     componentSection("text-field.playground", DemoR.string.demo_component_playground) { TextFieldPlayground() }
 }
 
@@ -134,6 +137,21 @@ private fun TextFieldKeyboardTypes() {
         var value by rememberSaveable(label) { mutableStateOf("") }
         TSTextField(value = value, label = stringResource(label), onValueChange = { value = it }, inputTraits = traits)
     }
+}
+
+@Composable
+private fun TextFieldCode() {
+    var code by rememberSaveable { mutableStateOf("") }
+    TSTextField(
+        value = code,
+        label = stringResource(DemoR.string.demo_sample_join_code),
+        onValueChange = { code = it },
+        contentStyle = TSTextFieldContentStyle.Code,
+        modifier = Modifier.testTag(TextFieldPageTags.CODE_FIELD),
+        placeholder = stringResource(DemoR.string.demo_sample_join_code_placeholder),
+        hint = stringResource(DemoR.string.demo_sample_join_code_hint),
+        inputTraits = TSTextInputTraits.Code,
+    )
 }
 
 @Composable

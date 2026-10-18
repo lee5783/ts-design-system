@@ -2,6 +2,7 @@ package com.ts.ds.compose.components.textfield
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,16 +36,23 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSImeAction
 import com.ts.ds.core.input.TSTextInputTraits
+import com.ts.ds.core.style.TSTextFieldContentStyle
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -241,6 +249,51 @@ class TSTextFieldTest {
     }
 
     @Test
+    fun codeTraitsOpenAPasswordKeyboardWithoutSuggestionsInCapitals() {
+        val expected = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Characters,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Default,
+        )
+
+        assertEquals(expected, TSTextInputTraits.Code.keyboardOptions(masked = false))
+        assertEquals(KeyboardType.Password, TSTextInputTraits.Code.keyboardOptions(masked = true).keyboardType)
+        assertEquals(KeyboardType.Ascii, TSTextInputTraits.Code.copy(autoCorrect = true).keyboardOptions(masked = false).keyboardType)
+    }
+
+    @Test
+    fun codeFieldShowsItsTextUnmaskedInTheMonospaceCodeRole() {
+        text = "AB12CD"
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                Box(Modifier.width(320.dp)) {
+                    TSTextField(
+                        value = text,
+                        label = CODE_LABEL,
+                        onValueChange = { text = it },
+                        contentStyle = TSTextFieldContentStyle.Code,
+                        modifier = Modifier.testTag(FIELD),
+                        hint = HINT,
+                        inputTraits = TSTextInputTraits.Code,
+                    )
+                }
+            }
+        }
+
+        field().assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Password))
+        field().assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("AB12CD")))
+        val inputLayout = field().textLayout().layoutInput
+        assertEquals("AB12CD", inputLayout.text.text)
+        val inputStyle = inputLayout.style
+        assertEquals(FontFamily.Monospace, inputStyle.fontFamily)
+        assertEquals(13.sp, inputStyle.fontSize)
+        val labelStyle = composeRule.onNodeWithText(CODE_LABEL, useUnmergedTree = true).textLayout().layoutInput.style
+        assertNotEquals(FontFamily.Monospace, labelStyle.fontFamily)
+        field().assertHeightIsEqualTo(88.dp)
+    }
+
+    @Test
     fun latinLabelAndHintKeepALeftToRightParagraphInAnRtlLayout() {
         composeRule.setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -267,6 +320,7 @@ class TSTextFieldTest {
     private companion object {
         const val FIELD = "field"
         const val LABEL = "Email"
+        const val CODE_LABEL = "Join code"
         const val HINT = "We never share your email."
         const val PLACEHOLDER = "you@example.com"
         const val ERROR = "Enter an email like name@example.com"

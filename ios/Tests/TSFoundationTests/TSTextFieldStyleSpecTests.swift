@@ -14,11 +14,30 @@ struct TSTextFieldStyleSpecTests {
         .disabled: (.borderStrong, 1),
     ]
 
-    @Test("The matrix covers 5 states × read-only once each")
+    @Test("The matrix covers 5 states × read-only × content style once each")
     func matrixIsComplete() {
         let configurations = TSTextFieldStyleSpec.allConfigurations
-        #expect(configurations.count == 10)
-        #expect(Set(configurations).count == 10)
+        #expect(configurations.count == 20)
+        #expect(Set(configurations).count == 20)
+    }
+
+    @Test("The code content style changes only the input font", arguments: TSTextFieldStyleSpec.allConfigurations.filter { $0.contentStyle == .code })
+    func codeContentStyle(configuration: TSTextFieldStyleSpec.Configuration) {
+        let code = TSTextFieldStyleSpec.resolve(configuration)
+        let standard = TSTextFieldStyleSpec.resolve(.init(state: configuration.state, isReadOnly: configuration.isReadOnly))
+        #expect(code.inputFont == .code)
+        #expect(standard.inputFont == .body)
+        #expect(code.labelFont == standard.labelFont)
+        #expect(code.messageFont == standard.messageFont)
+        #expect(code.border == standard.border)
+        #expect(code.borderWidth == standard.borderWidth)
+        #expect(code.fill == standard.fill)
+        #expect(code.inputColor == standard.inputColor)
+        #expect(code.placeholderColor == standard.placeholderColor)
+        #expect(code.messageColor == standard.messageColor)
+        #expect(code.minHeight == standard.minHeight)
+        #expect(code.opacity == standard.opacity)
+        #expect(code.showsFocusRing == standard.showsFocusRing)
     }
 
     @Test("Every configuration maps its state to border, ring, fill and opacity", arguments: TSTextFieldStyleSpec.allConfigurations)
@@ -178,6 +197,11 @@ struct TSTextInputTraitsTests {
         #expect(TSTextInputTraits.oneTimeCode.keyboardType == .numberPad)
         #expect(TSTextInputTraits.search.returnKey == .search)
         #expect(TSTextInputTraits.default.isAutocorrectionEnabled)
+        #expect(TSTextInputTraits.code.keyboardType == .asciiCapable)
+        #expect(TSTextInputTraits.code.autocapitalization == .allCharacters)
+        #expect(!TSTextInputTraits.code.isAutocorrectionEnabled)
+        #expect(TSTextInputTraits.code.textContentType == nil)
+        #expect(TSTextInputTraits.code.returnKey == .default)
     }
 
     @Test("Applying traits configures UITextField and UITextView alike")

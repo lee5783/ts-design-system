@@ -34,6 +34,7 @@ import com.ts.ds.core.icon.TSIcons
 import com.ts.ds.core.input.TSTextInputTraits
 import com.ts.ds.core.logic.TSTextFieldAccessibility
 import com.ts.ds.core.style.TSControlState
+import com.ts.ds.core.style.TSTextFieldContentStyle
 import com.ts.ds.core.style.TSTextFieldStyleSpec
 import com.ts.ds.views.R
 import com.ts.ds.views.components.shared.TSViewSavedState
@@ -138,6 +139,12 @@ public class TSTextFieldView @JvmOverloads constructor(
             applyConfiguration()
         }
 
+    public var contentStyle: TSTextFieldContentStyle = TSTextFieldContentStyle.Default
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
     internal var isPasswordRevealed: Boolean = false
         private set
 
@@ -194,6 +201,7 @@ public class TSTextFieldView @JvmOverloads constructor(
             isMultiline = getBoolean(R.styleable.TSTextFieldView_tsMultiline, false)
             isReadOnly = getBoolean(R.styleable.TSTextFieldView_tsReadOnly, false)
             inputTraits = traitsFor(getInt(R.styleable.TSTextFieldView_tsInputTraits, 0))
+            contentStyle = TSTextFieldContentStyle.entries[getInt(R.styleable.TSTextFieldView_tsContentStyle, 0)]
             getText(R.styleable.TSTextFieldView_android_text)?.let(input::setText)
             isEnabled = getBoolean(R.styleable.TSTextFieldView_android_enabled, isEnabled)
             recycle()
@@ -255,7 +263,7 @@ public class TSTextFieldView @JvmOverloads constructor(
         )
 
     internal val resolved: TSTextFieldStyleSpec.Resolved
-        get() = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(isReadOnly), currentState)
+        get() = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(isReadOnly, contentStyle), currentState)
 
     internal val passwordToggle: View
         get() = toggleView
@@ -337,7 +345,7 @@ public class TSTextFieldView @JvmOverloads constructor(
             input.showSoftInputOnFocus = true
         }
         input.setTextAppearance(resolved.inputTypeRole.textAppearance)
-        input.typeface = Typeface.DEFAULT
+        input.typeface = if (resolved.inputTypeRole.values.monospace) Typeface.MONOSPACE else Typeface.DEFAULT
         TextViewCompat.setLineHeight(input, sp(resolved.inputTypeRole.values.lineHeight))
         input.setTextColor(tsColor(resolved.inputColor))
         input.setHintTextColor(tsColor(resolved.placeholderColor))
@@ -452,6 +460,7 @@ public class TSTextFieldView @JvmOverloads constructor(
             TSTextInputTraits.Decimal,
             TSTextInputTraits.Url,
             TSTextInputTraits.Search,
+            TSTextInputTraits.Code,
         )
     }
 }

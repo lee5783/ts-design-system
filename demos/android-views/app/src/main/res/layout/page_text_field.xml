@@ -126,6 +126,21 @@
                 android:layout_width="match_parent"
                 app:tsLabel="@string/demo_sample_code"
                 app:tsInputTraits="oneTimeCode" />
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_code_entry" />
+            <com.ts.ds.views.components.textfield.TSTextFieldView
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="match_parent"
+                android:tag="demo.text-field.code.field"
+                app:tsLabel="@string/demo_sample_join_code"
+                app:tsPlaceholder="@string/demo_sample_join_code_placeholder"
+                app:tsHint="@string/demo_sample_join_code_hint"
+                app:tsContentStyle="code"
+                app:tsInputTraits="code" />
 
             <LinearLayout
                 android:id="@+id/text_field_playground"

@@ -3,6 +3,11 @@ package com.ts.ds.core.style
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.tokens.TSTokenValues
 
+public enum class TSTextFieldContentStyle {
+    Default,
+    Code,
+}
+
 public object TSTextFieldStyleSpec : TSStyleSpec<TSTextFieldStyleSpec.Configuration, TSTextFieldStyleSpec.Resolved> {
     public const val MIN_TOUCH_TARGET_DP: Float = 48f
     public const val MINIMUM_LINES: Int = 3
@@ -13,6 +18,7 @@ public object TSTextFieldStyleSpec : TSStyleSpec<TSTextFieldStyleSpec.Configurat
 
     public data class Configuration(
         public val readOnly: Boolean = false,
+        public val contentStyle: TSTextFieldContentStyle = TSTextFieldContentStyle.Default,
     )
 
     public data class Resolved(
@@ -64,7 +70,9 @@ public object TSTextFieldStyleSpec : TSStyleSpec<TSTextFieldStyleSpec.Configurat
         TSControlState.Disabled,
     )
 
-    public val configurations: List<Configuration> = listOf(Configuration(readOnly = false), Configuration(readOnly = true))
+    public val configurations: List<Configuration> = TSTextFieldContentStyle.entries.flatMap { contentStyle ->
+        listOf(false, true).map { Configuration(readOnly = it, contentStyle = contentStyle) }
+    }
 
     public fun state(enabled: Boolean = true, focused: Boolean = false, error: Boolean = false): TSControlState =
         TSControlState.make(enabled = enabled, focused = focused).copy(error = error)
@@ -81,7 +89,7 @@ public object TSTextFieldStyleSpec : TSStyleSpec<TSTextFieldStyleSpec.Configurat
             labelTypeRole = TSTypeRole.Label,
             labelFontWeight = TSTypeRole.Label.values.fontWeight,
             labelColor = TSColorRole.TextPrimary,
-            inputTypeRole = TSTypeRole.Body,
+            inputTypeRole = inputTypeRole(configuration.contentStyle),
             inputColor = TSColorRole.TextPrimary,
             placeholderColor = TSColorRole.TextMuted,
             messageTypeRole = TSTypeRole.Caption,
@@ -117,6 +125,11 @@ public object TSTextFieldStyleSpec : TSStyleSpec<TSTextFieldStyleSpec.Configurat
 
     public fun maskedText(text: String, secure: Boolean): String =
         if (secure) MASK_CHARACTER.toString().repeat(text.length) else text
+
+    private fun inputTypeRole(contentStyle: TSTextFieldContentStyle): TSTypeRole = when (contentStyle) {
+        TSTextFieldContentStyle.Default -> TSTypeRole.Body
+        TSTextFieldContentStyle.Code -> TSTypeRole.Code
+    }
 
     private fun border(error: Boolean, showsFocusRing: Boolean): TSColorRole = when {
         error -> TSColorRole.Danger

@@ -31,6 +31,7 @@ class TSTextInputTraitsTest {
             Triple(TSTextInputTraits.Decimal, TSKeyboardType.Decimal, emptyList()),
             Triple(TSTextInputTraits.Url, TSKeyboardType.Uri, emptyList()),
             Triple(TSTextInputTraits.Search, TSKeyboardType.Text, emptyList()),
+            Triple(TSTextInputTraits.Code, TSKeyboardType.Ascii, emptyList()),
         )
         expectations.forEach { (traits, keyboard, hints) ->
             assertEquals(keyboard, traits.keyboardType)
@@ -40,5 +41,7 @@ class TSTextInputTraitsTest {
         assertEquals(TSCapitalization.Words, TSTextInputTraits.Name.capitalization)
         assertEquals(TSImeAction.Search, TSTextInputTraits.Search.imeAction)
         assertEquals(TSCapitalization.None, TSTextInputTraits.Email.capitalization)
+        assertEquals(TSCapitalization.Characters, TSTextInputTraits.Code.capitalization)
+        assertEquals(TSImeAction.Default, TSTextInputTraits.Code.imeAction)
     }
 }

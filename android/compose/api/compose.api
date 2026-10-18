@@ -65,6 +65,7 @@ public final class com/ts/ds/compose/components/tabs/TSTabsKt {
 
 public final class com/ts/ds/compose/components/textfield/TSTextFieldKt {
 	public static final fun TSTextField (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;ZZZLcom/ts/ds/core/input/TSTextInputTraits;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TSTextField (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lcom/ts/ds/core/style/TSTextFieldContentStyle;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;ZZZLcom/ts/ds/core/input/TSTextInputTraits;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class com/ts/ds/compose/components/toast/TSToastHostKt {

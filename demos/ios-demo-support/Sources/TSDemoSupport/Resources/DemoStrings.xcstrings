@@ -193,6 +193,18 @@
         }
       }
     },
+    "demo.component.code-entry" : {
+      "comment" : "Component page section: code style with code-entry keyboard traits.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code entry"
+          }
+        }
+      }
+    },
     "demo.component.contents" : {
       "comment" : "Component page section: avatar content kinds.",
       "extractionState" : "manual",
@@ -1989,6 +2001,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Invite your team"
+          }
+        }
+      }
+    },
+    "demo.sample.join-code" : {
+      "comment" : "Sample field label: a short join code typed in a monospace face.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Join code"
+          }
+        }
+      }
+    },
+    "demo.sample.join-code-hint" : {
+      "comment" : "Sample field hint for the join code.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 letters or digits"
+          }
+        }
+      }
+    },
+    "demo.sample.join-code-placeholder" : {
+      "comment" : "Sample placeholder for the join code.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ABCDEF"
           }
         }
       }

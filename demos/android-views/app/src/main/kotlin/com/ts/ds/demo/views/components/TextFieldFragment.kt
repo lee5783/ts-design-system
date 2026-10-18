@@ -69,5 +69,6 @@ class TextFieldFragment : DemoPageFragment(R.layout.page_text_field) {
         const val PLAYGROUND_LEADING_ICON = "demo.text-field.playground.leading-icon"
         const val PLAYGROUND_SECURE = "demo.text-field.playground.secure"
         const val PLAYGROUND_MULTILINE = "demo.text-field.playground.multiline"
+        const val CODE_FIELD = "demo.text-field.code.field"
     }
 }

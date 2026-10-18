@@ -80,6 +80,11 @@
         <enum name="decimal" value="9" />
         <enum name="url" value="10" />
         <enum name="search" value="11" />
+        <enum name="code" value="12" />
+    </attr>
+    <attr name="tsContentStyle" format="enum">
+        <enum name="plain" value="0" />
+        <enum name="code" value="1" />
     </attr>
 
     <declare-styleable name="TSButtonView">
@@ -123,6 +128,7 @@
         <attr name="tsMultiline" />
         <attr name="tsReadOnly" />
         <attr name="tsInputTraits" />
+        <attr name="tsContentStyle" />
     </declare-styleable>
 
     <declare-styleable name="TSCheckboxView">

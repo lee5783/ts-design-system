@@ -191,4 +191,21 @@ struct TSTextFieldBehaviorTests {
         #expect(try sut.inspect().find(TSIcon.self).actualView().name == .search)
         #expect(try sut.inspect().find(text: "Clear").string() == "Clear")
     }
+
+    @Test("The code style keeps a plain, visible field and applies the code keyboard traits")
+    func codeStyle() throws {
+        let box = TextBox("AB12CD")
+        let sut = TSTextField("Join code", text: box.binding, inputTraits: .code, contentStyle: .code)
+        let field = try sut.inspect().find(ViewType.TextField.self)
+        #expect(try field.input() == "AB12CD")
+        #expect(throws: (any Error).self) { try sut.inspect().find(ViewType.SecureField.self) }
+        let traits = try sut.inspect()
+            .find(where: { (try? $0.modifier(TSTextInputTraitsModifier.self)) != nil })
+            .modifier(TSTextInputTraitsModifier.self)
+            .actualView()
+            .traits
+        #expect(traits == .code)
+        #expect(sut.contentStyle == .code)
+        #expect(TSTextField("Email", text: .constant("")).contentStyle == .default)
+    }
 }
