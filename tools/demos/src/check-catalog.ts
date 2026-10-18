@@ -29,7 +29,7 @@ export interface CatalogReport {
 
 export const CATALOG_SOURCES: readonly CatalogSource[] = [
   { platform: "iOS", pageIds: "demos/ios-demo-support/Sources/TSDemoSupport/Catalog/DemoPageID.swift", catalog: "demos/ios-demo-support/Sources/TSDemoSupport/Catalog/DemoCatalog.swift" },
-  { platform: "Android", pageIds: "demos/android-demo-support/src/main/kotlin/com/ts/ds/demo/support/catalog/DemoPageId.kt", catalog: "demos/android-demo-support/src/main/kotlin/com/ts/ds/demo/support/catalog/DemoCatalog.kt" },
+  { platform: "Android", pageIds: "demos/android-demo-support/src/main/kotlin/com/tinysol/designsystem/sample/support/catalog/DemoPageId.kt", catalog: "demos/android-demo-support/src/main/kotlin/com/tinysol/designsystem/sample/support/catalog/DemoCatalog.kt" },
 ];
 
 const inFolders = (root: string, folders: readonly string[], suffixes: readonly string[]) => (pageName: string) => folders.flatMap((folder) => suffixes.map((suffix) => `${root}/${folder}/${pageName}${suffix}`));
@@ -37,8 +37,8 @@ const inFolders = (root: string, folders: readonly string[], suffixes: readonly 
 export const DEMO_APPS: readonly DemoApp[] = [
   { name: "ios-swiftui", platform: "iOS", pageFiles: inFolders("demos/ios-swiftui/TSDemoSwiftUI", ["Components", "Foundations"], ["Page.swift"]) },
   { name: "ios-uikit", platform: "iOS", pageFiles: inFolders("demos/ios-uikit/TSDemoUIKit", ["Components", "Foundations"], ["ViewController.swift"]) },
-  { name: "android-compose", platform: "Android", pageFiles: inFolders("demos/android-compose/app/src/main/kotlin/com/ts/ds/demo/compose", ["components", "foundations"], ["Page.kt"]) },
-  { name: "android-views", platform: "Android", pageFiles: inFolders("demos/android-views/app/src/main/kotlin/com/ts/ds/demo/views", ["components", "foundations"], ["Fragment.kt", "PageFragment.kt"]) },
+  { name: "android-compose", platform: "Android", pageFiles: inFolders("demos/android-compose/app/src/main/kotlin/com/tinysol/designsystem/compose/sample", ["components", "foundations"], ["Page.kt"]) },
+  { name: "android-views", platform: "Android", pageFiles: inFolders("demos/android-views/app/src/main/kotlin/com/tinysol/designsystem/views/sample", ["components", "foundations"], ["Fragment.kt", "PageFragment.kt"]) },
 ];
 
 export function pageName(id: string): string {

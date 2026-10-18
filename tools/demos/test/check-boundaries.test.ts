@@ -137,7 +137,7 @@ describe("checkDemoBoundaries", () => {
   });
 
   it("flags Android internals and the other toolkit in the gradle hooks", async () => {
-    await put("demos/android-views/app/build.gradle.kts", 'implementation("com.ts.ds:core")\nimplementation(project(":views"))\nimplementation("androidx.compose.ui:ui")\nimplementation(platform("com.ts.ds:bom:0.1.0"))\n');
+    await put("demos/android-views/app/build.gradle.kts", 'implementation("com.tinysol.designsystem:core")\nimplementation(project(":views"))\nimplementation("androidx.compose.ui:ui")\nimplementation(platform("com.tinysol.designsystem:bom:0.1.0"))\n');
     const [report] = await checkDemoBoundaries(root, [boundary("android-views")]);
     expect(report?.violations.map((violation) => violation.line)).toEqual([1, 2, 3]);
   });
@@ -145,7 +145,7 @@ describe("checkDemoBoundaries", () => {
   it("keeps Compose out of the Views demo's XML layouts", async () => {
     await put(
       "demos/android-views/app/src/main/res/layout/page_colors.xml",
-      '<LinearLayout>\n    <androidx.compose.ui.platform.ComposeView />\n    <com.ts.ds.views.TSButtonView />\n</LinearLayout>\n',
+      '<LinearLayout>\n    <androidx.compose.ui.platform.ComposeView />\n    <com.tinysol.designsystem.views.TSButtonView />\n</LinearLayout>\n',
     );
     const [report] = await checkDemoBoundaries(root, [boundary("android-views")]);
     expect(report?.violations.map((violation) => `${path.basename(violation.file)}:${violation.line}`)).toEqual(["page_colors.xml:2"]);
@@ -154,11 +154,11 @@ describe("checkDemoBoundaries", () => {
   it("keeps the Compose demo on its public coordinates and its own toolkit", async () => {
     await put(
       "demos/android-compose/app/build.gradle.kts",
-      'implementation(platform("com.ts.ds:bom:0.1.0"))\nimplementation("com.ts.ds:compose")\nimplementation("com.ts.ds:views")\ntestImplementation(project(":test-support"))\n',
+      'implementation(platform("com.tinysol.designsystem:bom:0.1.0"))\nimplementation("com.tinysol.designsystem:compose")\nimplementation("com.tinysol.designsystem:views")\ntestImplementation(project(":test-support"))\n',
     );
     await put(
       "demos/android-compose/app/src/main/kotlin/A.kt",
-      "import com.ts.ds.compose.theme.TSTheme\nimport com.ts.ds.views.theme.tsColor\nimport com.ts.ds.testsupport.snapshot.SnapshotMatrix\n",
+      "import com.tinysol.designsystem.compose.theme.TSTheme\nimport com.tinysol.designsystem.views.theme.tsColor\nimport com.tinysol.designsystem.testsupport.snapshot.SnapshotMatrix\n",
     );
     const [report] = await checkDemoBoundaries(root, [boundary("android-compose")]);
     expect(report?.violations.map((violation) => `${path.basename(violation.file)}:${violation.line}`)).toEqual([
@@ -170,10 +170,10 @@ describe("checkDemoBoundaries", () => {
   });
 
   it("keeps Android demo support free of the library and of any toolkit", async () => {
-    await put("demos/android-demo-support/build.gradle.kts", 'implementation("com.ts.ds:core:0.1.0")\nimplementation("androidx.compose.ui:ui")\ntestImplementation(libs.junit4)\n');
+    await put("demos/android-demo-support/build.gradle.kts", 'implementation("com.tinysol.designsystem:core:0.1.0")\nimplementation("androidx.compose.ui:ui")\ntestImplementation(libs.junit4)\n');
     await put(
       "demos/android-demo-support/src/main/kotlin/A.kt",
-      "import com.ts.ds.demo.support.R\nimport com.ts.ds.core.icon.TSIcon\n",
+      "import com.tinysol.designsystem.sample.support.R\nimport com.tinysol.designsystem.core.icon.TSIcon\n",
     );
     const [report] = await checkDemoBoundaries(root, [boundary("android-demo-support")]);
     expect(report?.violations.map((violation) => `${path.basename(violation.file)}:${violation.line}`)).toEqual([

@@ -6,9 +6,9 @@ import { argumentList, block, deprecation, kotlinFile } from "./kotlin-file.ts";
 
 export const TOKENS_KOTLIN_DIR = "android/tokens/src/generated/kotlin";
 
-export const TOKENS_PACKAGE = "com.ts.ds.tokens";
+export const TOKENS_PACKAGE = "com.tinysol.designsystem.tokens";
 
-const TOKEN_VALUES_PATH = `${TOKENS_KOTLIN_DIR}/com/ts/ds/tokens/TSTokenValues.kt`;
+const TOKEN_VALUES_PATH = `${TOKENS_KOTLIN_DIR}/com/tinysol/designsystem/tokens/TSTokenValues.kt`;
 
 const VALUE_TYPES = [
   argumentList("public class TSTypeValues internal constructor", [

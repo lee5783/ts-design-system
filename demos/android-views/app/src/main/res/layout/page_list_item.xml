@@ -47,11 +47,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_truncation" />
-            <com.ts.ds.views.components.listitem.TSListView
+            <com.tinysol.designsystem.views.components.listitem.TSListView
                 style="@style/Widget.Demo.ComponentSample"
                 android:layout_width="match_parent">
 
-                <com.ts.ds.views.components.listitem.TSListItemView
+                <com.tinysol.designsystem.views.components.listitem.TSListItemView
                     android:id="@+id/list_item_truncation_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                     app:tsSubtitle="@string/demo_sample_downloads_subtitle"
                     app:tsTitle="@string/demo_sample_long_setting"
                     app:tsTrailingText="@string/demo_sample_today" />
-            </com.ts.ds.views.components.listitem.TSListView>
+            </com.tinysol.designsystem.views.components.listitem.TSListView>
             <LinearLayout
                 android:id="@+id/list_item_playground"
                 android:layout_width="match_parent"

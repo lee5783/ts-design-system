@@ -1,0 +1,88 @@
+package com.tinysol.designsystem.compose.theme
+
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+
+internal object TSMaterialBridge {
+    fun colorScheme(colors: TSColors, darkTheme: Boolean): ColorScheme =
+        if (darkTheme) {
+            darkColorScheme(
+                primary = colors.accentPrimary,
+                onPrimary = colors.textOnAccent,
+                primaryContainer = colors.accentSubtle,
+                onPrimaryContainer = colors.accentText,
+                inversePrimary = colors.accentText,
+                secondary = colors.accentPrimary,
+                onSecondary = colors.textOnAccent,
+                secondaryContainer = colors.accentSubtle,
+                onSecondaryContainer = colors.accentText,
+                tertiary = colors.accentPrimary,
+                onTertiary = colors.textOnAccent,
+                tertiaryContainer = colors.accentSubtle,
+                onTertiaryContainer = colors.accentText,
+                background = colors.backgroundPrimary,
+                onBackground = colors.textPrimary,
+                surface = colors.surfaceCard,
+                onSurface = colors.textPrimary,
+                surfaceVariant = colors.backgroundSecondary,
+                onSurfaceVariant = colors.textSecondary,
+                surfaceTint = colors.surfaceCard,
+                inverseSurface = colors.surfaceInverse,
+                inverseOnSurface = colors.textInverse,
+                error = colors.danger,
+                onError = colors.textOnAccent,
+                errorContainer = colors.dangerSubtle,
+                onErrorContainer = colors.danger,
+                outline = colors.borderStrong,
+                outlineVariant = colors.borderSubtle,
+                scrim = colors.overlay,
+                surfaceBright = colors.surfaceElevated,
+                surfaceContainer = colors.surfaceElevated,
+                surfaceContainerHigh = colors.surfaceElevated,
+                surfaceContainerHighest = colors.surfaceElevated,
+                surfaceContainerLow = colors.surfaceCard,
+                surfaceContainerLowest = colors.surfaceCard,
+                surfaceDim = colors.backgroundSecondary,
+            )
+        } else {
+            lightColorScheme(
+                primary = colors.accentPrimary,
+                onPrimary = colors.textOnAccent,
+                primaryContainer = colors.accentSubtle,
+                onPrimaryContainer = colors.accentText,
+                inversePrimary = colors.accentText,
+                secondary = colors.accentPrimary,
+                onSecondary = colors.textOnAccent,
+                secondaryContainer = colors.accentSubtle,
+                onSecondaryContainer = colors.accentText,
+                tertiary = colors.accentPrimary,
+                onTertiary = colors.textOnAccent,
+                tertiaryContainer = colors.accentSubtle,
+                onTertiaryContainer = colors.accentText,
+                background = colors.backgroundPrimary,
+                onBackground = colors.textPrimary,
+                surface = colors.surfaceCard,
+                onSurface = colors.textPrimary,
+                surfaceVariant = colors.backgroundSecondary,
+                onSurfaceVariant = colors.textSecondary,
+                surfaceTint = colors.surfaceCard,
+                inverseSurface = colors.surfaceInverse,
+                inverseOnSurface = colors.textInverse,
+                error = colors.danger,
+                onError = colors.textOnAccent,
+                errorContainer = colors.dangerSubtle,
+                onErrorContainer = colors.danger,
+                outline = colors.borderStrong,
+                outlineVariant = colors.borderSubtle,
+                scrim = colors.overlay,
+                surfaceBright = colors.surfaceElevated,
+                surfaceContainer = colors.surfaceElevated,
+                surfaceContainerHigh = colors.surfaceElevated,
+                surfaceContainerHighest = colors.surfaceElevated,
+                surfaceContainerLow = colors.surfaceCard,
+                surfaceContainerLowest = colors.surfaceCard,
+                surfaceDim = colors.backgroundSecondary,
+            )
+        }
+}

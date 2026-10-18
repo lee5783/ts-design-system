@@ -16,7 +16,7 @@ public enum TSDialogRequestResult: Sendable {
 @MainActor
 public final class TSDialogPresenter: ObservableObject {
     public static let shared = TSDialogPresenter()
-    private static let logger = Logger(subsystem: "com.ts.ds", category: "TSDialogPresenter")
+    private static let logger = Logger(subsystem: "com.tinysol.design-system", category: "TSDialogPresenter")
 
     public var policy: TSDialogPolicy
     @Published public private(set) var refusedCount = 0

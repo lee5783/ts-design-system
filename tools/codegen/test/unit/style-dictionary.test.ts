@@ -44,7 +44,7 @@ describe("Style Dictionary bridge", () => {
     expect(token("component.switch-track-width")).toMatchObject({
       $type: "dimension",
       $value: 44,
-      $extensions: { "com.ts.ds": { component: "switch", upstream: "pending" } },
+      $extensions: { "com.tinysol.designsystem": { component: "switch", upstream: "pending" } },
     });
     expect(token("component.alert-title-font-weight")).toMatchObject({ $type: "fontWeight", $value: 600 });
   });

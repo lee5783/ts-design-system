@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ts.ds.compose"
+    namespace = "com.tinysol.designsystem.compose"
 }
 
 dependencies {

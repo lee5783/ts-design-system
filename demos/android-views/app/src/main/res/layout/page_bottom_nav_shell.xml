@@ -22,7 +22,7 @@
             android:padding="@dimen/ts_space_4" />
     </androidx.core.widget.NestedScrollView>
 
-    <com.ts.ds.views.components.bottomnav.TSBottomNavView
+    <com.tinysol.designsystem.views.components.bottomnav.TSBottomNavView
         android:id="@+id/shell_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

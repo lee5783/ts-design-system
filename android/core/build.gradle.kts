@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ts.ds.core"
+    namespace = "com.tinysol.designsystem.core"
 }
 
 dependencies {

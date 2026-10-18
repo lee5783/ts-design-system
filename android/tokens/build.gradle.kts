@@ -6,5 +6,5 @@ plugins {
 }
 
 android {
-    namespace = "com.ts.ds.tokens"
+    namespace = "com.tinysol.designsystem.tokens"
 }

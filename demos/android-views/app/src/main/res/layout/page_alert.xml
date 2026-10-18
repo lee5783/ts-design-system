@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-            <com.ts.ds.views.components.alert.TSAlertView
+            <com.tinysol.designsystem.views.components.alert.TSAlertView
                 android:id="@+id/alert_tone_danger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

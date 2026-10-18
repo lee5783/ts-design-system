@@ -13,11 +13,11 @@ val designVersion = (JsonSlurper().parse(repoRoot.resolve("design/manifest.json"
     .let { it["artifact"] as Map<*, *> }["version"].toString()
 
 android {
-    namespace = "com.ts.ds.demo.views"
+    namespace = "com.tinysol.designsystem.views.sample"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.ts.ds.demo.views"
+        applicationId = "com.tinysol.designsystem.views.sample"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -54,9 +54,9 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform("com.ts.ds:bom:$dsVersion"))
-    implementation("com.ts.ds:views")
-    implementation("com.ts.ds.demo:support")
+    implementation(platform("com.tinysol.designsystem:bom:$dsVersion"))
+    implementation("com.tinysol.designsystem:views")
+    implementation("com.tinysol.designsystem.sample:support")
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.recyclerview)
 

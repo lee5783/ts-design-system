@@ -28,18 +28,18 @@ describe("path filters", () => {
   });
 
   it("skips the iOS library and demo jobs for an Android-only change", () => {
-    const result = outputsFor(["android/compose/src/main/kotlin/com/ts/ds/compose/components/button/TSButton.kt"]);
+    const result = outputsFor(["android/compose/src/main/kotlin/com/tinysol/designsystem/compose/components/button/TSButton.kt"]);
     expect(result).toEqual({ ios: "false", android: "true", boundaries: "false", ios_demos: "[]", android_demos: '["compose","views"]' });
   });
 
   it("runs only the touched demo and the boundary check for a demo-only change", () => {
     expect(outputsFor(["demos/ios-swiftui/TSDemoSwiftUI/App/ContentView.swift"])).toEqual({ ios: "false", android: "false", boundaries: "true", ios_demos: '["swiftui"]', android_demos: "[]" });
-    expect(outputsFor(["demos/android-views/app/src/main/kotlin/com/ts/ds/demo/views/MainActivity.kt"])).toEqual({ ios: "false", android: "false", boundaries: "true", ios_demos: "[]", android_demos: '["views"]' });
+    expect(outputsFor(["demos/android-views/app/src/main/kotlin/com/tinysol/designsystem/views/sample/MainActivity.kt"])).toEqual({ ios: "false", android: "false", boundaries: "true", ios_demos: "[]", android_demos: '["views"]' });
   });
 
   it("runs both demos of a platform when its demo-support module changes", () => {
     expect(outputsFor(["demos/ios-demo-support/Sources/TSDemoSupport/Catalog/DemoCatalog.swift"]).ios_demos).toBe('["swiftui","uikit"]');
-    expect(outputsFor(["demos/android-demo-support/src/main/kotlin/com/ts/ds/demo/support/DemoCatalog.kt"]).android_demos).toBe('["compose","views"]');
+    expect(outputsFor(["demos/android-demo-support/src/main/kotlin/com/tinysol/designsystem/sample/support/DemoCatalog.kt"]).android_demos).toBe('["compose","views"]');
   });
 
   it("runs everything for a design source, Makefile or tools dependency change", () => {
