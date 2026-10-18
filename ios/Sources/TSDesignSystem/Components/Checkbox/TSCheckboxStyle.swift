@@ -17,7 +17,6 @@ struct TSCheckboxStyleBody<Label: View>: View {
     let style: TSCheckboxStyle
 
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
@@ -35,7 +34,7 @@ struct TSCheckboxStyleBody<Label: View>: View {
         .contentShape(Rectangle())
         .tsMinimumHitArea(outset: style.isLabelHidden ? TSHitArea.outset(for: resolved.markSize) : 0)
         .opacity(resolved.opacity)
-        .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+        .animation(TSAnimation.pressFeedback, value: state)
     }
 }
 

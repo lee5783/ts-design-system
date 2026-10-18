@@ -17,10 +17,6 @@ public final class TSTabsView: UIControl {
         didSet { applyStyle() }
     }
 
-    public var label: String? {
-        didSet { accessibilityLabel = label }
-    }
-
     override public var isEnabled: Bool {
         didSet { applyStyle() }
     }
@@ -36,7 +32,7 @@ public final class TSTabsView: UIControl {
     private(set) var tabViews: [TSTabView] = []
 
     var playHaptic: @MainActor (TSHapticEvent) -> Void = { TSHaptics.shared.play($0) }
-    var reduceMotion: @MainActor () -> Bool = { TSReduceMotion.isEnabled }
+    var reduceMotion: @MainActor () -> Bool = { false }
 
     private var trackTrailing: NSLayoutConstraint?
     private var segmentedWidth: NSLayoutConstraint?
@@ -47,14 +43,12 @@ public final class TSTabsView: UIControl {
         items: [TSTabItem],
         selectedID: String? = nil,
         variant: TSTabsVariant = .underline,
-        isBlock: Bool = false,
-        label: String? = nil
+        isBlock: Bool = false
     ) {
         self.items = items
         self.selectedID = selectedID ?? items.first?.id ?? ""
         self.variant = variant
         self.isBlock = isBlock
-        self.label = label
         super.init(frame: .zero)
         configureHierarchy()
         rebuildTabs()
@@ -93,7 +87,7 @@ public final class TSTabsView: UIControl {
     func userDidSelect(_ tab: TSTabView) {
         guard isEnabled, tab.item.id != selectedID else { return }
         selectedID = tab.item.id
-        TSReduceMotion.animate(reduceMotion: reduceMotion()) {
+        TSAnimation.animate(isInstant: reduceMotion()) {
             self.layoutIfNeeded()
         }
         scrollToSelection(animated: !reduceMotion())
@@ -105,8 +99,6 @@ public final class TSTabsView: UIControl {
 
     private func configureHierarchy() {
         isAccessibilityElement = false
-        accessibilityContainerType = .semanticGroup
-        accessibilityLabel = label
         addInteraction(UILargeContentViewerInteraction())
 
         [trackView, hairlineView, scrollView, stackView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
@@ -174,8 +166,8 @@ public final class TSTabsView: UIControl {
 
     private func rebuildTabs() {
         tabViews.forEach { $0.removeFromSuperview() }
-        tabViews = items.enumerated().map { index, item in
-            let tab = TSTabView(item: item, position: (index, items.count), variant: variant)
+        tabViews = items.map { item in
+            let tab = TSTabView(item: item, variant: variant)
             tab.onSelect = { [weak self] in self?.userDidSelect($0) }
             stackView.addArrangedSubview(tab)
             return tab
@@ -218,7 +210,6 @@ public final class TSTabsView: UIControl {
             $0.isEnabled = isEnabled
             $0.isSelected = $0.item.id == selectedID
         }
-        accessibilityLabel = label
         setNeedsLayout()
     }
 

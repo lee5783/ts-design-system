@@ -19,8 +19,7 @@ enum BottomNavShell {
         }
         let controller = TSTabBarController(
             items: items,
-            viewControllers: navigationControllers,
-            label: DemoStrings.string(.sampleMainNavigation)
+            viewControllers: navigationControllers
         )
         controller.view.accessibilityIdentifier = "demo.bottom-nav.shell"
         let update: (Int) -> Void = { [weak controller] badge in

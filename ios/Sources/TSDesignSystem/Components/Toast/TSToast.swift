@@ -17,17 +17,10 @@ public struct TSToast: View {
         self.init(item.message, tone: item.tone, actionTitle: item.action?.title, onAction: onAction ?? item.action.map { action in { action.handler() } })
     }
 
-    var accessibilityLabel: String {
-        TSToastAccessibility.label(tone: tone, message: message)
-    }
-
     public var body: some View {
         let resolved = TSToastStyleSpec.resolve(.init(tone: tone, hasAction: actionTitle != nil && onAction != nil))
         HStack(spacing: resolved.spacing) {
             TSToastMessage(message: message, resolved: resolved)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(accessibilityLabel))
-                .accessibilityAddTraits(.isStaticText)
             if let actionTitle, let onAction, resolved.showsAction {
                 TSToastActionButton(title: actionTitle, resolved: resolved, action: onAction)
                     .padding(.trailing, -resolved.actionHorizontalPadding)

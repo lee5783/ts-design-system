@@ -5,10 +5,6 @@ final class TSBottomNavItemView: UIControl {
         didSet { applyStyle() }
     }
 
-    var position: (index: Int, count: Int) {
-        didSet { applyStyle() }
-    }
-
     override var isSelected: Bool {
         didSet { applyStyle() }
     }
@@ -32,9 +28,8 @@ final class TSBottomNavItemView: UIControl {
     private var badgeLeft: NSLayoutConstraint?
     private var badgeRight: NSLayoutConstraint?
 
-    init(item: TSBottomNavItem, position: (index: Int, count: Int)) {
+    init(item: TSBottomNavItem) {
         self.item = item
-        self.position = position
         iconView = TSIconView(item.icon, size: .lg)
         super.init(frame: .zero)
         configureHierarchy()
@@ -79,12 +74,6 @@ final class TSBottomNavItemView: UIControl {
             cornerRadius: resolved.pillCornerRadius,
             curve: .continuous
         )
-    }
-
-    override func accessibilityActivate() -> Bool {
-        guard isEnabled else { return false }
-        onSelect(self)
-        return true
     }
 
     private func configureHierarchy() {
@@ -171,13 +160,6 @@ final class TSBottomNavItemView: UIControl {
         largeContentTitle = item.label
         largeContentImage = item.icon.templateImage(pointSize: resolved.iconSize.pointSize)
         isAccessibilityElement = true
-        accessibilityLabel = item.label
-        accessibilityValue = TSBottomNavAccessibility.value(index: position.index, count: position.count, badge: item.badge)
-        var accessibilityTraits: UIAccessibilityTraits = isSelected ? .selected : []
-        if !isEnabled {
-            accessibilityTraits.insert(.notEnabled)
-        }
-        self.accessibilityTraits = accessibilityTraits
         setNeedsLayout()
     }
 }

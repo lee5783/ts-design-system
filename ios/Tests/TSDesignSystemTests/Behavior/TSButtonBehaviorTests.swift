@@ -37,23 +37,6 @@ struct TSButtonBehaviorTests {
         #expect(throws: (any Error).self) { try sut.inspect().find(TSIcon.self) }
     }
 
-    @Test("The accessibility label is the title and the value is empty at rest")
-    func accessibilityAtRest() throws {
-        let sut = TSButton("Save changes") {}
-        let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Save changes")
-        #expect(try button.accessibilityValue().string() == "")
-    }
-
-    @Test("Loading sets the accessibility value to Loading")
-    func accessibilityLoading() throws {
-        let sut = TSButton("Saving", isLoading: true) {}
-        let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Saving")
-        #expect(try button.accessibilityValue().string() == TSStrings.loading)
-        #expect(TSStrings.loading == "Loading")
-    }
-
     @Test("Icons inside a button are hidden from accessibility")
     func iconsAreDecorative() throws {
         let sut = TSButton("Continue", leadingIcon: .plus, trailingIcon: .arrowRight) {}

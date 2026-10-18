@@ -5,13 +5,9 @@ import UIKit
 @MainActor
 @Suite("TSBadgeView behaviour")
 struct TSBadgeViewBehaviorTests {
-    @Test("The text is the label of one static-text element, not a button", arguments: TSBadgeTone.allCases)
-    func accessibility(tone: TSBadgeTone) {
+    @Test("A badge is a plain view, not a control", arguments: TSBadgeTone.allCases)
+    func isNotAControl(tone: TSBadgeTone) {
         let badge = TSBadgeView(text: "Failed", tone: tone, showsDot: true, icon: .xCircle)
-        #expect(badge.isAccessibilityElement)
-        #expect(badge.accessibilityLabel == "Failed")
-        #expect(badge.accessibilityTraits.contains(.staticText))
-        #expect(!badge.accessibilityTraits.contains(.button))
         #expect(!(badge as UIView is UIControl))
     }
 
@@ -34,7 +30,6 @@ struct TSBadgeViewBehaviorTests {
         badge.icon = .checkCircle
         badge.text = "Active"
         #expect(hostedSubviews.filter { !$0.isHidden }.count == 3)
-        #expect(badge.accessibilityLabel == "Active")
         #expect(hostedSubviews.compactMap { $0 as? TSIconView }.first?.name == .checkCircle)
     }
 

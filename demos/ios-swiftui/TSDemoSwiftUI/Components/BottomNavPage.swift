@@ -82,7 +82,7 @@ struct BottomNavPage: View {
     }
 
     private func bar(_ items: [TSBottomNavItem], selection: Binding<String>) -> some View {
-        TSBottomNav(items: items, selection: selection, label: DemoStrings.string(.sampleMainNavigation))
+        TSBottomNav(items: items, selection: selection)
     }
 }
 
@@ -93,8 +93,7 @@ struct BottomNavShellDemo: View {
     var body: some View {
         TSBottomNavShell(
             items: BottomNavSample.items(count: 4, inboxBadge: inboxBadge),
-            selection: $selection,
-            label: DemoStrings.string(.sampleMainNavigation)
+            selection: $selection
         ) { item in
             BottomNavShellTab(item: item, inboxBadge: $inboxBadge)
         }

@@ -105,7 +105,6 @@ final class AlertViewController: DemoPageViewController {
 
     private func dismissAlert() {
         playgroundAlert.isHidden = true
-        playgroundAlert.announcesWhenShown = true
         showButton.isEnabled = true
     }
 

@@ -19,10 +19,20 @@ enum RenderedPixels {
     static func image(of view: some View, size: CGSize) -> UIImage? {
         let host = UIHostingController(rootView: view)
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
-        window.rootViewController = host
+        let root = UIViewController()
+        root.view.frame = window.bounds
+        host.view.frame = root.view.frame
+        host.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        root.view.addSubview(host.view)
+        root.addChild(host)
+        host.didMove(toParent: root)
+        window.rootViewController = root
         window.isHidden = false
-        host.view.frame = window.bounds
+        root.beginAppearanceTransition(true, animated: false)
+        root.endAppearanceTransition()
+        root.view.layoutIfNeeded()
         host.view.layoutIfNeeded()
+        host.view.frame.origin = CGPoint(x: 10_000, y: 10_000)
         let format = UIGraphicsImageRendererFormat()
         format.scale = 2
         return UIGraphicsImageRenderer(size: size, format: format).image {

@@ -5,17 +5,14 @@ public struct TSAlert<Action: View>: View {
     let title: String?
     let message: String?
     let icon: TSIconName?
-    let announcesOnAppear: Bool
     let onDismiss: (() -> Void)?
     let action: Action
-    var announce: @MainActor (String) -> Void = { TSAlertAccessibility.post($0) }
 
     public init(
         tone: TSAlertTone = .info,
         title: String? = nil,
         message: String? = nil,
         icon: TSIconName? = nil,
-        announcesOnAppear: Bool = false,
         onDismiss: (() -> Void)? = nil,
         @ViewBuilder action: () -> Action
     ) {
@@ -23,13 +20,8 @@ public struct TSAlert<Action: View>: View {
         self.title = title
         self.message = message
         self.icon = icon
-        self.announcesOnAppear = announcesOnAppear
         self.onDismiss = onDismiss
         self.action = action()
-    }
-
-    var accessibilityLabel: String {
-        TSAlertAccessibility.label(tone: tone, title: title, message: message)
     }
 
     private var hasAction: Bool {
@@ -40,9 +32,6 @@ public struct TSAlert<Action: View>: View {
         let resolved = TSAlertStyleSpec.resolve(.init(tone: tone, hasTitle: title != nil, isDismissible: onDismiss != nil))
         HStack(alignment: .top, spacing: resolved.spacing) {
             TSAlertMessage(title: title, message: message, icon: icon ?? resolved.icon, resolved: resolved)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(accessibilityLabel))
-                .accessibilityAddTraits(.isStaticText)
             if hasAction {
                 action
             }
@@ -58,18 +47,6 @@ public struct TSAlert<Action: View>: View {
                 .fill(resolved.fill.color)
         )
         .accessibilityElement(children: .contain)
-        .modifier(TSAlertEscape(onDismiss: onDismiss))
-        .onAppear {
-            if announcesOnAppear {
-                announce(accessibilityLabel)
-            }
-        }
-    }
-
-    func announcing(with announce: @escaping @MainActor (String) -> Void) -> Self {
-        var copy = self
-        copy.announce = announce
-        return copy
     }
 }
 
@@ -79,7 +56,6 @@ public extension TSAlert where Action == EmptyView {
         title: String? = nil,
         message: String? = nil,
         icon: TSIconName? = nil,
-        announcesOnAppear: Bool = false,
         onDismiss: (() -> Void)? = nil
     ) {
         self.init(
@@ -87,7 +63,6 @@ public extension TSAlert where Action == EmptyView {
             title: title,
             message: message,
             icon: icon,
-            announcesOnAppear: announcesOnAppear,
             onDismiss: onDismiss,
             action: { EmptyView() }
         )
@@ -123,19 +98,6 @@ struct TSAlertMessage: View {
     }
 }
 
-struct TSAlertEscape: ViewModifier {
-    let onDismiss: (() -> Void)?
-
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if let onDismiss {
-            content.accessibilityAction(.escape, onDismiss)
-        } else {
-            content
-        }
-    }
-}
-
 struct TSAlertDismissButton: View {
     let resolved: TSAlertStyleSpec.Resolved
     let action: () -> Void
@@ -145,7 +107,6 @@ struct TSAlertDismissButton: View {
             TSIcon(resolved.dismissIcon, size: resolved.dismissIconSize)
         }
         .buttonStyle(TSAlertDismissStyle(resolved: resolved))
-        .accessibilityLabel(Text(TSStrings.dismiss))
     }
 }
 

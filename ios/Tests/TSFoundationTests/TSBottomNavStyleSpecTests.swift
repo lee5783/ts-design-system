@@ -109,17 +109,4 @@ struct TSBottomNavStyleSpecTests {
         #expect(item.badged(nil).badgeText == nil)
         #expect(item.badged(5).badgeText == "5")
     }
-
-    @Test(
-        "The accessibility value is \"Tab, n of N\" plus the badge",
-        arguments: [
-            (1, 3, Int?.none, "Tab, 2 of 3"),
-            (1, 4, 0, "Tab, 2 of 4"),
-            (0, 4, 3, "Tab, 1 of 4, 3 new"),
-            (4, 5, 250, "Tab, 5 of 5, 99+ new"),
-        ]
-    )
-    func accessibilityValue(index: Int, count: Int, badge: Int?, expected: String) {
-        #expect(TSBottomNavAccessibility.value(index: index, count: count, badge: badge, locale: english) == expected)
-    }
 }

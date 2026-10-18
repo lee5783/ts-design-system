@@ -9,10 +9,6 @@ public final class TSBottomNavView: UIControl {
         didSet { applySelection() }
     }
 
-    public var label: String? {
-        didSet { accessibilityLabel = label }
-    }
-
     override public var isEnabled: Bool {
         didSet { applyStyle() }
     }
@@ -21,14 +17,13 @@ public final class TSBottomNavView: UIControl {
     let hairlineView = UIView()
     private(set) var itemViews: [TSBottomNavItemView] = []
 
-    var reduceMotion: @MainActor () -> Bool = { TSReduceMotion.isEnabled }
+    var reduceMotion: @MainActor () -> Bool = { false }
 
     private var hairlineHeight: NSLayoutConstraint?
 
-    public init(items: [TSBottomNavItem], selectedID: String? = nil, label: String? = nil) {
+    public init(items: [TSBottomNavItem], selectedID: String? = nil) {
         self.items = items
         self.selectedID = selectedID ?? items.first?.id ?? ""
-        self.label = label
         super.init(frame: .zero)
         configureHierarchy()
         rebuildItems()
@@ -50,7 +45,7 @@ public final class TSBottomNavView: UIControl {
 
     func userDidSelect(_ itemView: TSBottomNavItemView) {
         guard isEnabled, itemView.item.id != selectedID else { return }
-        TSReduceMotion.animate(reduceMotion: reduceMotion()) {
+        TSAnimation.animate(isInstant: reduceMotion()) {
             self.selectedID = itemView.item.id
         }
         sendActions(for: .valueChanged)
@@ -58,8 +53,6 @@ public final class TSBottomNavView: UIControl {
 
     private func configureHierarchy() {
         isAccessibilityElement = false
-        accessibilityContainerType = .semanticGroup
-        accessibilityLabel = label
         addInteraction(UILargeContentViewerInteraction())
 
         let container = TSBottomNavStyleSpec.container
@@ -97,8 +90,8 @@ public final class TSBottomNavView: UIControl {
 
     private func rebuildItems() {
         itemViews.forEach { $0.removeFromSuperview() }
-        itemViews = items.enumerated().map { index, item in
-            let itemView = TSBottomNavItemView(item: item, position: (index, items.count))
+        itemViews = items.map { item in
+            let itemView = TSBottomNavItemView(item: item)
             itemView.onSelect = { [weak self] in self?.userDidSelect($0) }
             stackView.addArrangedSubview(itemView)
             return itemView
@@ -123,6 +116,5 @@ public final class TSBottomNavView: UIControl {
             $0.isEnabled = isEnabled
             $0.isSelected = $0.item.id == selectedID
         }
-        accessibilityLabel = label
     }
 }

@@ -1,90 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "ts.alert.danger" : {
-      "comment" : "Accessibility name of the danger tone, read before an alert's title and message.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error"
-          }
-        }
-      }
-    },
-    "ts.alert.info" : {
-      "comment" : "Accessibility name of the info tone, read before an alert's title and message.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Information"
-          }
-        }
-      }
-    },
-    "ts.alert.success" : {
-      "comment" : "Accessibility name of the success tone, read before an alert's title and message.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Success"
-          }
-        }
-      }
-    },
-    "ts.alert.warning" : {
-      "comment" : "Accessibility name of the warning tone, read before an alert's title and message.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Warning"
-          }
-        }
-      }
-    },
-    "ts.bottom-nav.badge" : {
-      "comment" : "Accessibility value part for a bottom navigation badge, for example 3 new or 99+ new. The argument is the formatted count.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ new"
-          }
-        }
-      }
-    },
-    "ts.checkbox.checked" : {
-      "comment" : "Accessibility value of a checked checkbox.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Checked"
-          }
-        }
-      }
-    },
-    "ts.checkbox.unchecked" : {
-      "comment" : "Accessibility value of an unchecked checkbox.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unchecked"
-          }
-        }
-      }
-    },
     "ts.close" : {
       "comment" : "Accessibility label of a close button.",
       "extractionState" : "manual",
@@ -121,42 +37,6 @@
         }
       }
     },
-    "ts.list-item.collapsed" : {
-      "comment" : "Accessibility value of a disclosure list row whose body is hidden.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collapsed"
-          }
-        }
-      }
-    },
-    "ts.list-item.expanded" : {
-      "comment" : "Accessibility value of a disclosure list row whose body is shown.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expanded"
-          }
-        }
-      }
-    },
-    "ts.list-item.navigates" : {
-      "comment" : "Accessibility hint of a list row with a chevron: activating the row opens another screen.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens another screen"
-          }
-        }
-      }
-    },
     "ts.loading" : {
       "comment" : "Accessibility label of a loading indicator.",
       "extractionState" : "manual",
@@ -165,42 +45,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Loading"
-          }
-        }
-      }
-    },
-    "ts.position" : {
-      "comment" : "Position of an item in a set, for example 2 of 4. The arguments are the index and the count.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld of %2$lld"
-          }
-        }
-      }
-    },
-    "ts.tab.position" : {
-      "comment" : "Accessibility value of a tab: its role and its position in the tab list, for example Tab, 2 of 4. The arguments are the index and the count.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tab, %1$lld of %2$lld"
-          }
-        }
-      }
-    },
-    "ts.text-field.error" : {
-      "comment" : "Accessibility value and announcement for a text field error. The argument is the error message.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error: %@"
           }
         }
       }
@@ -225,30 +69,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show password"
-          }
-        }
-      }
-    },
-    "ts.toggle.off" : {
-      "comment" : "Accessibility value of a switch that is off.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Off"
-          }
-        }
-      }
-    },
-    "ts.toggle.on" : {
-      "comment" : "Accessibility value of a switch that is on.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "On"
           }
         }
       }

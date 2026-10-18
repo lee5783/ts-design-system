@@ -89,12 +89,6 @@ final class TSDialogPanelView: UIView {
         }
     }
 
-    override func accessibilityPerformEscape() -> Bool {
-        guard let onClose else { return false }
-        onClose()
-        return true
-    }
-
     private func configureHierarchy() {
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -105,7 +99,6 @@ final class TSDialogPanelView: UIView {
         addSubview(stackView)
 
         titleLabel.numberOfLines = 0
-        titleLabel.accessibilityTraits = .header
         messageLabel.numberOfLines = 0
         [titleLabel, messageLabel].forEach {
             $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -131,15 +124,6 @@ final class TSDialogPanelView: UIView {
             actionsStack.trailingAnchor.constraint(equalTo: actionsContainer.trailingAnchor),
             flexible
         ])
-
-        accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: TSStrings.close) { [weak self] _ in
-                MainActor.assumeIsolated {
-                    self?.onClose?()
-                }
-                return true
-            }
-        ]
     }
 
     private func rebuildActions() {

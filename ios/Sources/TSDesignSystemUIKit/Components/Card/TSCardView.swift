@@ -43,10 +43,6 @@ public final class TSCardView: UIControl {
         didSet { rebuildFooter() }
     }
 
-    public var accessibilityActions: [TSCardAction] {
-        didSet { applyStyle() }
-    }
-
     public var isRaised: Bool {
         didSet { applyStyle() }
     }
@@ -84,7 +80,6 @@ public final class TSCardView: UIControl {
         isRaised: Bool = false,
         isInteractive: Bool = false,
         footerActions: [TSCardAction] = [],
-        accessibilityActions: [TSCardAction] = [],
         accessory: TSCardAccessory? = nil
     ) {
         self.title = title
@@ -93,7 +88,6 @@ public final class TSCardView: UIControl {
         self.isRaised = isRaised
         self.isInteractive = isInteractive
         self.footerActions = footerActions
-        self.accessibilityActions = accessibilityActions
         self.typedAccessory = accessory
         super.init(frame: .zero)
         configureHierarchy()
@@ -138,12 +132,6 @@ public final class TSCardView: UIControl {
             return hit
         }
         return self
-    }
-
-    override public func accessibilityActivate() -> Bool {
-        guard isInteractive, isEnabled else { return false }
-        userDidActivate()
-        return true
     }
 
     override public func layoutSubviews() {
@@ -199,7 +187,6 @@ public final class TSCardView: UIControl {
         [titleLabel, subtitleLabel].forEach(headingStack.addArrangedSubview)
         headerStack.addArrangedSubview(headingStack)
         titleLabel.numberOfLines = 0
-        titleLabel.accessibilityTraits = .header
         subtitleLabel.numberOfLines = 0
         [titleLabel, subtitleLabel].forEach {
             $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -323,28 +310,7 @@ public final class TSCardView: UIControl {
         accessoryView.flatMap { $0 as? UIControl }?.isEnabled = isEnabled
         (accessoryView as? TSIconButtonView)?.isDimmedByContainer = !isEnabled
         (accessoryView as? TSButtonView)?.isDimmedByContainer = !isEnabled
-        applyAccessibility()
-        setNeedsLayout()
-    }
-
-    private func applyAccessibility() {
         isAccessibilityElement = isInteractive
-        guard isInteractive else {
-            accessibilityLabel = nil
-            accessibilityValue = nil
-            accessibilityTraits = .none
-            accessibilityCustomActions = nil
-            return
-        }
-        accessibilityLabel = TSCardAccessibility.label(title: title, subtitle: subtitle, body: bodyText)
-        accessibilityValue = TSCardAccessibility.value(title: title, subtitle: subtitle, body: bodyText)
-        accessibilityTraits = isEnabled ? .button : [.button, .notEnabled]
-        let actions = isEnabled ? TSCardAccessibility.customActions(footer: footerActions, accessory: accessory, additional: accessibilityActions) : []
-        accessibilityCustomActions = actions.map { action in
-            UIAccessibilityCustomAction(name: action.label) { _ in
-                MainActor.assumeIsolated { action.handler() }
-                return true
-            }
-        }
+        setNeedsLayout()
     }
 }

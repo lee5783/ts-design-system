@@ -3,22 +3,19 @@ import SwiftUI
 public struct TSBottomNav: View {
     let items: [TSBottomNavItem]
     @Binding var selection: String
-    let label: String?
     var stateOverrides: [String: TSControlState] = [:]
 
     @FocusState private var focusedID: String?
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    public init(items: [TSBottomNavItem], selection: Binding<String>, label: String? = nil) {
+    public init(items: [TSBottomNavItem], selection: Binding<String>) {
         self.items = items
         _selection = selection
-        self.label = label
     }
 
     public var body: some View {
         let container = TSBottomNavStyleSpec.container
         HStack(spacing: 0) {
-            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+            ForEach(items, id: \.id) { item in
                 Button {
                     select(item)
                 } label: {
@@ -42,10 +39,6 @@ public struct TSBottomNav: View {
                         TSIcon(item.icon, size: .lg)
                     }
                 }
-                .accessibilityLabel(Text(item.label))
-                .accessibilityValue(Text(TSBottomNavAccessibility.value(index: index, count: items.count, badge: item.badge)))
-                .accessibilityRemoveTraits(.isButton)
-                .accessibilityAddTraits(item.id == selection ? .isSelected : [])
             }
         }
         .frame(height: container.height)
@@ -60,8 +53,8 @@ public struct TSBottomNav: View {
                 )
                 .edgesIgnoringSafeArea(.bottom)
         )
-        .animation(TSReduceMotion.animation(reduceMotion: reduceMotion), value: selection)
-        .modifier(TSTabListAccessibility(label: label))
+        .animation(TSAnimation.standard(), value: selection)
+        .accessibilityElement(children: .contain)
     }
 
     func forcingState(_ state: TSControlState, for id: String) -> Self {

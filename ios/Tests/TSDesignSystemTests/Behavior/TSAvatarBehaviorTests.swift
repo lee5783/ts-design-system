@@ -12,15 +12,6 @@ struct TSAvatarBehaviorTests {
         context.fill(CGRect(x: 0, y: 0, width: 8, height: 8))
     }
 
-    @Test("The name is the accessibility label of one image element", arguments: TSAvatarSize.allCases)
-    func accessibility(size: TSAvatarSize) throws {
-        let sut = TSAvatar(name: "Ada Lovelace", size: size)
-        let body = try sut.body.inspect()
-        #expect(try body.accessibilityLabel().string() == "Ada Lovelace")
-        #expect(try body.accessibilityTraits().contains(.isImage))
-        #expect(try !body.accessibilityTraits().contains(.isButton))
-    }
-
     @Test("Without an image it shows the clamped initials at a fixed size", arguments: TSAvatarSize.allCases)
     func initials(size: TSAvatarSize) throws {
         let sut = TSAvatar(name: "Grace Brewster Hopper", size: size)
@@ -69,11 +60,5 @@ struct TSAvatarBehaviorTests {
         let sut = TSAvatar(name: "   ", size: .lg)
         let icon = try sut.inspect().find(TSIcon.self)
         #expect(try icon.actualView().body.inspect().fixedFrame().width == 24)
-    }
-
-    @Test("A blank name hides the avatar from accessibility, a named one stays exposed")
-    func blankNameIsHidden() throws {
-        #expect(try TSAvatar(name: "   ").body.inspect().accessibilityHidden())
-        #expect(try !TSAvatar(name: "Ada Lovelace").body.inspect().accessibilityHidden())
     }
 }

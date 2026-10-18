@@ -30,32 +30,20 @@ struct TSTextFieldViewBehaviorTests {
         #expect(counter.count == 1)
     }
 
-    @Test("The label is the accessibility label of the input, the placeholder is not, and the hint is the accessibility hint")
-    func accessibilityAtRest() {
+    @Test("The placeholder is the field's attributed placeholder")
+    func placeholder() {
         let field = makeField(TSTextFieldView(label: "Email", placeholder: "you@example.com", hint: "We never share it"))
-        #expect(field.textField.accessibilityLabel == "Email")
-        #expect(field.textField.accessibilityHint == "We never share it")
-        #expect(field.textField.accessibilityValue == nil || field.textField.accessibilityValue == "")
-        #expect(!field.labelView.isAccessibilityElement)
-        #expect(!field.messageLabel.isAccessibilityElement)
         #expect(field.textField.attributedPlaceholder?.string == "you@example.com")
     }
 
-    @Test("An error replaces the hint, shows the alert icon, sets the accessibility value and announces")
+    @Test("An error replaces the hint and shows the alert icon")
     func errorState() {
-        var announcements: [String] = []
         let field = makeField(TSTextFieldView(label: "Password", text: "abc", hint: "At least 8 characters"))
-        field.announce = { announcements.append($0) }
         field.errorMessage = "Must be at least 8 characters"
-        #expect(field.textField.accessibilityValue == "abc, Error: Must be at least 8 characters")
-        #expect(field.textField.accessibilityHint == nil)
         #expect(field.messageLabel.attributedText?.string == "Must be at least 8 characters")
         #expect(!field.messageIconView.isHidden)
         #expect(field.boxView.layer.borderColor == TSColor.danger.uiColor.resolvedColor(with: field.traitCollection).cgColor)
-        #expect(announcements == ["Error: Must be at least 8 characters"])
-        field.errorMessage = "Must be at least 8 characters"
         field.errorMessage = nil
-        #expect(announcements.count == 1)
         #expect(field.messageLabel.attributedText?.string == "At least 8 characters")
         #expect(field.messageIconView.isHidden)
     }
@@ -102,14 +90,13 @@ struct TSTextFieldViewBehaviorTests {
         #expect(!field.textField.isFirstResponder)
     }
 
-    @Test("Disabled blocks editing, dims the box and adds the not-enabled trait")
+    @Test("Disabled blocks editing and dims the box")
     func disabledBlocks() {
         let field = makeField(TSTextFieldView(label: "Name", text: "Ada"))
         field.isEnabled = false
         #expect(!field.textField.isEnabled)
         #expect(!field.textFieldShouldBeginEditing(field.textField))
         #expect(abs(field.boxView.alpha - 0.45) < 0.001)
-        #expect(field.textField.accessibilityTraits.contains(.notEnabled))
         #expect(field.boxView.backgroundColor == TSColor.backgroundSecondary.uiColor.resolvedColor(with: field.traitCollection))
     }
 
@@ -122,8 +109,6 @@ struct TSTextFieldViewBehaviorTests {
         #expect(field.textView.isSelectable)
         #expect(!field.textViewShouldBeginEditing(field.textView))
         #expect(field.textView.styledText == "TS-2048")
-        #expect(field.textView.accessibilityLabel == "Account ID")
-        #expect(field.textView.accessibilityValue == "TS-2048")
         field.forcedFocus = true
         #expect(field.boxView.layer.borderWidth == 1)
     }
@@ -133,11 +118,8 @@ struct TSTextFieldViewBehaviorTests {
         let field = makeField(TSTextFieldView(label: "Password", text: "hunter22", isSecure: true))
         #expect(field.textField.isSecureTextEntry)
         #expect(!field.passwordToggle.isHidden)
-        #expect(field.passwordToggle.accessibilityLabel == "Show password")
-        #expect(field.passwordToggle.accessibilityTraits.contains(.button))
         field.passwordToggle.sendActions(for: .primaryActionTriggered)
         #expect(!field.textField.isSecureTextEntry)
-        #expect(field.passwordToggle.accessibilityLabel == "Hide password")
         #expect(field.passwordToggle.isRevealed)
         field.passwordToggle.sendActions(for: .primaryActionTriggered)
         #expect(field.textField.isSecureTextEntry)

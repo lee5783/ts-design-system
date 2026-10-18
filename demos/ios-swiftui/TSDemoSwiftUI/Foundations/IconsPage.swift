@@ -20,13 +20,13 @@ struct IconsPage: View {
             }
             DemoComponentSection(.labelled) {
                 HStack(spacing: TSSpacing.space3) {
-                    TSIcon(.checkCircle, size: .lg, label: DemoStrings.string(.sampleSuccess))
+                    TSIcon(.checkCircle, size: .lg)
                         .foregroundColor(TSColor.success.color)
-                    TSIcon(.alert, size: .lg, label: DemoStrings.string(.sampleWarning))
+                    TSIcon(.alert, size: .lg)
                         .foregroundColor(TSColor.warning.color)
-                    TSIcon(.xCircle, size: .lg, label: DemoStrings.string(.sampleError))
+                    TSIcon(.xCircle, size: .lg)
                         .foregroundColor(TSColor.danger.color)
-                    TSIcon(.info, size: .lg, label: DemoStrings.string(.sampleInformation))
+                    TSIcon(.info, size: .lg)
                         .foregroundColor(TSColor.info.color)
                 }
             }

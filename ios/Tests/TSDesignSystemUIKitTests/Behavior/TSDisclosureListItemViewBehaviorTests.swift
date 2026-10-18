@@ -47,19 +47,12 @@ struct TSDisclosureListItemViewBehaviorTests {
         #expect(counter.count == 0)
     }
 
-    @Test("The header is a button element with Collapsed or Expanded and no navigation hint; activation toggles")
-    func accessibility() {
+    @Test("The header is the element and carries the row's identifier")
+    func headerElement() {
         let (row, _) = makeRow()
         let header = row.headerView
         #expect(!row.isAccessibilityElement)
         #expect(header.isAccessibilityElement)
-        #expect(header.accessibilityLabel == "Kotlin, Apache License 2.0")
-        #expect(header.accessibilityValue == "Collapsed")
-        #expect(header.accessibilityHint == nil)
-        #expect(header.accessibilityTraits.contains(.button))
-        #expect(header.accessibilityActivate())
-        #expect(row.isExpanded)
-        #expect(header.accessibilityValue == "Expanded")
         row.accessibilityIdentifier = "licence.kotlin"
         #expect(header.accessibilityIdentifier == "licence.kotlin")
     }
@@ -70,8 +63,6 @@ struct TSDisclosureListItemViewBehaviorTests {
         row.isEnabled = false
         row.sendActions(for: .touchUpInside)
         #expect(row.isExpanded)
-        #expect(!row.headerView.accessibilityActivate())
-        #expect(row.headerView.accessibilityTraits.contains(.notEnabled))
         #expect(abs(row.bodyContainer.alpha - 0.45) < 0.001)
     }
 

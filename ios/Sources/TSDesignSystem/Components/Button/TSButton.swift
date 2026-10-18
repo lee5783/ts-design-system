@@ -73,8 +73,6 @@ public struct TSButton: View {
         .disabled(isLoading)
         .focused($isFocused)
         .tsFocusEffectDisabled()
-        .accessibilityLabel(Text(title))
-        .accessibilityValue(Text(isLoading ? TSStrings.loading : ""))
     }
 
     func forcingState(_ state: TSControlState) -> TSButton {

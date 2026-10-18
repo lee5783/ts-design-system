@@ -62,10 +62,6 @@ public final class TSListItemCell: UICollectionViewListCell {
         contentView as? TSListItemContentView
     }
 
-    override public func accessibilityActivate() -> Bool {
-        itemContentView?.performAccessibilityActivation() ?? false
-    }
-
     override public func prepareForReuse() {
         super.prepareForReuse()
         groupPosition = .single

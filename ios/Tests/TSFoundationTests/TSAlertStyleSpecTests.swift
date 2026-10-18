@@ -5,11 +5,11 @@ import TSTokens
 
 @Suite("TSAlertStyleSpec")
 struct TSAlertStyleSpecTests {
-    private static let expectedTones: [TSAlertTone: (fill: TSColor, icon: TSIconName, iconColor: TSColor, name: String)] = [
-        .info: (.infoSubtle, .info, .info, "Information"),
-        .success: (.successSubtle, .checkCircle, .success, "Success"),
-        .warning: (.warningSubtle, .alert, .warning, "Warning"),
-        .danger: (.dangerSubtle, .xCircle, .danger, "Error")
+    private static let expectedTones: [TSAlertTone: (fill: TSColor, icon: TSIconName, iconColor: TSColor)] = [
+        .info: (.infoSubtle, .info, .info),
+        .success: (.successSubtle, .checkCircle, .success),
+        .warning: (.warningSubtle, .alert, .warning),
+        .danger: (.dangerSubtle, .xCircle, .danger)
     ]
 
     @Test("The matrix covers 4 tones × title × dismissible once each")
@@ -46,14 +46,5 @@ struct TSAlertStyleSpecTests {
         #expect(resolved.dismissIcon == .close)
         #expect(resolved.dismissIconSize == .md)
         #expect(resolved.dismissColor == .textSecondary)
-    }
-
-    @Test("The accessibility label and announcement read tone, title and message", arguments: TSAlertTone.allCases)
-    func accessibilityLabel(tone: TSAlertTone) throws {
-        let name = try #require(Self.expectedTones[tone]).name
-        #expect(TSStrings.alertTone(tone) == name)
-        #expect(TSAlertAccessibility.label(tone: tone, title: "Payment failed", message: "Update your card.") == "\(name), Payment failed, Update your card.")
-        #expect(TSAlertAccessibility.label(tone: tone, title: nil, message: "Update your card.") == "\(name), Update your card.")
-        #expect(TSAlertAccessibility.label(tone: tone, title: "Saved", message: nil) == "\(name), Saved")
     }
 }

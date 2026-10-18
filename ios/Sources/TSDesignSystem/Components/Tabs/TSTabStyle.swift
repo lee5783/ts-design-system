@@ -19,7 +19,6 @@ struct TSTabStyleBody<Label: View>: View {
     let style: TSTabStyle
 
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
@@ -39,7 +38,7 @@ struct TSTabStyleBody<Label: View>: View {
             .contentShape(Rectangle())
             .tsMinimumHitArea(outset: TSTabsStyleSpec.hitOutset(style.variant), edges: .vertical)
             .opacity(resolved.opacity)
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+            .animation(TSAnimation.pressFeedback, value: state)
     }
 }
 

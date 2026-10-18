@@ -16,35 +16,15 @@ struct TSCardViewBehaviorTests {
         return view
     }
 
-    @Test("An interactive card is one button element labelled by title and subtitle")
+    @Test("An interactive card is one element and owns its hits")
     func interactiveIsOneElement() {
         let card = layout(TSCardView(title: "Weekly report", subtitle: "Updated today", bodyText: "Revenue is up 12%.", isInteractive: true))
         #expect(card.isAccessibilityElement)
-        #expect(card.accessibilityLabel == "Weekly report, Updated today")
-        #expect(card.accessibilityTraits.contains(.button))
         #expect(card.hitTest(CGPoint(x: 40, y: 30), with: nil) === card)
         #expect(card.hitTest(CGPoint(x: 40, y: card.bounds.height - 20), with: nil) === card)
     }
 
-    @Test("An interactive card exposes footer and extra actions as accessibility custom actions that fire their handlers")
-    func customActions() throws {
-        var fired: [String] = []
-        let card = layout(TSCardView(
-            title: "Weekly report",
-            bodyText: "Revenue is up 12%.",
-            isInteractive: true,
-            footerActions: [TSCardAction("Share") { fired.append("Share") }, TSCardAction("Open", variant: .primary) { fired.append("Open") }],
-            accessibilityActions: [TSCardAction("More options") { fired.append("More options") }]
-        ))
-        let actions = try #require(card.accessibilityCustomActions)
-        #expect(actions.map(\.name) == ["Share", "Open", "More options"])
-        for action in actions.reversed() {
-            #expect(action.actionHandler?(action) == true)
-        }
-        #expect(fired == ["More options", "Open", "Share"])
-    }
-
-    @Test("A typed accessory renders an icon button that stays hittable and is also an accessibility custom action")
+    @Test("A typed accessory renders an icon button that stays hittable")
     func typedAccessory() throws {
         var fired = 0
         let card = layout(TSCardView(
@@ -54,35 +34,19 @@ struct TSCardViewBehaviorTests {
             accessory: .iconButton(icon: .more, label: "More options") { fired += 1 }
         ))
         let button = try #require(card.accessoryView as? TSIconButtonView)
-        #expect(button.accessibilityLabel == "More options")
         let center = button.convert(CGPoint(x: button.bounds.midX, y: button.bounds.midY), to: card)
         #expect(card.hitTest(center, with: nil).map { $0.isDescendant(of: button) } == true)
         button.sendActions(for: .primaryActionTriggered)
         #expect(fired == 1)
-        let action = try #require(card.accessibilityCustomActions?.first { $0.name == "More options" })
-        #expect(action.actionHandler?(action) == true)
-        #expect(fired == 2)
     }
 
-    @Test("The body text is read: as the value under a heading, or as the label when there is no heading")
-    func bodyIsRead() {
-        let headed = layout(TSCardView(title: "Weekly report", bodyText: "Revenue is up 12%.", isInteractive: true))
-        #expect(headed.accessibilityLabel == "Weekly report")
-        #expect(headed.accessibilityValue == "Revenue is up 12%.")
-        let textOnly = layout(TSCardView(bodyText: "Revenue is up 12%.", isInteractive: true))
-        #expect(textOnly.accessibilityLabel == "Revenue is up 12%.")
-        #expect(textOnly.accessibilityValue == nil)
-    }
-
-    @Test("A tap and accessibility activation send .primaryActionTriggered on an interactive card")
+    @Test("A tap sends .primaryActionTriggered on an interactive card")
     func actionFires() {
         let counter = TapCounter()
         let card = layout(TSCardView(title: "Weekly report", bodyText: "Body", isInteractive: true))
         card.addAction(UIAction { _ in counter.tap() }, for: .primaryActionTriggered)
         card.sendActions(for: .touchUpInside)
         #expect(counter.count == 1)
-        #expect(card.accessibilityActivate())
-        #expect(counter.count == 2)
     }
 
     @Test("Footer buttons stay hittable inside an interactive card and fire their own handlers")
@@ -103,7 +67,7 @@ struct TSCardViewBehaviorTests {
         #expect(send.frame.maxX <= card.footerView.bounds.width - 16 + 0.5)
     }
 
-    @Test("A static card is a container: not an element, no actions, the title is a header")
+    @Test("A static card is a container: not an element and sends no action")
     func staticCard() {
         let counter = TapCounter()
         let card = layout(TSCardView(title: "Weekly report", subtitle: "Updated today", bodyText: "Revenue is up 12%."))
@@ -111,9 +75,6 @@ struct TSCardViewBehaviorTests {
         card.sendActions(for: .touchUpInside)
         #expect(counter.count == 0)
         #expect(!card.isAccessibilityElement)
-        #expect(!card.accessibilityActivate())
-        #expect(card.accessibilityCustomActions?.isEmpty ?? true)
-        #expect(card.titleLabel.accessibilityTraits.contains(.header))
     }
 
     @Test("Highlighting an interactive card draws surface-pressed; a static card keeps surface-card")
@@ -129,17 +90,14 @@ struct TSCardViewBehaviorTests {
         #expect(plain.surfaceView.backgroundColor == TSColor.surfaceCard.uiColor.resolvedColor(with: traits))
     }
 
-    @Test("A disabled interactive card never fires, is not enabled and drops its custom actions")
+    @Test("A disabled interactive card never fires and disables its footer buttons")
     func disabledBlocks() {
         let counter = TapCounter()
         let card = layout(TSCardView(title: "Weekly report", bodyText: "Body", isInteractive: true, footerActions: [TSCardAction("Share") {}]))
         card.isEnabled = false
         card.addAction(UIAction { _ in counter.tap() }, for: .primaryActionTriggered)
         card.sendActions(for: .touchUpInside)
-        #expect(!card.accessibilityActivate())
         #expect(counter.count == 0)
-        #expect(card.accessibilityTraits.contains(.notEnabled))
-        #expect(card.accessibilityCustomActions?.isEmpty ?? true)
         #expect(card.footerButtons.allSatisfy { !$0.isEnabled })
         #expect(abs(card.surfaceView.alpha - 0.45) < 0.001)
     }
@@ -224,7 +182,7 @@ struct TSCardViewBehaviorTests {
         #expect(!iconButton.isDimmedByContainer)
     }
 
-    @Test("Setting accessoryView after a typed accessory clears it and its custom action; setting accessory again restores both")
+    @Test("Setting accessoryView after a typed accessory clears it; setting accessory again restores it")
     func accessoryLastWriterWins() throws {
         let card = layout(TSCardView(
             title: "Weekly report",
@@ -233,25 +191,21 @@ struct TSCardViewBehaviorTests {
             accessory: .iconButton(icon: .more, label: "Card options") {}
         ))
         let typed = try #require(card.accessoryView as? TSIconButtonView)
-        #expect(card.accessibilityCustomActions?.map(\.name) == ["Card options"])
 
         let share = TSButtonView(title: "Share")
         card.accessoryView = share
         #expect(card.accessory == nil)
         #expect(card.accessoryView === share)
         #expect(typed.superview == nil)
-        #expect(card.accessibilityCustomActions?.map(\.name) ?? [] == [])
 
         card.accessory = .iconButton(icon: .more, label: "Card options") {}
         #expect(card.accessory != nil)
         let restored = try #require(card.accessoryView as? TSIconButtonView)
         #expect(restored.superview === card.headerStack)
         #expect(share.superview == nil)
-        #expect(card.accessibilityCustomActions?.map(\.name) == ["Card options"])
 
         card.accessory = nil
         #expect(card.accessoryView == nil)
-        #expect(card.accessibilityCustomActions?.map(\.name) ?? [] == [])
     }
 
     @Test("Replacing a typed accessory with a view while disabled hands the dimming back to the old button")

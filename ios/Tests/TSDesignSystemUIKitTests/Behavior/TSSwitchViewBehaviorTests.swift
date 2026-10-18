@@ -38,7 +38,7 @@ struct TSSwitchViewBehaviorTests {
         #expect(counter.count == 2)
     }
 
-    @Test("setOn(_:animated:) is silent and lands immediately when reduce motion is on")
+    @Test("setOn(_:animated:) is silent and lands immediately when animations are off")
     func setOnAnimated() {
         let counter = TapCounter()
         let view = makeSwitch()
@@ -50,41 +50,16 @@ struct TSSwitchViewBehaviorTests {
         #expect(abs(view.thumbView.frame.minX - 21) < 0.001)
     }
 
-    @Test("isEnabled = false blocks toggling and adds the not-enabled trait")
+    @Test("isEnabled = false blocks toggling")
     func disabledBlocks() {
         let counter = TapCounter()
         let view = makeSwitch(isOn: true)
         view.addAction(UIAction { _ in counter.tap() }, for: .valueChanged)
         view.isEnabled = false
         view.sendActions(for: .touchUpInside)
-        #expect(!view.accessibilityActivate())
         #expect(view.isOn)
         #expect(counter.count == 0)
-        #expect(view.accessibilityTraits.contains(.notEnabled))
         #expect(abs(view.alpha - 0.45) < 0.001)
-    }
-
-    @Test(
-        "The row is one element: the label, an on/off value, and the toggle trait on 17+ or the button trait on 15–16",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func accessibilityHierarchy(path: TSCompatPath, isOn: Bool) {
-        let view = makeSwitch(isOn: isOn)
-        view.togglePath = path
-        #expect(view.isAccessibilityElement)
-        #expect(view.accessibilityLabel == "Wi-Fi")
-        #expect(view.accessibilityValue == (isOn ? "On" : "Off"))
-        #expect(!view.accessibilityTraits.contains(.selected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(view.accessibilityTraits.contains(.toggleButton))
-            #expect(!view.accessibilityTraits.contains(.button))
-        } else {
-            #expect(view.accessibilityTraits.contains(.button))
-            if #available(iOS 17, *) {
-                #expect(!view.accessibilityTraits.contains(.toggleButton))
-            }
-        }
-        #expect(!view.labelView.isAccessibilityElement)
     }
 
     @Test(

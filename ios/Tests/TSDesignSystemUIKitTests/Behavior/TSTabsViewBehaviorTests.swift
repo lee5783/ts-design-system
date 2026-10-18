@@ -52,48 +52,19 @@ struct TSTabsViewBehaviorTests {
         tabs.selectedID = "month"
         #expect(counter.count == 0)
         #expect(tabs.selectedTab?.item.id == "month")
-        #expect(tabs.tabViews[2].accessibilityTraits.contains(.selected))
     }
 
-    @Test("isEnabled = false blocks selection, adds the not-enabled trait and dims once", arguments: TSTabsVariant.allCases)
+    @Test("isEnabled = false blocks selection and dims once", arguments: TSTabsVariant.allCases)
     func disabledBlocks(variant: TSTabsVariant) {
         let counter = TapCounter()
         let tabs = TSTabsView(items: items, variant: variant)
         tabs.addAction(UIAction { _ in counter.tap() }, for: .valueChanged)
         tabs.isEnabled = false
         tabs.tabViews[2].sendActions(for: .touchUpInside)
-        #expect(!tabs.tabViews[2].accessibilityActivate())
         #expect(tabs.selectedID == "day")
         #expect(counter.count == 0)
-        #expect(tabs.tabViews.allSatisfy { $0.accessibilityTraits.contains(.notEnabled) })
         #expect(tabs.tabViews.allSatisfy { abs($0.alpha - 0.45) < 0.001 })
         #expect(abs(tabs.trackView.alpha - 0.45) < 0.001)
-    }
-
-    @Test("VoiceOver activation selects like a tap")
-    func accessibilityActivate() {
-        let tabs = TSTabsView(items: items)
-        #expect(tabs.tabViews[2].accessibilityActivate())
-        #expect(tabs.selectedID == "month")
-    }
-
-    @Test(
-        "Each tab is one element: its label, \"Tab, n of N\", the selected trait only when selected, and no button trait",
-        arguments: TSTabsVariant.allCases
-    )
-    func accessibility(variant: TSTabsVariant) {
-        let tabs = layout(TSTabsView(items: items, selectedID: "week", variant: variant, label: "Time range"))
-        #expect(!tabs.isAccessibilityElement)
-        #expect(tabs.accessibilityLabel == "Time range")
-        #expect(tabs.accessibilityContainerType == .semanticGroup)
-        for (index, tab) in tabs.tabViews.enumerated() {
-            #expect(tab.isAccessibilityElement)
-            #expect(tab.accessibilityLabel == items[index].label)
-            #expect(tab.accessibilityValue == "Tab, \(index + 1) of 3")
-            #expect(tab.accessibilityTraits.contains(.selected) == (index == 1))
-            #expect(!tab.accessibilityTraits.contains(.button))
-            #expect(!tab.labelView.isAccessibilityElement)
-        }
     }
 
     @Test("Replacing items rebuilds the tabs and keeps a valid selection")
@@ -102,7 +73,6 @@ struct TSTabsViewBehaviorTests {
         tabs.items = Array(manyItems.prefix(2))
         #expect(tabs.tabViews.count == 2)
         #expect(tabs.selectedID == "overview")
-        #expect(tabs.tabViews[1].accessibilityValue == "Tab, 2 of 2")
     }
 
     @Test("Underline tabs scroll horizontally when they overflow, and selecting a far tab scrolls it into view")

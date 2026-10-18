@@ -11,12 +11,10 @@ struct TSAlertBehaviorTests {
         return host.sizeThatFits(in: CGSize(width: 358, height: CGFloat.greatestFiniteMagnitude)).height
     }
 
-    @Test("The message is one element read as tone, title and message", arguments: TSAlertTone.allCases)
-    func messageElement(tone: TSAlertTone) throws {
+    @Test("The tone sets the message icon", arguments: TSAlertTone.allCases)
+    func toneIcon(tone: TSAlertTone) throws {
         let sut = TSAlert(tone: tone, title: "Payment failed", message: "Update your card.")
         let message = try sut.inspect().find(TSAlertMessage.self)
-        let expected = "\(TSStrings.alertTone(tone)), Payment failed, Update your card."
-        #expect(try message.accessibilityLabel().string() == expected)
         #expect(try message.actualView().icon == TSAlertStyleSpec.icon(tone))
     }
 
@@ -26,17 +24,13 @@ struct TSAlertBehaviorTests {
         #expect(try sut.inspect().find(TSAlertMessage.self).actualView().icon == .lock)
     }
 
-    @Test("The dismiss button is labelled Dismiss and fires the callback")
+    @Test("The dismiss button fires the callback")
     func dismissFires() throws {
         let counter = TapCounter()
         let sut = TSAlert(tone: .warning, title: "Storage almost full", onDismiss: { counter.tap() })
         let button = try sut.inspect().find(TSAlertDismissButton.self).find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Dismiss")
         try button.tap()
         #expect(counter.count == 1)
-        let escape = try sut.inspect().hStack().modifier(TSAlertEscape.self).actualView()
-        escape.onDismiss?()
-        #expect(counter.count == 2)
     }
 
     @Test("Without onDismiss there is no dismiss button")
@@ -58,18 +52,6 @@ struct TSAlertBehaviorTests {
         #expect(throws: (any Error).self) {
             try sut.inspect().find(TSAlertMessage.self).find(TSButton.self)
         }
-    }
-
-    @Test("An alert shown dynamically posts its announcement when it appears; a static alert does not")
-    func announcement() throws {
-        let log = AnnouncementLog()
-        let dynamic = TSAlert(tone: .danger, title: "Payment failed", message: "Update your card.", announcesOnAppear: true)
-            .announcing { log.record($0) }
-        try dynamic.inspect().hStack().callOnAppear()
-        #expect(log.messages == ["Error, Payment failed, Update your card."])
-        let quiet = TSAlert(tone: .info, title: "Heads up").announcing { log.record($0) }
-        try quiet.inspect().hStack().callOnAppear()
-        #expect(log.messages.count == 1)
     }
 
     @Test("Padding 12 + 1 border around 20 pt lines; title and message stack")

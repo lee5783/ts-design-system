@@ -139,41 +139,6 @@ struct TSTextFieldStyleSpecTests {
         #expect(TSTextFieldStyleSpec.readOnlyText("hunter2", isSecure: false) == "hunter2")
         #expect(TSTextFieldStyleSpec.readOnlyText("hunter2", isSecure: true) == "•••••••")
     }
-}
-
-@Suite("TSTextFieldAccessibility")
-struct TSTextFieldAccessibilityTests {
-    @Test("The value is untouched without an error and carries the error otherwise")
-    func value() {
-        #expect(TSTextFieldAccessibility.value(text: "ada", error: nil, isSecure: false) == nil)
-        #expect(TSTextFieldAccessibility.value(text: "ada", error: "", isSecure: false) == nil)
-        #expect(TSTextFieldAccessibility.value(text: "ada", error: "Too short", isSecure: false) == "ada, Error: Too short")
-        #expect(TSTextFieldAccessibility.value(text: "", error: "Required", isSecure: false) == "Error: Required")
-        #expect(TSTextFieldAccessibility.value(text: "secret", error: "Too short", isSecure: true) == "Error: Too short")
-    }
-
-    @Test("The hint is dropped while an error replaces it")
-    func hint() {
-        #expect(TSTextFieldAccessibility.hint("We never share it", error: nil) == "We never share it")
-        #expect(TSTextFieldAccessibility.hint("We never share it", error: "Required") == nil)
-        #expect(TSTextFieldAccessibility.hint(nil, error: nil) == nil)
-    }
-
-    @Test("An announcement is made only when a new error appears or changes")
-    func announcement() {
-        #expect(TSTextFieldAccessibility.announcement(from: nil, to: "Required") == "Error: Required")
-        #expect(TSTextFieldAccessibility.announcement(from: "Required", to: "Too short") == "Error: Too short")
-        #expect(TSTextFieldAccessibility.announcement(from: "Required", to: "Required") == nil)
-        #expect(TSTextFieldAccessibility.announcement(from: "Required", to: nil) == nil)
-        #expect(TSTextFieldAccessibility.announcement(from: nil, to: "") == nil)
-    }
-
-    @Test("Toggle labels and English strings")
-    func strings() {
-        #expect(TSTextFieldAccessibility.toggleLabel(isRevealed: false) == "Show password")
-        #expect(TSTextFieldAccessibility.toggleLabel(isRevealed: true) == "Hide password")
-        #expect(TSStrings.textFieldError("Required", locale: Locale(identifier: "en_US")) == "Error: Required")
-    }
 
     @Test("Multiline picks TextField(axis:) on iOS 16+ and the UITextView bridge on iOS 15")
     func multilinePath() {

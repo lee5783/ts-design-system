@@ -35,22 +35,6 @@ struct TSBottomNavBehaviorTests {
         #expect(box.value == "home")
     }
 
-    @Test("Each item is one element: label, \"Tab, n of N\" plus the badge, the selected trait only when selected, no button trait")
-    func accessibility() throws {
-        let sut = TSBottomNav(items: items, selection: .constant("inbox"), label: "Main")
-        let buttons = try sut.inspect().findAll(ViewType.Button.self)
-        #expect(buttons.count == 4)
-        let values = ["Tab, 1 of 4", "Tab, 2 of 4, 3 new", "Tab, 3 of 4", "Tab, 4 of 4, 99+ new"]
-        for (index, button) in buttons.enumerated() {
-            #expect(try button.accessibilityLabel().string() == items[index].label)
-            #expect(try button.accessibilityValue().string() == values[index])
-            let traits = try button.accessibilityTraits()
-            #expect(traits.contains(.isSelected) == (index == 1))
-            #expect(!traits.contains(.isButton))
-        }
-        #expect(try sut.inspect().hStack().accessibilityLabel().string() == "Main")
-    }
-
     @Test("The badge shows the formatted count and is hidden from VoiceOver; no badge without a count")
     func badge() throws {
         let sut = TSBottomNav(items: items, selection: .constant("home"))

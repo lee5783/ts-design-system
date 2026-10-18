@@ -40,30 +40,14 @@ struct TSTabsBehaviorTests {
         #expect(box.value == "day")
     }
 
-    @Test(
-        "Each tab is one element: its label, \"Tab, n of N\", the selected trait only when selected, and no button trait",
-        arguments: TSTabsVariant.allCases
-    )
-    func accessibility(variant: TSTabsVariant) throws {
-        let sut = TSTabs(items: items, selection: .constant("week"), variant: variant, label: "Time range")
+    @Test("The selection indicator is decorative", arguments: TSTabsVariant.allCases)
+    func selectionIndicator(variant: TSTabsVariant) throws {
+        let sut = TSTabs(items: items, selection: .constant("week"), variant: variant)
         let buttons = try sut.inspect().findAll(ViewType.Button.self)
         #expect(buttons.count == 3)
-        for (index, button) in buttons.enumerated() {
-            #expect(try button.accessibilityLabel().string() == items[index].label)
-            #expect(try button.accessibilityValue().string() == "Tab, \(index + 1) of 3")
-            let traits = try button.accessibilityTraits()
-            #expect(traits.contains(.isSelected) == (index == 1))
-            #expect(!traits.contains(.isButton))
-        }
         let style = try #require(try buttons[1].buttonStyle() as? TSTabStyle)
         let selection = try style.inspect(isPressed: false).find(TSTabSelection.self)
         #expect(try selection.actualView().body.inspect().accessibilityHidden())
-    }
-
-    @Test("The tab list carries its accessible name")
-    func listLabel() throws {
-        let sut = TSTabs(items: items, selection: .constant("day"), label: "Time range")
-        #expect(try sut.inspect().group().accessibilityLabel().string() == "Time range")
     }
 
     @Test("Underline tabs scroll horizontally when they overflow instead of squeezing")

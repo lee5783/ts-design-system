@@ -26,22 +26,10 @@ struct TSSwitchBehaviorTests {
         #expect(!box.value)
     }
 
-    @Test(
-        "One element: the label, an on/off value, and the toggle trait on 17+ or the button trait on 15–16",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func accessibilityHierarchy(path: TSCompatPath, isOn: Bool) throws {
-        let sut = TSSwitch("Wi-Fi", isOn: .constant(isOn), isLabelHidden: true).usingTogglePath(path)
+    @Test("The track is decorative", arguments: [false, true])
+    func trackIsDecorative(isOn: Bool) throws {
+        let sut = TSSwitch("Wi-Fi", isOn: .constant(isOn), isLabelHidden: true)
         let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Wi-Fi")
-        #expect(try button.accessibilityValue().string() == (isOn ? "On" : "Off"))
-        let traits = try button.accessibilityTraits()
-        #expect(!traits.contains(.isSelected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(traits.contains(.isToggle))
-        } else {
-            #expect(traits.contains(.isButton))
-        }
         let style = try #require(try button.buttonStyle() as? TSSwitchStyle)
         let track = try style.inspect(isPressed: false).find(TSSwitchTrack.self)
         #expect(try track.actualView().body.inspect().accessibilityHidden())

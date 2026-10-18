@@ -94,7 +94,6 @@ public final class TSIconButtonView: UIButton {
         self.configuration = configuration
         tsApplyBorder(resolved.border, width: resolved.borderWidth, cornerRadius: resolved.cornerRadius)
         alpha = isDimmedByContainer ? 1 : resolved.opacity
-        accessibilityLabel = label
         largeContentTitle = label
         largeContentImage = (iconImage ?? icon.image())?.withRenderingMode(.alwaysTemplate)
     }
@@ -107,11 +106,6 @@ public final class TSIconButtonView: UIButton {
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         setNeedsUpdateConfiguration()
-    }
-
-    override public var accessibilityTraits: UIAccessibilityTraits {
-        get { super.accessibilityTraits.union(isEnabled ? .button : [.button, .notEnabled]) }
-        set { super.accessibilityTraits = newValue }
     }
 
     override public func sendAction(_ action: UIAction) {

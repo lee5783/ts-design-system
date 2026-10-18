@@ -25,20 +25,18 @@ struct TSIconButtonBehaviorTests {
         #expect(counter.count == 0)
     }
 
-    @Test("The required label becomes the accessibility label")
-    func accessibilityLabel() throws {
+    @Test("The glyph inside the button is decorative")
+    func glyphIsDecorative() throws {
         let sut = TSIconButton(.more, label: "More options", isRound: true) {}
         let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "More options")
         #expect(try button.find(TSIcon.self).actualView().body.inspect().accessibilityHidden())
     }
 
-    @Test("A consumer image keeps the required label and draws at the resolved icon size")
+    @Test("A consumer image draws at the resolved icon size")
     func consumerImage() throws {
         let image = Image(uiImage: TSSampleIconImage.controller())
         let sut = TSIconButton(.image(image), label: "Controller", variant: .secondary) {}
         let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Controller")
         let resolved = TSIconButtonStyleSpec.resolve(.init(variant: .secondary))
         #expect(try button.find(TSIconSourceView.self).actualView().pointSize == resolved.iconSize)
         #expect(try button.find(ViewType.Image.self).accessibilityHidden())

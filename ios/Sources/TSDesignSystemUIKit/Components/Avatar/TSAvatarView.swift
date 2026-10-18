@@ -89,7 +89,6 @@ public final class TSAvatarView: UIView {
             placeholderView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         isAccessibilityElement = true
-        accessibilityTraits = .image
     }
 
     private func applyStyle() {
@@ -106,7 +105,5 @@ public final class TSAvatarView: UIView {
         placeholderView.isHidden = !resolved.showsPlaceholder
         placeholderView.size = resolved.placeholderIconSize
         placeholderView.tintColor = foreground
-        accessibilityLabel = name
-        isAccessibilityElement = TSAvatarAccessibility.isExposed(name: name)
     }
 }

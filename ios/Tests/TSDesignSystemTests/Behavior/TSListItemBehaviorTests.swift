@@ -48,54 +48,21 @@ struct TSListItemBehaviorTests {
         #expect(TSListItemStyleSpec.resolve(.init(isInteractive: plainChrome.isInteractive, state: .pressed)).background == nil)
     }
 
-    @Test("A chevron row with an action has the button trait and the navigates hint; an action row has no hint")
-    func navigationAccessibility() throws {
-        let navigation = try TSListItem("Settings", showsChevron: true, action: {}).inspect().find(ViewType.Button.self)
-        #expect(try navigation.accessibilityHint().string() == "Opens another screen")
-        let action = try TSListItem("Settings", action: {}).inspect().find(ViewType.Button.self)
-        #expect(try action.accessibilityHint().string() == "")
-    }
-
-    @Test(
-        "A trailing-switch row is one element with switch semantics: label, On/Off, toggle or button trait",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func switchSemantics(path: TSCompatPath, isOn: Bool) throws {
-        let sut = TSListItem("Wi-Fi", subtitle: "Home", isOn: .constant(isOn)).usingTogglePath(path)
-        let row = try sut.inspect().find(TSListItemContent<EmptyView, TSListItemSwitch>.self)
-        #expect(try row.accessibilityLabel().string() == "Wi-Fi, Home")
-        #expect(try row.accessibilityValue().string() == (isOn ? "On" : "Off"))
-        let traits = try row.accessibilityTraits()
-        #expect(!traits.contains(.isSelected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(traits.contains(.isToggle))
-        } else {
-            #expect(traits.contains(.isButton))
-        }
-    }
-
-    @Test("Activating a switch row flips the binding and plays a selection haptic; the switch itself also toggles")
-    func switchActivation() throws {
+    @Test("The row's switch flips the binding")
+    func switchToggles() throws {
         let box = ToggleBox()
-        var haptics: [TSHapticEvent] = []
-        TSListItem("Wi-Fi", isOn: box.binding).playingHaptics { haptics.append($0) }.flipToggle()
-        #expect(box.value)
-        #expect(haptics == [.selection])
         try TSListItem("Wi-Fi", isOn: box.binding).inspect().find(TSSwitch.self).find(ViewType.Button.self).tap()
-        #expect(!box.value)
+        #expect(box.value)
     }
 
-    @Test("A disabled switch row does not toggle through its accessibility action")
+    @Test("A disabled switch row does not toggle")
     func switchDisabled() throws {
         let box = ToggleBox()
-        let sut = TSListItem("Wi-Fi", isOn: box.binding)
-        sut.flipToggle()
-        #expect(box.value)
         let disabled = TSListItem("Wi-Fi", isOn: box.binding).disabled(true)
         #expect(throws: (any Error).self) {
             try disabled.inspect().find(TSSwitch.self).find(ViewType.Button.self).tap()
         }
-        #expect(box.value)
+        #expect(!box.value)
     }
 
     @Test("Rows are 48 pt with a title and 68 pt with a subtitle at the default text size")

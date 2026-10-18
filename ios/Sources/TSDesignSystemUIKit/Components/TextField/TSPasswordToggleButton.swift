@@ -2,10 +2,7 @@ import UIKit
 
 final class TSPasswordToggleButton: UIButton {
     var isRevealed = false {
-        didSet {
-            accessibilityLabel = TSTextFieldAccessibility.toggleLabel(isRevealed: isRevealed)
-            setNeedsUpdateConfiguration()
-        }
+        didSet { setNeedsUpdateConfiguration() }
     }
 
     init() {
@@ -18,7 +15,6 @@ final class TSPasswordToggleButton: UIButton {
             widthAnchor.constraint(equalToConstant: size),
             heightAnchor.constraint(equalToConstant: size)
         ])
-        accessibilityLabel = TSTextFieldAccessibility.toggleLabel(isRevealed: isRevealed)
         setNeedsUpdateConfiguration()
     }
 
@@ -51,10 +47,5 @@ final class TSPasswordToggleButton: UIButton {
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         TSHitArea.expandedRect(bounds, minimum: resolved.minimumHitSize).contains(point)
-    }
-
-    override var accessibilityTraits: UIAccessibilityTraits {
-        get { super.accessibilityTraits.union(isEnabled ? .button : [.button, .notEnabled]) }
-        set { super.accessibilityTraits = newValue }
     }
 }

@@ -39,8 +39,5 @@ public struct TSBadge: View {
             borderWidth: resolved.borderWidth
         )
         .fixedSize(horizontal: false, vertical: true)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(text))
-        .accessibilityAddTraits(.isStaticText)
     }
 }

@@ -28,18 +28,6 @@ public final class TSAlertView: UIView {
         didSet { applyStyle() }
     }
 
-    public var announcesWhenShown: Bool
-
-    override public var isHidden: Bool {
-        didSet {
-            if oldValue, !isHidden {
-                announceIfNeeded()
-            }
-        }
-    }
-
-    var announce: @MainActor (String) -> Void = { TSAlertAccessibility.post($0) }
-
     let stackView = UIStackView()
     let messageView = UIStackView()
     let iconView = TSIconView(.info, size: .md)
@@ -53,14 +41,12 @@ public final class TSAlertView: UIView {
         title: String? = nil,
         message: String? = nil,
         icon: TSIconName? = nil,
-        announcesWhenShown: Bool = false,
         onDismiss: (() -> Void)? = nil
     ) {
         self.tone = tone
         self.title = title
         self.message = message
         self.icon = icon
-        self.announcesWhenShown = announcesWhenShown
         self.onDismiss = onDismiss
         super.init(frame: .zero)
         configureHierarchy()
@@ -76,31 +62,9 @@ public final class TSAlertView: UIView {
         TSAlertStyleSpec.resolve(.init(tone: tone, hasTitle: title != nil, isDismissible: onDismiss != nil))
     }
 
-    var announcement: String {
-        TSAlertAccessibility.label(tone: tone, title: title, message: message)
-    }
-
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyStyle()
-    }
-
-    override public func didMoveToWindow() {
-        super.didMoveToWindow()
-        if window != nil, !isHidden {
-            announceIfNeeded()
-        }
-    }
-
-    override public func accessibilityPerformEscape() -> Bool {
-        guard let onDismiss else { return false }
-        onDismiss()
-        return true
-    }
-
-    private func announceIfNeeded() {
-        guard announcesWhenShown else { return }
-        announce(announcement)
     }
 
     private func configureHierarchy() {
@@ -135,7 +99,6 @@ public final class TSAlertView: UIView {
         messageView.spacing = resolved.spacing
         [iconView, textStack].forEach(messageView.addArrangedSubview)
         messageView.isAccessibilityElement = true
-        messageView.accessibilityTraits = .staticText
         messageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         messageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         iconView.setContentHuggingPriority(.required, for: .horizontal)
@@ -179,7 +142,6 @@ public final class TSAlertView: UIView {
         }
         dismissButton.isHidden = !resolved.showsDismiss
         dismissButton.apply(resolved)
-        messageView.accessibilityLabel = announcement
     }
 }
 
@@ -206,8 +168,6 @@ final class TSAlertDismissButton: UIControl {
         setContentCompressionResistancePriority(.required, for: .horizontal)
         addAction(UIAction { [weak self] _ in self?.sendActions(for: .primaryActionTriggered) }, for: .touchUpInside)
         isAccessibilityElement = true
-        accessibilityTraits = .button
-        accessibilityLabel = TSStrings.dismiss
     }
 
     @available(*, unavailable)
@@ -223,10 +183,5 @@ final class TSAlertDismissButton: UIControl {
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         TSHitArea.expandedRect(bounds).contains(point)
-    }
-
-    override func accessibilityActivate() -> Bool {
-        sendActions(for: .primaryActionTriggered)
-        return true
     }
 }

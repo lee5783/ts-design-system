@@ -5,12 +5,12 @@ import TSTokens
 
 @Suite("TSToastStyleSpec")
 struct TSToastStyleSpecTests {
-    private static let expectedTones: [TSToastTone: (icon: TSIconName?, iconColor: TSColor?, name: String?)] = [
-        .neutral: (nil, nil, nil),
-        .info: (.info, .infoOnInverse, "Information"),
-        .success: (.checkCircle, .successOnInverse, "Success"),
-        .warning: (.alert, .warningOnInverse, "Warning"),
-        .danger: (.xCircle, .dangerOnInverse, "Error")
+    private static let expectedTones: [TSToastTone: (icon: TSIconName?, iconColor: TSColor?)] = [
+        .neutral: (nil, nil),
+        .info: (.info, .infoOnInverse),
+        .success: (.checkCircle, .successOnInverse),
+        .warning: (.alert, .warningOnInverse),
+        .danger: (.xCircle, .dangerOnInverse)
     ]
 
     @Test("The matrix covers 5 tones × action once each")
@@ -57,44 +57,19 @@ struct TSToastStyleSpecTests {
         #expect(TSColor.dangerOnInverse.light == TSColor.danger.dark)
         #expect(TSColor.infoOnInverse.light == TSColor.info.dark)
     }
-
-    @Test("The label reads tone and message; the announcement adds the action", arguments: TSToastTone.allCases)
-    func accessibilityLabel(tone: TSToastTone) throws {
-        let name = try #require(Self.expectedTones[tone]).name
-        let prefix = name.map { "\($0), " } ?? ""
-        #expect(TSStrings.toastTone(tone) == name)
-        #expect(TSToastAccessibility.label(tone: tone, message: "Project archived") == "\(prefix)Project archived")
-        let plain = TSToastItem(message: "Project archived", tone: tone)
-        #expect(TSToastAccessibility.announcement(for: plain) == "\(prefix)Project archived")
-        let undo = TSToastItem(message: "Project archived", tone: tone, action: TSToastAction(title: "Undo") {})
-        #expect(TSToastAccessibility.announcement(for: undo) == "\(prefix)Project archived, Undo")
-    }
 }
 
 @MainActor
 @Suite("TSToastShowEffects")
 struct TSToastShowEffectsTests {
-    @Test("Each new toast is announced once and plays its tone haptic")
-    func announcesOnce() {
-        var announcements: [String] = []
+    @Test("Each new toast plays its tone haptic once")
+    func playsHapticOnce() {
         var haptics: [TSHapticEvent] = []
-        let effects = TSToastShowEffects(announce: { announcements.append($0) }, haptics: TSHaptics { haptics.append($0) })
+        let effects = TSToastShowEffects(haptics: TSHaptics { haptics.append($0) })
         let saved = TSToastItem(message: "Saved", tone: .success)
         effects.didChange(to: saved)
         effects.didChange(to: saved)
         effects.didChange(to: TSToastItem(message: "Moved"))
-        #expect(announcements == ["Success, Saved", "Moved"])
         #expect(haptics == [.success])
-    }
-
-    @Test("A toast shown again after the queue empties is announced again")
-    func reannouncesAfterEmpty() {
-        var announcements: [String] = []
-        let effects = TSToastShowEffects(announce: { announcements.append($0) }, haptics: TSHaptics(isEnabled: false))
-        let saved = TSToastItem(message: "Saved")
-        effects.didChange(to: saved)
-        effects.didChange(to: nil)
-        effects.didChange(to: saved)
-        #expect(announcements == ["Saved", "Saved"])
     }
 }

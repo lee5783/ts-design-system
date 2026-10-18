@@ -52,10 +52,6 @@ public final class TSListItemView: UIControl {
         return self
     }
 
-    override public func accessibilityActivate() -> Bool {
-        itemContentView.performAccessibilityActivation()
-    }
-
     func userDidActivate() {
         let configuration = effectiveConfiguration
         guard configuration.isEnabled, configuration.role.isPressable else { return }
@@ -71,11 +67,6 @@ public final class TSListItemView: UIControl {
             itemContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             itemContentView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
-        itemContentView.activate = { [weak self] in
-            guard let self, self.effectiveConfiguration.isEnabled else { return false }
-            self.userDidActivate()
-            return true
-        }
         itemContentView.toggleDidChange = { [weak self] isOn in
             self?.configuration.trailing = .toggle(isOn: isOn)
             self?.sendActions(for: .valueChanged)

@@ -18,12 +18,12 @@ struct TabsPage: View {
         DemoPage(page: .tabs) {
             DemoComponentSection(.variants) {
                 DemoCaption(text: DemoStrings.string(.underline))
-                TSTabs(items: TabsSample.sections, selection: $section, label: DemoStrings.string(.sampleProjectSections))
+                TSTabs(items: TabsSample.sections, selection: $section)
                 DemoCaption(text: DemoStrings.string(.segmented))
-                TSTabs(items: Array(TabsSample.ranges.prefix(3)), selection: $range, variant: .segmented, label: DemoStrings.string(.sampleTimeRange))
+                TSTabs(items: Array(TabsSample.ranges.prefix(3)), selection: $range, variant: .segmented)
             }
             DemoComponentSection(.block) {
-                TSTabs(items: TabsSample.ranges, selection: $blockRange, variant: .segmented, isBlock: true, label: DemoStrings.string(.sampleTimeRange))
+                TSTabs(items: TabsSample.ranges, selection: $blockRange, variant: .segmented, isBlock: true)
                 TSTabs(items: TabsSample.layouts, selection: $layout, variant: .segmented)
             }
             DemoComponentSection(.states) {
@@ -34,7 +34,7 @@ struct TabsPage: View {
                 }
             }
             DemoComponentSection(.overflow) {
-                TSTabs(items: TabsSample.manySections, selection: $overflowSection, label: DemoStrings.string(.sampleProjectSections))
+                TSTabs(items: TabsSample.manySections, selection: $overflowSection)
                     .accessibilityIdentifier("demo.tabs.overflow")
                 DemoCaption(text: TabsSample.label(for: overflowSection))
                     .accessibilityIdentifier("demo.tabs.overflow.value")
@@ -49,7 +49,7 @@ struct TabsPage: View {
                     .accessibilityIdentifier("demo.tabs.playground.disabled")
                 Toggle(DemoStrings.string(.block), isOn: $isBlock)
                     .accessibilityIdentifier("demo.tabs.playground.block")
-                TSTabs(items: TabsSample.ranges, selection: countedSelection, variant: variant, isBlock: isBlock, label: DemoStrings.string(.sampleTimeRange))
+                TSTabs(items: TabsSample.ranges, selection: countedSelection, variant: variant, isBlock: isBlock)
                     .disabled(isDisabled)
                     .accessibilityIdentifier("demo.tabs.playground.tabs")
                 DemoCaption(text: TabsSample.label(for: selection))

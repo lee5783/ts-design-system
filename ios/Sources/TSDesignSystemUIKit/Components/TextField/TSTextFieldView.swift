@@ -23,12 +23,7 @@ public final class TSTextFieldView: UIControl {
     }
 
     public var errorMessage: String? {
-        didSet {
-            applyStyle()
-            if let announcement = TSTextFieldAccessibility.announcement(from: oldValue, to: errorMessage) {
-                announce(announcement)
-            }
-        }
+        didSet { applyStyle() }
     }
 
     public var leadingIcon: TSIconName? {
@@ -94,8 +89,6 @@ public final class TSTextFieldView: UIControl {
     var forcedFocus = false {
         didSet { applyStyle() }
     }
-
-    var announce: @MainActor (String) -> Void = { TSTextFieldAccessibility.post($0) }
 
     private var isSyncingText = false
     private lazy var textFieldHeight = textField.heightAnchor.constraint(greaterThanOrEqualToConstant: TSSize.controlMd)
@@ -304,17 +297,8 @@ public final class TSTextFieldView: UIControl {
         messageIconView.tintColor = messageColor
         messageLabel.attributedText = resolved.messageFont.attributedString(message ?? "", sizeCategory: sizeCategory, color: messageColor, alignment: alignment)
 
-        applyAccessibility(resolved)
-    }
-
-    private func applyAccessibility(_ resolved: TSTextFieldStyleSpec.Resolved) {
         let input: UIView = usesTextView ? textView : textField
-        let value = TSTextFieldAccessibility.value(text: text, error: errorMessage, isSecure: isSecure)
         input.isAccessibilityElement = true
-        input.accessibilityLabel = label
-        input.accessibilityHint = TSTextFieldAccessibility.hint(hint, error: errorMessage)
-        input.accessibilityValue = isReadOnly ? (value ?? TSTextFieldStyleSpec.readOnlyText(text, isSecure: isSecure)) : value
-        input.accessibilityTraits = resolved.isSelectable ? [] : .notEnabled
     }
 
     private func pushText() {

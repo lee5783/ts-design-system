@@ -37,7 +37,6 @@ public final class TSListSectionHeaderView: UICollectionReusableView {
             bottom
         ])
         isAccessibilityElement = true
-        accessibilityTraits = .header
     }
 
     private func applyStyle() {
@@ -48,6 +47,5 @@ public final class TSListSectionHeaderView: UICollectionReusableView {
             color: group.headerColor.uiColor.resolvedColor(with: traitCollection),
             alignment: effectiveUserInterfaceLayoutDirection == .rightToLeft ? .right : .left
         )
-        accessibilityLabel = title
     }
 }

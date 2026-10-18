@@ -34,12 +34,6 @@ struct TSDisclosureListItemBehaviorTests {
         #expect(try disclosure(ToggleBox(true)).inspect().find(text: "Licence text").string() == "Licence text")
     }
 
-    @Test("The header is a button whose value is Collapsed or Expanded", arguments: [false, true])
-    func accessibilityValue(isExpanded: Bool) throws {
-        let button = try disclosure(ToggleBox(isExpanded)).inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityValue().string() == (isExpanded ? "Expanded" : "Collapsed"))
-    }
-
     @Test("A disabled row does not toggle")
     func disabledBlocks() throws {
         let box = ToggleBox()

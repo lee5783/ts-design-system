@@ -9,14 +9,9 @@ public final class TSIconView: UIImageView {
         didSet { invalidateIntrinsicContentSize() }
     }
 
-    public var label: String? {
-        didSet { updateAccessibility() }
-    }
-
-    public init(_ name: TSIconName, size: TSIconSize = .md, label: String? = nil) {
+    public init(_ name: TSIconName, size: TSIconSize = .md) {
         self.name = name
         self.size = size
-        self.label = label
         super.init(frame: .zero)
         contentMode = .scaleAspectFit
         setContentHuggingPriority(.required, for: .horizontal)
@@ -24,7 +19,6 @@ public final class TSIconView: UIImageView {
         setContentCompressionResistancePriority(.required, for: .horizontal)
         setContentCompressionResistancePriority(.required, for: .vertical)
         updateImage()
-        updateAccessibility()
     }
 
     @available(*, unavailable)
@@ -38,16 +32,10 @@ public final class TSIconView: UIImageView {
     }
 
     private var resolved: TSIconStyleSpec.Resolved {
-        TSIconStyleSpec.resolve(.init(size: size, hasLabel: label != nil))
+        TSIconStyleSpec.resolve(.init(size: size))
     }
 
     private func updateImage() {
         image = name.image()?.withRenderingMode(.alwaysTemplate)
-    }
-
-    private func updateAccessibility() {
-        isAccessibilityElement = resolved.isAccessibilityElement
-        accessibilityLabel = label
-        accessibilityTraits = resolved.isAccessibilityElement ? .image : []
     }
 }

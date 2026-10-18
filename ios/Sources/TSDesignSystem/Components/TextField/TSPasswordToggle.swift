@@ -22,6 +22,5 @@ struct TSPasswordToggle: View {
                 .tsMinimumHitArea(outset: TSHitArea.outset(for: resolved.size, minimum: resolved.minimumHitSize))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(Text(TSTextFieldAccessibility.toggleLabel(isRevealed: isRevealed)))
     }
 }

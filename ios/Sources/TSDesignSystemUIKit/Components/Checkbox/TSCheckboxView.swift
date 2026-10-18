@@ -26,10 +26,6 @@ public final class TSCheckboxView: UIControl {
     let checkView = TSIconView(.check, size: .sm)
     let labelView = UILabel()
 
-    var togglePath: TSCompatPath = TSCompat.toggleTrait {
-        didSet { applyStyle() }
-    }
-
     var playHaptic: @MainActor (TSHapticEvent) -> Void = { TSHaptics.shared.play($0) }
 
     public init(label: String, isOn: Bool = false, isLabelHidden: Bool = false) {
@@ -81,12 +77,6 @@ public final class TSCheckboxView: UIControl {
 
     override public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         TSHitArea.expandedRect(bounds).contains(point)
-    }
-
-    override public func accessibilityActivate() -> Bool {
-        guard isEnabled else { return false }
-        userDidToggle()
-        return true
     }
 
     func userDidToggle() {
@@ -146,8 +136,6 @@ public final class TSCheckboxView: UIControl {
         )
         alpha = resolved.opacity
 
-        accessibilityLabel = label
-        TSAccessibilityTraitsCompat.apply(to: self, isOn: isOn, kind: .checkbox, path: togglePath)
-        accessibilityTraits = isEnabled ? accessibilityTraits.subtracting(.notEnabled) : accessibilityTraits.union(.notEnabled)
+        isAccessibilityElement = true
     }
 }

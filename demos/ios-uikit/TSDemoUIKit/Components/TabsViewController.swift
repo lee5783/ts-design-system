@@ -16,7 +16,7 @@ final class TabsViewController: DemoPageViewController {
         return caption
     }()
     private lazy var playgroundTabs: TSTabsView = {
-        let tabs = TSTabsView(items: TabsSample.ranges, variant: .segmented, isBlock: true, label: DemoStrings.string(.sampleTimeRange))
+        let tabs = TSTabsView(items: TabsSample.ranges, variant: .segmented, isBlock: true)
         tabs.accessibilityIdentifier = "demo.tabs.playground.tabs"
         tabs.addAction(UIAction { [weak self] _ in self?.tabsDidChange() }, for: .valueChanged)
         return tabs
@@ -37,20 +37,19 @@ final class TabsViewController: DemoPageViewController {
     private func variantsSection() -> UIView {
         let section = DemoComponentSectionView(.variants, views: [])
         section.addArrangedSubview(DemoPlayground.caption(DemoStrings.string(.underline)))
-        section.addFullWidth(TSTabsView(items: TabsSample.sections, label: DemoStrings.string(.sampleProjectSections)))
+        section.addFullWidth(TSTabsView(items: TabsSample.sections))
         section.addArrangedSubview(DemoPlayground.caption(DemoStrings.string(.segmented)))
         section.addArrangedSubview(TSTabsView(
             items: Array(TabsSample.ranges.prefix(3)),
             selectedID: TabsSample.ranges[1].id,
-            variant: .segmented,
-            label: DemoStrings.string(.sampleTimeRange)
+            variant: .segmented
         ))
         return section
     }
 
     private func blockSection() -> UIView {
         let section = DemoComponentSectionView(.block, views: [])
-        section.addFullWidth(TSTabsView(items: TabsSample.ranges, variant: .segmented, isBlock: true, label: DemoStrings.string(.sampleTimeRange)))
+        section.addFullWidth(TSTabsView(items: TabsSample.ranges, variant: .segmented, isBlock: true))
         section.addArrangedSubview(TSTabsView(items: TabsSample.layouts, variant: .segmented))
         return section
     }
@@ -67,7 +66,7 @@ final class TabsViewController: DemoPageViewController {
     }
 
     private func overflowSection() -> UIView {
-        let tabs = TSTabsView(items: TabsSample.manySections, label: DemoStrings.string(.sampleProjectSections))
+        let tabs = TSTabsView(items: TabsSample.manySections)
         tabs.accessibilityIdentifier = "demo.tabs.overflow"
         tabs.addAction(UIAction { [weak self, unowned tabs] _ in
             self?.overflowCaption.string = TabsSample.label(for: tabs.selectedID)

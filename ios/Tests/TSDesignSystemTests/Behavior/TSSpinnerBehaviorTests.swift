@@ -14,22 +14,4 @@ struct TSSpinnerBehaviorTests {
     func frame(size spinnerSize: TSSpinnerSize, expected: CGFloat) {
         #expect(size(of: TSSpinner(size: spinnerSize)) == CGSize(width: expected, height: expected))
     }
-
-    @Test("The spinner is one element labelled Loading that updates frequently")
-    func defaultLabel() throws {
-        let sut = try TSSpinner().body.inspect()
-        #expect(try sut.accessibilityLabel().string() == "Loading")
-        #expect(try sut.accessibilityTraits().contains(.updatesFrequently))
-    }
-
-    @Test("A custom label replaces Loading")
-    func customLabel() throws {
-        #expect(try TSSpinner(label: "Loading messages").body.inspect().accessibilityLabel().string() == "Loading messages")
-    }
-
-    @Test("A nil label hides the spinner, as the Button spinner is hidden")
-    func hidden() throws {
-        #expect(try TSSpinner(label: nil).body.inspect().accessibilityHidden())
-        #expect(try TSSpinner(size: 16, lineWidth: 2, color: .black).body.inspect().accessibilityHidden())
-    }
 }

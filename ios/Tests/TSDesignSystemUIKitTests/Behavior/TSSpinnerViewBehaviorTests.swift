@@ -26,15 +26,6 @@ struct TSSpinnerViewBehaviorTests {
         #expect(view.lineWidth == 3)
     }
 
-    @Test("A public spinner is one element labelled Loading; the Button's internal spinner is hidden")
-    func accessibility() {
-        let view = TSSpinnerView()
-        #expect(view.isAccessibilityElement)
-        #expect(view.accessibilityLabel == "Loading")
-        #expect(view.accessibilityTraits.contains(.updatesFrequently))
-        #expect(!TSSpinnerView(frame: .zero).isAccessibilityElement)
-    }
-
     @Test("It rotates only while in a window and not hidden")
     func rotation() {
         let view = TSSpinnerView()

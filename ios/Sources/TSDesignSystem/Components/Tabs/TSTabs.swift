@@ -5,27 +5,23 @@ public struct TSTabs: View {
     @Binding var selection: String
     let variant: TSTabsVariant
     let isBlock: Bool
-    let label: String?
     var stateOverrides: [String: TSControlState] = [:]
     var playHaptic: @MainActor (TSHapticEvent) -> Void = { TSHaptics.shared.play($0) }
 
     @FocusState private var focusedID: String?
     @Namespace private var namespace
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     public init(
         items: [TSTabItem],
         selection: Binding<String>,
         variant: TSTabsVariant = .underline,
-        isBlock: Bool = false,
-        label: String? = nil
+        isBlock: Bool = false
     ) {
         self.items = items
         _selection = selection
         self.variant = variant
         self.isBlock = isBlock
-        self.label = label
     }
 
     public var body: some View {
@@ -38,8 +34,8 @@ public struct TSTabs: View {
                 segmented(container)
             }
         }
-        .animation(TSReduceMotion.animation(reduceMotion: reduceMotion), value: selection)
-        .modifier(TSTabListAccessibility(label: label))
+        .animation(TSAnimation.standard(), value: selection)
+        .accessibilityElement(children: .contain)
     }
 
     func forcingState(_ state: TSControlState, for id: String) -> Self {
@@ -64,7 +60,7 @@ public struct TSTabs: View {
             .fixedSize(horizontal: false, vertical: true)
             .onAppear { proxy.scrollTo(selection) }
             .tsOnChange(of: selection) { _, newValue in
-                withAnimation(TSReduceMotion.animation(reduceMotion: reduceMotion)) {
+                withAnimation(TSAnimation.standard()) {
                     proxy.scrollTo(newValue, anchor: .center)
                 }
             }
@@ -96,7 +92,7 @@ public struct TSTabs: View {
     }
 
     private var tabs: some View {
-        ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+        ForEach(items, id: \.id) { item in
             Button {
                 select(item)
             } label: {
@@ -115,10 +111,6 @@ public struct TSTabs: View {
             .focused($focusedID, equals: item.id)
             .tsFocusEffectDisabled()
             .modifier(TSTabLargeContent(label: item.label, isEnabled: variant == .segmented))
-            .accessibilityLabel(Text(item.label))
-            .accessibilityValue(Text(TSStrings.tabPosition(index + 1, of: items.count)))
-            .accessibilityRemoveTraits(.isButton)
-            .accessibilityAddTraits(item.id == selection ? .isSelected : [])
             .id(item.id)
         }
     }
@@ -143,21 +135,6 @@ struct TSTabLargeContent: ViewModifier {
             }
         } else {
             content
-        }
-    }
-}
-
-struct TSTabListAccessibility: ViewModifier {
-    let label: String?
-
-    func body(content: Content) -> some View {
-        if let label {
-            content
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel(Text(label))
-        } else {
-            content
-                .accessibilityElement(children: .contain)
         }
     }
 }

@@ -24,12 +24,12 @@ struct SpinnerPage: View {
             }
             DemoComponentSection(.inContext) {
                 HStack(spacing: TSSpacing.space2) {
-                    TSSpinner(size: .sm, tone: .secondary, label: nil)
+                    TSSpinner(size: .sm, tone: .secondary)
                     TSText(DemoStrings.string(.sampleLoadingMessages), role: .bodySm, color: .secondary)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityIdentifier("demo.spinner.in-context")
-                TSSpinner(size: .lg, tone: .accent, label: DemoStrings.string(.sampleLoadingMessages))
+                TSSpinner(size: .lg, tone: .accent)
                     .accessibilityIdentifier("demo.spinner.labelled")
             }
         }

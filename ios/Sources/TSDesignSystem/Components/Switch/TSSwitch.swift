@@ -5,7 +5,6 @@ public struct TSSwitch: View {
     @Binding var isOn: Bool
     let isLabelHidden: Bool
     var stateOverride: TSControlState?
-    var togglePath: TSCompatPath = TSCompat.toggleTrait
     var playHaptic: @MainActor (TSHapticEvent) -> Void = { TSHaptics.shared.play($0) }
 
     @FocusState private var isFocused: Bool
@@ -30,19 +29,11 @@ public struct TSSwitch: View {
         )
         .focused($isFocused)
         .tsFocusEffectDisabled()
-        .accessibilityLabel(Text(label))
-        .tsToggleAccessibility(isOn: isOn, kind: .switch, path: togglePath)
     }
 
     func forcingState(_ state: TSControlState) -> Self {
         var copy = self
         copy.stateOverride = state
-        return copy
-    }
-
-    func usingTogglePath(_ path: TSCompatPath) -> Self {
-        var copy = self
-        copy.togglePath = path
         return copy
     }
 

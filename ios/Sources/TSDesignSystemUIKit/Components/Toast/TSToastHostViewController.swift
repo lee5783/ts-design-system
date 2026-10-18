@@ -85,12 +85,9 @@ final class TSToastHostViewController: UIViewController {
         bottomConstraint = bottom
         toastView = toast
         view.layoutIfNeeded()
-        let reduceMotion = TSReduceMotion.isEnabled
         toast.alpha = 0
-        if !reduceMotion {
-            toast.transform = CGAffineTransform(translationX: 0, y: toast.bounds.height / 2)
-        }
-        TSReduceMotion.animate(reduceMotion: false) {
+        toast.transform = CGAffineTransform(translationX: 0, y: toast.bounds.height / 2)
+        TSAnimation.animate {
             toast.alpha = 1
             toast.transform = .identity
         }
@@ -100,12 +97,9 @@ final class TSToastHostViewController: UIViewController {
         toast.isUserInteractionEnabled = false
         toast.messageView.isAccessibilityElement = false
         toast.accessibilityElementsHidden = true
-        let reduceMotion = TSReduceMotion.isEnabled
-        TSReduceMotion.animate(reduceMotion: false, animations: {
+        TSAnimation.animate(animations: {
             toast.alpha = 0
-            if !reduceMotion {
-                toast.transform = CGAffineTransform(translationX: 0, y: toast.bounds.height / 2)
-            }
+            toast.transform = CGAffineTransform(translationX: 0, y: toast.bounds.height / 2)
         }, completion: {
             toast.removeFromSuperview()
         })

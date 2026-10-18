@@ -53,42 +53,4 @@ struct TSCardStyleSpecTests {
     func stackSpacing() {
         #expect(TSCardStyleSpec.stackSpacing == 16)
     }
-
-    @Test("The accessibility label joins title and subtitle; custom actions list footer actions first")
-    func accessibility() {
-        #expect(TSCardAccessibility.label(title: "Weekly report", subtitle: "Updated today") == "Weekly report, Updated today")
-        #expect(TSCardAccessibility.label(title: "Weekly report", subtitle: nil) == "Weekly report")
-        #expect(TSCardAccessibility.label(title: nil, subtitle: "Updated today") == "Updated today")
-        #expect(TSCardAccessibility.label(title: "", subtitle: nil) == "")
-        let actions = TSCardAccessibility.customActions(
-            footer: [TSCardAction("Share") {}, TSCardAction("Open", variant: .primary) {}],
-            additional: [TSCardAction("More options") {}]
-        )
-        #expect(actions.map(\.label) == ["Share", "Open", "More options"])
-        #expect(actions.map(\.variant) == [.secondary, .primary, .secondary])
-    }
-
-    @Test("Without a title or subtitle the body text is the label; with a heading it is the value")
-    func bodyFallback() {
-        #expect(TSCardAccessibility.label(title: nil, subtitle: nil, body: "Revenue is up 12%.") == "Revenue is up 12%.")
-        #expect(TSCardAccessibility.label(title: "Weekly report", subtitle: nil, body: "Revenue is up 12%.") == "Weekly report")
-        #expect(TSCardAccessibility.value(title: "Weekly report", subtitle: nil, body: "Revenue is up 12%.") == "Revenue is up 12%.")
-        #expect(TSCardAccessibility.value(title: nil, subtitle: "", body: "Revenue is up 12%.") == nil)
-        #expect(TSCardAccessibility.value(title: "Weekly report", subtitle: nil, body: nil) == nil)
-    }
-
-    @Test("A typed accessory becomes a custom action after the footer actions and before the extra ones")
-    @MainActor
-    func accessoryAction() {
-        var fired = 0
-        let accessory = TSCardAccessory.iconButton(icon: .more, label: "More options") { fired += 1 }
-        let actions = TSCardAccessibility.customActions(
-            footer: [TSCardAction("Open", variant: .primary) {}],
-            accessory: accessory,
-            additional: [TSCardAction("Pin") {}]
-        )
-        #expect(actions.map(\.label) == ["Open", "More options", "Pin"])
-        actions[1].handler()
-        #expect(fired == 1)
-    }
 }

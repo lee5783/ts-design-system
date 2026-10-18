@@ -21,8 +21,6 @@ public final class TSSpinnerView: UIView {
         self.init(frame: .zero)
         usesStyleSpec = true
         isAccessibilityElement = true
-        accessibilityLabel = TSStrings.loading
-        accessibilityTraits = .updatesFrequently
         setContentHuggingPriority(.required, for: .horizontal)
         setContentHuggingPriority(.required, for: .vertical)
         self.size = size

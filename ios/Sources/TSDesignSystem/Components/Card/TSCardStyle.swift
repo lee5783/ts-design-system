@@ -16,7 +16,6 @@ struct TSCardStyleBody<Label: View>: View {
     let style: TSCardStyle
 
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var state: TSControlState {
         style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
@@ -28,7 +27,7 @@ struct TSCardStyleBody<Label: View>: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(resolved.fill.color)
             .contentShape(Rectangle())
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+            .animation(TSAnimation.pressFeedback, value: state)
     }
 }
 
@@ -114,7 +113,6 @@ struct TSCardContent<Accessory: View, Content: View>: View {
                         .foregroundColor(resolved.titleColor.color)
                         .fixedSize(horizontal: false, vertical: true)
                         .tsFont(resolved.titleFont)
-                        .accessibilityAddTraits(.isHeader)
                 }
                 if let subtitle {
                     Text(subtitle)

@@ -50,12 +50,11 @@ struct TSDialogViewControllerBehaviorTests {
         #expect(dialog.view.backgroundColor == TSColor.overlay.uiColor.resolvedColor(with: dialog.traitCollection))
     }
 
-    @Test("The dialog's view is modal for VoiceOver and the title is a header", arguments: TSDialogVariant.allCases)
+    @Test("The dialog's view is modal and shows its title and message", arguments: TSDialogVariant.allCases)
     func modal(variant: TSDialogVariant) {
         let dialog = makeDialog(variant: variant)
         dialog.loadViewIfNeeded()
         #expect(dialog.view.accessibilityViewIsModal)
-        #expect(dialog.panelView.titleLabel.accessibilityTraits.contains(.header))
         #expect(dialog.panelView.titleLabel.attributedText?.string == "Delete this project?")
         #expect(dialog.panelView.messageLabel.attributedText?.string == "This cannot be undone.")
     }
@@ -315,18 +314,6 @@ struct TSDialogViewControllerBehaviorTests {
         #expect(presenter.refusedCount == 1)
     }
 
-    @Test("Escape closes the dialog, calls onDismiss and frees the presenter for the next dialog")
-    func escapeDismisses() {
-        let presenter = TSDialogPresenter()
-        let counter = TapCounter()
-        let dialog = makeDialog(counter: counter, presenter: presenter)
-        presenter.begin(dialog)
-        #expect(dialog.panelView.accessibilityPerformEscape())
-        #expect(counter.count == 1)
-        #expect(!presenter.isPresenting)
-        #expect(presenter.begin(Owner()))
-    }
-
     @Test("A scrim tap closes the dialog and calls onDismiss; the scrim recognizer filters panel touches")
     func scrimDismisses() {
         let presenter = TSDialogPresenter()
@@ -347,16 +334,6 @@ struct TSDialogViewControllerBehaviorTests {
         dialog.loadViewIfNeeded()
         #expect(dialog.view.gestureRecognizers?.contains { $0 is UITapGestureRecognizer } != true)
         #expect(dialog.view.backgroundColor == TSColor.surfaceElevated.uiColor.resolvedColor(with: dialog.traitCollection))
-    }
-
-    @Test("The Close custom action closes the dialog")
-    func closeAction() throws {
-        let counter = TapCounter()
-        let dialog = makeDialog(counter: counter)
-        let action = try #require(dialog.panelView.accessibilityCustomActions?.first)
-        #expect(action.name == "Close")
-        _ = action.actionHandler?(action)
-        #expect(counter.count == 1)
     }
 
     @Test("A dismissing action runs its handler and closes without onDismiss; a non-dismissing one stays open")
@@ -461,7 +438,7 @@ struct TSDialogViewControllerBehaviorTests {
         #expect(dialog.overrideUserInterfaceStyle == .dark)
     }
 
-    @Test("Reduce motion turns the sheet's slide into a fade")
+    @Test("With animations off the sheet's slide becomes a fade")
     func reduceMotion() {
         let host = Host()
         let dialog = makeDialog(variant: .sheet)

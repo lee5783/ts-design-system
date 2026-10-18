@@ -21,7 +21,6 @@ struct TSButtonStyleBody<Label: View>: View {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.tsDimmedByContainer) private var isDimmedByContainer
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isLoading: style.isLoading, isFocused: style.isFocused)
@@ -42,6 +41,6 @@ struct TSButtonStyleBody<Label: View>: View {
             .tsFocusRing(isFocused: resolved.showsFocusRing, cornerRadius: resolved.cornerRadius)
             .opacity(isDimmedByContainer ? 1 : resolved.opacity)
             .tsMinimumHitArea(outset: TSHitArea.outset(for: max(resolved.minHeight, lineHeight), minimum: resolved.minimumHitSize))
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+            .animation(TSAnimation.pressFeedback, value: state)
     }
 }

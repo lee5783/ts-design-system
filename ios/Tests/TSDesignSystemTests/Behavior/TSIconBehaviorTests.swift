@@ -12,13 +12,6 @@ struct TSIconBehaviorTests {
         #expect(try sut.body.inspect().accessibilityHidden())
     }
 
-    @Test("A labelled icon exposes its label")
-    func labelled() throws {
-        let sut = TSIcon(.bell, size: .lg, label: "Notifications")
-        #expect(try !sut.body.inspect().accessibilityHidden())
-        #expect(try sut.body.inspect().accessibilityLabel().string() == "Notifications")
-    }
-
     @Test("Each size renders a frame of the token size", arguments: TSIconSize.allCases)
     func size(size: TSIconSize) throws {
         let sut = TSIcon(.star, size: size)

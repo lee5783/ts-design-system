@@ -21,15 +21,12 @@ struct TSIconButtonViewBehaviorTests {
         button.isEnabled = false
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 0)
-        #expect(button.accessibilityTraits.contains(.notEnabled))
     }
 
-    @Test("The label is the accessibility label, with the button trait and large content title")
-    func accessibility() {
+    @Test("The label is the large content title")
+    func largeContentTitle() {
         let button = TSIconButtonView(icon: .more, label: "More options", isRound: true)
         button.updateConfiguration()
-        #expect(button.accessibilityLabel == "More options")
-        #expect(button.accessibilityTraits.contains(.button))
         #expect(button.showsLargeContentViewer)
         #expect(button.largeContentTitle == "More options")
     }
@@ -77,14 +74,13 @@ struct TSIconButtonViewBehaviorTests {
         return try #require(RenderedInk.strongest(in: imageView))
     }
 
-    @Test("A consumer image keeps the label, the large content title and the resolved icon size")
+    @Test("A consumer image keeps the large content title and the resolved icon size")
     func consumerImage() {
         let button = TSIconButtonView(iconImage: TSSampleIconImage.controller(side: 48), label: "Controller", variant: .secondary)
         button.updateConfiguration()
         let image = button.configuration?.image
         #expect(image?.size == CGSize(width: button.resolved.iconSize, height: button.resolved.iconSize))
         #expect(image?.renderingMode == .alwaysTemplate)
-        #expect(button.accessibilityLabel == "Controller")
         #expect(button.largeContentTitle == "Controller")
         #expect(button.largeContentImage?.renderingMode == .alwaysTemplate)
         #expect(button.intrinsicContentSize == CGSize(width: 44, height: 44))
