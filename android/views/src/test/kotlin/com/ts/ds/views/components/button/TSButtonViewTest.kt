@@ -4,11 +4,8 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.drawToBitmap
 import androidx.core.widget.ImageViewCompat
 import com.ts.ds.core.icon.TSIcon
@@ -47,9 +44,6 @@ class TSButtonViewTest {
         }
     }
 
-    private fun TSButtonView.nodeInfo(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     @Test
     fun tapInvokesTheClickListener() {
         button().tapCenter()
@@ -67,14 +61,13 @@ class TSButtonViewTest {
     }
 
     @Test
-    fun loadingBlocksTapsWithoutDimmingAndReportsLoading() {
+    fun loadingBlocksTapsWithoutDimming() {
         val view = button { isLoading = true }
         view.tapCenter()
 
         assertEquals(0, taps)
         assertEquals(1f, view.alpha, 0f)
-        assertEquals("Loading", ViewCompat.getStateDescription(view))
-        assertFalse(view.nodeInfo().isEnabled)
+        assertFalse(view.isEnabled)
     }
 
     @Test
@@ -83,18 +76,8 @@ class TSButtonViewTest {
         view.isLoading = false
 
         assertTrue(view.isEnabled)
-        assertNull(ViewCompat.getStateDescription(view))
         view.tapCenter()
         assertEquals(1, taps)
-    }
-
-    @Test
-    fun accessibilityNodeIsAButtonNamedByItsLabel() {
-        val info = button { leadingIcon = TSIcon.Check }.nodeInfo()
-
-        assertEquals(Button::class.java.name, info.className)
-        assertEquals("Save", info.text.toString())
-        assertTrue(info.isEnabled)
     }
 
     @Test

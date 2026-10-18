@@ -1,5 +1,5 @@
 public final class com/ts/ds/compose/components/alert/TSAlertKt {
-	public static final fun TSAlert (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSAlertTone;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;ZLkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSAlert (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSAlertTone;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/avatar/TSAvatarKt {
@@ -11,19 +11,19 @@ public final class com/ts/ds/compose/components/badge/TSBadgeKt {
 }
 
 public final class com/ts/ds/compose/components/bottomnav/TSBottomNavKt {
-	public static final fun TSBottomNav (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;ZLandroidx/compose/foundation/layout/WindowInsets;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSBottomNav (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZLandroidx/compose/foundation/layout/WindowInsets;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/button/TSButtonKt {
-	public static final fun TSButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/icon/TSIcon;ZZLjava/lang/String;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
-	public static final fun TSButton-pDkBHBI (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/compose/components/icon/TSIconSource;Lcom/ts/ds/compose/components/icon/TSIconSource;ZZLjava/lang/String;IILandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TSButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/icon/TSIcon;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSButton-pRZ6q_s (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/compose/components/icon/TSIconSource;Lcom/ts/ds/compose/components/icon/TSIconSource;ZZIILandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class com/ts/ds/compose/components/card/TSCardKt {
-	public static final fun TSCard (Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
-	public static final fun TSCard (Lcom/ts/ds/core/logic/TSCardAccessory;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
-	public static final fun TSCard (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
-	public static final fun TSCard (Ljava/lang/String;Lcom/ts/ds/core/logic/TSCardAccessory;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TSCard (Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSCard (Lcom/ts/ds/core/logic/TSCardAccessory;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSCard (Ljava/lang/String;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSCard (Ljava/lang/String;Lcom/ts/ds/core/logic/TSCardAccessory;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;ZLjava/util/List;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TSCardBodyText (Ljava/lang/String;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
 
@@ -37,7 +37,7 @@ public final class com/ts/ds/compose/components/dialog/TSDialogKt {
 }
 
 public final class com/ts/ds/compose/components/icon/TSIconKt {
-	public static final fun TSIcon-yrwZFoE (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconSize;JLandroidx/compose/runtime/Composer;II)V
+	public static final fun TSIcon-ww6aTOc (Lcom/ts/ds/core/icon/TSIcon;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconSize;JLandroidx/compose/runtime/Composer;II)V
 }
 
 public abstract interface class com/ts/ds/compose/components/icon/TSIconSource {
@@ -80,8 +80,8 @@ public final class com/ts/ds/compose/components/icon/TSIconSource$Vector : com/t
 }
 
 public final class com/ts/ds/compose/components/iconbutton/TSIconButtonKt {
-	public static final fun TSIconButton (Lcom/ts/ds/compose/components/icon/TSIconSource;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
-	public static final fun TSIconButton (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSIconButton (Lcom/ts/ds/compose/components/icon/TSIconSource;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSIconButton (Lcom/ts/ds/core/icon/TSIcon;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/listitem/TSDisclosureListItemKt {
@@ -105,7 +105,7 @@ public final class com/ts/ds/compose/components/listitem/TSListKt {
 }
 
 public final class com/ts/ds/compose/components/spinner/TSSpinnerKt {
-	public static final fun TSSpinner (Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSSpinnerSize;Lcom/ts/ds/core/style/TSSpinnerTone;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+	public static final fun TSSpinner (Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSSpinnerSize;Lcom/ts/ds/core/style/TSSpinnerTone;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/switchcontrol/TSSwitchKt {
@@ -113,7 +113,7 @@ public final class com/ts/ds/compose/components/switchcontrol/TSSwitchKt {
 }
 
 public final class com/ts/ds/compose/components/tabs/TSTabsKt {
-	public static final fun TSTabs (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSTabsVariant;ZLjava/lang/String;ZLandroidx/compose/runtime/Composer;II)V
+	public static final fun TSTabs (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSTabsVariant;ZZLandroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/text/TSTextKt {

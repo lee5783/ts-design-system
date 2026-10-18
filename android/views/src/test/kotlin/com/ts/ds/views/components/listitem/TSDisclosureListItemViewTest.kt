@@ -4,10 +4,7 @@ import android.content.pm.ApplicationInfo
 import android.os.Parcelable
 import android.util.SparseArray
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.views.components.hostInActivity
@@ -15,7 +12,6 @@ import com.ts.ds.views.components.tapCenter
 import com.ts.ds.views.theme.tsColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,9 +44,6 @@ class TSDisclosureListItemViewTest {
         }
     }.getChildAt(0) as TSDisclosureListItemView
 
-    private fun View.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     @Test
     fun addedChildrenBecomeTheBody() {
         val view = disclosure()
@@ -79,27 +72,10 @@ class TSDisclosureListItemViewTest {
     }
 
     @Test
-    fun headerIsAButtonWithExpansionStateAndActions() {
-        val view = disclosure()
-        val collapsed = view.headerView.node()
-        assertEquals(Button::class.java.name, collapsed.className)
-        assertEquals("Kotlin, Apache License 2.0", collapsed.text)
-        assertEquals("Collapsed", collapsed.stateDescription)
-        assertNull(collapsed.hintText)
-        assertTrue(collapsed.actionList.any { it.id == AccessibilityNodeInfoCompat.ACTION_EXPAND })
-        assertTrue(view.headerView.performAccessibilityAction(AccessibilityNodeInfoCompat.ACTION_EXPAND, null))
-        val expanded = view.headerView.node()
-        assertEquals("Expanded", expanded.stateDescription)
-        assertTrue(expanded.actionList.any { it.id == AccessibilityNodeInfoCompat.ACTION_COLLAPSE })
-        assertEquals(listOf(true), changes)
-    }
-
-    @Test
     fun disabledRowDoesNotToggle() {
         val view = disclosure { isEnabled = false }
         view.headerView.tapCenter()
         assertFalse(view.isExpanded)
-        assertTrue(view.headerView.node().actionList.none { it.id == AccessibilityNodeInfoCompat.ACTION_EXPAND })
         assertEquals(0.45f, view.bodyContainer.alpha, 0.001f)
     }
 

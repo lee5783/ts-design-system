@@ -23,13 +23,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.dismiss
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.paneTitle
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.button.TSButton
 import com.ts.ds.compose.components.shared.withContentDirectionAtLayoutStart
@@ -37,7 +30,6 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.shadow
 import com.ts.ds.compose.theme.style
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.logic.TSDialogAction
 import com.ts.ds.core.logic.TSDialogLayout
 import com.ts.ds.core.style.TSDialogActionsAxis
@@ -68,14 +60,12 @@ internal fun TSDialogPanel(
     resolved: TSDialogStyleSpec.Resolved,
     actions: List<TSDialogAction>,
     onAction: (TSDialogAction) -> Unit,
-    onClose: () -> Unit,
     modifier: Modifier = Modifier,
     scrollsContent: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val colors = TSTheme.colors
     val shape = resolved.panelShape()
-    val closeLabel = stringResource(CoreR.string.ts_close)
     val elevation = resolved.shadow?.let { TSTheme.elevation.shadow(it) }
     var chrome = modifier
     resolved.maxWidthDp?.let { chrome = chrome.widthIn(max = it.dp) }
@@ -87,19 +77,6 @@ internal fun TSDialogPanel(
             .fillMaxWidth()
             .background(colors.color(resolved.fill), shape)
             .testTag(TSDialogTestTags.PANEL)
-            .semantics {
-                paneTitle = title
-                dismiss(closeLabel) {
-                    onClose()
-                    true
-                }
-                customActions = listOf(
-                    CustomAccessibilityAction(closeLabel) {
-                        onClose()
-                        true
-                    },
-                )
-            }
             .padding(
                 start = resolved.paddingHorizontalDp.dp,
                 end = resolved.paddingHorizontalDp.dp,
@@ -125,8 +102,7 @@ internal fun TSDialogPanel(
                     .withContentDirectionAtLayoutStart(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag(TSDialogTestTags.TITLE)
-                    .semantics { heading() },
+                    .testTag(TSDialogTestTags.TITLE),
             )
             Spacer(Modifier.height(resolved.titleSpacingDp.dp))
             content()

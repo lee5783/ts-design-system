@@ -10,16 +10,10 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.logic.TSToastAccessibility
 import com.ts.ds.core.logic.TSToastTone
 import com.ts.ds.core.style.TSToastStyleSpec
 import com.ts.ds.core.style.TSTypeRole
@@ -76,9 +70,7 @@ public class TSToastView @JvmOverloads constructor(
         messageView.gravity = Gravity.CENTER_VERTICAL
         textView.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
         textView.gravity = Gravity.START
-        messageView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        ViewCompat.setScreenReaderFocusable(messageView, true)
-        listOf(iconView, textView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
+        iconView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         messageView.addView(iconView, LayoutParams(0, 0))
         messageView.addView(textView, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
         addView(messageView, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
@@ -86,24 +78,6 @@ public class TSToastView @JvmOverloads constructor(
         actionView.isClickable = true
         actionView.isFocusable = true
         actionView.setOnClickListener { onAction?.invoke() }
-        ViewCompat.setAccessibilityDelegate(
-            actionView,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = Button::class.java.name
-                }
-            },
-        )
-        ViewCompat.setAccessibilityDelegate(
-            messageView,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = TextView::class.java.name
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSToastView, defStyleAttr, 0).apply {
             tone = TSToastTone.entries[getInt(R.styleable.TSToastView_tsToastTone, TSToastTone.Neutral.ordinal)]
             message = getText(R.styleable.TSToastView_tsMessage) ?: ""
@@ -121,9 +95,6 @@ public class TSToastView @JvmOverloads constructor(
         get() = TSToastStyleSpec.resolve(
             TSToastStyleSpec.Configuration(tone = tone, hasAction = actionLabel != null && onAction != null),
         )
-
-    internal val accessibilityLabel: String
-        get() = TSToastAccessibility.label(context, tone, message)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val maxWidth = dpToPx(resolved.maxWidthDp)
@@ -176,7 +147,6 @@ public class TSToastView @JvmOverloads constructor(
         actionView.layoutParams = (actionView.layoutParams as LayoutParams).apply { marginStart = spacing }
         actionView.applyPressedAlpha(resolved.actionPressedOpacity)
         actionView.ensureMinTouchTarget(dpToPx(resolved.minTouchTargetDp))
-        messageView.contentDescription = accessibilityLabel
     }
 
     private fun lineHeightPx(role: TSTypeRole): Int =

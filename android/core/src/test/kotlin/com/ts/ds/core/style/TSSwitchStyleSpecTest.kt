@@ -1,6 +1,5 @@
 package com.ts.ds.core.style
 
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.tokens.TSTokenValues
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
@@ -71,11 +70,5 @@ class TSSwitchStyleSpecMatrixTest {
     @Test
     fun matrixIsOffOnTimesFourStates() {
         assertEquals(8, TSSwitchStyleSpec.configurations.size * TSSwitchStyleSpec.states.size)
-    }
-
-    @Test
-    fun reduceMotionMakesTheDurationZero() {
-        assertEquals(0, TSReduceMotion.durationMillis(150, reduceMotion = true))
-        assertEquals(150, TSReduceMotion.durationMillis(150, reduceMotion = false))
     }
 }

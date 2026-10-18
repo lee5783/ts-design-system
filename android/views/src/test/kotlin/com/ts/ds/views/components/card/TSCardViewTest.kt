@@ -5,10 +5,7 @@ import android.os.Looper
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.drawToBitmap
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.logic.TSCardAccessory
@@ -57,13 +54,9 @@ class TSCardViewTest {
 
     private fun interactiveCard(configure: TSCardView.() -> Unit = {}): TSCardView = card {
         footerActions = footer
-        accessibilityActions = listOf(TSCardAction("More options") { events += "more" })
         setOnClickListener { events += "card" }
         configure()
     }
-
-    private fun TSCardView.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
 
     private fun View.boundsIn(ancestor: View): Rect {
         val location = IntArray(2).also(::getLocationInWindow)
@@ -87,34 +80,12 @@ class TSCardViewTest {
     }
 
     @Test
-    fun interactiveCardIsOneButtonElement() {
-        val view = interactiveCard()
-        val node = view.node()
-
-        assertEquals(Button::class.java.name, node.className)
-        assertEquals("Plan, Pro", node.contentDescription)
-        assertTrue(ViewCompat.isScreenReaderFocusable(view))
-        view.footerButtons.forEach { assertFalse(it.isImportantForAccessibility) }
-    }
-
-    @Test
-    fun tapAndActivationPerformTheAction() {
+    fun tapPerformsTheAction() {
         val view = interactiveCard()
 
         view.tapCenter()
-        ViewCompat.performAccessibilityAction(view, AccessibilityNodeInfoCompat.ACTION_CLICK, null)
 
-        assertEquals(listOf("card", "card"), events)
-    }
-
-    @Test
-    fun footerThenExtraActionsAreCustomActionsThatFire() {
-        val view = interactiveCard()
-        val custom = view.node().actionList.filter { it.label != null }
-
-        assertEquals(listOf("Share", "Open", "More options"), custom.map { it.label.toString() })
-        custom.forEach { ViewCompat.performAccessibilityAction(view, it.id, null) }
-        assertEquals(listOf("share", "open", "more"), events)
+        assertEquals(listOf("card"), events)
     }
 
     @Test
@@ -146,28 +117,22 @@ class TSCardViewTest {
     }
 
     @Test
-    fun staticCardIsAContainerWithAHeaderTitle() {
+    fun staticCardIsNotClickable() {
         val view = card { footerActions = footer }
 
         assertFalse(view.isClickable)
-        assertFalse(view.node().className == Button::class.java.name)
-        view.footerButtons.forEach { assertTrue(it.isImportantForAccessibility) }
-        assertTrue(view.node().actionList.none { it.label != null })
         view.tapOn(view.footerButtons[1])
         assertEquals(listOf("open"), events)
-        val title = (0 until view.childCount).flatMap { view.textViews(view.getChildAt(it)) }.first { it.text == "Plan" }
-        assertTrue(ViewCompat.isAccessibilityHeading(title))
     }
 
     @Test
-    fun disabledCardBlocksAndDropsCustomActions() {
+    fun disabledCardBlocksTaps() {
         val view = interactiveCard { isEnabled = false }
 
         view.tapCenter()
         view.tapOn(view.footerButtons[1])
 
         assertEquals(emptyList<String>(), events)
-        assertTrue(view.node().actionList.none { it.label != null })
         view.footerButtons.forEach { assertFalse(it.isEnabled) }
         assertEquals(0.45f, view.alpha, 0f)
     }
@@ -251,34 +216,18 @@ class TSCardViewTest {
     }
 
     @Test
-    fun bodyIsTheStateDescriptionBesideAHeadingAndTheLabelWithoutOne() {
-        assertEquals("Billed monthly", interactiveCard().node().stateDescription)
-
-        val untitled = interactiveCard {
-            title = null
-            subtitle = null
-        }
-        assertEquals("Billed monthly", untitled.node().contentDescription)
-        assertEquals(null, untitled.node().stateDescription)
-    }
-
-    @Test
-    fun typedAccessoryIsAnIconButtonAndACustomActionBetweenFooterAndExtra() {
+    fun typedAccessoryIsAnIconButtonThatFires() {
         val view = interactiveCard {
             accessory = TSCardAccessory.IconButton(TSIcon.More, "Card options") { events += "accessory" }
         }
         val accessory = view.accessoryView as TSIconButtonView
-        val custom = view.node().actionList.filter { it.label != null }
 
-        assertEquals("Card options", accessory.contentDescription)
-        assertEquals(listOf("Share", "Open", "Card options", "More options"), custom.map { it.label.toString() })
-        ViewCompat.performAccessibilityAction(view, custom[2].id, null)
         view.tapOn(accessory)
-        assertEquals(listOf("accessory", "accessory"), events)
+        assertEquals(listOf("accessory"), events)
     }
 
     @Test
-    fun settingAnAccessoryViewClearsTheTypedAccessoryAndItsCustomAction() {
+    fun settingAnAccessoryViewClearsTheTypedAccessory() {
         val view = interactiveCard {
             accessory = TSCardAccessory.IconButton(TSIcon.More, "Card options") { events += "accessory" }
         }
@@ -291,7 +240,6 @@ class TSCardViewTest {
 
         assertEquals(null, view.accessory)
         assertTrue(view.accessoryView === replacement)
-        assertEquals(listOf("Share", "Open", "More options"), view.node().actionList.mapNotNull { it.label?.toString() })
     }
 
     @Test
@@ -305,13 +253,6 @@ class TSCardViewTest {
 
         view.accessory = TSCardAccessory.IconButton(TSIcon.More, "Card options") {}
 
-        assertEquals("Card options", (view.accessoryView as TSIconButtonView).contentDescription)
-        assertEquals(listOf("Share", "Open", "Card options", "More options"), view.node().actionList.mapNotNull { it.label?.toString() })
-    }
-
-    private fun TSCardView.textViews(root: View): List<android.widget.TextView> = when (root) {
-        is android.widget.TextView -> listOf(root)
-        is android.view.ViewGroup -> (0 until root.childCount).flatMap { textViews(root.getChildAt(it)) }
-        else -> emptyList()
+        assertTrue(view.accessoryView is TSIconButtonView)
     }
 }

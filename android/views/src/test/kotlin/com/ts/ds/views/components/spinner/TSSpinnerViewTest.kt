@@ -1,10 +1,7 @@
 package com.ts.ds.views.components.spinner
 
 import android.view.View
-import android.widget.ProgressBar
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.style.TSSpinnerSize
 import com.ts.ds.core.style.TSSpinnerTone
 import com.ts.ds.views.R
@@ -37,14 +34,10 @@ class TSSpinnerViewTest {
     }
 
     @Test
-    fun defaultsAreMediumPrimaryLabelledLoading() {
+    fun defaultsAreMediumPrimary() {
         val view = spinner()
         assertEquals(TSSpinnerSize.Md, view.size)
         assertEquals(TSSpinnerTone.Primary, view.tone)
-        assertEquals("Loading", view.contentDescription)
-        val node = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-        assertEquals(ProgressBar::class.java.name, node.className)
-        assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_YES, view.importantForAccessibility)
     }
 
     @Test

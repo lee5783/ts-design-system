@@ -41,7 +41,7 @@ import org.robolectric.annotation.GraphicsMode
 class TSToastHostTest {
     private val activity = Robolectric.buildActivity(DialogHostActivity::class.java).setup().get()
     private val scheduler = ManualToastScheduler()
-    private val queue = TSToastQueue { message -> TSToastTimeouts.resolve(message.hasAction, false, 34) { it } }
+    private val queue = TSToastQueue(TSToastTimeouts.default)
     private var actions = 0
 
     private val content: ViewGroup
@@ -124,13 +124,11 @@ class TSToastHostTest {
     }
 
     @Test
-    fun eachToastIsAnnouncedOnceThroughAPoliteLiveRegion() {
+    fun attachingAnOverlayMovesTheToastToANewView() {
         val host = install()
         host.show(TSToastMessage("Saved", TSToastTone.Success))
         idle()
         val toast = requireNotNull(host.topLayer?.toastView)
-
-        assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE, ViewCompat.getAccessibilityLiveRegion(toast))
 
         val overlay = FrameLayout(activity)
         content.addView(overlay, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
@@ -139,7 +137,6 @@ class TSToastHostTest {
         val moved = requireNotNull(host.topLayer?.toastView)
 
         assertNotSame(toast, moved)
-        assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, ViewCompat.getAccessibilityLiveRegion(moved))
     }
 
     @Test

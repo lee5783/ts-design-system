@@ -7,13 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TSToastQueueTest {
-    private fun queue(
-        screenReaderEnabled: Boolean = false,
-        sdkInt: Int = 34,
-        recommended: (Long) -> Long = { it },
-    ): TSToastQueue = TSToastQueue { message ->
-        TSToastTimeouts.resolve(message.hasAction, screenReaderEnabled, sdkInt, recommended)
-    }
+    private fun queue(): TSToastQueue = TSToastQueue(TSToastTimeouts.default)
 
     @Test
     fun toastsAreShownInFifoOrder() {
@@ -84,56 +78,9 @@ class TSToastQueueTest {
 
     @Test
     fun defaultTimeoutIsFourSecondsOnModernApis() {
-        val entry = queue(sdkInt = 34).enqueue(TSToastMessage("Saved"))
+        val entry = queue().enqueue(TSToastMessage("Saved"))
 
         assertEquals(4_000L, entry.timeoutMillis)
         assertTrue(entry.autoDismisses)
-    }
-
-    @Test
-    fun modernApisUseTheRecommendedTimeout() {
-        val requested = mutableListOf<Long>()
-        val queue = queue(sdkInt = 29) { original -> requested += original; original * 3 }
-
-        assertEquals(12_000L, queue.enqueue(TSToastMessage("Saved")).timeoutMillis)
-        assertEquals(listOf(4_000L), requested)
-    }
-
-    @Test
-    fun belowApi29TheRecommendedTimeoutIsNeverQueried() {
-        val queue = queue(sdkInt = 28) { error("getRecommendedTimeoutMillis is API 29") }
-
-        assertEquals(4_000L, queue.enqueue(TSToastMessage("Saved")).timeoutMillis)
-        assertEquals(4_000L, queue.enqueue(TSToastMessage("Archived", actionLabel = "Undo")).timeoutMillis)
-    }
-
-    @Test
-    fun belowApi29AScreenReaderExtendsTheTimeoutToTenSeconds() {
-        val queue = queue(screenReaderEnabled = true, sdkInt = 26) { error("not on API 26") }
-
-        assertEquals(10_000L, queue.enqueue(TSToastMessage("Saved")).timeoutMillis)
-    }
-
-    @Test
-    fun anActionWithAScreenReaderNeverAutoDismisses() {
-        listOf(26, 28, 29, 36).forEach { sdk ->
-            val entry = queue(screenReaderEnabled = true, sdkInt = sdk).enqueue(TSToastMessage("Archived", actionLabel = "Undo"))
-
-            assertNull("sdk $sdk", entry.timeoutMillis)
-            assertFalse("sdk $sdk", entry.autoDismisses)
-        }
-    }
-
-    @Test
-    fun timeoutIsResolvedPerToastWhenEnqueued() {
-        var screenReader = false
-        val queue = TSToastQueue { message -> TSToastTimeouts.resolve(message.hasAction, screenReader, 27) { it } }
-
-        val before = queue.enqueue(TSToastMessage("a"))
-        screenReader = true
-        val after = queue.enqueue(TSToastMessage("b"))
-
-        assertEquals(4_000L, before.timeoutMillis)
-        assertEquals(10_000L, after.timeoutMillis)
     }
 }

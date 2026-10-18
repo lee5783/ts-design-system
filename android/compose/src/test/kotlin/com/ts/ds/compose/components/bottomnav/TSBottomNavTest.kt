@@ -12,10 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
@@ -23,6 +19,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.Density
@@ -90,7 +87,6 @@ class TSBottomNavTest {
                                 changes += it
                                 selected = it
                             },
-                            label = "Main navigation",
                             enabled = enabled,
                             windowInsets = insets,
                             modifier = Modifier.testTag("nav"),
@@ -117,14 +113,10 @@ class TSBottomNavTest {
     }
 
     @Test
-    fun tapSelectsTheItemWithTabSemantics() {
+    fun tapSelectsTheItem() {
         setNav()
 
-        item("search")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "3 of 5"))
-            .assertIsNotSelected()
-            .performClick()
+        item("search").assertIsNotSelected().performClick()
 
         item("search").assertIsSelected()
         item("home").assertIsNotSelected()
@@ -152,15 +144,11 @@ class TSBottomNavTest {
     }
 
     @Test
-    fun badgeIsInTheValueAndHiddenFromAccessibility() {
+    fun badgesShowFormattedCounts() {
         setNav()
 
-        item("inbox")
-            .assertTextEquals("Inbox")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "2 of 5, 3 new"))
-        item("alerts").assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "4 of 5, 99+ new"))
-        composeRule.onNodeWithTag(TSBottomNavTestTags.badge("inbox"), useUnmergedTree = true)
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Text))
+        composeRule.onNodeWithTag(TSBottomNavTestTags.badge("inbox"), useUnmergedTree = true).onChild().assertTextEquals("3")
+        composeRule.onNodeWithTag(TSBottomNavTestTags.badge("alerts"), useUnmergedTree = true).onChild().assertTextEquals("99+")
         composeRule.onNodeWithTag(TSBottomNavTestTags.badge("home"), useUnmergedTree = true).assertDoesNotExist()
     }
 
@@ -171,28 +159,6 @@ class TSBottomNavTest {
         setItems(five.map { if (it.id == "inbox") it.badged(null) else it })
 
         composeRule.onNodeWithTag(TSBottomNavTestTags.badge("inbox"), useUnmergedTree = true).assertDoesNotExist()
-        item("inbox").assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "2 of 5"))
-    }
-
-    @Test
-    fun theBarIsALabelledSelectableGroupWithCollectionInfo() {
-        setNav()
-
-        composeRule.onNodeWithTag("nav")
-            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.SelectableGroup))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Main navigation")))
-            .assert(
-                SemanticsMatcher("collection of 1 x 5") {
-                    val info = it.config[SemanticsProperties.CollectionInfo]
-                    info.rowCount == 1 && info.columnCount == 5
-                },
-            )
-        item("alerts").assert(
-            SemanticsMatcher("fourth column") {
-                val info = it.config[SemanticsProperties.CollectionItemInfo]
-                info.rowIndex == 0 && info.columnIndex == 3
-            },
-        )
     }
 
     @Test

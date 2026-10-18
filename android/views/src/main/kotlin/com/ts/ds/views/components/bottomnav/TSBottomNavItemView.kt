@@ -14,15 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.PathInterpolator
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.TextViewCompat
 import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.icon.TSIcon
-import com.ts.ds.core.logic.TSBottomNavAccessibility
-import com.ts.ds.core.motion.TSReduceMotion
+import com.ts.ds.core.logic.TSBadgeCountFormatter
 import com.ts.ds.core.style.TSBottomNavItem
 import com.ts.ds.core.style.TSBottomNavStyleSpec
 import com.ts.ds.core.style.TSColorRole
@@ -48,7 +44,7 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
     private val evaluator = ArgbEvaluator()
     private var ready = false
 
-    var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    var reduceMotion: () -> Boolean = { false }
 
     var item: TSBottomNavItem = TSBottomNavItem("", "", TSIcon.Home)
         set(value) {
@@ -59,19 +55,11 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
     var isItemSelected: Boolean = false
         private set
 
-    var index: Int = 0
-        private set
-
-    var count: Int = 1
-        private set
-
     init {
         pillView.background = pillChrome
         badgeView.background = badgeShape
-        listOf(pillView, iconView, labelView, badgeView).forEach {
-            it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-            addView(it)
-        }
+        listOf(pillView, iconView, labelView, badgeView).forEach(::addView)
+        listOf(pillView, iconView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
         labelView.maxLines = 1
         labelView.isSingleLine = true
         labelView.ellipsize = TextUtils.TruncateAt.END
@@ -84,18 +72,6 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
         badgeView.typeface = Typeface.create(MEDIUM_FAMILY, Typeface.NORMAL)
         isClickable = true
         isFocusable = true
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = View::class.java.name
-                    info.isSelected = isItemSelected
-                    info.setCollectionItemInfo(AccessibilityNodeInfoCompat.CollectionItemInfoCompat.obtain(0, 1, index, 1, false, isItemSelected))
-                }
-            },
-        )
         ready = true
         applyMetrics()
         applyItem()
@@ -116,12 +92,6 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
 
     internal val pillFillColor: Int
         get() = pillColor
-
-    fun updatePosition(index: Int, count: Int) {
-        this.index = index
-        this.count = count
-        applyAccessibility()
-    }
 
     fun setItemSelected(selected: Boolean, animated: Boolean) {
         if (selected == isItemSelected) return
@@ -211,17 +181,11 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
     private fun applyItem() {
         if (!ready) return
         labelView.text = item.label
-        contentDescription = item.label
         iconView.setImageResource(item.icon.drawableRes)
-        val text = TSBottomNavAccessibility.badgeText(context, item.badge)
+        val text = item.badge?.let { TSBadgeCountFormatter.format(context, it) }
         badgeView.text = text
         badgeView.visibility = if (text == null) GONE else VISIBLE
-        applyAccessibility()
         requestLayout()
-    }
-
-    private fun applyAccessibility() {
-        ViewCompat.setStateDescription(this, TSBottomNavAccessibility.value(context, index, count, item.badge))
     }
 
     private fun applyState(animated: Boolean) {
@@ -231,7 +195,7 @@ internal class TSBottomNavItemView(context: Context) : ViewGroup(context) {
         alpha = resolved.opacity
         animator?.cancel()
         animator = null
-        val duration = TSReduceMotion.durationMillis(resolved.animationDurationMillis, reduceMotion())
+        val duration = if (reduceMotion()) 0 else resolved.animationDurationMillis
         if (animated && duration > 0) {
             val startPill = pillColor
             val startForeground = foregroundColor

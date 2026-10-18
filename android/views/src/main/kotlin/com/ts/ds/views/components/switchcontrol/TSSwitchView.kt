@@ -9,27 +9,20 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.Gravity
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
 import android.view.animation.PathInterpolator
 import android.widget.Checkable
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.logic.TSToggleAccessibility
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSSwitchStyleSpec
 import com.ts.ds.views.R
 import com.ts.ds.views.components.shared.TSControlBackground
-import com.ts.ds.views.components.shared.TSToggleAccessibilityInfo
 import com.ts.ds.views.components.shared.TSViewSavedState
 import com.ts.ds.views.components.shared.dpToPx
 import com.ts.ds.views.components.shared.performToggleHaptic
@@ -55,13 +48,12 @@ public class TSSwitchView @JvmOverloads constructor(
     private val focusRingWidth = resources.getDimension(R.dimen.ts_focus_ring_width)
     private val argbEvaluator = ArgbEvaluator()
     private var checkedState = false
-    private val toggleAccessibility = TSToggleAccessibilityInfo(SwitchCompat::class.java.name, { label }, { checkedState })
     private var progress = 0f
     private var animator: ValueAnimator? = null
     private var onCheckedChangeListener: OnCheckedChangeListener? = null
     private var ready = false
 
-    internal var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    internal var reduceMotion: () -> Boolean = { false }
 
     public var label: CharSequence
         get() = labelView.text
@@ -84,7 +76,6 @@ public class TSSwitchView @JvmOverloads constructor(
         trackView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
         thumbView.background = thumbFill
         trackView.addView(thumbView, FrameLayout.LayoutParams(0, 0, Gravity.LEFT or Gravity.CENTER_VERTICAL))
-        labelView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         labelView.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
         addView(trackView, LayoutParams(0, 0))
         addView(labelView, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
@@ -143,16 +134,6 @@ public class TSSwitchView @JvmOverloads constructor(
         dispatchThawSelfOnly(container)
     }
 
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        toggleAccessibility.populate(info)
-    }
-
-    override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
-        super.onInitializeAccessibilityEvent(event)
-        toggleAccessibility.populate(event)
-    }
-
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
         if (ready) applyState()
@@ -188,7 +169,7 @@ public class TSSwitchView @JvmOverloads constructor(
     private fun animateProgress(target: Float, animated: Boolean) {
         animator?.cancel()
         animator = null
-        val duration = TSReduceMotion.durationMillis(resolved.animationDurationMillis, reduceMotion())
+        val duration = if (reduceMotion()) 0 else resolved.animationDurationMillis
         if (!animated || duration == 0 || !ready) {
             progress = target
             applyState()
@@ -253,7 +234,6 @@ public class TSSwitchView @JvmOverloads constructor(
         val onLeft = on.thumbLeftDp(rightToLeft)
         thumbView.translationX = dpToPx(offLeft + (onLeft - offLeft) * progress).toFloat()
         alpha = resolved.opacity
-        ViewCompat.setStateDescription(this, TSToggleAccessibility.switchState(context, checkedState))
     }
 
     private fun trackColor(resolved: TSSwitchStyleSpec.Resolved): Int =

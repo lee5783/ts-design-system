@@ -4,14 +4,12 @@ public final class com/ts/ds/views/components/alert/TSAlertView : android/widget
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getActionView ()Landroid/view/View;
-	public final fun getAnnouncesWhenShown ()Z
 	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
 	public final fun getMessage ()Ljava/lang/CharSequence;
 	public final fun getOnDismiss ()Lkotlin/jvm/functions/Function0;
 	public final fun getTitle ()Ljava/lang/CharSequence;
 	public final fun getTone ()Lcom/ts/ds/core/style/TSAlertTone;
 	public final fun setActionView (Landroid/view/View;)V
-	public final fun setAnnouncesWhenShown (Z)V
 	public final fun setIcon (Lcom/ts/ds/core/icon/TSIcon;)V
 	public final fun setMessage (Ljava/lang/CharSequence;)V
 	public final fun setOnDismiss (Lkotlin/jvm/functions/Function0;)V
@@ -55,11 +53,9 @@ public final class com/ts/ds/views/components/bottomnav/TSBottomNavView : androi
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getItems ()Ljava/util/List;
-	public final fun getLabel ()Ljava/lang/CharSequence;
 	public final fun getSelectedId ()Ljava/lang/String;
 	public fun setEnabled (Z)V
 	public final fun setItems (Ljava/util/List;)V
-	public final fun setLabel (Ljava/lang/CharSequence;)V
 	public final fun setOnItemSelectedListener (Lcom/ts/ds/views/components/bottomnav/TSBottomNavView$OnItemSelectedListener;)V
 	public final fun setSelectedId (Ljava/lang/String;)V
 }
@@ -77,7 +73,6 @@ public final class com/ts/ds/views/components/button/TSButtonView : android/widg
 	public final fun getEllipsize ()Landroid/text/TextUtils$TruncateAt;
 	public final fun getLeadingIcon ()Lcom/ts/ds/core/icon/TSIcon;
 	public final fun getLeadingIconDrawable ()Landroid/graphics/drawable/Drawable;
-	public final fun getLoadingDescription ()Ljava/lang/CharSequence;
 	public final fun getMaxLines ()I
 	public final fun getSize ()Lcom/ts/ds/core/style/TSButtonSize;
 	public final fun getText ()Ljava/lang/CharSequence;
@@ -91,7 +86,6 @@ public final class com/ts/ds/views/components/button/TSButtonView : android/widg
 	public final fun setLeadingIconDrawable (Landroid/graphics/drawable/Drawable;)V
 	public final fun setLeadingIconResource (I)V
 	public final fun setLoading (Z)V
-	public final fun setLoadingDescription (Ljava/lang/CharSequence;)V
 	public final fun setMaxLines (I)V
 	public final fun setSize (Lcom/ts/ds/core/style/TSButtonSize;)V
 	public final fun setText (Ljava/lang/CharSequence;)V
@@ -106,7 +100,6 @@ public final class com/ts/ds/views/components/card/TSCardView : android/widget/L
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAccessibilityActions ()Ljava/util/List;
 	public final fun getAccessory ()Lcom/ts/ds/core/logic/TSCardAccessory;
 	public final fun getAccessoryView ()Landroid/view/View;
 	public final fun getBodyText ()Ljava/lang/CharSequence;
@@ -116,8 +109,6 @@ public final class com/ts/ds/views/components/card/TSCardView : android/widget/L
 	public final fun getTitle ()Ljava/lang/CharSequence;
 	public final fun isInteractive ()Z
 	public final fun isRaised ()Z
-	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
-	public final fun setAccessibilityActions (Ljava/util/List;)V
 	public final fun setAccessory (Lcom/ts/ds/core/logic/TSCardAccessory;)V
 	public final fun setAccessoryView (Landroid/view/View;)V
 	public final fun setBodyText (Ljava/lang/CharSequence;)V
@@ -140,8 +131,6 @@ public final class com/ts/ds/views/components/checkbox/TSCheckboxView : android/
 	public final fun getLabel ()Ljava/lang/CharSequence;
 	public fun isChecked ()Z
 	public final fun isLabelHidden ()Z
-	public fun onInitializeAccessibilityEvent (Landroid/view/accessibility/AccessibilityEvent;)V
-	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
 	public fun performClick ()Z
 	public fun setChecked (Z)V
 	public fun setEnabled (Z)V
@@ -352,8 +341,6 @@ public final class com/ts/ds/views/components/listitem/TSListItemView : android/
 	public final fun getTitle ()Ljava/lang/CharSequence;
 	public final fun getTrailing ()Lcom/ts/ds/views/components/listitem/TSListItemTrailing;
 	public final fun isChecked ()Z
-	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
-	public fun performAccessibilityAction (ILandroid/os/Bundle;)Z
 	public final fun setChecked (Z)V
 	public fun setEnabled (Z)V
 	public final fun setGroupPosition (Lcom/ts/ds/core/style/TSListGroupPosition;)V
@@ -395,7 +382,6 @@ public final class com/ts/ds/views/components/spinner/TSSpinnerView : android/vi
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getSize ()Lcom/ts/ds/core/style/TSSpinnerSize;
 	public final fun getTone ()Lcom/ts/ds/core/style/TSSpinnerTone;
-	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
 	public final fun setSize (Lcom/ts/ds/core/style/TSSpinnerSize;)V
 	public final fun setTone (Lcom/ts/ds/core/style/TSSpinnerTone;)V
 }
@@ -409,8 +395,6 @@ public final class com/ts/ds/views/components/switchcontrol/TSSwitchView : andro
 	public final fun getLabel ()Ljava/lang/CharSequence;
 	public fun isChecked ()Z
 	public final fun isLabelHidden ()Z
-	public fun onInitializeAccessibilityEvent (Landroid/view/accessibility/AccessibilityEvent;)V
-	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
 	public fun onRtlPropertiesChanged (I)V
 	public fun performClick ()Z
 	public fun setChecked (Z)V
@@ -433,7 +417,6 @@ public final class com/ts/ds/views/components/tabs/TSTabsView : android/widget/F
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getItems ()Ljava/util/List;
-	public final fun getLabel ()Ljava/lang/CharSequence;
 	public final fun getSelectedId ()Ljava/lang/String;
 	public final fun getVariant ()Lcom/ts/ds/core/style/TSTabsVariant;
 	public final fun isBlock ()Z
@@ -441,7 +424,6 @@ public final class com/ts/ds/views/components/tabs/TSTabsView : android/widget/F
 	public final fun setBlock (Z)V
 	public fun setEnabled (Z)V
 	public final fun setItems (Ljava/util/List;)V
-	public final fun setLabel (Ljava/lang/CharSequence;)V
 	public final fun setOnTabSelectedListener (Lcom/ts/ds/views/components/tabs/TSTabsView$OnTabSelectedListener;)V
 	public final fun setSelectedId (Ljava/lang/String;)V
 	public final fun setVariant (Lcom/ts/ds/core/style/TSTabsVariant;)V
@@ -539,11 +521,6 @@ public final class com/ts/ds/views/components/toast/TSToastView : android/widget
 	public final fun setMessage (Ljava/lang/CharSequence;)V
 	public final fun setOnAction (Lkotlin/jvm/functions/Function0;)V
 	public final fun setTone (Lcom/ts/ds/core/logic/TSToastTone;)V
-}
-
-public final class com/ts/ds/views/foundation/TSAccessibilityKt {
-	public static final fun setAccessibilityRole (Landroid/view/View;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)V
-	public static synthetic fun setAccessibilityRole$default (Landroid/view/View;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)V
 }
 
 public final class com/ts/ds/views/foundation/TSInsetsKt {

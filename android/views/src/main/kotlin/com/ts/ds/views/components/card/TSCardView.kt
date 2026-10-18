@@ -7,14 +7,9 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.logic.TSCardAccessibility
 import com.ts.ds.core.logic.TSCardAccessory
 import com.ts.ds.core.logic.TSCardAction
 import com.ts.ds.core.style.TSCardStyleSpec
@@ -47,7 +42,6 @@ public class TSCardView @JvmOverloads constructor(
     internal val footerView = LinearLayout(context)
     private val chrome = TSControlBackground()
     private val focusRingWidth = resources.getDimension(R.dimen.ts_focus_ring_width)
-    private val customActionIds = mutableListOf<Int>()
     private var ready = false
 
     public var title: CharSequence? = null
@@ -103,7 +97,6 @@ public class TSCardView @JvmOverloads constructor(
         set(value) {
             accessoryView = value?.let(::makeAccessoryView)
             typedAccessory = value
-            applyAccessibility()
         }
 
     public var footerActions: List<TSCardAction> = emptyList()
@@ -111,12 +104,6 @@ public class TSCardView @JvmOverloads constructor(
             field = value
             rebuildFooter()
             applyConfiguration()
-        }
-
-    public var accessibilityActions: List<TSCardAction> = emptyList()
-        set(value) {
-            field = value
-            applyAccessibility()
         }
 
     public var isRaised: Boolean = false
@@ -140,7 +127,6 @@ public class TSCardView @JvmOverloads constructor(
             it.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
             it.gravity = Gravity.START
         }
-        ViewCompat.setAccessibilityHeading(titleView, true)
         headerTextColumn.addView(titleView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
         headerTextColumn.addView(subtitleView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
         headerView.addView(headerTextColumn, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
@@ -193,29 +179,11 @@ public class TSCardView @JvmOverloads constructor(
         chrome.setBounds(0, 0, w, h)
     }
 
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        if (!isInteractive) return
-        val node = AccessibilityNodeInfoCompat.wrap(info)
-        node.className = Button::class.java.name
-        node.contentDescription = accessibilityLabel.ifEmpty { null }
-        node.stateDescription = accessibilityValue
-    }
-
     internal val currentState: TSControlState
         get() = TSControlState.make(pressed = isPressed, enabled = isEnabled, focused = isFocused)
 
     internal val resolved: TSCardStyleSpec.Resolved
         get() = TSCardStyleSpec.resolve(TSCardStyleSpec.Configuration(isRaised, isInteractive), currentState)
-
-    internal val accessibilityLabel: String
-        get() = TSCardAccessibility.label(title, subtitle, bodyText)
-
-    internal val accessibilityValue: String?
-        get() = TSCardAccessibility.value(title, subtitle, bodyText)
-
-    internal val customActions: List<TSCardAction>
-        get() = if (isInteractive) TSCardAccessibility.customActions(footerActions, accessibilityActions, isEnabled, accessory) else emptyList()
 
     internal val footerButtons: List<TSButtonView>
         get() = (0 until footerView.childCount).map { footerView.getChildAt(it) as TSButtonView }
@@ -274,7 +242,6 @@ public class TSCardView @JvmOverloads constructor(
         bodyTextView.minHeight = lineHeightPx(resolved.bodyTypeRole)
         applyFooter(resolved, hasFooter)
         applyState()
-        applyAccessibility()
     }
 
     private fun applyFooter(resolved: TSCardStyleSpec.Resolved, hasFooter: Boolean) {
@@ -322,27 +289,6 @@ public class TSCardView @JvmOverloads constructor(
         )
         elevation = resolved.shadow?.let { dpToPx(it.values.elevation).toFloat() } ?: 0f
         alpha = resolved.opacity
-    }
-
-    private fun applyAccessibility() {
-        if (!ready) return
-        val interactive = isInteractive
-        importantForAccessibility = if (interactive) IMPORTANT_FOR_ACCESSIBILITY_YES else IMPORTANT_FOR_ACCESSIBILITY_AUTO
-        ViewCompat.setScreenReaderFocusable(this, interactive)
-        contentView.importantForAccessibility = if (interactive && accessibilityLabel.isNotEmpty()) {
-            IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-        } else {
-            IMPORTANT_FOR_ACCESSIBILITY_AUTO
-        }
-        customActionIds.forEach { ViewCompat.removeAccessibilityAction(this, it) }
-        customActionIds.clear()
-        customActions.forEach { action ->
-            val id = ViewCompat.addAccessibilityAction(this, action.label) { _, _ ->
-                action.onClick()
-                true
-            }
-            if (id != View.NO_ID) customActionIds += id
-        }
     }
 
     private fun makeAccessoryView(accessory: TSCardAccessory): View = when (accessory) {

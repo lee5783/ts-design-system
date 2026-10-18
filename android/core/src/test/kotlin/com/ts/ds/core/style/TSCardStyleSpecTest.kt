@@ -1,9 +1,5 @@
 package com.ts.ds.core.style
 
-import com.ts.ds.core.icon.TSIcon
-import com.ts.ds.core.logic.TSCardAccessibility
-import com.ts.ds.core.logic.TSCardAccessory
-import com.ts.ds.core.logic.TSCardAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -96,54 +92,5 @@ class TSCardStyleSpecMatrixTest {
         val resolved = TSCardStyleSpec.resolve(TSCardStyleSpec.Configuration(isInteractive = true), TSControlState.Loading)
         assertEquals(TSColorRole.SurfaceCard, resolved.fill)
         assertEquals(1f, resolved.opacity, 0f)
-    }
-
-    @Test
-    fun labelJoinsTitleAndSubtitle() {
-        assertEquals("Plan, Pro", TSCardAccessibility.label("Plan", "Pro"))
-        assertEquals("Plan", TSCardAccessibility.label("Plan", null))
-        assertEquals("Plan", TSCardAccessibility.label("Plan", ""))
-        assertEquals("Pro", TSCardAccessibility.label(null, "Pro"))
-        assertEquals("", TSCardAccessibility.label(null, null))
-    }
-
-    @Test
-    fun customActionsListFooterFirstAndAreDroppedWhileDisabled() {
-        val share = TSCardAction("Share") {}
-        val open = TSCardAction("Open", TSButtonVariant.Primary) {}
-        val more = TSCardAction("More options") {}
-
-        assertEquals(
-            listOf("Share", "Open", "More options"),
-            TSCardAccessibility.customActions(listOf(share, open), listOf(more)).map { it.label },
-        )
-        assertEquals(emptyList<TSCardAction>(), TSCardAccessibility.customActions(listOf(share), listOf(more), enabled = false))
-        assertEquals(TSButtonVariant.Secondary, share.variant)
-    }
-
-    @Test
-    fun labelFallsBackToTheBodyAndTheValueCarriesTheBodyBesideAHeading() {
-        assertEquals("Billed monthly", TSCardAccessibility.label(null, null, "Billed monthly"))
-        assertEquals("Plan", TSCardAccessibility.label("Plan", null, "Billed monthly"))
-        assertEquals("", TSCardAccessibility.label("", "", ""))
-        assertEquals("Billed monthly", TSCardAccessibility.value("Plan", null, "Billed monthly"))
-        assertEquals(null, TSCardAccessibility.value(null, null, "Billed monthly"))
-        assertEquals(null, TSCardAccessibility.value("Plan", "Pro", ""))
-    }
-
-    @Test
-    fun accessoryIsACustomActionBetweenFooterAndAdditional() {
-        var fired = 0
-        val accessory = TSCardAccessory.IconButton(TSIcon.More, "More options") { fired++ }
-        val actions = TSCardAccessibility.customActions(
-            footer = listOf(TSCardAction("Share") {}),
-            additional = listOf(TSCardAction("Pin") {}),
-            accessory = accessory,
-        )
-
-        assertEquals(listOf("Share", "More options", "Pin"), actions.map { it.label })
-        actions[1].onClick()
-        assertEquals(1, fired)
-        assertEquals(emptyList<TSCardAction>(), TSCardAccessibility.customActions(emptyList(), emptyList(), enabled = false, accessory = accessory))
     }
 }

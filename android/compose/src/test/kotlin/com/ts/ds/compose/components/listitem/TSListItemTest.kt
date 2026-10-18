@@ -16,12 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -32,7 +28,6 @@ import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -118,13 +113,10 @@ class TSListItemTest {
     }
 
     @Test
-    fun actionRowIsAButtonThatFires() {
+    fun actionRowFires() {
         setContent { TSListItem("Inbox", onClick = { taps++ }, modifier = Modifier.testTag("row")) }
 
-        composeRule.onNodeWithTag("row")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .assertIsEnabled()
-            .performClick()
+        composeRule.onNodeWithTag("row").assertIsEnabled().performClick()
 
         assertEquals(1, taps)
     }
@@ -139,42 +131,19 @@ class TSListItemTest {
     }
 
     @Test
-    fun plainRowIsOneElementWithoutAClickAction() {
+    fun plainRowHasNoClickAction() {
         setContent {
             TSListItem("Storage", subtitle = "12 GB used", modifier = Modifier.testTag("row"), trailing = { TSListItemValue("80%") })
         }
 
-        val node = composeRule.onNodeWithTag("row").fetchSemanticsNode()
-        assertNull(node.config.getOrNull(SemanticsActions.OnClick))
-        assertNull(node.config.getOrNull(SemanticsProperties.Role))
-        assertEquals(listOf("Storage", "12 GB used", "80%"), node.config[SemanticsProperties.Text].map { it.text })
+        assertNull(composeRule.onNodeWithTag("row").fetchSemanticsNode().config.getOrNull(SemanticsActions.OnClick))
     }
 
     @Test
-    fun leadingContentIsDecorative() {
-        setContent {
-            TSListItem("Ada Lovelace", modifier = Modifier.testTag("row"), leading = { TSAvatar("Ada Lovelace") })
-        }
-
-        val node = composeRule.onNodeWithTag("row").fetchSemanticsNode()
-        assertNull(node.config.getOrNull(SemanticsProperties.ContentDescription))
-        assertEquals(listOf("Ada Lovelace"), node.config[SemanticsProperties.Text].map { it.text })
-    }
-
-    @Test
-    fun chevronRowCarriesTheNavigatesHint() {
+    fun chevronRowShowsTheChevron() {
         setContent { TSListItem("Settings", onClick = {}, showsChevron = true, modifier = Modifier.testTag("row")) }
 
-        val node = composeRule.onNodeWithTag("row").fetchSemanticsNode()
-        assertEquals("Opens another screen", node.config[SemanticsActions.OnClick].label)
         composeRule.onNodeWithTag(TSListItemTestTags.CHEVRON, useUnmergedTree = true).assertHeightIsEqualTo(20.dp)
-    }
-
-    @Test
-    fun rowWithoutChevronHasNoHint() {
-        setContent { TSListItem("Inbox", onClick = {}, modifier = Modifier.testTag("row")) }
-
-        assertNull(composeRule.onNodeWithTag("row").fetchSemanticsNode().config[SemanticsActions.OnClick].label)
     }
 
     @Test
@@ -205,18 +174,11 @@ class TSListItemTest {
     }
 
     @Test
-    fun switchRowIsOneSwitchElement() {
+    fun switchRowTogglesFromItsSwitch() {
         setContent { SwitchRow({ changes += it }) }
 
-        composeRule.onNodeWithTag("row")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Switch))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Off"))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Wi-Fi, Home")))
-            .assertIsOff()
-            .performSemanticsAction(SemanticsActions.OnClick)
-        composeRule.onNodeWithTag("row")
-            .assertIsOn()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "On"))
+        composeRule.onNodeWithTag(TSListItemTestTags.SWITCH, useUnmergedTree = true).assertIsOff().performClick()
+        composeRule.onNodeWithTag(TSListItemTestTags.SWITCH, useUnmergedTree = true).assertIsOn()
 
         assertEquals(listOf(true), changes)
         assertEquals(DsHaptics.constantFor(DsHapticEvent.ToggleOn), shadowOf(hostView).lastHapticFeedbackPerformed())
@@ -250,8 +212,7 @@ class TSListItemTest {
     fun disabledSwitchRowBlocksTheSwitch() {
         setContent { SwitchRow({ changes += it }, enabled = false) }
 
-        composeRule.onNodeWithTag("row").assertIsNotEnabled()
-        composeRule.onNodeWithTag(TSListItemTestTags.SWITCH, useUnmergedTree = true).performClick()
+        composeRule.onNodeWithTag(TSListItemTestTags.SWITCH, useUnmergedTree = true).assertIsNotEnabled().performClick()
 
         assertEquals(emptyList<Boolean>(), changes)
     }

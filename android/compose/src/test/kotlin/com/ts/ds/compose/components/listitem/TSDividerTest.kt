@@ -8,9 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getBoundsInRoot
@@ -82,13 +79,5 @@ class TSDividerTest {
     fun dividerFollowsTheDarkTheme() {
         setContent(dark = true)
         assertEquals(darkTSColors().borderSubtle, pixelAt("divider", 160.dp, 0.5.dp))
-    }
-
-    @Test
-    fun dividerIsNotAnAccessibilityElement() {
-        setContent()
-        composeRule.onNodeWithTag("divider")
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Text))
     }
 }

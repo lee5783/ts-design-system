@@ -23,15 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.disabled
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.button.TSButton
 import com.ts.ds.compose.components.iconbutton.TSIconButton
@@ -42,7 +33,6 @@ import com.ts.ds.compose.components.shared.withContentDirectionAtLayoutStart
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
-import com.ts.ds.core.logic.TSCardAccessibility
 import com.ts.ds.core.logic.TSCardAccessory
 import com.ts.ds.core.logic.TSCardAction
 import com.ts.ds.core.style.TSCardStyleSpec
@@ -62,7 +52,6 @@ public fun TSCard(
     subtitle: String? = null,
     raised: Boolean = false,
     footerActions: List<TSCardAction> = emptyList(),
-    accessibilityActions: List<TSCardAction> = emptyList(),
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
@@ -76,11 +65,9 @@ public fun TSCard(
         bodyText = null,
         raised = raised,
         footerActions = footerActions,
-        accessibilityActions = accessibilityActions,
         onClick = onClick,
         enabled = enabled,
         interactionSource = interactionSource,
-        cardAccessory = null,
         accessory = accessory,
         content = content,
     )
@@ -94,7 +81,6 @@ public fun TSCard(
     subtitle: String? = null,
     raised: Boolean = false,
     footerActions: List<TSCardAction> = emptyList(),
-    accessibilityActions: List<TSCardAction> = emptyList(),
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
@@ -107,11 +93,9 @@ public fun TSCard(
         bodyText = text,
         raised = raised,
         footerActions = footerActions,
-        accessibilityActions = accessibilityActions,
         onClick = onClick,
         enabled = enabled,
         interactionSource = interactionSource,
-        cardAccessory = null,
         accessory = accessory,
     ) {
         TSCardBodyText(text)
@@ -126,7 +110,6 @@ public fun TSCard(
     subtitle: String? = null,
     raised: Boolean = false,
     footerActions: List<TSCardAction> = emptyList(),
-    accessibilityActions: List<TSCardAction> = emptyList(),
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
@@ -139,11 +122,9 @@ public fun TSCard(
         bodyText = null,
         raised = raised,
         footerActions = footerActions,
-        accessibilityActions = accessibilityActions,
         onClick = onClick,
         enabled = enabled,
         interactionSource = interactionSource,
-        cardAccessory = accessory,
         accessory = { TSCardAccessoryButton(accessory, enabled) },
         content = content,
     )
@@ -158,7 +139,6 @@ public fun TSCard(
     subtitle: String? = null,
     raised: Boolean = false,
     footerActions: List<TSCardAction> = emptyList(),
-    accessibilityActions: List<TSCardAction> = emptyList(),
     onClick: (() -> Unit)? = null,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
@@ -170,11 +150,9 @@ public fun TSCard(
         bodyText = text,
         raised = raised,
         footerActions = footerActions,
-        accessibilityActions = accessibilityActions,
         onClick = onClick,
         enabled = enabled,
         interactionSource = interactionSource,
-        cardAccessory = accessory,
         accessory = { TSCardAccessoryButton(accessory, enabled) },
     ) {
         TSCardBodyText(text)
@@ -186,7 +164,6 @@ private fun TSCardAccessoryButton(accessory: TSCardAccessory, enabled: Boolean) 
     when (accessory) {
         is TSCardAccessory.IconButton -> TSIconButton(
             icon = accessory.icon,
-            contentDescription = accessory.label,
             onClick = accessory.onClick,
             enabled = enabled,
         )
@@ -200,11 +177,9 @@ private fun TSCardLayout(
     bodyText: String?,
     raised: Boolean,
     footerActions: List<TSCardAction>,
-    accessibilityActions: List<TSCardAction>,
     onClick: (() -> Unit)?,
     enabled: Boolean,
     interactionSource: MutableInteractionSource?,
-    cardAccessory: TSCardAccessory?,
     accessory: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
     content: (@Composable () -> Unit)?,
@@ -214,31 +189,14 @@ private fun TSCardLayout(
     val state = source.collectTSCardState(enabled)
     val resolved = TSCardStyleSpec.resolve(TSCardStyleSpec.Configuration(raised, interactive), state)
     val shape = RoundedCornerShape(resolved.cornerRadiusDp.dp)
-    val label = TSCardAccessibility.label(title, subtitle, bodyText)
-    val value = TSCardAccessibility.value(title, subtitle, bodyText)
-    val clearsContent = interactive && label.isNotEmpty()
     val interaction = if (onClick != null) {
-        val actions = TSCardAccessibility.customActions(footerActions, accessibilityActions, enabled, cardAccessory)
         Modifier
             .clickable(
                 interactionSource = source,
                 indication = null,
                 enabled = state.interactive,
-                role = Role.Button,
                 onClick = onClick,
             )
-            .semantics {
-                if (label.isNotEmpty()) contentDescription = label
-                if (value != null) stateDescription = value
-                if (actions.isNotEmpty()) {
-                    customActions = actions.map { action ->
-                        CustomAccessibilityAction(action.label) {
-                            action.onClick()
-                            true
-                        }
-                    }
-                }
-            }
     } else {
         Modifier
     }
@@ -260,9 +218,7 @@ private fun TSCardLayout(
     ) {
         CompositionLocalProvider(LocalTSDimmedByContainer provides !enabled) {
             Column(
-                modifier = Modifier
-                    .testTag(TSCardTestTags.CONTENT)
-                    .then(if (clearsContent) Modifier.clearAndSetSemantics {} else Modifier),
+                modifier = Modifier.testTag(TSCardTestTags.CONTENT),
             ) {
                 TSCardHeader(resolved, title, subtitle, hasBody = content != null, accessory = accessory)
                 if (content != null) {
@@ -319,7 +275,6 @@ private fun TSCardHeader(
             if (title != null) {
                 BasicText(
                     text = title,
-                    modifier = Modifier.semantics { heading() },
                     style = typography.style(resolved.titleTypeRole).copy(color = colors.color(resolved.titleColor)).withContentDirectionAtLayoutStart(),
                 )
             }

@@ -164,7 +164,6 @@ class TSViewStateRestorationTest {
         val wifi = view<TSListItemView>(RestorationHostActivity.WIFI_ROW_ID)
         assertFalse(wifi.isChecked)
         assertEquals(0f, wifi.switchView.thumbProgress, 0f)
-        assertEquals("Off", wifi.accessibilityValue.toString())
         val bluetooth = view<TSListItemView>(RestorationHostActivity.BLUETOOTH_ROW_ID)
         assertTrue(bluetooth.isChecked)
         assertEquals(1f, bluetooth.switchView.thumbProgress, 0f)

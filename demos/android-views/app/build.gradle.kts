@@ -65,5 +65,4 @@ dependencies {
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.espresso.contrib)
-    androidTestImplementation(libs.guava.android)
 }

@@ -5,18 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTouchHeightIsEqualTo
 import androidx.compose.ui.test.assertTouchWidthIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -47,7 +41,6 @@ class TSIconButtonTest {
                 Box(Modifier.testTag("container")) {
                     TSIconButton(
                         icon = TSIcon.Search,
-                        contentDescription = "Search",
                         onClick = { taps++ },
                         variant = TSIconButtonVariant.Secondary,
                         round = round,
@@ -60,12 +53,10 @@ class TSIconButtonTest {
     }
 
     @Test
-    fun clickInvokesTheActionThroughTheLabel() {
+    fun clickInvokesTheAction() {
         setIconButton()
 
-        composeRule.onNodeWithContentDescription("Search")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .performClick()
+        composeRule.onNodeWithTag("button").performClick()
 
         assertEquals(1, taps)
     }
@@ -88,20 +79,12 @@ class TSIconButtonTest {
     }
 
     @Test
-    fun iconIsHiddenFromAccessibility() {
-        setIconButton()
-
-        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
-    }
-
-    @Test
-    fun consumerIconKeepsTheLabelAndTheSize() {
+    fun consumerIconKeepsTheSize() {
         composeRule.setContent {
             TSTheme(darkTheme = false) {
                 Box(Modifier.testTag("container")) {
                     TSIconButton(
                         icon = TSIconSource.Painter(ColorPainter(Color.Red)),
-                        contentDescription = "Controller",
                         onClick = { taps++ },
                         variant = TSIconButtonVariant.Secondary,
                         modifier = Modifier.testTag("button"),
@@ -111,10 +94,7 @@ class TSIconButtonTest {
         }
 
         composeRule.onNodeWithTag("container").assertWidthIsEqualTo(48.dp).assertHeightIsEqualTo(48.dp)
-        composeRule.onNodeWithContentDescription("Controller")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .performClick()
-        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
+        composeRule.onNodeWithTag("button").performClick()
         assertEquals(1, taps)
     }
 }

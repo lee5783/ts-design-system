@@ -10,13 +10,8 @@ class TSToastPresenterTest {
     private val shown = mutableListOf<String>()
     private val changes = mutableListOf<String?>()
 
-    private fun presenter(
-        screenReaderEnabled: Boolean = false,
-        sdkInt: Int = 34,
-    ): TSToastPresenter {
-        val queue = TSToastQueue { message ->
-            TSToastTimeouts.resolve(message.hasAction, screenReaderEnabled, sdkInt) { it }
-        }
+    private fun presenter(): TSToastPresenter {
+        val queue = TSToastQueue(TSToastTimeouts.default)
         return TSToastPresenter(
             queue = queue,
             scheduler = scheduler,
@@ -51,19 +46,6 @@ class TSToastPresenterTest {
         assertEquals("Saved", presenter.current?.message?.text)
         scheduler.advanceBy(1)
         assertNull(presenter.current)
-    }
-
-    @Test
-    fun screenReaderBelowApi29ExtendsToTenSecondsAndActionsNeverAutoDismiss() {
-        val presenter = presenter(screenReaderEnabled = true, sdkInt = 26).apply { start() }
-        presenter.queue.enqueue(TSToastMessage("Saved"))
-        assertEquals(listOf(10_000L), scheduler.pendingDelays)
-        scheduler.advanceBy(10_000)
-
-        presenter.queue.enqueue(TSToastMessage("Message deleted", actionLabel = "Undo", onAction = {}))
-        assertTrue(scheduler.pendingDelays.isEmpty())
-        scheduler.advanceBy(60_000)
-        assertEquals("Message deleted", presenter.current?.message?.text)
     }
 
     @Test

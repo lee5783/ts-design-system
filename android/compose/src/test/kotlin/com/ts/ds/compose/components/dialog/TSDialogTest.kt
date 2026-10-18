@@ -12,10 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.getBoundsInRoot
@@ -26,7 +22,6 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -88,12 +83,11 @@ class TSDialogTest {
     }
 
     @Test
-    fun centerShowsInADialogWindowWithPaneTitleAndHeading() {
+    fun centerShowsInADialogWindow() {
         setDialog()
         composeRule.onNode(isDialog()).assertExists()
-        composeRule.onNodeWithTag(TSDialogTestTags.PANEL)
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, "Delete this project?"))
-        composeRule.onNodeWithText("Delete this project?").assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading))
+        composeRule.onNodeWithTag(TSDialogTestTags.PANEL).assertExists()
+        composeRule.onNodeWithText("Delete this project?").assertExists()
         composeRule.onNodeWithText("This cannot be undone.").assertExists()
         composeRule.onAllNodesWithTag(TSDialogTestTags.GRABBER).assertCountEquals(0)
         assertTrue(presenter.isPresenting)
@@ -235,18 +229,6 @@ class TSDialogTest {
             dispatcher.dispatchOnBackProgressed(BackEventCompat(10f, 0f, 0.5f, BackEventCompat.EDGE_LEFT))
             dispatcher.onBackPressed()
         }
-        composeRule.waitForIdle()
-        assertFalse(presented)
-        assertEquals(1, dismissals)
-    }
-
-    @Test
-    fun accessibilityDismissAndCloseActionDismiss() {
-        setDialog()
-        val panel = composeRule.onNodeWithTag(TSDialogTestTags.PANEL)
-        val close = panel.fetchSemanticsNode().config.getOrNull(SemanticsActions.CustomActions).orEmpty()
-        assertEquals(listOf("Close"), close.map { it.label })
-        panel.performSemanticsAction(SemanticsActions.Dismiss)
         composeRule.waitForIdle()
         assertFalse(presented)
         assertEquals(1, dismissals)

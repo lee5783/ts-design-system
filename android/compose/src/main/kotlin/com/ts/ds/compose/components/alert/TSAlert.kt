@@ -17,16 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.dismiss
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
 import com.ts.ds.compose.components.shared.withContentDirectionAtLayoutStart
@@ -34,9 +27,7 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
 import com.ts.ds.compose.theme.withDsFontWeight
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
-import com.ts.ds.core.logic.TSAlertAccessibility
 import com.ts.ds.core.style.TSAlertStyleSpec
 import com.ts.ds.core.style.TSAlertTone
 import com.ts.ds.core.style.resolve
@@ -54,7 +45,6 @@ public fun TSAlert(
     tone: TSAlertTone = TSAlertTone.Info,
     title: String? = null,
     icon: TSIcon? = null,
-    announcesWhenShown: Boolean = false,
     onDismiss: (() -> Unit)? = null,
     action: (@Composable () -> Unit)? = null,
 ) {
@@ -63,8 +53,6 @@ public fun TSAlert(
     )
     val colors = TSTheme.colors
     val typography = TSTheme.typography
-    val label = TSAlertAccessibility.label(LocalContext.current, tone, title, message)
-    val dismissLabel = stringResource(CoreR.string.ts_dismiss)
     val spacing = resolved.spacingDp.dp
 
     Row(
@@ -77,17 +65,7 @@ public fun TSAlert(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .testTag(TSAlertTestTags.MESSAGE)
-                .clearAndSetSemantics {
-                    contentDescription = label
-                    if (announcesWhenShown) liveRegion = LiveRegionMode.Polite
-                    if (onDismiss != null) {
-                        dismiss(dismissLabel) {
-                            onDismiss()
-                            true
-                        }
-                    }
-                },
+                .testTag(TSAlertTestTags.MESSAGE),
             horizontalArrangement = Arrangement.spacedBy(spacing),
             verticalAlignment = Alignment.Top,
         ) {
@@ -117,7 +95,7 @@ public fun TSAlert(
             Box { action() }
         }
         if (onDismiss != null && resolved.showsDismiss) {
-            TSAlertDismissButton(resolved, dismissLabel, onDismiss)
+            TSAlertDismissButton(resolved, onDismiss)
         }
     }
 }
@@ -125,7 +103,6 @@ public fun TSAlert(
 @Composable
 private fun TSAlertDismissButton(
     resolved: TSAlertStyleSpec.Resolved,
-    label: String,
     onDismiss: () -> Unit,
 ) {
     val source = remember { MutableInteractionSource() }
@@ -138,7 +115,6 @@ private fun TSAlertDismissButton(
         modifier = Modifier
             .testTag(TSAlertTestTags.DISMISS)
             .alpha(if (pressed) resolved.dismissPressedOpacity else 1f)
-            .clickable(interactionSource = source, indication = null, role = Role.Button, onClick = onDismiss)
-            .semantics { contentDescription = label },
+            .clickable(interactionSource = source, indication = null, onClick = onDismiss)
     )
 }

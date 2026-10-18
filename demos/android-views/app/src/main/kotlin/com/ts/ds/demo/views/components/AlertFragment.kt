@@ -132,7 +132,6 @@ class AlertFragment : DemoPageFragment(R.layout.page_alert) {
                 tag = PLAYGROUND_SHOW
                 setOnClickListener {
                     playgroundDismissed = false
-                    alert.announcesWhenShown = true
                     alert.visibility = View.VISIBLE
                     isEnabled = false
                 }

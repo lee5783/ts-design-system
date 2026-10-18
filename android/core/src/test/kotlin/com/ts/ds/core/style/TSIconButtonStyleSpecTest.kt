@@ -56,12 +56,4 @@ class TSIconStyleSpecTest {
         assertEquals(listOf(16f, 20f, 24f), TSIconSize.entries.map { TSIconStyleSpec.resolve(TSIconStyleSpec.Configuration(it)).sizeDp })
         assertEquals(24, TSIconButtonStyleSpec.configurations.size * TSIconButtonStyleSpec.states.size)
     }
-
-    @Test
-    fun onlyLabelledIconsAreImportantForAccessibility() {
-        TSIconStyleSpec.configurations.forEach { configuration ->
-            assertEquals(configuration.hasLabel, TSIconStyleSpec.resolve(configuration).importantForAccessibility)
-        }
-        assertEquals(6, TSIconStyleSpec.configurations.size)
-    }
 }

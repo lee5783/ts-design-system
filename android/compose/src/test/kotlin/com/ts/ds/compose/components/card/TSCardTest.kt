@@ -13,14 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
-import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.getBoundsInRoot
@@ -29,7 +24,6 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -93,7 +87,6 @@ class TSCardTest {
             title = "Plan",
             subtitle = "Pro",
             footerActions = footerActions,
-            accessibilityActions = listOf(TSCardAction("More options") { events += "more" }),
             onClick = { events += "card" },
             enabled = enabled,
             modifier = Modifier.testTag("card"),
@@ -116,37 +109,12 @@ class TSCardTest {
     }
 
     @Test
-    fun interactiveCardIsOneButtonElementWithTheLabel() {
-        setContent { InteractiveCard() }
-
-        val node = composeRule.onNodeWithTag("card")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Plan, Pro")))
-            .assertIsEnabled()
-            .fetchSemanticsNode()
-        assertTrue(node.children.isEmpty())
-        assertNull(node.config.getOrNull(SemanticsProperties.Text))
-    }
-
-    @Test
-    fun tapAndActivationPerformTheAction() {
+    fun tapPerformsTheAction() {
         setContent { InteractiveCard() }
 
         composeRule.onNodeWithTag("card").performClick()
-        composeRule.onNodeWithTag("card").performSemanticsAction(SemanticsActions.OnClick)
 
-        assertEquals(listOf("card", "card"), events)
-    }
-
-    @Test
-    fun footerThenExtraActionsAreCustomActionsThatFire() {
-        setContent { InteractiveCard() }
-
-        val actions = composeRule.onNodeWithTag("card").fetchSemanticsNode().config[SemanticsActions.CustomActions]
-        assertEquals(listOf("Share", "Open", "More options"), actions.map { it.label })
-        actions.forEach { it.action() }
-
-        assertEquals(listOf("share", "open", "more"), events)
+        assertEquals(listOf("card"), events)
     }
 
     @Test
@@ -167,7 +135,7 @@ class TSCardTest {
                 title = "Plan",
                 onClick = { events += "card" },
                 modifier = Modifier.testTag("card"),
-                accessory = { TSIconButton(TSIcon.More, "More options", onClick = { events += "accessory" }) },
+                accessory = { TSIconButton(TSIcon.More, onClick = { events += "accessory" }) },
             )
         }
         val card = composeRule.onNodeWithTag("card").getBoundsInRoot()
@@ -182,7 +150,7 @@ class TSCardTest {
     }
 
     @Test
-    fun staticCardIsAContainerWithAHeaderTitle() {
+    fun staticCardHasNoClickAction() {
         setContent {
             TSCard(text = "Billed monthly", title = "Plan", subtitle = "Pro", footerActions = footer, modifier = Modifier.testTag("card")) {
             }
@@ -190,21 +158,18 @@ class TSCardTest {
 
         val node = composeRule.onNodeWithTag("card").fetchSemanticsNode()
         assertNull(node.config.getOrNull(SemanticsActions.OnClick))
-        assertNull(node.config.getOrNull(SemanticsProperties.Role))
-        composeRule.onNodeWithText("Plan").assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading))
         composeRule.onNodeWithText("Open").performClick()
         assertEquals(listOf("open"), events)
     }
 
     @Test
-    fun disabledCardBlocksAndDropsCustomActions() {
+    fun disabledCardBlocksTaps() {
         setContent { InteractiveCard(enabled = false) }
 
         composeRule.onNodeWithTag("card").assertIsNotEnabled().performClick()
         tapInside("card", "Open")
 
         assertEquals(emptyList<String>(), events)
-        assertNull(composeRule.onNodeWithTag("card").fetchSemanticsNode().config.getOrNull(SemanticsActions.CustomActions))
     }
 
     @Test
@@ -257,55 +222,25 @@ class TSCardTest {
     }
 
     @Test
-    fun bodyIsTheValueBesideAHeadingAndTheLabelWithoutOne() {
-        setContent {
-            Column {
-                InteractiveCard()
-                TSCard(text = "Billed monthly", onClick = {}, modifier = Modifier.testTag("untitled"))
-            }
-        }
-
-        composeRule.onNodeWithTag("card")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Billed monthly"))
-        composeRule.onNodeWithTag("untitled")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Billed monthly")))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.StateDescription))
-    }
-
-    @Test
-    fun untitledSlotCardReadsItsMergedContent() {
-        setContent {
-            TSCard(onClick = {}, modifier = Modifier.testTag("card")) { TSCardBodyText("Billed monthly") }
-        }
-
-        val node = composeRule.onNodeWithTag("card").fetchSemanticsNode()
-        assertEquals(listOf("Billed monthly"), node.config[SemanticsProperties.Text].map { it.text })
-    }
-
-    @Test
-    fun typedAccessoryRendersAndIsACustomActionBetweenFooterAndExtra() {
+    fun typedAccessoryRendersAndFires() {
         setContent {
             TSCard(
                 text = "Billed monthly",
                 accessory = TSCardAccessory.IconButton(TSIcon.More, "Card options") { events += "accessory" },
                 title = "Plan",
                 footerActions = footer,
-                accessibilityActions = listOf(TSCardAction("More options") { events += "more" }),
                 onClick = { events += "card" },
                 modifier = Modifier.testTag("card"),
             )
         }
 
-        val actions = composeRule.onNodeWithTag("card").fetchSemanticsNode().config[SemanticsActions.CustomActions]
-        assertEquals(listOf("Share", "Open", "Card options", "More options"), actions.map { it.label })
-        actions[2].action()
         val card = composeRule.onNodeWithTag("card").getBoundsInRoot()
         val accessory = composeRule.onNodeWithTag(TSCardTestTags.ACCESSORY, useUnmergedTree = true).getBoundsInRoot()
         composeRule.onNodeWithTag("card").performTouchInput {
             click(Offset(((accessory.left + accessory.right) / 2f - card.left).toPx(), ((accessory.top + accessory.bottom) / 2f - card.top).toPx()))
         }
 
-        assertEquals(listOf("accessory", "accessory"), events)
+        assertEquals(listOf("accessory"), events)
     }
 
     @Test

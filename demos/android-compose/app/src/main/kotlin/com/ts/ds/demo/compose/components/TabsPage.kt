@@ -60,14 +60,13 @@ private fun TabsVariants() {
     var section by rememberSaveable { mutableStateOf(SampleData.tabSections.first().id) }
     var range by rememberSaveable { mutableStateOf(SampleData.tabRanges[1].id) }
     DemoCaption(text = variantName(TSTabsVariant.Underline))
-    TSTabs(SampleData.tabSections.tabItems(), section, { section = it }, label = stringResource(DemoR.string.demo_sample_project_sections))
+    TSTabs(SampleData.tabSections.tabItems(), section, { section = it })
     DemoCaption(text = variantName(TSTabsVariant.Segmented))
     TSTabs(
         SampleData.tabRanges.take(3).tabItems(),
         range,
         { range = it },
         variant = TSTabsVariant.Segmented,
-        label = stringResource(DemoR.string.demo_sample_time_range),
     )
 }
 
@@ -81,7 +80,6 @@ private fun TabsBlock() {
         { range = it },
         variant = TSTabsVariant.Segmented,
         block = true,
-        label = stringResource(DemoR.string.demo_sample_time_range),
     )
     TSTabs(SampleData.tabLayouts.tabItems(), layout, { layout = it }, variant = TSTabsVariant.Segmented)
 }
@@ -102,7 +100,6 @@ private fun TabsOverflow() {
         items,
         section,
         { section = it },
-        label = stringResource(DemoR.string.demo_sample_project_sections),
         modifier = Modifier.testTag(TabsPageTags.OVERFLOW),
     )
     DemoCaption(text = selectedCaption(items, section), modifier = Modifier.testTag(TabsPageTags.OVERFLOW_VALUE))
@@ -149,7 +146,6 @@ private fun TabsPlayground() {
         },
         variant = variant,
         block = block,
-        label = stringResource(DemoR.string.demo_sample_time_range),
         enabled = !disabled,
         modifier = Modifier.testTag(TabsPageTags.PLAYGROUND_TABS),
     )

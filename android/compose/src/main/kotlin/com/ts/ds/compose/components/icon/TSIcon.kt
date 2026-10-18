@@ -18,15 +18,14 @@ import com.ts.ds.core.style.resolve
 @Composable
 public fun TSIcon(
     icon: TSIcon,
-    contentDescription: String?,
     modifier: Modifier = Modifier,
     size: TSIconSize = TSIconSize.Md,
     tint: Color = TSTheme.colors.textPrimary,
 ) {
-    val resolved = TSIconStyleSpec.resolve(TSIconStyleSpec.Configuration(size, hasLabel = contentDescription != null))
+    val resolved = TSIconStyleSpec.resolve(TSIconStyleSpec.Configuration(size))
     TSIconImage(
         icon = icon,
-        contentDescription = contentDescription.takeIf { resolved.importantForAccessibility },
+        contentDescription = null,
         size = resolved.sizeDp.dp,
         tint = tint,
         modifier = modifier,

@@ -38,8 +38,7 @@
             <com.ts.ds.views.components.tabs.TSTabsView
                 style="@style/Widget.Demo.ComponentSample"
                 android:layout_width="match_parent"
-                android:entries="@array/demo_tabs_sections"
-                app:tsLabel="@string/demo_sample_project_sections" />
+                android:entries="@array/demo_tabs_sections" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +50,6 @@
                 style="@style/Widget.Demo.ComponentSample"
                 android:layout_width="match_parent"
                 android:entries="@array/demo_tabs_short_ranges"
-                app:tsLabel="@string/demo_sample_time_range"
                 app:tsTabsVariant="segmented" />
 
             <TextView
@@ -65,7 +63,6 @@
                 android:layout_width="match_parent"
                 android:entries="@array/demo_tabs_ranges"
                 app:tsBlock="true"
-                app:tsLabel="@string/demo_sample_time_range"
                 app:tsTabsVariant="segmented" />
             <com.ts.ds.views.components.tabs.TSTabsView
                 style="@style/Widget.Demo.ComponentSample"

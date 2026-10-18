@@ -7,24 +7,18 @@ import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.Gravity
 import android.view.View
-import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.CheckBox
 import android.widget.Checkable
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.logic.TSToggleAccessibility
 import com.ts.ds.core.style.TSCheckboxStyleSpec
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.views.R
 import com.ts.ds.views.components.shared.TSControlBackground
-import com.ts.ds.views.components.shared.TSToggleAccessibilityInfo
 import com.ts.ds.views.components.shared.TSViewSavedState
 import com.ts.ds.views.components.shared.dpToPx
 import com.ts.ds.views.components.shared.performToggleHaptic
@@ -46,7 +40,6 @@ public class TSCheckboxView @JvmOverloads constructor(
     private val chrome = TSControlBackground()
     private val focusRingWidth = resources.getDimension(R.dimen.ts_focus_ring_width)
     private var checkedState = false
-    private val toggleAccessibility = TSToggleAccessibilityInfo(CheckBox::class.java.name, { label }, { checkedState })
     private var onCheckedChangeListener: OnCheckedChangeListener? = null
     private var ready = false
 
@@ -69,7 +62,6 @@ public class TSCheckboxView @JvmOverloads constructor(
         markView.background = chrome
         markView.scaleType = ImageView.ScaleType.FIT_CENTER
         markView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-        labelView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         labelView.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
         addView(markView, LayoutParams(0, 0))
         addView(labelView, LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f))
@@ -121,16 +113,6 @@ public class TSCheckboxView @JvmOverloads constructor(
 
     override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
         dispatchThawSelfOnly(container)
-    }
-
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        toggleAccessibility.populate(info)
-    }
-
-    override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
-        super.onInitializeAccessibilityEvent(event)
-        toggleAccessibility.populate(event)
     }
 
     override fun setEnabled(enabled: Boolean) {
@@ -190,7 +172,6 @@ public class TSCheckboxView @JvmOverloads constructor(
             markView.setImageDrawable(null)
         }
         alpha = resolved.opacity
-        ViewCompat.setStateDescription(this, TSToggleAccessibility.checkboxState(context, checkedState))
     }
 
     private companion object {

@@ -12,9 +12,6 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.ImageButton
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSImeAction
 import com.ts.ds.core.input.TSTextInputTraits
@@ -51,9 +48,6 @@ class TSTextFieldViewTest {
         }
     }
 
-    private fun View.nodeInfo(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     private fun TSTextFieldView.type(value: String) {
         editText.requestFocus()
         KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD).getEvents(value.toCharArray()).forEach(editText::dispatchKeyEvent)
@@ -86,37 +80,17 @@ class TSTextFieldViewTest {
     }
 
     @Test
-    fun theInputIsTheOnlyAccessibleElementAndCarriesLabelAndHint() {
-        val view = field { placeholder = PLACEHOLDER }
-        val info = view.editText.nodeInfo()
-
-        assertEquals("$LABEL, $HINT", info.hintText.toString())
-        assertNull(info.error)
-        assertFalse(info.isContentInvalid)
-        listOf(view.getChildAt(0), view.message).forEach {
-            assertTrue(it.importantForAccessibility != View.IMPORTANT_FOR_ACCESSIBILITY_YES)
-        }
-    }
-
-    @Test
-    fun errorReplacesTheHintAddsTheIconAndSetsTheNodeError() {
+    fun errorReplacesTheHintAndAddsTheIcon() {
         val view = field { errorMessage = ERROR }
-        val info = view.editText.nodeInfo()
 
         assertEquals(ERROR, view.messageText.toString())
         assertEquals(View.VISIBLE, view.errorIcon.visibility)
-        assertEquals(LABEL, info.hintText.toString())
-        assertEquals(ERROR, info.error.toString())
-        assertTrue(info.isContentInvalid)
         assertEquals(TSColorRole.Danger, view.resolved.border)
-        assertEquals("Error: $ERROR", view.message.contentDescription.toString())
-        assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE, ViewCompat.getAccessibilityLiveRegion(view.message))
 
         view.errorMessage = null
 
         assertEquals(HINT, view.messageText.toString())
         assertEquals(View.GONE, view.errorIcon.visibility)
-        assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, ViewCompat.getAccessibilityLiveRegion(view.message))
         assertEquals(TSColorRole.BorderStrong, view.resolved.border)
     }
 
@@ -179,15 +153,12 @@ class TSTextFieldViewTest {
         val view = field { text = "secret"; isSecure = true }
         val toggle = view.passwordToggle
         assertTrue(view.editText.transformationMethod is PasswordTransformationMethod)
-        assertEquals("Show password", toggle.contentDescription)
         assertFalse(toggle.isSelected)
-        assertEquals(ImageButton::class.java.name, toggle.nodeInfo().className)
 
         toggle.performClick()
 
         assertTrue(view.isPasswordRevealed)
         assertFalse(view.editText.transformationMethod is PasswordTransformationMethod)
-        assertEquals("Hide password", toggle.contentDescription)
         assertTrue(toggle.isSelected)
         assertEquals(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD, view.editText.inputType and InputType.TYPE_MASK_VARIATION)
 

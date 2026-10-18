@@ -4,8 +4,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.logic.TSToastTone
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
@@ -33,23 +31,11 @@ class TSToastViewTest {
         }
     }
 
-    private fun View.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     @Test
-    fun messageIsOneElementPerTone() {
-        val labels = mapOf(
-            TSToastTone.Neutral to "Saved",
-            TSToastTone.Success to "Success, Saved",
-            TSToastTone.Warning to "Warning, Saved",
-            TSToastTone.Danger to "Error, Saved",
-            TSToastTone.Info to "Information, Saved",
-        )
-        labels.forEach { (tone, label) ->
+    fun iconShowsForEveryToneExceptNeutral() {
+        TSToastTone.entries.forEach { tone ->
             val view = toast { this.tone = tone }
 
-            assertEquals(label, view.messageView.node().contentDescription)
-            assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO, view.textView.importantForAccessibility)
             assertEquals(if (tone == TSToastTone.Neutral) View.GONE else View.VISIBLE, view.iconView.visibility)
         }
     }
@@ -62,7 +48,6 @@ class TSToastViewTest {
         }
 
         assertEquals(View.VISIBLE, view.actionView.visibility)
-        assertEquals("android.widget.Button", view.actionView.node().className)
         assertTrue(view.actionView.paintFlags and Paint.UNDERLINE_TEXT_FLAG != 0)
         view.actionView.tapCenter()
 
@@ -105,7 +90,7 @@ class TSToastViewTest {
         }.getChildAt(0) as TSToastView
 
         assertEquals(TSToastTone.Danger, view.tone)
-        assertEquals("Error, Upload failed", view.accessibilityLabel)
+        assertEquals("Upload failed", view.message.toString())
         assertEquals("Retry", view.actionLabel.toString())
     }
 }

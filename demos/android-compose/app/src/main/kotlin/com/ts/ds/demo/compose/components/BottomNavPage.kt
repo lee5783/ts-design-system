@@ -102,7 +102,6 @@ private fun SampleNav(
         items = items,
         selectedId = selected,
         onSelect = onSelect,
-        label = stringResource(DemoR.string.demo_sample_main_navigation),
         enabled = enabled,
         windowInsets = WindowInsets(0, 0, 0, 0),
         modifier = modifier,
@@ -238,7 +237,6 @@ fun BottomNavShellScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
                 items = items,
                 selectedId = selection,
                 onSelect = { selection = it },
-                label = stringResource(DemoR.string.demo_sample_main_navigation),
                 modifier = Modifier.testTag(BottomNavPageTags.SHELL_NAV),
             )
         }

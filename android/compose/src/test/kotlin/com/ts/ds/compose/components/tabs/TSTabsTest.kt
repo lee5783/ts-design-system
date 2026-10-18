@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -90,7 +89,6 @@ class TSTabsTest {
                             },
                             variant = variant,
                             block = block,
-                            label = "Time range",
                             enabled = enabled,
                             modifier = Modifier.testTag("tabs"),
                         )
@@ -105,39 +103,14 @@ class TSTabsTest {
     private fun leftOf(tag: String): Float = composeRule.onNodeWithTag(tag, useUnmergedTree = true).getBoundsInRoot().left.value
 
     @Test
-    fun tapSelectsTheTabAndExposesTabSemantics() {
+    fun tapSelectsTheTab() {
         setTabs()
 
-        tab("week")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Tab))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "2 of 4"))
-            .assertIsNotSelected()
-            .performClick()
+        tab("week").assertIsNotSelected().performClick()
 
         tab("week").assertIsSelected()
-        tab("day").assertIsNotSelected().assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "1 of 4"))
+        tab("day").assertIsNotSelected()
         assertEquals(listOf("week"), changes)
-    }
-
-    @Test
-    fun theListIsASelectableGroupWithCollectionInfo() {
-        setTabs()
-
-        composeRule.onNodeWithTag("tabs")
-            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.SelectableGroup))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Time range")))
-            .assert(
-                SemanticsMatcher("collection of 1 x 4") {
-                    val info = it.config[SemanticsProperties.CollectionInfo]
-                    info.rowCount == 1 && info.columnCount == 4
-                },
-            )
-        tab("month").assert(
-            SemanticsMatcher("third column") {
-                val info = it.config[SemanticsProperties.CollectionItemInfo]
-                info.rowIndex == 0 && info.columnIndex == 2
-            },
-        )
     }
 
     @Test

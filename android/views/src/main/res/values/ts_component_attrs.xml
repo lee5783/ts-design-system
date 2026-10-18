@@ -58,7 +58,6 @@
         <enum name="danger" value="3" />
     </attr>
     <attr name="tsMessage" format="string" />
-    <attr name="tsAnnouncesWhenShown" format="boolean" />
     <attr name="tsToastTone" format="enum">
         <enum name="neutral" value="0" />
         <enum name="success" value="1" />
@@ -161,12 +160,10 @@
         <attr name="android:enabled" />
         <attr name="tsTabsVariant" />
         <attr name="tsBlock" />
-        <attr name="tsLabel" />
     </declare-styleable>
 
     <declare-styleable name="TSBottomNavView">
         <attr name="android:enabled" />
-        <attr name="tsLabel" />
     </declare-styleable>
 
     <declare-styleable name="TSListItemView">
@@ -204,7 +201,6 @@
         <attr name="tsTitle" />
         <attr name="tsMessage" />
         <attr name="tsIcon" />
-        <attr name="tsAnnouncesWhenShown" />
     </declare-styleable>
     <declare-styleable name="TSToastView">
         <attr name="tsToastTone" />

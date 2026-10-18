@@ -148,7 +148,6 @@ public fun TSDialog(
                 resolved = resolved,
                 actions = actions,
                 onAction = onAction,
-                onClose = userDismiss,
                 modifier = modifier.then(panelModifier),
                 scrollsContent = scrolls,
                 content = content,

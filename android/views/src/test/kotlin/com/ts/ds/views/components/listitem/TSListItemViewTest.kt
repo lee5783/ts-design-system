@@ -5,11 +5,7 @@ import android.os.Looper
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.haptics.DsHaptics
 import com.ts.ds.core.icon.TSIcon
@@ -52,9 +48,6 @@ class TSListItemViewTest {
         }
     }.getChildAt(0) as TSListItemView
 
-    private fun TSListItemView.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     private fun View.tapAt(x: Float, y: Float) {
         val time = SystemClock.uptimeMillis()
         listOf(MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP).forEach { action ->
@@ -79,8 +72,6 @@ class TSListItemViewTest {
 
         assertEquals(1, taps)
         assertEquals(TSListItemRole.Action, view.role)
-        assertEquals(Button::class.java.name, view.node().className)
-        assertEquals("Wi-Fi", view.node().text)
     }
 
     @Test
@@ -93,7 +84,7 @@ class TSListItemViewTest {
         view.tapCenter()
 
         assertEquals(0, taps)
-        assertFalse(view.node().isEnabled)
+        assertFalse(view.isEnabled)
     }
 
     @Test
@@ -108,9 +99,6 @@ class TSListItemViewTest {
         assertFalse(view.isClickable)
         assertFalse(view.isPressed)
         assertNull(view.resolved.background)
-        assertEquals(View::class.java.name, view.node().className)
-        assertEquals("Wi-Fi, Home", view.node().text)
-        assertEquals("Connected", view.node().stateDescription)
     }
 
     @Test
@@ -125,47 +113,32 @@ class TSListItemViewTest {
     }
 
     @Test
-    fun chevronRowCarriesTheNavigatesHint() {
+    fun chevronRowIsNavigation() {
         val view = row {
             setOnClickListener {}
             showsChevron = true
         }
 
         assertEquals(TSListItemRole.Navigation, view.role)
-        assertEquals("Opens another screen", view.node().hintText)
         assertEquals(View.VISIBLE, view.chevronView.visibility)
         assertTrue(view.chevronView.drawable.isAutoMirrored)
     }
 
     @Test
-    fun rowWithoutChevronHasNoHint() {
-        val view = row { setOnClickListener {} }
-
-        assertNull(view.node().hintText)
-    }
-
-    @Test
-    fun switchRowIsOneSwitchElement() {
+    fun switchRowTogglesFromItsSwitch() {
         val view = row {
             subtitle = "Home"
             trailing = TSListItemTrailing.Switch
             setOnClickListener { taps++ }
         }
 
-        val node = view.node()
-        assertEquals(SwitchCompat::class.java.name, node.className)
-        assertTrue(node.isCheckable)
-        assertFalse(node.isChecked)
-        assertEquals("Wi-Fi, Home", node.text)
-        assertEquals("Off", node.stateDescription)
+        assertFalse(view.isChecked)
         assertFalse(view.isClickable)
-        assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, (view.getChildAt(0)).importantForAccessibility)
 
-        assertTrue(ViewCompat.performAccessibilityAction(view, AccessibilityNodeInfoCompat.ACTION_CLICK, null))
+        view.switchView.tapCenter()
 
         assertTrue(view.isChecked)
         assertEquals(listOf(true), changes)
-        assertEquals("On", view.node().stateDescription)
         assertEquals(DsHaptics.constantFor(DsHapticEvent.ToggleOn), shadowOf(view.switchView).lastHapticFeedbackPerformed())
         assertEquals(0, taps)
     }
@@ -204,7 +177,6 @@ class TSListItemViewTest {
         view.switchView.tapCenter()
 
         assertEquals(emptyList<Boolean>(), changes)
-        assertFalse(ViewCompat.performAccessibilityAction(view, AccessibilityNodeInfoCompat.ACTION_CLICK, null))
         assertFalse(view.isChecked)
         assertEquals(0.45f, view.switchView.alpha, 0.001f)
     }

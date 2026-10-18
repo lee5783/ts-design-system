@@ -9,7 +9,6 @@ import android.view.animation.PathInterpolator
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import com.ts.ds.core.icon.TSIcons
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSListGroupPosition
 import com.ts.ds.core.style.TSListItemStyleSpec
@@ -31,7 +30,7 @@ public class TSDisclosureListItemView @JvmOverloads constructor(
     internal val bodyContainer = LinearLayout(context)
     private var onExpandedChangeListener: OnExpandedChangeListener? = null
     private var ready = false
-    internal var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    internal var reduceMotion: () -> Boolean = { false }
 
     public var title: CharSequence
         get() = headerView.title

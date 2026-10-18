@@ -37,26 +37,24 @@ fun LazyListScope.iconButtonPage() {
     componentSection("icon-button.variants", DemoR.string.demo_component_variants) {
         TSIconButtonVariant.entries.forEach { variant ->
             Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3), verticalAlignment = Alignment.CenterVertically) {
-                TSIconButton(TSIcon.Search, stringResource(DemoR.string.demo_sample_search), onClick = {}, variant = variant)
+                TSIconButton(TSIcon.Search, onClick = {}, variant = variant)
                 DemoCaption(text = variant.name.lowercase())
             }
         }
     }
     componentSection("icon-button.shapes", DemoR.string.demo_component_shapes) {
         Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3)) {
-            val add = stringResource(DemoR.string.demo_sample_add)
-            TSIconButton(TSIcon.Plus, add, onClick = {}, variant = TSIconButtonVariant.Primary)
-            TSIconButton(TSIcon.Plus, add, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
-            TSIconButton(TSIcon.More, stringResource(DemoR.string.demo_sample_more_options), onClick = {}, variant = TSIconButtonVariant.Secondary, round = true)
+            TSIconButton(TSIcon.Plus, onClick = {}, variant = TSIconButtonVariant.Primary)
+            TSIconButton(TSIcon.Plus, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
+            TSIconButton(TSIcon.More, onClick = {}, variant = TSIconButtonVariant.Secondary, round = true)
         }
     }
     componentSection("icon-button.consumer-icon", DemoR.string.demo_component_consumer_icon) {
         Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3)) {
             val controller = TSIconSource.Vector(ImageVector.vectorResource(R.drawable.demo_ic_controller))
-            val label = stringResource(DemoR.string.demo_sample_controller)
-            TSIconButton(controller, label, onClick = {}, modifier = Modifier.testTag(IconButtonPageTags.CONSUMER_ICON))
-            TSIconButton(controller, label, onClick = {}, variant = TSIconButtonVariant.Secondary)
-            TSIconButton(controller, label, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
+            TSIconButton(controller, onClick = {}, modifier = Modifier.testTag(IconButtonPageTags.CONSUMER_ICON))
+            TSIconButton(controller, onClick = {}, variant = TSIconButtonVariant.Secondary)
+            TSIconButton(controller, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
         }
     }
     componentSection("icon-button.states", DemoR.string.demo_component_states) {
@@ -65,9 +63,8 @@ fun LazyListScope.iconButtonPage() {
                 val name = variant.name.lowercase()
                 DemoCaption(text = if (round) "$name · ${stringResource(DemoR.string.demo_component_round)}" else name)
                 Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3)) {
-                    val close = stringResource(DemoR.string.demo_sample_close)
-                    TSIconButton(TSIcon.Close, close, onClick = {}, variant = variant, round = round)
-                    TSIconButton(TSIcon.Close, close, onClick = {}, variant = variant, round = round, enabled = false)
+                    TSIconButton(TSIcon.Close, onClick = {}, variant = variant, round = round)
+                    TSIconButton(TSIcon.Close, onClick = {}, variant = variant, round = round, enabled = false)
                 }
             }
         }
@@ -97,7 +94,6 @@ private fun IconButtonPlayground() {
     )
     TSIconButton(
         icon = TSIcon.Settings,
-        contentDescription = stringResource(DemoR.string.demo_sample_more_options),
         onClick = { taps++ },
         variant = variant,
         round = round,

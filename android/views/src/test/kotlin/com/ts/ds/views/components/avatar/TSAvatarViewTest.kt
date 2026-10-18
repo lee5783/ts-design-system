@@ -4,17 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.view.View
-import android.widget.ImageView
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.TextViewCompat
 import com.ts.ds.core.style.TSAvatarContent
 import com.ts.ds.core.style.TSAvatarSize
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -35,18 +30,6 @@ class TSAvatarViewTest {
 
     private fun TSAvatarView.photo(): BitmapDrawable =
         BitmapDrawable(resources, Bitmap.createBitmap(8, 8, Bitmap.Config.ARGB_8888))
-
-    @Test
-    fun labelIsTheNameWithTheImageClassAndNoClick() {
-        val view = avatar()
-        val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-
-        assertEquals("Ada Lovelace", info.contentDescription.toString())
-        assertEquals(ImageView::class.java.name, info.className)
-        assertFalse(info.isClickable)
-        assertFalse(view.isClickable)
-        assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_YES, view.importantForAccessibility)
-    }
 
     @Test
     fun initialsWhenThereIsNoImage() {
@@ -85,11 +68,9 @@ class TSAvatarViewTest {
     @Test
     fun blankNameShowsThePlaceholder() {
         val view = avatar { name = " " }
-        val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
 
         assertEquals(TSAvatarContent.Placeholder, view.content)
         assertEquals(View.GONE, view.initialsLabel.visibility)
-        assertNull(info.contentDescription)
     }
 
     @Test

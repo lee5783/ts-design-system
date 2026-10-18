@@ -47,9 +47,9 @@ fun LazyListScope.spinnerPage() {
             horizontalArrangement = Arrangement.spacedBy(TSSpacing.space2),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TSSpinner(size = TSSpinnerSize.Sm, tone = TSSpinnerTone.Secondary, contentDescription = null)
+            TSSpinner(size = TSSpinnerSize.Sm, tone = TSSpinnerTone.Secondary)
             TSText(loading, role = TSTypeRole.BodySm, color = TSTextColor.Secondary)
         }
-        TSSpinner(Modifier.testTag(SpinnerPageTags.LABELLED), size = TSSpinnerSize.Lg, tone = TSSpinnerTone.Accent, contentDescription = loading)
+        TSSpinner(Modifier.testTag(SpinnerPageTags.LABELLED), size = TSSpinnerSize.Lg, tone = TSSpinnerTone.Accent)
     }
 }

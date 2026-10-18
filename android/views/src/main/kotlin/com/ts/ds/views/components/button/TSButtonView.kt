@@ -10,18 +10,12 @@ import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
 import com.ts.ds.core.style.TSButtonSize
@@ -116,14 +110,7 @@ public class TSButtonView @JvmOverloads constructor(
         set(value) {
             field = value
             super.setEnabled(userEnabled && !value)
-            ViewCompat.setStateDescription(this, if (value) loadingDescription else null)
             applyConfiguration()
-        }
-
-    public var loadingDescription: CharSequence = context.getString(CoreR.string.ts_loading)
-        set(value) {
-            field = value
-            if (isLoading) ViewCompat.setStateDescription(this, value)
         }
 
     init {
@@ -140,21 +127,11 @@ public class TSButtonView @JvmOverloads constructor(
         isFocusable = true
         background = chrome
         val iconSize = dpToPx(initial.iconSizeDp)
-        listOf(leadingView, labelView, trailingView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
+        listOf(leadingView, trailingView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
         addView(leadingView, LayoutParams(iconSize, iconSize).apply { marginEnd = dpToPx(initial.iconSpacingDp) })
         addView(labelView, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
         addView(trailingView, LayoutParams(iconSize, iconSize).apply { marginStart = dpToPx(initial.iconSpacingDp) })
         labelView.gravity = Gravity.CENTER
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = Button::class.java.name
-                    info.text = text
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSButtonView, defStyleAttr, 0).apply {
             text = getText(R.styleable.TSButtonView_android_text) ?: ""
             variant = TSButtonVariant.entries[getInt(R.styleable.TSButtonView_tsVariant, TSButtonVariant.Primary.ordinal)]

@@ -10,10 +10,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.foundation.rememberTSHaptics
 import com.ts.ds.compose.foundation.tsMinimumTouchTarget
@@ -21,23 +17,20 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
 import com.ts.ds.core.haptics.DsHaptics
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSTypeRole
 
 @Suppress("ComposeCompositionLocalUsage")
-internal val LocalTSReduceMotion = staticCompositionLocalOf<Boolean?> { null }
+internal val LocalTSReduceMotion = staticCompositionLocalOf { false }
 
 @Composable
-internal fun tsReduceMotion(): Boolean = LocalTSReduceMotion.current ?: TSReduceMotion.isEnabled
+internal fun tsReduceMotion(): Boolean = LocalTSReduceMotion.current
 
 @Composable
 internal fun TSToggleRow(
     checked: Boolean,
     label: String,
     onCheckedChange: (Boolean) -> Unit,
-    role: Role,
-    stateDescription: String,
     labelHidden: Boolean,
     enabled: Boolean,
     labelTypeRole: TSTypeRole,
@@ -57,16 +50,11 @@ internal fun TSToggleRow(
                 interactionSource = interactionSource,
                 indication = null,
                 enabled = enabled,
-                role = role,
                 onValueChange = { value ->
                     haptics.perform(DsHaptics.toggleEvent(value))
                     onCheckedChange(value)
                 },
             )
-            .semantics {
-                this.stateDescription = stateDescription
-                if (labelHidden) contentDescription = label
-            }
             .tsMinimumTouchTarget(minTouchTargetDp.dp)
             .alpha(opacity),
         horizontalArrangement = Arrangement.spacedBy(spacingDp.dp),

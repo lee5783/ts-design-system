@@ -11,9 +11,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.icon.TSIcon
@@ -67,8 +64,7 @@ public class TSBadgeView @JvmOverloads constructor(
         gravity = Gravity.CENTER_VERTICAL
         background = chrome
         dotView.background = dotShape
-        listOf(dotView, iconView, labelView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
+        listOf(dotView, iconView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
         val initial = TSBadgeStyleSpec.resolve(TSBadgeStyleSpec.Configuration())
         val dotSize = dpToPx(initial.dotSizeDp)
         val iconSize = dpToPx(initial.iconSizeDp)
@@ -80,19 +76,6 @@ public class TSBadgeView @JvmOverloads constructor(
         labelView.isSingleLine = true
         labelView.ellipsize = TextUtils.TruncateAt.END
         labelView.textAlignment = TEXT_ALIGNMENT_VIEW_START
-        ViewCompat.setScreenReaderFocusable(this, true)
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = TextView::class.java.name
-                    info.text = text
-                    info.isClickable = false
-                    info.isLongClickable = false
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSBadgeView, defStyleAttr, 0).apply {
             text = getText(R.styleable.TSBadgeView_android_text) ?: ""
             tone = TSBadgeTone.entries[getInt(R.styleable.TSBadgeView_tsBadgeTone, TSBadgeTone.Neutral.ordinal)]

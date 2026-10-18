@@ -35,15 +35,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CollectionInfo
-import androidx.compose.ui.semantics.CollectionItemInfo
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.collectionInfo
-import androidx.compose.ui.semantics.collectionItemInfo
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -56,7 +48,6 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.shadow
 import com.ts.ds.compose.theme.style
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.style.TSTabItem
 import com.ts.ds.core.style.TSTabsStyleSpec
@@ -103,7 +94,6 @@ public fun TSTabs(
     modifier: Modifier = Modifier,
     variant: TSTabsVariant = TSTabsVariant.Underline,
     block: Boolean = false,
-    label: String? = null,
     enabled: Boolean = true,
 ) {
     val container = TSTabsStyleSpec.container(variant, enabled)
@@ -113,8 +103,6 @@ public fun TSTabs(
     val motion = rememberMarkerMotion(selectedIndex, reference.animationDurationMillis, reference.animationEasing)
     val groupModifier = Modifier
         .semantics {
-            label?.let { contentDescription = it }
-            collectionInfo = CollectionInfo(rowCount = 1, columnCount = items.size)
         }
         .selectableGroup()
         .alpha(container.opacity)
@@ -124,8 +112,6 @@ public fun TSTabs(
             key(item.id) {
                 TSTab(
                     item = item,
-                    index = index,
-                    count = items.size,
                     selected = index == selectedIndex,
                     variant = variant,
                     enabled = enabled,
@@ -243,8 +229,6 @@ private fun TSTabsRow(
 @Composable
 private fun TSTab(
     item: TSTabItem,
-    index: Int,
-    count: Int,
     selected: Boolean,
     variant: TSTabsVariant,
     enabled: Boolean,
@@ -254,7 +238,6 @@ private fun TSTab(
     val source = remember { MutableInteractionSource() }
     val state = source.collectTSControlState(enabled = enabled)
     val resolved = TSTabsStyleSpec.resolve(TSTabsStyleSpec.Configuration(variant, selected), state)
-    val position = stringResource(CoreR.string.ts_position_of_total, index + 1, count)
     val shape = RoundedCornerShape(resolved.cornerRadiusDp.dp)
     val requester = remember { BringIntoViewRequester() }
     if (selectedInView) {
@@ -269,13 +252,8 @@ private fun TSTab(
                 interactionSource = source,
                 indication = null,
                 enabled = enabled,
-                role = Role.Tab,
                 onClick = { if (!selected) onClick() },
             )
-            .semantics {
-                stateDescription = position
-                collectionItemInfo = CollectionItemInfo(rowIndex = 0, rowSpan = 1, columnIndex = index, columnSpan = 1)
-            }
             .heightIn(min = resolved.minTouchTargetDp.dp)
             .padding(vertical = resolved.touchOutsetDp.dp)
             .tsControlChrome(

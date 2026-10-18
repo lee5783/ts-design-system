@@ -3,22 +3,7 @@
     <string name="ts_loading">Loading</string>
     <string name="ts_close">Close</string>
     <string name="ts_dismiss">Dismiss</string>
-    <string name="ts_position_of_total">%1$d of %2$d</string>
     <string name="ts_badge_count_overflow">%1$d+</string>
-    <string name="ts_text_field_error">Error: %1$s</string>
     <string name="ts_text_field_show_password">Show password</string>
     <string name="ts_text_field_hide_password">Hide password</string>
-    <string name="ts_checkbox_checked">Checked</string>
-    <string name="ts_checkbox_unchecked">Unchecked</string>
-    <string name="ts_switch_on">On</string>
-    <string name="ts_switch_off">Off</string>
-    <string name="ts_tab_position">Tab, %1$d of %2$d</string>
-    <string name="ts_bottom_nav_badge">%1$s new</string>
-    <string name="ts_list_item_navigates">Opens another screen</string>
-    <string name="ts_list_item_expanded">Expanded</string>
-    <string name="ts_list_item_collapsed">Collapsed</string>
-    <string name="ts_alert_info">Information</string>
-    <string name="ts_alert_success">Success</string>
-    <string name="ts_alert_warning">Warning</string>
-    <string name="ts_alert_danger">Error</string>
 </resources>

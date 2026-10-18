@@ -38,12 +38,10 @@ dependencyResolutionManagement {
             version("androidx-navigation", "2.9.5")
             version("androidx-recyclerview", "1.4.0")
             version("androidx-test-runner", "1.7.0")
-            version("guava-android", "31.0.1-android")
             library("androidx-navigation-fragment", "androidx.navigation", "navigation-fragment").versionRef("androidx-navigation")
             library("androidx-recyclerview", "androidx.recyclerview", "recyclerview").versionRef("androidx-recyclerview")
             library("espresso-contrib", "androidx.test.espresso", "espresso-contrib").versionRef("espresso")
             library("androidx-test-runner", "androidx.test", "runner").versionRef("androidx-test-runner")
-            library("guava-android", "com.google.guava", "guava").versionRef("guava-android")
             plugin("android-application", "com.android.application").versionRef("agp")
         }
     }

@@ -3,9 +3,6 @@ package com.ts.ds.views.components.checkbox
 import android.os.Looper
 import android.os.SystemClock
 import android.view.MotionEvent
-import android.widget.CheckBox
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.haptics.DsHaptics
 import com.ts.ds.core.style.TSColorRole
@@ -34,9 +31,6 @@ class TSCheckboxViewTest {
             configure()
         }
     }
-
-    private fun TSCheckboxView.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
 
     private fun TSCheckboxView.tapAt(x: Float) {
         val time = SystemClock.uptimeMillis()
@@ -81,20 +75,14 @@ class TSCheckboxViewTest {
     }
 
     @Test
-    fun nodeIsACheckableCheckBoxWithTheLabelAndStateDescription() {
+    fun tapTogglesChecked() {
         val view = checkbox()
-        val off = view.node()
 
-        assertEquals(CheckBox::class.java.name, off.className)
-        assertEquals("Remember me", off.text.toString())
-        assertTrue(off.isCheckable)
-        assertFalse(off.isChecked)
-        assertEquals("Unchecked", ViewCompat.getStateDescription(view).toString())
+        assertFalse(view.isChecked)
 
         view.tapCenter()
 
-        assertTrue(view.node().isChecked)
-        assertEquals("Checked", ViewCompat.getStateDescription(view).toString())
+        assertTrue(view.isChecked)
     }
 
     @Test
@@ -108,13 +96,12 @@ class TSCheckboxViewTest {
     }
 
     @Test
-    fun hiddenLabelKeepsTheAccessibleLabelAndA48dpTarget() {
+    fun hiddenLabelKeepsA48dpTarget() {
         val view = checkbox { isLabelHidden = true }
 
         assertEquals(48, view.width)
         assertEquals(48, view.height)
         assertEquals(20, view.markView.width)
-        assertEquals("Remember me", view.node().text.toString())
     }
 
     @Test

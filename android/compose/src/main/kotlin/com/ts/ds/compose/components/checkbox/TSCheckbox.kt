@@ -8,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
 import com.ts.ds.compose.components.shared.TSToggleRow
@@ -17,7 +15,6 @@ import com.ts.ds.compose.components.shared.collectTSControlState
 import com.ts.ds.compose.components.shared.tsControlChrome
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.style.TSCheckboxStyleSpec
 
 @Composable
@@ -39,8 +36,6 @@ public fun TSCheckbox(
         checked = checked,
         label = label,
         onCheckedChange = onCheckedChange,
-        role = Role.Checkbox,
-        stateDescription = stringResource(if (checked) CoreR.string.ts_checkbox_checked else CoreR.string.ts_checkbox_unchecked),
         labelHidden = labelHidden,
         enabled = state.interactive,
         labelTypeRole = resolved.labelTypeRole,
