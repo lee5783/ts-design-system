@@ -245,6 +245,7 @@
     <string name="demo_component_with_input">With input</string>
     <string name="demo_component_stacking">Stacking</string>
     <string name="demo_component_refused_count">Refused presentations: %1$d</string>
+    <string name="demo_component_queued_count">Queued presentations: %1$d</string>
     <string name="demo_component_center">Center</string>
     <string name="demo_component_sheet">Sheet</string>
     <string name="demo_component_long_content">Long content</string>
@@ -260,6 +261,7 @@
     <string name="demo_sample_project_name_value">Q3 launch</string>
     <string name="demo_sample_stacking_title">One dialog at a time</string>
     <string name="demo_sample_stacking_body">Opening a second dialog from here is refused, so dialogs never stack.</string>
+    <string name="demo_sample_stacking_queue_body">A second dialog opened from here waits until this one closes, so dialogs never stack.</string>
     <string name="demo_sample_archive_title">Archive this project?</string>
     <string name="demo_sample_archive">Archive</string>
     <string name="demo_sample_long_dialog_body">Archiving moves the project out of everyone\'s sidebar. Its files, comments and history are kept, and an owner can restore it at any time from Settings. Members keep read-only access until the project is deleted, and shared links stop working right away.</string>

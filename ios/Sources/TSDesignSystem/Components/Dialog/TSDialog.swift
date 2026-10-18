@@ -67,26 +67,50 @@ enum TSDialogRoute: String, Hashable, CaseIterable {
 @MainActor
 final class TSDialogSession: ObservableObject {
     @Published private(set) var isGranted = false
-    private var afterDismissal: (() -> Void)?
+    private var hasAppeared = false
+    private var afterDismissal: (@MainActor () -> Void)?
 
     func request(_ isPresented: Bool, presenter: TSDialogPresenter) -> Bool {
         guard isPresented else {
+            let grantedButNeverShown = isGranted && !hasAppeared
             isGranted = false
+            if presenter.isPending(self) || grantedButNeverShown {
+                presenter.end(self)
+            }
             return true
         }
         guard !isGranted else { return true }
-        guard presenter.begin(self) else { return false }
-        isGranted = true
-        return true
+        switch presenter.request(self, onGranted: { [weak self] in self?.isGranted = true }) {
+        case .granted:
+            isGranted = true
+            return true
+        case .queued:
+            return true
+        case .refused:
+            return false
+        }
     }
 
-    func withdraw(then afterDismissal: (() -> Void)? = nil) {
+    func withdraw() {
         isGranted = false
-        self.afterDismissal = afterDismissal
+    }
+
+    func perform(_ action: TSDialogAction, dismiss: () -> Void) {
+        guard isGranted else { return }
+        action.handler()
+        guard action.dismisses else { return }
+        afterDismissal = action.afterDismissal
+        withdraw()
+        dismiss()
+    }
+
+    func didAppear() {
+        hasAppeared = true
     }
 
     func didDismiss(presenter: TSDialogPresenter) {
         guard !isGranted else { return }
+        hasAppeared = false
         presenter.end(self)
         let afterDismissal = afterDismissal
         self.afterDismissal = nil
@@ -95,6 +119,8 @@ final class TSDialogSession: ObservableObject {
 
     func invalidate(presenter: TSDialogPresenter) {
         isGranted = false
+        hasAppeared = false
+        afterDismissal = nil
         presenter.end(self)
     }
 }
@@ -163,7 +189,7 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
                     environment: environment,
                     onDidDismiss: didDismiss,
                     onRefused: refuseLater,
-                    content: AnyView(TSDialogCenterContainer(resolved: resolved, onScrimTap: close, panel: panel()))
+                    content: AnyView(TSDialogCenterContainer(resolved: resolved, onScrimTap: close, panel: panel()).onAppear(perform: session.didAppear))
                 )
             )
         case .sheetBridge:
@@ -197,6 +223,7 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
 
     private var sheetRoot: some View {
         TSDialogSheetContainer(onHeightChange: { sheetHeight = $0 }, panel: panel())
+            .onAppear(perform: session.didAppear)
     }
 
     func panel(focusesTitle: Bool = true) -> TSDialogPanel<DialogContent> {
@@ -245,12 +272,7 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
     }
 
     func perform(_ action: TSDialogAction) {
-        guard action.dismisses else {
-            action.handler()
-            return
-        }
-        session.withdraw(then: action.handler)
-        isPresented = false
+        session.perform(action) { isPresented = false }
     }
 
     private func didDismiss() {

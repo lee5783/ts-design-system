@@ -73,6 +73,7 @@ public open class TSDialogFragment : AppCompatDialogFragment() {
     }
 
     override fun onStart() {
+        session.inheritSystemBars(this)
         super.onStart()
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         session.attachToasts(requireContext(), dialog?.window)
@@ -90,6 +91,7 @@ public open class TSDialogFragment : AppCompatDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        session.restoreHostSystemBars(this)
         presenter.end(this)
     }
 
@@ -99,11 +101,11 @@ public open class TSDialogFragment : AppCompatDialogFragment() {
     }
 
     private fun perform(action: TSDialogAction) {
-        if (action.dismisses) dismiss()
-        action.onClick()
+        session.perform(this, action)
     }
 
     private fun cancelByUser() {
+        session.restoreHostSystemBars(this)
         dialog?.cancel()
     }
 

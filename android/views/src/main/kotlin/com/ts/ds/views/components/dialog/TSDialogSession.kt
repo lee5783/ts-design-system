@@ -12,6 +12,7 @@ import com.ts.ds.core.logic.TSDialogAction
 import com.ts.ds.core.logic.TSDialogPresenter
 import com.ts.ds.core.style.TSDialogVariant
 import com.ts.ds.views.components.toast.TSToastHost
+import java.lang.ref.WeakReference
 
 internal class TSDialogSession(private val variant: TSDialogVariant) {
     var title: CharSequence = ""
@@ -24,6 +25,7 @@ internal class TSDialogSession(private val variant: TSDialogVariant) {
         private set
 
     private var toastContainer: ViewGroup? = null
+    private var hostBars: TSSystemBarsState? = null
 
     fun attachToasts(context: Context, window: Window?) {
         val container = window?.decorView as? ViewGroup ?: return
@@ -39,8 +41,14 @@ internal class TSDialogSession(private val variant: TSDialogVariant) {
 
     fun canCommit(manager: FragmentManager): Boolean = !manager.isStateSaved && !manager.isDestroyed
 
+    fun begin(owner: Any): Boolean {
+        val chaining = chainingOwner?.get()
+        if (chaining != null && chaining !== owner && presenter.isActive(chaining)) return presenter.handOver(chaining, owner)
+        return presenter.begin(owner)
+    }
+
     inline fun <T> claimAround(owner: Any, refused: T, operation: () -> T): T {
-        if (!presenter.begin(owner)) return refused
+        if (!begin(owner)) return refused
         return try {
             operation()
         } catch (error: Throwable) {
@@ -49,7 +57,7 @@ internal class TSDialogSession(private val variant: TSDialogVariant) {
         }
     }
 
-    fun claim(owner: Any, savedInstanceState: Bundle?): Boolean = savedInstanceState == null && presenter.begin(owner)
+    fun claim(owner: Any, savedInstanceState: Bundle?): Boolean = savedInstanceState == null && begin(owner)
 
     fun drop(fragment: DialogFragment, savedInstanceState: Bundle?) {
         fragment.showsDialog = false
@@ -59,6 +67,32 @@ internal class TSDialogSession(private val variant: TSDialogVariant) {
             TSDialogFragmentResults.DROPPED,
             bundleOf(TSDialogFragmentResults.KEY_TAG to fragment.tag),
         )
+    }
+
+    fun perform(owner: DialogFragment, action: TSDialogAction) {
+        if (!action.dismisses) {
+            action.onClick()
+            return
+        }
+        chainingOwner = WeakReference(owner)
+        try {
+            action.onClick()
+        } finally {
+            chainingOwner = null
+        }
+        restoreHostSystemBars(owner)
+        if (owner.isAdded) owner.dismissAllowingStateLoss() else presenter.end(owner)
+    }
+
+    fun inheritSystemBars(fragment: DialogFragment) {
+        val host = fragment.activity?.window ?: return
+        val state = hostBars ?: host.systemBarsState().also { hostBars = it }
+        fragment.dialog?.window?.applySystemBars(state)
+    }
+
+    fun restoreHostSystemBars(fragment: DialogFragment) {
+        val state = hostBars ?: return
+        fragment.activity?.window?.applySystemBars(state)
     }
 
     fun makePanel(context: Context, onAction: (TSDialogAction) -> Unit, onClose: () -> Unit): TSDialogPanelView =
@@ -72,4 +106,8 @@ internal class TSDialogSession(private val variant: TSDialogVariant) {
             it.onClose = onClose
             panel = it
         }
+
+    private companion object {
+        var chainingOwner: WeakReference<Any>? = null
+    }
 }

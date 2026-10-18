@@ -215,20 +215,45 @@ public final class com/ts/ds/core/logic/TSDialogLayout {
 	public final fun orderedActions (Ljava/util/List;Z)Ljava/util/List;
 }
 
+public final class com/ts/ds/core/logic/TSDialogPolicy : java/lang/Enum {
+	public static final field Queue Lcom/ts/ds/core/logic/TSDialogPolicy;
+	public static final field Refuse Lcom/ts/ds/core/logic/TSDialogPolicy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/logic/TSDialogPolicy;
+	public static fun values ()[Lcom/ts/ds/core/logic/TSDialogPolicy;
+}
+
 public final class com/ts/ds/core/logic/TSDialogPresenter {
 	public static final field Companion Lcom/ts/ds/core/logic/TSDialogPresenter$Companion;
 	public fun <init> ()V
+	public fun <init> (Lcom/ts/ds/core/logic/TSDialogPolicy;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/logic/TSDialogPolicy;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun addListener (Lkotlin/jvm/functions/Function1;)V
 	public final fun begin (Ljava/lang/Object;)Z
 	public final fun end (Ljava/lang/Object;)V
+	public final fun getPendingCount ()I
+	public final fun getPolicy ()Lcom/ts/ds/core/logic/TSDialogPolicy;
 	public final fun getRefusedCount ()I
+	public final fun handOver (Ljava/lang/Object;Ljava/lang/Object;)Z
 	public final fun isActive (Ljava/lang/Object;)Z
+	public final fun isPending (Ljava/lang/Object;)Z
 	public final fun isPresenting ()Z
 	public final fun removeListener (Lkotlin/jvm/functions/Function1;)V
+	public final fun request (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)Lcom/ts/ds/core/logic/TSDialogRequestResult;
+	public final fun setPolicy (Lcom/ts/ds/core/logic/TSDialogPolicy;)V
 }
 
 public final class com/ts/ds/core/logic/TSDialogPresenter$Companion {
 	public final fun getShared ()Lcom/ts/ds/core/logic/TSDialogPresenter;
+}
+
+public final class com/ts/ds/core/logic/TSDialogRequestResult : java/lang/Enum {
+	public static final field Granted Lcom/ts/ds/core/logic/TSDialogRequestResult;
+	public static final field Queued Lcom/ts/ds/core/logic/TSDialogRequestResult;
+	public static final field Refused Lcom/ts/ds/core/logic/TSDialogRequestResult;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/logic/TSDialogRequestResult;
+	public static fun values ()[Lcom/ts/ds/core/logic/TSDialogRequestResult;
 }
 
 public final class com/ts/ds/core/logic/TSInitials {

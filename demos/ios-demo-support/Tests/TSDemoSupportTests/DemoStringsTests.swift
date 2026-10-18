@@ -36,9 +36,10 @@ struct DemoStringsTests {
         #expect(DemoStrings.tapCount(3) == "Tapped 3 times")
     }
 
-    @Test("The dialog captions format their result and refusal count")
+    @Test("The dialog captions format their result, refusal and queue counts")
     func dialogCaptions() {
         #expect(DemoStrings.dialogResult("Delete") == "Result: Delete")
         #expect(DemoStrings.refusedCount(1) == "Refused presentations: 1")
+        #expect(DemoStrings.queuedCount(1) == "Queued presentations: 1")
     }
 }

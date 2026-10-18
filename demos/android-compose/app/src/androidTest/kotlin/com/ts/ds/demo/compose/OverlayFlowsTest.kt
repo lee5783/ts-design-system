@@ -70,9 +70,9 @@ class OverlayFlowsTest {
         onNodeWithTag(DialogPageTags.RESULT).assertTextEquals(result(value))
     }
 
-    private fun ComposeTestRule.refusedCount(): Int {
-        onNode(hasScrollToNodeAction()).performScrollToNode(hasTestTag(DialogPageTags.REFUSED))
-        val text = onNodeWithTag(DialogPageTags.REFUSED).fetchSemanticsNode()
+    private fun ComposeTestRule.count(tag: String): Int {
+        onNode(hasScrollToNodeAction()).performScrollToNode(hasTestTag(tag))
+        val text = onNodeWithTag(tag).fetchSemanticsNode()
             .config[SemanticsProperties.Text].joinToString { it.text }
         return text.filter(Char::isDigit).toInt()
     }
@@ -156,10 +156,10 @@ class OverlayFlowsTest {
     }
 
     @Test
-    fun secondDialogIsRefusedWhileOneIsOpen() {
+    fun secondDialogIsQueuedWhileOneIsOpenAndShownAfterItCloses() {
         launchDemo().use {
             composeRule.openPage(DemoPageId.Dialog)
-            val before = composeRule.refusedCount()
+            val refusedBefore = composeRule.count(DialogPageTags.REFUSED)
             val stackingTitle = resources.getString(DemoR.string.demo_sample_stacking_title)
             composeRule.tap(DialogPageTags.OPEN_STACKING)
             composeRule.assertDialogShown(stackingTitle)
@@ -170,7 +170,11 @@ class OverlayFlowsTest {
 
             composeRule.onNodeWithText(resources.getString(DemoR.string.demo_sample_close)).performClick()
             composeRule.assertDialogGone(stackingTitle)
-            assertEquals(before + 1, composeRule.refusedCount())
+            composeRule.assertDialogShown(confirmTitle)
+            composeRule.onNodeWithText(resources.getString(DemoR.string.demo_sample_cancel)).performClick()
+            composeRule.assertDialogGone(confirmTitle)
+            assertEquals(refusedBefore, composeRule.count(DialogPageTags.REFUSED))
+            assertEquals(0, composeRule.count(DialogPageTags.QUEUED))
         }
     }
 

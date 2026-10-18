@@ -76,7 +76,7 @@ final class FeedbackComponentsTests: XCTestCase {
     }
 
     @MainActor
-    func testSecondDialogIsRefusedWhileOneIsOpen() {
+    func testSecondDialogIsQueuedWhileOneIsOpenAndShownAfterItCloses() {
         let app = launch(page: "dialog")
         let stackingTitle = app.staticTexts["One dialog at a time"].firstMatch
         let secondTitle = app.staticTexts["Delete this project?"].firstMatch
@@ -89,8 +89,12 @@ final class FeedbackComponentsTests: XCTestCase {
         XCTAssertTrue(stackingTitle.exists)
         app.buttons["Close"].firstMatch.tap()
         XCTAssertTrue(stackingTitle.waitForNonExistence(timeout: 5))
-        XCTAssertEqual(element(app, "demo.dialog.refused").label, "Refused presentations: 1")
-        XCTAssertEqual(element(app, "demo.dialog.result").label, "Result: Refused")
+        XCTAssertTrue(secondTitle.waitForExistence(timeout: 5))
+        app.buttons["Cancel"].firstMatch.tap()
+        XCTAssertTrue(secondTitle.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(element(app, "demo.dialog.queued").label, "Queued presentations: 0")
+        XCTAssertEqual(element(app, "demo.dialog.refused").label, "Refused presentations: 0")
+        XCTAssertEqual(element(app, "demo.dialog.result").label, "Result: Cancel")
     }
 
     @MainActor

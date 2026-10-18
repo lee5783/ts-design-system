@@ -1,14 +1,20 @@
 package com.ts.ds.views.components.dialog
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
+import android.view.Window
 import androidx.activity.BackEventCompat
 import androidx.activity.ComponentDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import android.widget.TextView
@@ -129,7 +135,7 @@ class TSDialogFragmentTest {
     }
 
     @Test
-    fun actionDismissesThenRunsWithoutUserDismiss() {
+    fun actionRunsThenDismissesWithoutUserDismiss() {
         val fragment = center().also { it.presentAndIdle() }
         requireNotNull(fragment.panel).actionButtons.last().performClick()
         idle()
@@ -138,6 +144,127 @@ class TSDialogFragmentTest {
         assertFalse(presenter.isPresenting)
         assertNull(hostActivity.supportFragmentManager.findFragmentByTag("dialog"))
     }
+
+    @Test
+    fun centerActionHandlerRunsWhileTheDialogIsStillShowing() = assertHandlerRunsWhileShowing { actions ->
+        center().apply { this.actions = actions }.also { it.presentAndIdle() }.let { it to it.panel }
+    }
+
+    @Test
+    fun sheetActionHandlerRunsWhileTheDialogIsStillShowing() = assertHandlerRunsWhileShowing { actions ->
+        sheet().apply { this.actions = actions }.also { it.presentAndIdle() }.let { it to it.panel }
+    }
+
+    private fun assertHandlerRunsWhileShowing(show: (List<TSDialogAction>) -> Pair<DialogFragment, TSDialogPanelView?>) {
+        var showingInHandler = false
+        var addedInHandler = false
+        var fragment: DialogFragment? = null
+        val (shown, panel) = show(
+            listOf(
+                TSDialogAction("Remove") {
+                    showingInHandler = requireNotNull(fragment).requireDialog().isShowing
+                    addedInHandler = requireNotNull(fragment).isAdded
+                },
+            ),
+        )
+        fragment = shown
+        requireNotNull(panel).actionButtons.single().performClick()
+        idle()
+        assertTrue(showingInHandler)
+        assertTrue(addedInHandler)
+        assertFalse(presenter.isPresenting)
+        assertFalse(shown.isAdded)
+    }
+
+    @Test
+    fun aHandlerThatRemovesItsDialogDoesNotCrashAndFreesThePresenter() {
+        val fragment = center()
+        fragment.actions = listOf(
+            TSDialogAction("Remove") { hostActivity.supportFragmentManager.beginTransaction().remove(fragment).commitNow() },
+        )
+        fragment.presentAndIdle()
+        requireNotNull(fragment.panel).actionButtons.single().performClick()
+        idle()
+        assertFalse(fragment.isAdded)
+        assertFalse(presenter.isPresenting)
+    }
+
+    @Test
+    fun aQueuedRequestWaitsUntilTheViewsDialogHasRunItsHandlerAndDismissed() {
+        val queuedOwner = Any()
+        var granted = 0
+        var heldInHandler = false
+        val fragment = center()
+        fragment.actions = listOf(TSDialogAction("Done") { heldInHandler = presenter.isActive(fragment) && granted == 0 })
+        fragment.presentAndIdle()
+        presenter.request(queuedOwner) { granted += 1 }
+        requireNotNull(fragment.panel).actionButtons.single().performClick()
+        idle()
+        assertTrue(heldInHandler)
+        assertEquals(1, granted)
+        assertTrue(presenter.isActive(queuedOwner))
+    }
+
+    @Test
+    fun aChainedDialogTakesTheSlotAheadOfAQueuedRequest() {
+        val queuedOwner = Any()
+        var granted = 0
+        var followUp: TSDialogFragment? = null
+        val fragment = center()
+        fragment.actions = listOf(
+            TSDialogAction("Delete") {
+                followUp = center("Project deleted").also { assertTrue(it.present(hostActivity.supportFragmentManager, "followUp")) }
+            },
+        )
+        fragment.presentAndIdle()
+        presenter.request(queuedOwner) { granted += 1 }
+        requireNotNull(fragment.panel).actionButtons.single().performClick()
+        idle()
+        assertTrue(presenter.isActive(requireNotNull(followUp)))
+        assertEquals(0, granted)
+        assertEquals(0, presenter.refusedCount)
+    }
+
+    @Test
+    fun centerAndSheetKeepTheHostsHiddenSystemBars() {
+        WindowCompat.getInsetsController(hostActivity.window, hostActivity.window.decorView).apply {
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            hide(WindowInsetsCompat.Type.systemBars())
+        }
+        idle()
+        assertFalse(hostActivity.window.decorView.showsBar(WindowInsetsCompat.Type.statusBars(), View.SYSTEM_UI_FLAG_FULLSCREEN))
+        val centerFragment = center().also { it.presentAndIdle() }
+        assertBarsHidden(requireNotNull(centerFragment.requireDialog().window))
+        centerFragment.dismiss()
+        idle()
+        val sheetWindow = requireNotNull(sheet().also { it.presentAndIdle() }.requireDialog().window)
+        assertBarsHidden(sheetWindow)
+    }
+
+    @Test
+    fun dialogOverAHostWithVisibleBarsKeepsThemVisible() {
+        val window = requireNotNull(center().also { it.presentAndIdle() }.requireDialog().window)
+        assertTrue(window.decorView.showsBar(WindowInsetsCompat.Type.statusBars(), View.SYSTEM_UI_FLAG_FULLSCREEN))
+        assertTrue(window.decorView.showsBar(WindowInsetsCompat.Type.navigationBars(), View.SYSTEM_UI_FLAG_HIDE_NAVIGATION))
+    }
+
+    private fun assertBarsHidden(window: Window) {
+        val decor = window.decorView
+        assertFalse(decor.showsBar(WindowInsetsCompat.Type.statusBars(), View.SYSTEM_UI_FLAG_FULLSCREEN))
+        assertFalse(decor.showsBar(WindowInsetsCompat.Type.navigationBars(), View.SYSTEM_UI_FLAG_HIDE_NAVIGATION))
+        assertEquals(
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE,
+            WindowCompat.getInsetsController(window, decor).systemBarsBehavior,
+        )
+    }
+
+    @Suppress("DEPRECATION")
+    private fun View.showsBar(type: Int, legacyFlag: Int): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ViewCompat.getRootWindowInsets(this)?.isVisible(type) ?: true
+        } else {
+            systemUiVisibility and legacyFlag == 0
+        }
 
     @Test
     fun scrimTapDismissesAndFreesThePresenter() {

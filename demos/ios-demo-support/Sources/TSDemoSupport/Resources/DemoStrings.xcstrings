@@ -769,6 +769,18 @@
         }
       }
     },
+    "demo.component.queued-count" : {
+      "comment" : "How many dialog presentations are waiting for the open dialog to close.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Queued presentations: %lld"
+          }
+        }
+      }
+    },
     "demo.component.refused-count" : {
       "comment" : "How many dialog presentations the presenter refused.",
       "extractionState" : "manual",
@@ -2877,6 +2889,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opening a second dialog from here is refused, so dialogs never stack."
+          }
+        }
+      }
+    },
+    "demo.sample.stacking-queue-body" : {
+      "comment" : "Sample dialog body for the stacking demo when the second dialog is queued.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A second dialog opened from here waits until this one closes, so dialogs never stack."
           }
         }
       }

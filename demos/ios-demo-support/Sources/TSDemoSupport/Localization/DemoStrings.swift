@@ -190,6 +190,7 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleProjectNameValue = "demo.sample.project-name-value"
     case sampleStackingTitle = "demo.sample.stacking-title"
     case sampleStackingBody = "demo.sample.stacking-body"
+    case sampleStackingQueueBody = "demo.sample.stacking-queue-body"
     case sampleArchiveTitle = "demo.sample.archive-title"
     case sampleArchive = "demo.sample.archive"
     case sampleLongDialogBody = "demo.sample.long-dialog-body"
@@ -254,6 +255,10 @@ public enum DemoStrings {
 
     public static func refusedCount(_ count: Int) -> String {
         String(format: string(rawKey: "demo.component.refused-count"), locale: .current, count)
+    }
+
+    public static func queuedCount(_ count: Int) -> String {
+        String(format: string(rawKey: "demo.component.queued-count"), locale: .current, count)
     }
 
     public static func pageTitle(_ page: DemoPageID) -> String {
