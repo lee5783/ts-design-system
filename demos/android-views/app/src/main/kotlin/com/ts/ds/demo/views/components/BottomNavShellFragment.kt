@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import com.ts.ds.core.logic.TSToastTone
 import com.ts.ds.core.style.TSButtonVariant
@@ -71,7 +70,6 @@ class BottomNavShellFragment : Fragment(R.layout.page_bottom_nav_shell) {
                 textAlignment = View.TEXT_ALIGNMENT_VIEW_START
                 text = item.label
                 tag = "demo.bottom-nav.shell.title.${item.id}"
-                ViewCompat.setAccessibilityHeading(this, true)
             },
             matchWidth = true,
         )

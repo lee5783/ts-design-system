@@ -14,7 +14,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
@@ -135,10 +135,6 @@ class ThemeOverrideTest {
         waitUntil(WAIT_MILLIS) { onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
     }
 
-    private fun ComposeTestRule.awaitDescription(label: String) {
-        waitUntil(WAIT_MILLIS) { onAllNodes(hasContentDescription(label), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-    }
-
     @Test
     fun deviceLightAppLaunchedDarkRendersDark() {
         setDeviceDark(false)
@@ -229,35 +225,35 @@ class ThemeOverrideTest {
     fun openSheetAndToastFollowALiveFlipWithoutClosing() {
         setDeviceDark(false)
         val title = resources.getString(DemoR.string.demo_sample_toast_sheet_title)
-        val toast = "${resources.getString(DemoR.string.demo_sample_success)}, ${resources.getString(DemoR.string.demo_sample_link_copied)}"
+        val toast = resources.getString(DemoR.string.demo_sample_link_copied)
         launchWithTheme(DemoTheme.Dark).use { scenario ->
             composeRule.openPage(DemoPageId.Toast)
             composeRule.tap(ToastPageTags.SHEET_OPEN)
             composeRule.awaitText(title)
             composeRule.onNodeWithText(resources.getString(DemoR.string.demo_sample_copy_link)).performClick()
-            composeRule.awaitDescription(toast)
+            composeRule.awaitText(toast)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = true)
 
             scenario.openLink(DemoTheme.Light)
             composeRule.onNodeWithText(title).assertExistsAndIs(dark = false)
-            composeRule.onNode(hasContentDescription(toast), useUnmergedTree = true).assertExists()
+            composeRule.onNode(hasText(toast), useUnmergedTree = true).assertExists()
         }
     }
 
     @Test
     fun toastKeepsItsQueuePositionAcrossALiveFlip() {
         setDeviceDark(false)
-        val first = "${resources.getString(DemoR.string.demo_sample_success)}, ${resources.getString(DemoR.string.demo_sample_photo_uploaded)}"
-        val second = "${resources.getString(DemoR.string.demo_sample_success)}, ${resources.getString(DemoR.string.demo_sample_album_shared)}"
+        val first = resources.getString(DemoR.string.demo_sample_photo_uploaded)
+        val second = resources.getString(DemoR.string.demo_sample_album_shared)
         launchWithTheme(DemoTheme.Light).use { scenario ->
             composeRule.openPage(DemoPageId.Toast)
             composeRule.tap(ToastPageTags.QUEUE_SHOW)
-            composeRule.awaitDescription(first)
+            composeRule.awaitText(first)
 
             scenario.openLink(DemoTheme.Dark)
-            composeRule.onNode(hasContentDescription(first), useUnmergedTree = true).assertExists()
-            assertEquals(0, composeRule.onAllNodes(hasContentDescription(second), useUnmergedTree = true).fetchSemanticsNodes().size)
-            composeRule.awaitDescription(second)
+            composeRule.onNode(hasText(first), useUnmergedTree = true).assertExists()
+            assertEquals(0, composeRule.onAllNodes(hasText(second), useUnmergedTree = true).fetchSemanticsNodes().size)
+            composeRule.awaitText(second)
         }
     }
 

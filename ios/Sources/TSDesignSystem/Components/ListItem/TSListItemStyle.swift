@@ -27,7 +27,6 @@ struct TSListItemChrome: ViewModifier {
     let isInteractive: Bool
 
     @Environment(\.tsListShowsDividers) private var showsDivider
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func body(content: Content) -> some View {
         let resolved = TSListItemStyleSpec.resolve(.init(isInteractive: isInteractive, state: state))
@@ -47,7 +46,7 @@ struct TSListItemChrome: ViewModifier {
                     .accessibilityHidden(true),
                 alignment: .top
             )
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+            .animation(TSAnimation.pressFeedback, value: state)
     }
 }
 
@@ -147,7 +146,7 @@ struct TSListItemContent<Leading: View, Trailing: View>: View {
             let disclosure = TSListItemStyleSpec.disclosure
             icon
                 .rotationEffect(.degrees(chevronRotation))
-                .tsAnimation(chevronRotation, duration: disclosure.animationDuration, easing: disclosure.animationEasing)
+                .animation(TSAnimation.standard(duration: disclosure.animationDuration, easing: disclosure.animationEasing), value: chevronRotation)
         } else {
             icon
         }

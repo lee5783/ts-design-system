@@ -10,8 +10,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -22,13 +20,10 @@ import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.assertIsNotSelected
-import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTouchHeightIsEqualTo
 import androidx.compose.ui.test.assertTouchWidthIsEqualTo
-import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -122,29 +117,17 @@ class TSTextFieldTest {
     }
 
     @Test
-    fun labelAndHintAreReadWithTheFieldAndThePlaceholderIsNot() {
-        setField(placeholder = PLACEHOLDER)
+    fun labelAndHintAreShown() {
+        setField()
 
         assertEquals(listOf(LABEL, HINT), texts())
-        field().assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Error))
     }
 
     @Test
-    fun errorReplacesTheHintAndSetsErrorSemantics() {
+    fun errorReplacesTheHint() {
         setField(error = ERROR)
 
-        field().assert(SemanticsMatcher.expectValue(SemanticsProperties.Error, ERROR))
-        assertEquals(listOf(LABEL), texts())
-        composeRule.onNode(hasContentDescription("Error: $ERROR"))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
-    }
-
-    @Test
-    fun iconsAreDecorative() {
-        setField(error = ERROR, leadingIcon = TSIcon.Mail)
-
-        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true)
-            .assertCountEquals(0)
+        assertEquals(listOf(LABEL, ERROR), texts())
     }
 
     @Test
@@ -170,7 +153,7 @@ class TSTextFieldTest {
         setField(initial = "secret", secure = true, readOnly = true)
 
         field().assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Password))
-        composeRule.onAllNodes(hasContentDescription("Show password")).assertCountEquals(0)
+        composeRule.onAllNodesWithTag(TSTextFieldTestTags.PASSWORD_TOGGLE).assertCountEquals(0)
     }
 
     @Test
@@ -178,13 +161,10 @@ class TSTextFieldTest {
         setField(initial = "secret", secure = true)
 
         field().assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Password))
-        composeRule.onNodeWithContentDescription("Show password")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .assertIsNotSelected()
-            .performClick()
+        composeRule.onNodeWithTag(TSTextFieldTestTags.PASSWORD_TOGGLE).performClick()
 
         field().assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Password))
-        composeRule.onNodeWithContentDescription("Hide password").assertIsSelected().performClick()
+        composeRule.onNodeWithTag(TSTextFieldTestTags.PASSWORD_TOGGLE).performClick()
 
         field().assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Password))
         assertEquals("secret", text)
@@ -194,7 +174,7 @@ class TSTextFieldTest {
     fun passwordToggleHasA48dpTouchTarget() {
         setField(secure = true)
 
-        composeRule.onNodeWithContentDescription("Show password")
+        composeRule.onNodeWithTag(TSTextFieldTestTags.PASSWORD_TOGGLE)
             .assertTouchHeightIsEqualTo(48.dp)
             .assertTouchWidthIsEqualTo(48.dp)
     }

@@ -3,18 +3,15 @@ import SwiftUI
 public struct TSBottomNavShell<Content: View>: View {
     let items: [TSBottomNavItem]
     @Binding var selection: String
-    let label: String?
     let content: (TSBottomNavItem) -> Content
 
     public init(
         items: [TSBottomNavItem],
         selection: Binding<String>,
-        label: String? = nil,
         @ViewBuilder content: @escaping (TSBottomNavItem) -> Content
     ) {
         self.items = items
         _selection = selection
-        self.label = label
         self.content = content
     }
 
@@ -29,7 +26,7 @@ public struct TSBottomNavShell<Content: View>: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            TSBottomNav(items: items, selection: $selection, label: label)
+            TSBottomNav(items: items, selection: $selection)
         }
     }
 }

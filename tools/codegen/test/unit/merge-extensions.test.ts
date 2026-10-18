@@ -2,9 +2,8 @@ import { describe, expect, it } from "vitest";
 import { loadTsTokens } from "../../src/model/load-ts-tokens.ts";
 import { mergeExtensions, readNativeModel } from "../../src/model/merge-extensions.ts";
 import { toDesignTokens } from "../../src/model/to-style-dictionary.ts";
-import { THEMES, TOKEN_FAMILIES, type AnyToken, type ColorToken, type ThemeId, type TokenModel } from "../../src/model/types.ts";
-import { compositedContrastRatio, contrastRatio } from "../../src/transforms/contrast.ts";
-import { parseCubicBezier, parseHexColor, parseMs } from "../../src/transforms/css-values.ts";
+import { TOKEN_FAMILIES, type AnyToken, type ColorToken, type TokenModel } from "../../src/model/types.ts";
+import { parseCubicBezier, parseMs } from "../../src/transforms/css-values.ts";
 import { rawFixture, rawFixtureExtensions, rawRealExtensions, rawRealTokens, repoRoot } from "../support.ts";
 
 const source = () => loadTsTokens(rawFixture());
@@ -192,8 +191,6 @@ describe("merge-extensions", () => {
 describe("design/extensions/native-tokens.json", () => {
   const real = () => mergeExtensions(loadTsTokens(rawRealTokens()), rawRealExtensions());
   const color = (model: TokenModel, name: string) => model.color.find((token) => token.name.token === name) as ColorToken;
-  const ratio = (model: TokenModel, first: string, second: string, theme: ThemeId) =>
-    contrastRatio(color(model, first).value[theme].rgba, color(model, second).value[theme].rgba);
 
   it("merges cleanly into the real model with every entry pending upstream", async () => {
     const model = await readNativeModel(repoRoot);
@@ -225,19 +222,6 @@ describe("design/extensions/native-tokens.json", () => {
     });
   });
 
-  it("keeps the new colors within the DS contrast rules in both themes", () => {
-    const model = real();
-    for (const theme of ["light", "dark"] as const) {
-      expect(ratio(model, "text-on-accent", "danger-pressed", theme)).toBeGreaterThanOrEqual(4.5);
-      expect(ratio(model, "danger-pressed", "background-primary", theme)).toBeGreaterThanOrEqual(3);
-      expect(ratio(model, "switch-thumb", "border-strong", theme)).toBeGreaterThanOrEqual(3);
-      expect(ratio(model, "switch-thumb", "accent-primary", theme)).toBeGreaterThanOrEqual(3);
-      for (const tone of ["success", "warning", "danger", "info"]) {
-        expect(ratio(model, `${tone}-on-inverse`, "surface-inverse", theme)).toBeGreaterThanOrEqual(3);
-      }
-    }
-  });
-
   it("carries the issue #3 controller palette with the raised dark backing", () => {
     const model = real();
     expect(model.controller.color.map((token) => [token.name.token, token.value.light.hex, token.value.dark.hex])).toEqual([
@@ -251,37 +235,6 @@ describe("design/extensions/native-tokens.json", () => {
       ["text-on-overlay-media", "#18181b", "#ffffff"],
     ]);
     expect(model.controller.size.map((token) => [token.name.token, token.value])).toEqual([["controller-outline-width", 1.5]]);
-  });
-
-  describe("controller contrast, alpha composited over black and white frames", () => {
-    const controller = (model: TokenModel, name: string, theme: ThemeId) =>
-      (model.controller.color.find((token) => token.name.token === name) as ColorToken).value[theme].rgba;
-    const frames = { black: parseHexColor("#000000").rgba, white: parseHexColor("#ffffff").rgba };
-    const cases = THEMES.flatMap((theme) => (["black", "white"] as const).map((frame) => [theme, frame] as const));
-
-    it.each(cases)("%s theme over a %s frame: outline >= 3:1 against the backing", (theme, frame) => {
-      const model = real();
-      const backdrop = [frames[frame], controller(model, "controller-backing", theme)];
-      expect(compositedContrastRatio(controller(model, "controller-key-outline", theme), backdrop)).toBeGreaterThanOrEqual(3);
-    });
-
-    it.each(cases)("%s theme over a %s frame: idle label >= 4.5:1 on the key", (theme, frame) => {
-      const model = real();
-      const backdrop = [frames[frame], controller(model, "controller-backing", theme), controller(model, "controller-key", theme)];
-      expect(compositedContrastRatio(controller(model, "controller-key-label", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
-    });
-
-    it.each(cases)("%s theme over a %s frame: media text >= 4.5:1 on the media scrim", (theme, frame) => {
-      const model = real();
-      const backdrop = [frames[frame], controller(model, "overlay-scrim-media", theme)];
-      expect(compositedContrastRatio(controller(model, "text-on-overlay-media", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
-    });
-
-    it.each(cases)("%s theme over a %s frame: pressed label >= 4.5:1 on the pressed key", (theme, frame) => {
-      const model = real();
-      const backdrop = [frames[frame], controller(model, "controller-backing", theme), controller(model, "controller-key-pressed", theme)];
-      expect(compositedContrastRatio(controller(model, "controller-key-label", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
-    });
   });
 
   it("uses the opposite theme status value for every on-inverse token", () => {

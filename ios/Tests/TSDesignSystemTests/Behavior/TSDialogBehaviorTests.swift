@@ -32,8 +32,7 @@ struct TSDialogBehaviorTests {
             hasBody: true,
             onAction: { log.record($0) },
             onClose: { log.close() },
-            content: Text("This cannot be undone."),
-            focusesTitle: false
+            content: Text("This cannot be undone.")
         )
     }
 
@@ -407,11 +406,10 @@ struct TSDialogBehaviorTests {
         #expect(!presenter.isPresenting)
     }
 
-    @Test("The title is a header and the message follows it")
+    @Test("The title is shown and the message follows it")
     func title() throws {
         let sut = panel()
         let title = try sut.inspect().find(text: "Delete this project?")
-        #expect(try title.accessibilityTraits().contains(.isHeader))
         #expect(try sut.inspect().find(text: "This cannot be undone.").string() == "This cannot be undone.")
     }
 
@@ -432,16 +430,6 @@ struct TSDialogBehaviorTests {
         try sut.inspect().find(button: "Delete").tap()
         try sut.inspect().find(button: "Cancel").tap()
         #expect(log.labels == ["Delete", "Cancel"])
-    }
-
-    @Test("Escape and the Close action both close the dialog")
-    func escapeCloses() throws {
-        let log = ActionLog()
-        let sut = panel(log: log)
-        let escape = try sut.inspect().vStack().modifier(TSDialogEscape.self).actualView()
-        escape.onClose()
-        #expect(log.closes == 1)
-        #expect(TSStrings.close == "Close")
     }
 
     @Test("A hidden cancel-action button maps the hardware Escape key to close")

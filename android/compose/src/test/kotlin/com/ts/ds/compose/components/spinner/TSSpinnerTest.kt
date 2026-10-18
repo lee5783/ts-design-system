@@ -4,10 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.ProgressBarRangeInfo
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -49,28 +45,5 @@ class TSSpinnerTest {
             composeRule.onNodeWithTag(size.name).assertWidthIsEqualTo(dp).assertHeightIsEqualTo(dp)
         }
         composeRule.onNodeWithTag(TSSpinnerSize.Md.name).assertWidthIsEqualTo(20.dp)
-    }
-
-    @Test
-    fun spinnerIsAnIndeterminateProgressNamedLoading() {
-        setContent { TSSpinner(Modifier.testTag("spinner")) }
-        composeRule.onNodeWithTag("spinner")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Loading")))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ProgressBarRangeInfo, ProgressBarRangeInfo.Indeterminate))
-    }
-
-    @Test
-    fun customLabelReplacesLoading() {
-        setContent { TSSpinner(Modifier.testTag("spinner"), contentDescription = "Loading messages") }
-        composeRule.onNodeWithTag("spinner")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Loading messages")))
-    }
-
-    @Test
-    fun nullLabelHidesTheSpinner() {
-        setContent { TSSpinner(Modifier.testTag("spinner"), contentDescription = null) }
-        composeRule.onNodeWithTag("spinner")
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ProgressBarRangeInfo))
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -48,7 +47,6 @@ public fun TSBadge(
 
     Row(
         modifier = modifier
-            .semantics(mergeDescendants = true) {}
             .clip(shape)
             .background(colors.color(resolved.fill), shape)
             .then(if (border != null) Modifier.border(resolved.borderWidthDp.dp, colors.color(border), shape) else Modifier)

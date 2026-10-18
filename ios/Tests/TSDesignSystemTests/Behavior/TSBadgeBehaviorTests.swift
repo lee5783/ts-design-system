@@ -6,15 +6,6 @@ import ViewInspector
 @MainActor
 @Suite("TSBadge behaviour")
 struct TSBadgeBehaviorTests {
-    @Test("The text is the accessibility label of one static element", arguments: TSBadgeTone.allCases)
-    func accessibility(tone: TSBadgeTone) throws {
-        let sut = TSBadge("Failed", tone: tone, showsDot: true, icon: .xCircle)
-        let traits = try sut.body.inspect().accessibilityTraits()
-        #expect(try sut.body.inspect().accessibilityLabel().string() == "Failed")
-        #expect(traits.contains(.isStaticText))
-        #expect(!traits.contains(.isButton))
-    }
-
     @Test("A badge is not a button")
     func notAButton() throws {
         let sut = TSBadge("New", tone: .accent)

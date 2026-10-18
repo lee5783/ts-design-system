@@ -35,22 +35,14 @@ Cross-toolkit contract for TS text: a type role plus a text colour, so screens n
 
 The values above are the token values at the default text size; the generated tokens are the source of truth. Text scales with Dynamic Type / font scale like every TS text.
 
-## Accessibility
-
-- Plain static text: the string is the label; no traits.
-- `overline` is uppercased only visually on iOS (`textCase`), so VoiceOver reads the original string. Compose `TSText` uppercases the string itself, as `TSListSection` does; on Views set `android:textAllCaps="true"` (`TextAppearance.TS.Overline` does not).
-- Headings are the caller's job (`.accessibilityAddTraits(.isHeader)`, `Modifier.semantics { heading() }`).
-
 ## Tests
 
 | Layer | File | What |
 |---|---|---|
 | Shared (iOS) | `ios/Tests/TSFoundationTests/TSTextStyleTests.swift` | every role → its `TSFont`; every colour → its `text-*` role |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSTextBehaviorTests.swift` | label is the string; height equals the role's line height |
-| Snapshots | `TSTextSnapshotTests` (`text.roles-*`, `text.colors-*`) | every role, every colour, standard matrix incl. AX5 and RTL |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSTextBehaviorTests.swift` | the text is the string verbatim (no localization lookup); height equals the role's line height; defaults |
 | Shared (Android) | `android/core/src/test/.../style/TSTextColorTest.kt` | every colour → its `text-*` role |
 | Compose | `android/compose/src/test/.../text/TSTextTest.kt` (sdk 26/36) | text node; line height and colour per role; `maxLines` / `overflow` |
-| Snapshots (Android) | `TSTextSnapshotTest`, `TSTextSdkSnapshotTest` (`roles_*`, `colors_*`) | same galleries; sdk 26 subset for the weight-600 fallback |
 | Demo | Text page in all four demos; `ContentComponentsTests.testTextPageShowsEveryTypeRoleAndTextColor` (both iOS demos), `ContentComponentsTest.textPageShowsEveryTypeRoleAndTextColor` (both Android demos) | SwiftUI / Compose show `TSText`; UIKit / Views show the documented equivalents |
 
 ## Platform notes
@@ -59,3 +51,4 @@ The values above are the token values at the default text size; the generated to
 - Compose `TSText` is `BasicText` with `TSTheme.typography.style(role)`, `TSTheme.colors.color(color.role)` and `TextDirection.Content`; the weight-600 roles fall back to `sans-serif-medium` below API 28 like every TS text.
 - UIKit and Views have no `TSText` (C-002): `UILabel` with `TSFont` attributes, and `TextView` with `TextAppearance.TS.*`, already give the same result, and a wrapper view would only re-expose their properties.
 - Use `TSText` (or the UIKit / Views equivalents) instead of Material `Text` with `MaterialTheme.typography`, so a TS screen never mixes the two type scales.
+- `overline` is uppercased only visually on iOS (`textCase`), so the original string is kept. Compose `TSText` uppercases the string itself, as `TSListSection` does; on Views set `android:textAllCaps="true"` (`TextAppearance.TS.Overline` does not).

@@ -4,20 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.view.View
-import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.FrameLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ts.ds.views.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -68,17 +64,5 @@ class TSViewFoundationTest {
         ViewCompat.dispatchApplyWindowInsets(rtl, insets)
         assertEquals(30, rtl.paddingStart)
         assertEquals(10, rtl.paddingEnd)
-    }
-
-    @Test
-    fun accessibilityRoleSetsClassNameAndRoleDescription() {
-        val view = View(context)
-        view.setAccessibilityRole("android.widget.Switch", "toggle")
-        val info = AccessibilityNodeInfo.obtain()
-        view.onInitializeAccessibilityNodeInfo(info)
-        val compat = AccessibilityNodeInfoCompat.wrap(info)
-        assertEquals("android.widget.Switch", compat.className)
-        assertEquals("toggle", compat.roleDescription)
-        assertTrue(ViewCompat.hasAccessibilityDelegate(view))
     }
 }

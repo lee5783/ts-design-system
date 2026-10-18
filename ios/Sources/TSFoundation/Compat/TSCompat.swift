@@ -10,10 +10,6 @@ package enum TSCompat {
         if #available(iOS 17, *) { .native } else { .fallback }
     }
 
-    package static var toggleTrait: TSCompatPath {
-        if #available(iOS 17, *) { .native } else { .fallback }
-    }
-
     package static var focusEffect: TSCompatPath {
         if #available(iOS 17, *) { .native } else { .fallback }
     }

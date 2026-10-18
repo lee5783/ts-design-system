@@ -17,15 +17,6 @@ final class TextBox {
 }
 
 @MainActor
-final class AnnouncementLog {
-    private(set) var messages: [String] = []
-
-    func record(_ message: String) {
-        messages.append(message)
-    }
-}
-
-@MainActor
 @Suite("TSTextField behaviour")
 struct TSTextFieldBehaviorTests {
     @Test("Typing writes through the text binding")
@@ -37,39 +28,20 @@ struct TSTextFieldBehaviorTests {
         #expect(try sut.inspect().find(ViewType.TextField.self).input() == "ada@example.com")
     }
 
-    @Test("The label is the accessibility label, not the placeholder, and the hint maps to the accessibility hint")
-    func accessibilityAtRest() throws {
+    @Test("The label and the hint render as text")
+    func labelAndHint() throws {
         let sut = TSTextField("Email", text: .constant(""), placeholder: "you@example.com", hint: "We never share it")
-        let field = try sut.inspect().find(ViewType.TextField.self)
-        #expect(try field.accessibilityLabel().string() == "Email")
-        #expect(try field.accessibilityHint().string() == "We never share it")
-        #expect(throws: (any Error).self) { try field.accessibilityValue() }
         #expect(try sut.inspect().find(text: "Email").string() == "Email")
         #expect(try sut.inspect().find(text: "We never share it").string() == "We never share it")
     }
 
-    @Test("An error replaces the hint, shows the alert icon and sets the accessibility value")
+    @Test("An error replaces the hint and shows the alert icon")
     func errorState() throws {
         let sut = TSTextField("Password", text: .constant("abc"), hint: "At least 8 characters", error: "Must be at least 8 characters")
-        let field = try sut.inspect().find(ViewType.TextField.self)
-        #expect(try field.accessibilityValue().string() == "abc, Error: Must be at least 8 characters")
-        #expect(try field.accessibilityHint().string() == "")
         #expect(throws: (any Error).self) { try sut.inspect().find(text: "At least 8 characters") }
         #expect(try sut.inspect().find(text: "Must be at least 8 characters").string() == "Must be at least 8 characters")
         let icon = try sut.inspect().find(TSIcon.self)
         #expect(try icon.actualView().name == .alert)
-    }
-
-    @available(iOS 17, *)
-    @Test("A new error posts an announcement; clearing or repeating it does not")
-    func errorAnnouncement() throws {
-        let log = AnnouncementLog()
-        let sut = TSTextField("Email", text: .constant(""), error: "Required").announcing { log.record($0) }
-        let view = try sut.inspect().vStack()
-        try view.callOnChange(oldValue: String?.none, newValue: String?.some("Required"))
-        try view.callOnChange(oldValue: String?.some("Required"), newValue: String?.some("Required"))
-        try view.callOnChange(oldValue: String?.some("Required"), newValue: String?.none)
-        #expect(log.messages == ["Error: Required"])
     }
 
     @Test("Disabled blocks editing")
@@ -88,17 +60,7 @@ struct TSTextFieldBehaviorTests {
         #expect(throws: (any Error).self) { try sut.inspect().find(ViewType.TextField.self) }
         #expect(throws: (any Error).self) { try sut.inspect().find(ViewType.SecureField.self) }
         #expect(throws: Never.self) { try sut.inspect().find(text: "TS-2048") }
-        let element = try sut.inspect().find(viewWithAccessibilityLabel: "Account ID")
-        #expect(try element.accessibilityValue().string() == "TS-2048")
         #expect(throws: (any Error).self) { try sut.inspect().find(TSMultilineTextView.self) }
-    }
-
-    @Test("The read-only element spans the whole box, not just its text")
-    func readOnlyElementFillsTheBox() throws {
-        let sut = TSTextField("Account ID", text: .constant("TS-2048"), isReadOnly: true)
-        let element = try sut.inspect().find(viewWithAccessibilityLabel: "Account ID")
-        #expect(throws: Never.self) { try element.find(text: "TS-2048") }
-        #expect(try element.flexFrame().maxWidth == .infinity)
     }
 
     @Test("Secure entry starts masked with a Show password toggle")
@@ -107,7 +69,6 @@ struct TSTextFieldBehaviorTests {
         #expect(throws: Never.self) { try sut.inspect().find(ViewType.SecureField.self) }
         #expect(throws: (any Error).self) { try sut.inspect().find(ViewType.TextField.self) }
         let toggle = try sut.inspect().find(TSPasswordToggle.self)
-        #expect(try toggle.button().accessibilityLabel().string() == "Show password")
         #expect(try toggle.find(TSIcon.self).actualView().name == .eye)
     }
 
@@ -117,7 +78,6 @@ struct TSTextFieldBehaviorTests {
         #expect(throws: Never.self) { try sut.inspect().find(ViewType.TextField.self) }
         #expect(throws: (any Error).self) { try sut.inspect().find(ViewType.SecureField.self) }
         let toggle = try sut.inspect().find(TSPasswordToggle.self)
-        #expect(try toggle.button().accessibilityLabel().string() == "Hide password")
     }
 
     @Test("The toggle flips the reveal binding")

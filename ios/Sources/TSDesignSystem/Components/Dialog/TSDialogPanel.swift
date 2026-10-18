@@ -9,9 +9,7 @@ struct TSDialogPanel<Content: View>: View {
     let onAction: (TSDialogAction) -> Void
     let onClose: () -> Void
     let content: Content
-    var focusesTitle = true
 
-    @AccessibilityFocusState private var isTitleFocused: Bool
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var resolved: TSDialogStyleSpec.Resolved {
@@ -26,8 +24,6 @@ struct TSDialogPanel<Content: View>: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tsFont(resolved.titleFont)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityAddTraits(.isHeader)
-                .accessibilityFocused($isTitleFocused)
             if hasBody {
                 content
                     .foregroundColor(resolved.bodyColor.color)
@@ -51,13 +47,7 @@ struct TSDialogPanel<Content: View>: View {
         .frame(maxWidth: resolved.maxWidth ?? .infinity)
         .background(TSDialogPanelBackground(resolved: resolved))
         .accessibilityElement(children: .contain)
-        .accessibilityAddTraits(.isModal)
         .modifier(TSDialogEscape(onClose: onClose))
-        .task {
-            guard focusesTitle else { return }
-            try? await Task.sleep(nanoseconds: 350_000_000)
-            isTitleFocused = true
-        }
     }
 }
 
@@ -66,8 +56,6 @@ struct TSDialogEscape: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .accessibilityAction(.escape, onClose)
-            .accessibilityAction(named: Text(TSStrings.close), onClose)
             .background(TSDialogEscapeKey(onClose: onClose))
     }
 }

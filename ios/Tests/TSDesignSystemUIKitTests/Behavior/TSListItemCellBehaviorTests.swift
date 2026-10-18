@@ -15,7 +15,7 @@ struct TSListItemCellBehaviorTests {
         return state
     }
 
-    @Test("The item becomes a TSListItemConfiguration content configuration and the cell is the accessibility element")
+    @Test("The item becomes a TSListItemConfiguration content configuration and the cell exposes its content")
     func contentConfiguration() throws {
         let cell = makeCell()
         cell.item = TSListItemConfiguration(title: "Inbox", subtitle: "12 unread", showsChevron: true, isInteractive: true)
@@ -24,10 +24,7 @@ struct TSListItemCellBehaviorTests {
         #expect(configuration.title == "Inbox")
         let content = try #require(cell.itemContentView)
         #expect(!content.isAccessibilityElement)
-        #expect(cell.isAccessibilityElement)
-        #expect(cell.accessibilityLabel == "Inbox, 12 unread")
-        #expect(cell.accessibilityHint == "Opens another screen")
-        #expect(cell.accessibilityTraits.contains(.button))
+        #expect(!cell.isAccessibilityElement)
     }
 
     @Test("A highlighted interactive cell draws surface-pressed; a highlighted static cell does not")
@@ -77,7 +74,6 @@ struct TSListItemCellBehaviorTests {
         cell.updateConfiguration(using: cell.configurationState)
         let first = try #require(cell.itemContentView)
         #expect(!first.switchSlot.isHidden)
-        #expect(cell.accessibilityValue == "On")
 
         cell.prepareForReuse()
         cell.isHighlighted = false
@@ -94,13 +90,6 @@ struct TSListItemCellBehaviorTests {
         #expect(!content.chevronView.isHidden)
         #expect(content.backgroundColor == .clear)
         #expect(content.alpha == 1)
-        #expect(cell.accessibilityValue == nil)
-        #expect(cell.accessibilityLabel == "Settings")
-        #expect(cell.accessibilityTraits.contains(.button))
-        #expect(!cell.accessibilityTraits.contains(.notEnabled))
-        if #available(iOS 17, *) {
-            #expect(!cell.accessibilityTraits.contains(.toggleButton))
-        }
         #expect(cell.groupPosition == .single)
     }
 
@@ -113,12 +102,11 @@ struct TSListItemCellBehaviorTests {
         let switchView = try #require(cell.itemContentView?.switchSlot.switchView)
         switchView.reduceMotion = { true }
         switchView.playHaptic = { _ in }
-        #expect(cell.accessibilityActivate())
+        switchView.userDidToggle()
         #expect(values == [true])
         #expect(cell.item?.trailing == .toggle(isOn: true))
         cell.updateConfiguration(using: state(isHighlighted: true))
         #expect(cell.itemContentView?.switchSlot.switchView.isOn == true)
-        #expect(cell.accessibilityValue == "On")
     }
 
     @Test(
@@ -171,8 +159,6 @@ struct TSListItemCellBehaviorTests {
             forElementKind: UICollectionView.elementKindSectionHeader,
             at: IndexPath(item: 0, section: 0)
         ) as? TSListSectionHeaderView)
-        #expect(header.accessibilityLabel == "Section")
-        #expect(header.accessibilityTraits.contains(.header))
         #expect(header.frame.maxY <= cells[0].frame.minY)
         _ = dataSource
     }

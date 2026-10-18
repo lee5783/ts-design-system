@@ -27,8 +27,6 @@ struct TSListItemViewBehaviorTests {
         row.addAction(UIAction { _ in counter.tap() }, for: .primaryActionTriggered)
         row.sendActions(for: .touchUpInside)
         #expect(counter.count == 1)
-        #expect(row.accessibilityActivate())
-        #expect(counter.count == 2)
     }
 
     @Test("A row without an action, or a disabled row, never fires")
@@ -41,11 +39,8 @@ struct TSListItemViewBehaviorTests {
         for row in [plain, disabled, controlDisabled] {
             row.addAction(UIAction { _ in counter.tap() }, for: .primaryActionTriggered)
             row.sendActions(for: .touchUpInside)
-            #expect(!row.accessibilityActivate())
         }
         #expect(counter.count == 0)
-        #expect(disabled.accessibilityTraits.contains(.notEnabled))
-        #expect(controlDisabled.accessibilityTraits.contains(.notEnabled))
         #expect(abs(disabled.itemContentView.alpha - 0.45) < 0.001)
     }
 
@@ -65,8 +60,8 @@ struct TSListItemViewBehaviorTests {
         #expect(toggle.itemContentView.backgroundColor == .clear)
     }
 
-    @Test("The row is one element labelled by title and subtitle; a chevron action row has the button trait and the navigates hint")
-    func accessibility() {
+    @Test("Neither the row nor its content view is an element")
+    func rowElement() {
         let row = makeRow(TSListItemConfiguration(
             title: "Inbox",
             subtitle: "12 unread",
@@ -75,37 +70,11 @@ struct TSListItemViewBehaviorTests {
             showsChevron: true,
             isInteractive: true
         ))
-        #expect(row.isAccessibilityElement)
+        #expect(!row.isAccessibilityElement)
         #expect(!row.itemContentView.isAccessibilityElement)
-        #expect(row.accessibilityLabel == "Inbox, 12 unread")
-        #expect(row.accessibilityValue == "New")
-        #expect(row.accessibilityHint == "Opens another screen")
-        #expect(row.accessibilityTraits.contains(.button))
-        let plain = makeRow(TSListItemConfiguration(title: "Calendar", trailing: .text("Today")))
-        #expect(plain.accessibilityValue == "Today")
-        #expect(plain.accessibilityHint == nil)
-        #expect(!plain.accessibilityTraits.contains(.button))
     }
 
-    @Test(
-        "A trailing-switch row exposes switch semantics: On/Off value, toggle trait on 17+ or button on 15–16",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func switchSemantics(path: TSCompatPath, isOn: Bool) {
-        let row = makeRow(TSListItemConfiguration(title: "Wi-Fi", trailing: .toggle(isOn: isOn)))
-        row.itemContentView.togglePath = path
-        #expect(row.accessibilityLabel == "Wi-Fi")
-        #expect(row.accessibilityValue == (isOn ? "On" : "Off"))
-        #expect(!row.accessibilityTraits.contains(.selected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(row.accessibilityTraits.contains(.toggleButton))
-        } else {
-            #expect(row.accessibilityTraits.contains(.button))
-        }
-        #expect(!row.itemContentView.switchSlot.switchView.isHidden)
-    }
-
-    @Test("Activating a switch row toggles the switch, calls onToggle and sends .valueChanged; disabled blocks")
+    @Test("Toggling a switch row's switch calls onToggle and sends .valueChanged; disabled blocks")
     func switchActivation() {
         var values: [Bool] = []
         let counter = TapCounter()
@@ -113,15 +82,14 @@ struct TSListItemViewBehaviorTests {
         row.itemContentView.switchSlot.switchView.reduceMotion = { true }
         row.itemContentView.switchSlot.switchView.playHaptic = { _ in }
         row.addAction(UIAction { _ in counter.tap() }, for: .valueChanged)
-        #expect(row.accessibilityActivate())
+        row.itemContentView.switchSlot.switchView.userDidToggle()
         #expect(values == [true])
         #expect(counter.count == 1)
         #expect(row.configuration.trailing == .toggle(isOn: true))
-        #expect(row.accessibilityValue == "On")
         row.isHighlighted = true
         #expect(row.itemContentView.switchSlot.switchView.isOn)
         row.isEnabled = false
-        #expect(!row.accessibilityActivate())
+        row.itemContentView.switchSlot.switchView.userDidToggle()
         #expect(values == [true])
     }
 

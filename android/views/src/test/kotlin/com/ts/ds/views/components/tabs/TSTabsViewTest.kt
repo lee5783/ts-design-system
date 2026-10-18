@@ -4,8 +4,6 @@ import android.os.Looper
 import android.view.ViewGroup
 import android.view.animation.PathInterpolator
 import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.haptics.DsHaptics
 import com.ts.ds.core.style.TSTabItem
@@ -43,7 +41,6 @@ class TSTabsViewTest {
                 addView(
                     TSTabsView(context).apply {
                         items = ranges
-                        label = "Time range"
                         reduceMotion = { false }
                         setOnTabSelectedListener { _, id -> changes += id }
                         configure()
@@ -61,9 +58,6 @@ class TSTabsViewTest {
     }
 
     private fun TSTabsView.tab(id: String): TSTabView = tabs.first { it.item.id == id }
-
-    private fun TSTabView.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
 
     private fun TSTabsView.leftInContent(id: String): Int = row.left + tab(id).left
 
@@ -124,27 +118,11 @@ class TSTabsViewTest {
     }
 
     @Test
-    fun eachTabIsSelectableWithItsPosition() {
+    fun selectedTabIsMarkedSelected() {
         val view = tabs { selectedId = "week" }
-        val week = view.tab("week").node()
 
-        assertEquals("Week", week.text.toString())
-        assertTrue(week.isSelected)
-        assertEquals("Tab, 2 of 4", ViewCompat.getStateDescription(view.tab("week")).toString())
-        assertEquals(1, week.collectionItemInfo.columnIndex)
-        assertEquals(0, week.collectionItemInfo.rowIndex)
-        assertFalse(view.tab("day").node().isSelected)
-        assertEquals("Tab, 1 of 4", ViewCompat.getStateDescription(view.tab("day")).toString())
-    }
-
-    @Test
-    fun theListCarriesCollectionInfoAndItsLabel() {
-        val view = tabs()
-        val node = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-
-        assertEquals(1, node.collectionInfo.rowCount)
-        assertEquals(4, node.collectionInfo.columnCount)
-        assertEquals("Time range", view.contentDescription.toString())
+        assertTrue(view.tab("week").isSelected)
+        assertFalse(view.tab("day").isSelected)
     }
 
     @Test
@@ -247,7 +225,6 @@ class TSTabsViewTest {
 
         assertEquals(9, view.tabs.size)
         assertTrue(view.tab("overview").isSelected)
-        assertEquals("Tab, 9 of 9", ViewCompat.getStateDescription(view.tab("reports")).toString())
     }
 
     @Test
@@ -255,12 +232,10 @@ class TSTabsViewTest {
         val attrs = Robolectric.buildAttributeSet()
             .addAttribute(R.attr.tsTabsVariant, "segmented")
             .addAttribute(R.attr.tsBlock, "true")
-            .addAttribute(R.attr.tsLabel, "Layout")
             .build()
         val view = hostInActivity { TSTabsView(it, attrs) }
 
         assertEquals(TSTabsVariant.Segmented, view.variant)
         assertTrue(view.isBlock)
-        assertEquals("Layout", view.label.toString())
     }
 }

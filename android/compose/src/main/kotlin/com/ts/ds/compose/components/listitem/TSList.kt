@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
@@ -56,8 +54,7 @@ public fun TSListSection(
                 text = header.uppercase(),
                 style = style.withDsFontWeight(group.headerTypeRole.values.fontWeight).copy(color = TSTheme.colors.color(group.headerColor)),
                 modifier = Modifier
-                    .padding(start = group.headerHorizontalPaddingDp.dp, end = group.headerHorizontalPaddingDp.dp, bottom = group.headerSpacingDp.dp)
-                    .semantics { heading() },
+                    .padding(start = group.headerHorizontalPaddingDp.dp, end = group.headerHorizontalPaddingDp.dp, bottom = group.headerSpacingDp.dp),
             )
         }
         TSList(content = content)

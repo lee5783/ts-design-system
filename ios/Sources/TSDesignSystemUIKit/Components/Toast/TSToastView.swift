@@ -48,10 +48,6 @@ public final class TSToastView: UIView {
         TSToastStyleSpec.resolve(.init(tone: tone, hasAction: actionTitle != nil && onAction != nil))
     }
 
-    var accessibilityText: String {
-        TSToastAccessibility.label(tone: tone, message: message)
-    }
-
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyStyle()
@@ -94,8 +90,7 @@ public final class TSToastView: UIView {
             messageLabel.bottomAnchor.constraint(equalTo: messageView.bottomAnchor),
             messageLabel.trailingAnchor.constraint(equalTo: messageView.trailingAnchor)
         ])
-        messageView.isAccessibilityElement = true
-        messageView.accessibilityTraits = .staticText
+        messageView.isAccessibilityElement = false
         messageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         messageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         iconView.setContentHuggingPriority(.required, for: .horizontal)
@@ -143,7 +138,6 @@ public final class TSToastView: UIView {
             color: resolved.messageColor.uiColor.resolvedColor(with: traitCollection),
             alignment: alignment
         )
-        messageView.accessibilityLabel = accessibilityText
         actionButton.isHidden = !resolved.showsAction
         actionButton.apply(title: actionTitle ?? "", resolved: resolved, traitCollection: traitCollection)
     }
@@ -176,8 +170,7 @@ final class TSToastActionButton: UIControl {
         titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.setContentHuggingPriority(.required, for: .horizontal)
         addAction(UIAction { [weak self] _ in self?.sendActions(for: .primaryActionTriggered) }, for: .touchUpInside)
-        isAccessibilityElement = true
-        accessibilityTraits = .button
+        isAccessibilityElement = false
     }
 
     @available(*, unavailable)
@@ -193,15 +186,9 @@ final class TSToastActionButton: UIControl {
         }
         titleLabel.attributedText = NSAttributedString(string: resolved.actionFont.text(title), attributes: attributes)
         paddingConstraints.forEach { $0.constant = resolved.actionHorizontalPadding }
-        accessibilityLabel = title
     }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         TSHitArea.expandedRect(bounds).contains(point)
-    }
-
-    override func accessibilityActivate() -> Bool {
-        sendActions(for: .primaryActionTriggered)
-        return true
     }
 }

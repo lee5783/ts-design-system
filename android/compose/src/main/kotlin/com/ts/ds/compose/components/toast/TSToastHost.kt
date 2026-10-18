@@ -1,6 +1,5 @@
 package com.ts.ds.compose.components.toast
 
-import android.os.SystemClock
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -29,11 +27,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.shared.tsReduceMotion
@@ -62,8 +56,6 @@ public class TSToastState(
 ) {
     internal var onShow: (TSToastEntry) -> Unit = {}
     internal val layers = mutableStateListOf<Any>()
-    private var announcedId: Long? = null
-    private var announcedAt: Long = 0L
     private val presenter = TSToastPresenter(
         queue = queue,
         scheduler = scheduler,
@@ -87,14 +79,6 @@ public class TSToastState(
 
     internal fun performAction(entry: TSToastEntry): Boolean = presenter.performAction(entry)
 
-    internal fun claimAnnouncement(entry: TSToastEntry): Boolean {
-        val now = SystemClock.uptimeMillis()
-        if (announcedId == entry.id) return now - announcedAt < ANNOUNCEMENT_HANDOFF_MILLIS
-        announcedId = entry.id
-        announcedAt = now
-        return true
-    }
-
     internal fun start() = presenter.start()
 
     internal fun stop() = presenter.stop()
@@ -105,9 +89,8 @@ public fun rememberTSToastState(
     queue: TSToastQueue? = null,
     scheduler: TSToastScheduler = TSToastScheduler.Main,
 ): TSToastState {
-    val context = LocalContext.current
     return remember(queue, scheduler) {
-        TSToastState(queue ?: TSToastQueue(TSToastTimeouts.timeoutFor(context)), scheduler)
+        TSToastState(queue ?: TSToastQueue(TSToastTimeouts.default), scheduler)
     }
 }
 
@@ -165,16 +148,7 @@ internal fun TSToastLayer(
             label = "ts.toast",
         ) { shown ->
             if (shown != null) {
-                val isTopLayer = state.layers.lastOrNull() === token
-                var announces by remember(shown.id) { mutableStateOf(false) }
-                LaunchedEffect(shown.id, isTopLayer) {
-                    if (isTopLayer) announces = state.claimAnnouncement(shown)
-                }
-                Box(
-                    Modifier
-                        .semantics { if (announces) liveRegion = LiveRegionMode.Polite }
-                        .pointerInput(shown.id) { detectTapGestures { } },
-                ) {
+                Box(Modifier.pointerInput(shown.id) { detectTapGestures { } }) {
                     TSToast(
                         message = shown.message.text,
                         tone = shown.message.tone,
@@ -186,8 +160,6 @@ internal fun TSToastLayer(
         }
     }
 }
-
-private const val ANNOUNCEMENT_HANDOFF_MILLIS = 500L
 
 private fun toastTransition(resolved: TSToastStyleSpec.Resolved, reduceMotion: Boolean): ContentTransform {
     val enter = fadeIn(tween(resolved.enterDurationMillis))

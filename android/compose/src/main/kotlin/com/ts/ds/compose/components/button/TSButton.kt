@@ -13,9 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
@@ -31,7 +28,6 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
 import com.ts.ds.compose.theme.withDsFontWeight
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSButtonSize
 import com.ts.ds.core.style.TSButtonStyleSpec
@@ -48,7 +44,6 @@ public fun TSButton(
     trailingIcon: TSIcon? = null,
     enabled: Boolean = true,
     loading: Boolean = false,
-    loadingDescription: String = stringResource(CoreR.string.ts_loading),
     interactionSource: MutableInteractionSource? = null,
 ) {
     TSButton(
@@ -61,7 +56,6 @@ public fun TSButton(
         trailingIconSource = trailingIcon?.let(TSIconSource::Ts),
         enabled = enabled,
         loading = loading,
-        loadingDescription = loadingDescription,
         maxLines = Int.MAX_VALUE,
         overflow = TextOverflow.Clip,
         interactionSource = interactionSource,
@@ -79,7 +73,6 @@ public fun TSButton(
     trailingIconSource: TSIconSource? = null,
     enabled: Boolean = true,
     loading: Boolean = false,
-    loadingDescription: String = stringResource(CoreR.string.ts_loading),
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
     interactionSource: MutableInteractionSource? = null,
@@ -102,7 +95,6 @@ public fun TSButton(
     Row(
         modifier = modifier
             .tsControlClickable(source, state.interactive, onClick, resolved.minTouchTargetDp)
-            .semantics { if (loading) stateDescription = loadingDescription }
             .tsControlChrome(
                 interactionSource = source,
                 shape = shape,

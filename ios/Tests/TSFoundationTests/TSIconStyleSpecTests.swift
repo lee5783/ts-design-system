@@ -10,11 +10,6 @@ struct TSIconStyleSpecTests {
         #expect(TSIconStyleSpec.resolve(.init(size: size)).pointSize == expected)
     }
 
-    @Test("An icon is an accessibility element only when it has a label", arguments: TSIconStyleSpec.allConfigurations)
-    func accessibility(configuration: TSIconStyleSpec.Configuration) {
-        #expect(TSIconStyleSpec.resolve(configuration).isAccessibilityElement == configuration.hasLabel)
-    }
-
     @Test("Template icons render at the requested size and keep RTL mirroring", arguments: [TSIconName.home, .chevronRight])
     func templateImage(name: TSIconName) throws {
         let image = try #require(name.templateImage(pointSize: TSSize.iconMd))

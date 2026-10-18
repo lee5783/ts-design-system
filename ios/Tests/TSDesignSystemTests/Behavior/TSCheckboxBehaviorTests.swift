@@ -30,22 +30,10 @@ struct TSCheckboxBehaviorTests {
         #expect(!box.value)
     }
 
-    @Test(
-        "One element: the label, a checked/unchecked value, and the toggle trait on 17+ or the button trait on 15–16",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func accessibilityHierarchy(path: TSCompatPath, isOn: Bool) throws {
-        let sut = TSCheckbox("Email me about updates", isOn: .constant(isOn)).usingTogglePath(path)
+    @Test("The mark is decorative", arguments: [false, true])
+    func markIsDecorative(isOn: Bool) throws {
+        let sut = TSCheckbox("Email me about updates", isOn: .constant(isOn))
         let button = try sut.inspect().find(ViewType.Button.self)
-        #expect(try button.accessibilityLabel().string() == "Email me about updates")
-        #expect(try button.accessibilityValue().string() == (isOn ? "Checked" : "Unchecked"))
-        let traits = try button.accessibilityTraits()
-        #expect(!traits.contains(.isSelected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(traits.contains(.isToggle))
-        } else {
-            #expect(traits.contains(.isButton))
-        }
         let style = try #require(try button.buttonStyle() as? TSCheckboxStyle)
         let mark = try style.inspect(isPressed: false).find(TSCheckboxMark.self)
         #expect(try mark.actualView().body.inspect().accessibilityHidden())

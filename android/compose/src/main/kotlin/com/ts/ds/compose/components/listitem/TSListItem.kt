@@ -29,21 +29,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.semantics.toggleableState
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,10 +46,8 @@ import com.ts.ds.compose.foundation.rememberTSHaptics
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.haptics.DsHaptics
 import com.ts.ds.core.icon.TSIcon
-import com.ts.ds.core.logic.TSListItemAccessibility
 import com.ts.ds.core.logic.TSListItemRole
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSListItemLayout
@@ -100,19 +89,16 @@ public fun TSListItem(
         ),
         state,
     )
-    val hint = TSListItemAccessibility.hint(LocalContext.current, role)
     val inGroup = LocalTSListGroup.current
     val interaction = if (onClick != null) {
         Modifier.clickable(
             interactionSource = source,
             indication = null,
             enabled = state.interactive,
-            onClickLabel = hint,
-            role = Role.Button,
             onClick = onClick,
         )
     } else {
-        Modifier.semantics(mergeDescendants = true) { if (!enabled) disabled() }
+        Modifier
     }
 
     TSListItemRow(
@@ -153,28 +139,12 @@ public fun TSListItem(
         haptics.perform(DsHaptics.toggleEvent(value))
         onCheckedChange(value)
     }
-    val label = TSListItemAccessibility.label(title, subtitle)
-    val stateDescription = stringResource(if (checked) CoreR.string.ts_switch_on else CoreR.string.ts_switch_off)
     val inGroup = LocalTSListGroup.current
 
     TSListItemRow(
         resolved = resolved,
         inGroup = inGroup,
-        modifier = modifier.clearAndSetSemantics {
-            contentDescription = label
-            role = Role.Switch
-            toggleableState = ToggleableState(checked)
-            this.stateDescription = stateDescription
-            tsListItemDivider = inGroup
-            if (enabled) {
-                onClick {
-                    toggle(!checked)
-                    true
-                }
-            } else {
-                disabled()
-            }
-        },
+        modifier = modifier.semantics { tsListItemDivider = inGroup },
         title = title,
         subtitle = subtitle,
         showsChevron = false,
@@ -188,7 +158,6 @@ public fun TSListItem(
                         interactionSource = source,
                         indication = null,
                         enabled = enabled,
-                        role = Role.Switch,
                         onValueChange = toggle,
                     ),
             ) {
@@ -300,7 +269,7 @@ internal fun TSListItemRow(
 
 @Composable
 private fun TSListItemLeading(content: @Composable () -> Unit) {
-    Box(Modifier.testTag(TSListItemTestTags.LEADING).clearAndSetSemantics {}) { content() }
+    Box(Modifier.testTag(TSListItemTestTags.LEADING)) { content() }
 }
 
 @Composable

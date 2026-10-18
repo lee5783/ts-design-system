@@ -8,7 +8,7 @@ Tooling: `tools/release/src/release.ts` (bump, verify, notes), `tools/release/sr
 
 These are one-time user actions (tracker D-001, D-002, D-007, D-008, D-026):
 
-1. Decide what of `.claude/` and `CLAUDE.md` is committed. Snapshot references are git-ignored and stay out of the commit (C-45).
+1. Decide what of `.claude/` and `CLAUDE.md` is committed.
 2. Check the owner values: `.github/CODEOWNERS` and `ds.pom.developerId` / `ds.pom.developerName` / `ds.pom.organizationName` in `android/gradle.properties`.
 3. Commit the tree with conventional commit messages: the first changelog is generated from the whole history.
 4. In branch protection on `master`, require only `codegen-check-ok`, `ios-ok`, `android-ok` and `demos-ok`.

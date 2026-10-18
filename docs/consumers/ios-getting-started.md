@@ -47,9 +47,9 @@ Both UI products re-export `TSFoundation` (fonts, style specs, strings, resource
 
 ## 3. What gets fetched
 
-- Only `ts-design-system` is fetched. The repo's test-only packages (swift-snapshot-testing, ViewInspector) are not, even though the repo's own `Package.resolved` pins them.
+- Only `ts-design-system` is fetched. The repo's test-only package (ViewInspector) is not, even though the repo's own `Package.resolved` pins it.
 - SPM clones the whole monorepo, `android/` included (about 114 MB of working tree).
-- The repository holds no snapshot test PNGs and no Git LFS objects, so the checkout needs no git-lfs.
+- The repository holds no Git LFS objects, so the checkout needs no git-lfs.
 
 ## 4. First screen
 
@@ -153,4 +153,4 @@ Use these inside TS screens so stroke, size, colour and type stay on the spec:
 
 Contracts: `design/specs/components/{spinner,list-item,text,button,icon-button,text-field}.md`.
 
-Each component's full API (props, states, accessibility) is in `design/specs/components/<name>.md`; the SwiftUI and UIKit demo apps show every variant ([../guides/running-demos.md](../guides/running-demos.md)).
+Each component's full API (props, states, platform notes) is in `design/specs/components/<name>.md`; the SwiftUI and UIKit demo apps show every variant ([../guides/running-demos.md](../guides/running-demos.md)).

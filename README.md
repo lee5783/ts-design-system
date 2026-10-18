@@ -8,7 +8,7 @@
 - Primary capabilities:
   - Generated tokens (color light/dark, type, spacing, radius, shadow, size, opacity) and icons for both platforms.
   - 15 components in all four toolkits: Alert, Avatar, Badge, BottomNav, Button, Card, Checkbox, Dialog, Icon, IconButton, ListItem, Switch, Tabs, TextField, Toast.
-  - Light and dark, Dynamic Type and font scale, VoiceOver and TalkBack, RTL.
+  - Light and dark, Dynamic Type and font scale, 44 pt / 48 dp touch targets, RTL.
   - Four demo apps, one per toolkit, each showing every token and every component variant, size and state.
 - Who it is for: iOS and Android app teams adopting the TS design system, and the maintainers who keep the libraries in step with the design source.
 
@@ -18,7 +18,7 @@ One version covers both platforms (`VERSION`, currently `0.1.0`; history in `CHA
 
 - Goals:
   - One design source (`design/`) feeding generated tokens and assets for both platforms, so a DS update is a sync plus codegen, not hand edits.
-  - Native components per toolkit with the same tokens, sizes, states and accessibility contract (`design/specs/components/<name>.md`).
+  - Native components per toolkit with the same tokens, sizes, states and behaviour contract (`design/specs/components/<name>.md`).
   - A stable public API from the first tag, guarded by API checks on both platforms.
 - Non-goals (from `docs/stack.md`): CocoaPods, Maven Central, Kotlin Multiplatform and web distribution. iOS ships through SPM only, Android through GitHub Packages only.
 
@@ -121,12 +121,12 @@ Not applicable: this repo ships libraries. Releases are cut from `master` by the
 
 ```bash
 make test                     # tools, codegen and sync checks, demo boundaries, iOS and Android suites
-make ios-test                 # iOS unit and behaviour tests (snapshot suites skipped)
-make android-test             # Android unit and behaviour tests (snapshots rendered, not compared)
+make ios-test                 # iOS unit and behaviour tests (local default: the pinned simulator in .ios-simulator)
+make android-test             # Android unit and behaviour tests
 make api-check BASELINE=<tag> # public API compatibility on both platforms
 ```
 
-Snapshot references are git-ignored and checked locally only. Record them before a UI change with `make ios-snapshot-record` / `make android-snapshot-record`, then compare after it with `make ios-snapshot-verify` / `make android-snapshot-verify`. CI does not compare pixels. Workflow: `docs/guides/snapshot-workflow.md`.
+Run only the suites you touched: `make ios-build-for-testing` once, then `IOS_TESTS="<Target/Suite ...>" make ios-test-only`; on Android, `./gradlew :<module>:testDebugUnitTest --tests '<class>'` from `android/`. There is no snapshot testing and CI compares no pixels; visual changes are shown with screenshots in the PR. Details: `docs/testing.md`.
 
 ## Project Layout
 
@@ -136,7 +136,7 @@ ts-design-system/
 ├── `tools/`       - Node 22 / Vitest workspace: DS sync, token codegen, CI, release, API and demo checks
 ├── `ios/`         - Swift package sources and tests (`TSTokens`, `TSFoundation`, `TSDesignSystem`, `TSDesignSystemUIKit`)
 ├── `Package.swift`- SPM manifest for the iOS products
-├── `android/`     - Gradle project: `tokens`, `core`, `compose`, `views`, `bom`, `test-support`, `build-logic`
+├── `android/`     - Gradle project: `tokens`, `core`, `compose`, `views`, `bom`, `golden-check`, `build-logic`
 ├── `demos/`       - Four demo apps plus a shared demo-support module per platform
 ├── `docs/`        - Architecture, conventions, testing, maintainer guides and consumer pages
 ├── `.github/`     - CI and release workflows, Renovate, CODEOWNERS, PR template
@@ -157,7 +157,7 @@ ts-design-system/
 - **Maintainer guides (`docs/guides/`):**
   - `ds-update-flow.md`, `adding-a-component.md`
   - `release.md`, `deprecation-policy.md`
-  - `toolchain-upgrades.md`, `snapshot-workflow.md`, `running-demos.md`
+  - `toolchain-upgrades.md`, `running-demos.md`
 - **Consumer pages (`docs/consumers/`):** `ios-getting-started.md`, `android-getting-started.md`, `theming.md`, `migration-guides.md`.
 - **Component contracts:** `design/specs/components/<name>.md`.
 - `docs/features/INDEX.md`: not present. Components are documented through the specs above.
@@ -169,7 +169,7 @@ ts-design-system/
 - Use conventional commit messages (`feat(ios): …`, `fix(android): …`, `docs: …`). `CHANGELOG.md` is generated from them by git-cliff (`cliff.toml`).
 - Generated code is regenerated with `make codegen`, never edited by hand.
 - Public API changes must pass `make api-check`; Android changes need updated `api/*.api` dumps.
-- Visual changes are checked with the local snapshot verify targets.
+- Visual changes are shown with screenshots in the PR's Evidence section: the pinned iOS simulator (`.ios-simulator`) and one Android emulator at API 36.
 - Updating the design system: `docs/guides/ds-update-flow.md`. Adding a component: `docs/guides/adding-a-component.md`.
 
 ## License

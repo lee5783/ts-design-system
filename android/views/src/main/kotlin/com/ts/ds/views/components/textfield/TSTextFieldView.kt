@@ -20,9 +20,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.os.bundleOf
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.TextViewCompat
@@ -32,7 +29,6 @@ import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
 import com.ts.ds.core.input.TSTextInputTraits
-import com.ts.ds.core.logic.TSTextFieldAccessibility
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSTextFieldContentStyle
 import com.ts.ds.core.style.TSTextFieldStyleSpec
@@ -153,7 +149,6 @@ public class TSTextFieldView @JvmOverloads constructor(
         val initial = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(), TSControlState.Default)
         val toggle = TSTextFieldStyleSpec.passwordToggle(revealed = false)
         val spacing = dpToPx(initial.spacingDp)
-        labelView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         labelView.textAlignment = TEXT_ALIGNMENT_VIEW_START
         addView(labelView, LayoutParams(MATCH, WRAP).apply { bottomMargin = dpToPx(initial.labelSpacingDp) })
         box.orientation = HORIZONTAL
@@ -183,14 +178,12 @@ public class TSTextFieldView @JvmOverloads constructor(
         messageRow.orientation = HORIZONTAL
         messageRow.gravity = Gravity.CENTER_VERTICAL
         messageIcon.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
-        messageView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         messageView.textAlignment = TEXT_ALIGNMENT_VIEW_START
         messageIcon.setImageResource(TSIcon.Alert.drawableRes)
         val messageIconSize = dpToPx(initial.messageIconSizeDp)
         messageRow.addView(messageIcon, LayoutParams(messageIconSize, messageIconSize).apply { marginEnd = dpToPx(initial.messageSpacingDp) })
         messageRow.addView(messageView, LayoutParams(0, WRAP, 1f))
         addView(messageRow, LayoutParams(MATCH, WRAP).apply { topMargin = dpToPx(initial.messageSpacingDp) })
-        ViewCompat.setAccessibilityDelegate(input, InputAccessibility())
         context.obtainStyledAttributes(attrs, R.styleable.TSTextFieldView, defStyleAttr, 0).apply {
             label = getText(R.styleable.TSTextFieldView_tsLabel) ?: ""
             placeholder = getText(R.styleable.TSTextFieldView_tsPlaceholder)
@@ -259,7 +252,7 @@ public class TSTextFieldView @JvmOverloads constructor(
         get() = TSTextFieldStyleSpec.state(
             enabled = userEnabled,
             focused = input.isFocused,
-            error = TSTextFieldAccessibility.hasError(errorMessage?.toString()),
+            error = !errorMessage.isNullOrBlank(),
         )
 
     internal val resolved: TSTextFieldStyleSpec.Resolved
@@ -375,24 +368,14 @@ public class TSTextFieldView @JvmOverloads constructor(
         if (!ready) return
         val resolved = resolved
         val error = errorMessage?.toString()
-        val hasError = TSTextFieldAccessibility.hasError(error)
-        val text = if (hasError) error else TSTextFieldAccessibility.hint(hint?.toString(), error)
+        val text = if (!error.isNullOrBlank()) error else hint?.toString()?.takeIf { it.isNotBlank() }
         val color = tsColor(resolved.messageColor)
-        ViewCompat.setAccessibilityLiveRegion(messageRow, ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE)
         messageView.setTextAppearance(resolved.messageTypeRole.textAppearance)
         messageView.setTextColor(color)
         messageView.text = text
         messageIcon.visibility = if (resolved.showsErrorIcon) VISIBLE else GONE
         ImageViewCompat.setImageTintList(messageIcon, ColorStateList.valueOf(color))
         messageRow.visibility = if (text == null) GONE else VISIBLE
-        if (hasError && error != null) {
-            messageRow.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-            messageRow.contentDescription = TSTextFieldAccessibility.errorDescription(context, error)
-            ViewCompat.setAccessibilityLiveRegion(messageRow, ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE)
-        } else {
-            messageRow.contentDescription = null
-            messageRow.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-        }
     }
 
     private fun applyState() {
@@ -408,27 +391,12 @@ public class TSTextFieldView @JvmOverloads constructor(
         toggleFill.fillColor = ColorStateList.valueOf(toggle.fill?.let(::tsColor) ?: 0)
         ImageViewCompat.setImageTintList(toggleView, ColorStateList.valueOf(tsColor(toggle.iconColor)))
         toggleView.isSelected = toggle.selected
-        toggleView.contentDescription = TSTextFieldAccessibility.toggleLabel(context, isPasswordRevealed)
     }
 
     private fun sp(value: Float): Int =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, resources.displayMetrics).toInt()
 
     private fun traitsFor(value: Int): TSTextInputTraits = TRAITS[value]
-
-    private inner class InputAccessibility : AccessibilityDelegateCompat() {
-        override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-            super.onInitializeAccessibilityNodeInfo(host, info)
-            val error = errorMessage?.toString()
-            val visibleHint = TSTextFieldAccessibility.hint(hint?.toString(), error)
-            info.hintText = listOfNotNull(label.toString().takeIf(String::isNotBlank), visibleHint).joinToString(", ")
-            info.isShowingHintText = input.text.isNullOrEmpty()
-            if (TSTextFieldAccessibility.hasError(error)) {
-                info.error = error
-                info.isContentInvalid = true
-            }
-        }
-    }
 
     private class TSTextFieldInput(context: Context) : AppCompatEditText(context) {
         var onFocusChange: (() -> Unit)? = null

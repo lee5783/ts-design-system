@@ -38,8 +38,6 @@ struct TSToastHostView: View {
     let bottomInset: CGFloat
     let onToastFrameChange: (CGRect) -> Void
 
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
     var body: some View {
         let margin = TSToastStyleSpec.resolve(.init()).outerMargin
         ZStack(alignment: .bottom) {
@@ -52,7 +50,7 @@ struct TSToastHostView: View {
                         }
                     )
                     .id(item.id)
-                    .transition(TSReduceMotion.transition(.move(edge: .bottom).combined(with: .opacity), reduceMotion: reduceMotion))
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .padding(.horizontal, margin)

@@ -26,6 +26,5 @@
         android:id="@+id/shell_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="demo.bottom-nav.shell.nav"
-        app:tsLabel="@string/demo_sample_main_navigation" />
+        android:tag="demo.bottom-nav.shell.nav" />
 </LinearLayout>

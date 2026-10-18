@@ -6,9 +6,6 @@ import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.style.TSAlertTone
 import com.ts.ds.core.style.TSButtonVariant
 import com.ts.ds.views.components.button.TSButtonView
@@ -43,9 +40,6 @@ class TSAlertViewTest {
         }
     }.getChildAt(0) as TSAlertView
 
-    private fun View.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     private fun View.boundsIn(ancestor: View): Rect {
         val location = IntArray(2).also(::getLocationInWindow)
         val origin = IntArray(2).also(ancestor::getLocationInWindow)
@@ -63,37 +57,12 @@ class TSAlertViewTest {
     }
 
     @Test
-    fun messageIsOneElementPerTone() {
-        val names = mapOf(
-            TSAlertTone.Info to "Information",
-            TSAlertTone.Success to "Success",
-            TSAlertTone.Warning to "Warning",
-            TSAlertTone.Danger to "Error",
-        )
-        names.forEach { (tone, name) ->
-            val view = alert {
-                this.tone = tone
-                title = "Storage almost full"
-            }
-            val node = view.messageView.node()
-
-            assertEquals("$name, Storage almost full, Free up space", node.contentDescription)
-            assertEquals(TextView::class.java.name, node.className)
-            assertTrue(ViewCompat.isScreenReaderFocusable(view.messageView))
-            assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, view.iconView.importantForAccessibility)
-        }
-    }
-
-    @Test
-    fun dismissFiresFromTouchAndTheAccessibilityAction() {
+    fun dismissFiresFromTouch() {
         val view = alert { onDismiss = { dismissals++ } }
 
         view.dismissButton.tapCenter()
-        ViewCompat.performAccessibilityAction(view.messageView, AccessibilityNodeInfoCompat.ACTION_DISMISS, null)
 
-        assertEquals(2, dismissals)
-        assertEquals("Dismiss", view.dismissButton.contentDescription)
-        assertEquals(android.widget.Button::class.java.name, view.dismissButton.node().className)
+        assertEquals(1, dismissals)
     }
 
     @Test
@@ -101,7 +70,6 @@ class TSAlertViewTest {
         val view = alert()
 
         assertEquals(View.GONE, view.dismissButton.visibility)
-        assertTrue(view.messageView.node().actionList.none { it.id == AccessibilityNodeInfoCompat.ACTION_DISMISS })
     }
 
     @Test
@@ -130,20 +98,10 @@ class TSAlertViewTest {
             actionView = retry
         }
 
-        assertEquals("Error, Upload failed", view.messageView.node().contentDescription)
         assertTrue(retry.boundsIn(view).right <= view.dismissButton.boundsIn(view).left)
         retry.tapCenter()
         assertEquals(1, retries)
         assertEquals(0, dismissals)
-    }
-
-    @Test
-    fun liveRegionOnlyWhenShownDynamically() {
-        assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, ViewCompat.getAccessibilityLiveRegion(alert().messageView))
-        assertEquals(
-            ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE,
-            ViewCompat.getAccessibilityLiveRegion(alert { announcesWhenShown = true }.messageView),
-        )
     }
 
     @Test

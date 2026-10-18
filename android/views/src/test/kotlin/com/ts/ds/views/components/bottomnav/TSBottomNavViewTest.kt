@@ -11,7 +11,6 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSBottomNavItem
 import com.ts.ds.views.R
@@ -54,7 +53,6 @@ class TSBottomNavViewTest {
                 addView(
                     TSBottomNavView(context).apply {
                         items = five
-                        label = "Main navigation"
                         reduceMotion = { true }
                         setOnItemSelectedListener { _, id -> changes += id }
                         configure()
@@ -72,9 +70,6 @@ class TSBottomNavViewTest {
     }
 
     private fun TSBottomNavView.item(id: String): TSBottomNavItemView = itemViewList.first { it.item.id == id }
-
-    private fun View.node(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
 
     @Test
     fun tapSelectsAndNotifiesOnce() {
@@ -121,34 +116,6 @@ class TSBottomNavViewTest {
     }
 
     @Test
-    fun itemsAreTabsWithPositionAndBadgeInTheValue() {
-        val view = nav { selectedId = "inbox" }
-
-        val inbox = view.item("inbox").node()
-        assertEquals(View::class.java.name, inbox.className)
-        assertTrue(inbox.isSelected)
-        assertEquals("Inbox", inbox.contentDescription)
-        assertEquals("Tab, 2 of 5, 3 new", inbox.stateDescription)
-        assertEquals(1, inbox.collectionItemInfo.columnIndex)
-        assertEquals("Tab, 4 of 5, 99+ new", view.item("alerts").node().stateDescription)
-        assertEquals("Tab, 1 of 5", view.item("home").node().stateDescription)
-        assertFalse(view.item("home").node().isSelected)
-        listOf(view.item("inbox").badgeView, view.item("inbox").labelView, view.item("inbox").pillView).forEach {
-            assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO, it.importantForAccessibility)
-        }
-    }
-
-    @Test
-    fun barIsALabelledCollection() {
-        val view = nav()
-
-        val node = view.node()
-        assertEquals("Main navigation", node.contentDescription)
-        assertEquals(5, node.collectionInfo.columnCount)
-        assertEquals(1, node.collectionInfo.rowCount)
-    }
-
-    @Test
     fun badgesShowFormattedCountsAndUpdateInPlace() {
         val view = nav()
         val inbox = view.item("inbox")
@@ -162,7 +129,6 @@ class TSBottomNavViewTest {
 
         assertSame(inbox, view.item("inbox"))
         assertEquals(View.GONE, inbox.badgeView.visibility)
-        assertEquals("Tab, 2 of 5", inbox.node().stateDescription)
     }
 
     @Test
@@ -173,7 +139,6 @@ class TSBottomNavViewTest {
         idle()
 
         assertEquals(3, view.itemViewList.size)
-        assertEquals("Tab, 3 of 3", view.item("search").node().stateDescription)
     }
 
     @Test

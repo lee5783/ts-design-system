@@ -29,16 +29,14 @@ struct TSSwiftUIModifierTests {
         #expect(abs(size.height - 48) <= 1.5)
     }
 
-    @Test("Shadow, focus ring, press, toggle, onChange and animation modifiers render")
+    @Test("Shadow, focus ring, press and onChange modifiers render")
     func modifiersRender() {
         let view = VStack {
             Text("Shadow").tsShadow(TSShadowTokens.shadowLg)
             Text("Focus").tsFocusRing(cornerRadius: 8)
             Text("Focused").tsFocusRing(isFocused: true, cornerRadius: 8)
             Text("Press").tsPressFeedback(.opacity, isPressed: true)
-            Text("Toggle").tsToggleAccessibility(isOn: true, kind: .switch)
             Text("Change").tsOnChange(of: 1, initial: true) { _, _ in }
-            Text("Animate").tsAnimation(true)
         }
         #expect(fittingSize(view).height > 0)
     }

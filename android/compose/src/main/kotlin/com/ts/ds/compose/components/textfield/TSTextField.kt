@@ -25,13 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.error
-import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.password
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -47,10 +42,8 @@ import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.shadow
 import com.ts.ds.compose.theme.style
 import com.ts.ds.compose.theme.withDsFontWeight
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSTextInputTraits
-import com.ts.ds.core.logic.TSTextFieldAccessibility
 import com.ts.ds.core.style.TSTextFieldContentStyle
 import com.ts.ds.core.style.TSTextFieldStyleSpec
 
@@ -117,7 +110,7 @@ public fun TSTextField(
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val focused by source.collectIsFocusedAsState()
     val forced = LocalTSForcedControlState.current
-    val hasError = TSTextFieldAccessibility.hasError(error)
+    val hasError = !error.isNullOrBlank()
     val state = TSTextFieldStyleSpec.state(enabled = enabled, focused = forced?.focused ?: focused, error = hasError)
     val resolved = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(readOnly, contentStyle), state)
     var revealed by rememberSaveable { mutableStateOf(forced?.selected ?: false) }
@@ -128,15 +121,13 @@ public fun TSTextField(
     val shape = RoundedCornerShape(resolved.cornerRadiusDp.dp)
     val elevation = resolved.shadow?.let { TSTheme.elevation.shadow(it) }
     val inputStyle = typography.style(resolved.inputTypeRole).copy(color = colors.color(resolved.inputColor))
-    val errorDescription = if (hasError) stringResource(CoreR.string.ts_text_field_error, error.orEmpty()) else null
-    val visibleHint = TSTextFieldAccessibility.hint(hint, error)
+    val visibleHint = hint?.takeIf { it.isNotBlank() && !hasError }
     val contentType = inputTraits.contentType()
 
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.semantics {
-            if (hasError) error(error.orEmpty())
             if (masked) password()
             if (contentType != null) this.contentType = contentType
         },
@@ -197,7 +188,6 @@ public fun TSTextField(
                                 text = placeholder,
                                 style = inputStyle.copy(color = colors.color(resolved.placeholderColor)),
                                 maxLines = if (multiline) TSTextFieldStyleSpec.MAXIMUM_LINES else 1,
-                                modifier = Modifier.clearAndSetSemantics {},
                             )
                         }
                         innerTextField()
@@ -209,7 +199,6 @@ public fun TSTextField(
                 }
                 TSTextFieldMessage(
                     text = if (hasError) error else visibleHint,
-                    errorDescription = errorDescription,
                     resolved = resolved,
                 )
             }
@@ -220,24 +209,13 @@ public fun TSTextField(
 @Composable
 private fun TSTextFieldMessage(
     text: String?,
-    errorDescription: String?,
     resolved: TSTextFieldStyleSpec.Resolved,
 ) {
     if (text == null) return
     val color = TSTheme.colors.color(resolved.messageColor)
     Row(
         modifier = Modifier
-            .padding(top = resolved.messageSpacingDp.dp)
-            .then(
-                if (errorDescription != null) {
-                    Modifier.clearAndSetSemantics {
-                        contentDescription = errorDescription
-                        liveRegion = LiveRegionMode.Polite
-                    }
-                } else {
-                    Modifier
-                },
-            ),
+            .padding(top = resolved.messageSpacingDp.dp),
         horizontalArrangement = Arrangement.spacedBy(resolved.messageSpacingDp.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

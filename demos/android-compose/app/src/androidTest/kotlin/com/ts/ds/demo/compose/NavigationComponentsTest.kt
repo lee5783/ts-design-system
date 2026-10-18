@@ -1,8 +1,6 @@
 package com.ts.ds.demo.compose
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -58,7 +56,6 @@ class NavigationComponentsTest {
             composeRule.scrollTo(TabsPageTags.PLAYGROUND_COUNT)
             composeRule.tab(TabsPageTags.PLAYGROUND_TABS, "Week")
                 .assertIsNotSelected()
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "2 of 4"))
                 .performTouchInput { click(Offset(centerX, 2.dp.toPx())) }
             composeRule.tab(TabsPageTags.PLAYGROUND_TABS, "Week").assertIsSelected()
             composeRule.tab(TabsPageTags.PLAYGROUND_TABS, "Day").assertIsNotSelected()
@@ -91,15 +88,18 @@ class NavigationComponentsTest {
         }
     }
 
-    private fun ComposeTestRule.navValue(nav: String, label: String, value: String) =
-        tab(nav, label).assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, value))
+    private fun ComposeTestRule.navBadge(nav: String, label: String, badge: String) =
+        tab(nav, label).assert(hasText(badge))
+
+    private fun ComposeTestRule.navWithoutBadge(nav: String, label: String, badge: String) =
+        tab(nav, label).assert(!hasText(badge))
 
     @Test
     fun bottomNavSelectionBadgeAndDisabled() {
         launchDemo().use {
             composeRule.openPage(DemoPageId.BottomNav)
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_CHANGES)
-            composeRule.navValue(BottomNavPageTags.PLAYGROUND_NAV, "Search", "3 of 4")
+            composeRule.tab(BottomNavPageTags.PLAYGROUND_NAV, "Search")
                 .assertIsNotSelected()
                 .performClick()
             composeRule.tab(BottomNavPageTags.PLAYGROUND_NAV, "Search").assertIsSelected()
@@ -110,15 +110,15 @@ class NavigationComponentsTest {
             composeRule.tab(BottomNavPageTags.PLAYGROUND_NAV, "Search").performClick()
             composeRule.onNodeWithTag(BottomNavPageTags.PLAYGROUND_CHANGES).assertTextEquals("Tapped 1 time")
 
-            composeRule.navValue(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "2 of 4, 3 new")
+            composeRule.navBadge(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "3")
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_ADD_HUNDRED)
             composeRule.onNodeWithTag(BottomNavPageTags.PLAYGROUND_ADD_HUNDRED).performClick()
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_CHANGES)
-            composeRule.navValue(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "2 of 4, 99+ new")
+            composeRule.navBadge(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "99+")
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_CLEAR)
             composeRule.onNodeWithTag(BottomNavPageTags.PLAYGROUND_CLEAR).performClick()
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_CHANGES)
-            composeRule.navValue(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "2 of 4")
+            composeRule.navWithoutBadge(BottomNavPageTags.PLAYGROUND_NAV, "Inbox", "99+")
 
             composeRule.scrollTo(BottomNavPageTags.PLAYGROUND_DISABLED)
             composeRule.onNodeWithTag(BottomNavPageTags.PLAYGROUND_DISABLED).performClick()
@@ -140,10 +140,10 @@ class NavigationComponentsTest {
             composeRule.tab(BottomNavPageTags.SHELL_NAV, "Inbox").performClick().assertIsSelected()
             composeRule.onNodeWithTag(BottomNavPageTags.shellTitle("inbox")).assertIsDisplayed()
             composeRule.onNodeWithTag(BottomNavPageTags.shellAddOne("inbox")).performClick()
-            composeRule.navValue(BottomNavPageTags.SHELL_NAV, "Inbox", "2 of 4, 4 new")
+            composeRule.navBadge(BottomNavPageTags.SHELL_NAV, "Inbox", "4")
 
             composeRule.onNodeWithTag(BottomNavPageTags.shellToast("inbox")).performClick()
-            val sentToast = hasContentDescription("Message sent", substring = true)
+            val sentToast = hasText("Message sent", substring = true)
             composeRule.waitUntil(5_000) { composeRule.onAllNodes(sentToast).fetchSemanticsNodes().isNotEmpty() }
             val toast = composeRule.onNode(sentToast).getBoundsInRoot()
             val nav = composeRule.onNodeWithTag(BottomNavPageTags.SHELL_NAV).getBoundsInRoot()

@@ -23,7 +23,7 @@ The artifact needs an authenticated claude.ai session, so the copy is agent-assi
 
 `design/extensions/native-tokens.json` holds tokens the DS does not define yet. Each entry has `name`, `value` (a string, or `{ light, dark }` for colours), `usage`, `upstream` (`pending`, `accepted` or `rejected`) and `origin`; component constants also carry `component` and `type`.
 
-- **The DS shipped a token we defined locally:** codegen stops with `native-tokens <family>/<name>: duplicate key, already defined in design/source/tokens.json; remove it from design/extensions/native-tokens.json once the DS ships it`. Delete the local entry (the DS value wins) and check the snapshot diff.
+- **The DS shipped a token we defined locally:** codegen stops with `native-tokens <family>/<name>: duplicate key, already defined in design/source/tokens.json; remove it from design/extensions/native-tokens.json once the DS ships it`. Delete the local entry (the DS value wins) and check the affected demo pages.
 - **The DS renamed or removed a token** that the libraries expose: add `"old-name": "new-name"` to the `renames` map. Codegen then emits a deprecated alias on every platform (Swift `@available(*, deprecated, renamed:)`, Kotlin `@Deprecated(…, ReplaceWith(…))`), and the rename is a minor change instead of a major one. Codegen refuses a rename whose old name still exists or whose target does not.
 - Update an entry's `upstream` status when design accepts or rejects it.
 
@@ -72,8 +72,8 @@ The suggestion covers tokens only. API and behaviour changes in the libraries ar
 
 ## 5. Verify
 
-1. `make test`: unit and golden tests, `codegen-check`, `ds-sync`, demo boundaries, iOS and Android suites. It compares no snapshots.
-2. Locally, with a baseline recorded before the sync, `make ios-snapshot-verify` and `make android-snapshot-verify` fail exactly where visuals changed. Review every diff, put before/after screenshots of the intended changes in the PR, then re-record your baseline ([snapshot-workflow.md](snapshot-workflow.md)). CI does not compare pixels.
+1. `make test`: unit and golden tests, `codegen-check`, `ds-sync`, demo boundaries, iOS and Android suites. No test compares pixels.
+2. Take argent screenshots of the affected demo pages before and after the sync, on the pinned iOS simulator (`.ios-simulator`) and one Android emulator at API 36, and put the intended changes in the PR's Evidence section. CI does not compare pixels.
 3. If golden fixtures in `tools/codegen/test/fixtures/expected/**` must change because the generator changed, refresh them with `cd tools && UPDATE_GOLDEN=1 npx vitest run codegen/test/golden/<swift|android-xml|compose|icons>.test.ts` and review the diff.
 4. Open the four demo apps and check the changed tokens and components by hand ([running-demos.md](running-demos.md)). Each About screen shows the library version and the DS version from `design/manifest.json`.
 

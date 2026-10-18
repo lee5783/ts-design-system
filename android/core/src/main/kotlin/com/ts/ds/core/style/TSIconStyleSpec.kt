@@ -13,18 +13,14 @@ public enum class TSIconSize(
 public object TSIconStyleSpec : TSStyleSpec<TSIconStyleSpec.Configuration, TSIconStyleSpec.Resolved> {
     public data class Configuration(
         public val size: TSIconSize = TSIconSize.Md,
-        public val hasLabel: Boolean = false,
     )
 
     public data class Resolved(
         public val sizeDp: Float,
-        public val importantForAccessibility: Boolean,
     )
 
-    public val configurations: List<Configuration> = TSIconSize.entries.flatMap { size ->
-        listOf(false, true).map { Configuration(size, it) }
-    }
+    public val configurations: List<Configuration> = TSIconSize.entries.map { Configuration(it) }
 
     override fun resolve(configuration: Configuration, state: TSControlState): Resolved =
-        Resolved(sizeDp = configuration.size.dp, importantForAccessibility = configuration.hasLabel)
+        Resolved(sizeDp = configuration.size.dp)
 }

@@ -42,15 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.CollectionInfo
-import androidx.compose.ui.semantics.CollectionItemInfo
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.collectionInfo
-import androidx.compose.ui.semantics.collectionItemInfo
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,7 +55,7 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.style
 import com.ts.ds.compose.theme.withDsFontWeight
-import com.ts.ds.core.logic.TSBottomNavAccessibility
+import com.ts.ds.core.logic.TSBadgeCountFormatter
 import com.ts.ds.core.style.TSBottomNavItem
 import com.ts.ds.core.style.TSBottomNavStyleSpec
 import com.ts.ds.core.style.TSTypeRole
@@ -85,7 +76,6 @@ public fun TSBottomNav(
     selectedId: String,
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
-    label: String? = null,
     enabled: Boolean = true,
     windowInsets: WindowInsets = WindowInsets.navigationBars,
 ) {
@@ -100,18 +90,12 @@ public fun TSBottomNav(
             .drawBehind { drawRect(hairline, size = Size(size.width, container.borderWidthDp.dp.toPx())) }
             .windowInsetsPadding(windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom))
             .height(container.heightDp.dp)
-            .semantics {
-                label?.let { contentDescription = it }
-                collectionInfo = CollectionInfo(rowCount = 1, columnCount = items.size)
-            }
             .selectableGroup(),
     ) {
         items.forEachIndexed { index, item ->
             key(item.id) {
                 TSBottomNavCell(
                     item = item,
-                    index = index,
-                    count = items.size,
                     selected = index == selectedIndex,
                     enabled = enabled,
                     onClick = { onSelect(item.id) },
@@ -124,8 +108,6 @@ public fun TSBottomNav(
 @Composable
 private fun RowScope.TSBottomNavCell(
     item: TSBottomNavItem,
-    index: Int,
-    count: Int,
     selected: Boolean,
     enabled: Boolean,
     onClick: () -> Unit,
@@ -133,9 +115,7 @@ private fun RowScope.TSBottomNavCell(
     val source = remember { MutableInteractionSource() }
     val state = source.collectTSControlState(enabled = enabled)
     val resolved = TSBottomNavStyleSpec.resolve(TSBottomNavStyleSpec.Configuration(selected), state)
-    val context = LocalContext.current
-    val value = TSBottomNavAccessibility.value(context, index, count, item.badge, includesRole = false)
-    val badgeText = TSBottomNavAccessibility.badgeText(context, item.badge)
+    val badgeText = item.badge?.let { TSBadgeCountFormatter.format(LocalContext.current, it) }
     val colors = TSTheme.colors
     val reduceMotion = tsReduceMotion()
     val curve = remember(resolved.animationEasing) {
@@ -155,13 +135,8 @@ private fun RowScope.TSBottomNavCell(
                 interactionSource = source,
                 indication = null,
                 enabled = enabled,
-                role = Role.Tab,
                 onClick = { if (!selected) onClick() },
             )
-            .semantics {
-                stateDescription = value
-                collectionItemInfo = CollectionItemInfo(rowIndex = 0, rowSpan = 1, columnIndex = index, columnSpan = 1)
-            }
             .alpha(resolved.opacity),
         contentAlignment = Alignment.Center,
     ) {
@@ -239,7 +214,6 @@ private fun TSBottomNavBadge(text: String, modifier: Modifier = Modifier) {
     }
     Box(
         modifier = modifier
-            .clearAndSetSemantics {}
             .defaultMinSize(minWidth = badge.minWidthDp.dp)
             .height(badge.heightDp.dp)
             .background(colors.color(badge.fill), shape)

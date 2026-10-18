@@ -26,7 +26,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_variants" />
 
             <com.ts.ds.views.components.button.TSButtonView
@@ -61,7 +60,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_sizes" />
 
             <com.ts.ds.views.components.button.TSButtonView
@@ -91,7 +89,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_with_icons" />
 
             <com.ts.ds.views.components.button.TSButtonView
@@ -117,7 +114,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_consumer_icon" />
 
             <com.ts.ds.views.components.button.TSButtonView
@@ -143,7 +139,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_line_limit" />
 
             <com.ts.ds.views.components.button.TSButtonView

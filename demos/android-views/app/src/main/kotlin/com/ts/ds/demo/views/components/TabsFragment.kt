@@ -20,7 +20,6 @@ class TabsFragment : DemoPageFragment(R.layout.page_tabs) {
     private var playgroundVariant = TSTabsVariant.Segmented
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindStates(rows.findViewById(R.id.tabs_states))
         bindOverflow(rows.findViewById(R.id.tabs_overflow))
         bindPlayground(rows.findViewById(R.id.tabs_playground))
@@ -63,7 +62,6 @@ class TabsFragment : DemoPageFragment(R.layout.page_tabs) {
             TSTabsView(section.context).apply {
                 this.items = items
                 selectedId = items.first().id
-                label = getString(DemoR.string.demo_sample_project_sections)
                 tag = OVERFLOW
             },
         )
@@ -79,7 +77,6 @@ class TabsFragment : DemoPageFragment(R.layout.page_tabs) {
             selectedId = items.first().id
             variant = playgroundVariant
             isBlock = true
-            label = getString(DemoR.string.demo_sample_time_range)
             tag = PLAYGROUND_TABS
         }
         section.addCaption(getString(DemoR.string.demo_component_variant))

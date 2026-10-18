@@ -93,7 +93,7 @@ private fun TextFieldSearch() {
         trailing = if (search.isEmpty()) {
             null
         } else {
-            { TSIconButton(TSIcon.Close, contentDescription = stringResource(DemoR.string.demo_sample_clear), onClick = { search = "" }) }
+            { TSIconButton(TSIcon.Close, onClick = { search = "" }) }
         },
     )
 }

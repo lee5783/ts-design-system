@@ -1,13 +1,7 @@
 package com.ts.ds.demo.views
 
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.CoordinatesProvider
@@ -22,7 +16,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ts.ds.demo.support.R as DemoR
 import com.ts.ds.demo.support.catalog.DemoPageId
-import com.ts.ds.demo.support.sample.SampleData
 import com.ts.ds.demo.views.components.AvatarFragment
 import com.ts.ds.demo.views.components.BadgeFragment
 import com.ts.ds.demo.views.components.CardFragment
@@ -30,6 +23,8 @@ import com.ts.ds.demo.views.components.ListItemFragment
 import com.ts.ds.demo.views.components.TextFragment
 import com.ts.ds.core.style.TSTextColor
 import com.ts.ds.core.style.TSTypeRole
+import com.ts.ds.views.components.badge.TSBadgeView
+import com.ts.ds.views.components.listitem.TSListItemView
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -50,25 +45,10 @@ class ContentComponentsTest {
         onView(withTag(tag)).perform(scrollIntoView(), click())
     }
 
-    private fun ActivityScenario<MainActivity>.nodeOf(tag: String): Pair<View, AccessibilityNodeInfoCompat> {
+    private fun ActivityScenario<MainActivity>.viewOf(tag: String): View {
         onView(withTag(tag)).perform(scrollIntoView())
-        var result: Pair<View, AccessibilityNodeInfoCompat>? = null
-        onActivity { activity ->
-            val view = activity.window.decorView.findViewWithTag<View>(tag)
-            val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-            result = view to info
-        }
-        return requireNotNull(result)
-    }
-
-    private fun ActivityScenario<MainActivity>.disclosureHeader(tag: String): Pair<View, AccessibilityNodeInfoCompat> {
-        onView(withTag(tag)).perform(scrollIntoView())
-        var result: Pair<View, AccessibilityNodeInfoCompat>? = null
-        onActivity { activity ->
-            val header = (activity.window.decorView.findViewWithTag<View>(tag) as ViewGroup).getChildAt(0)
-            val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(header, it) }
-            result = header to info
-        }
+        var result: View? = null
+        onActivity { activity -> result = activity.window.decorView.findViewWithTag<View>(tag) }
         return requireNotNull(result)
     }
 
@@ -80,9 +60,11 @@ class ContentComponentsTest {
         onView(withTag(tag)).perform(scrollIntoView(), GeneralClickAction(Tap.SINGLE, coordinates, Press.FINGER, 0, 0))
     }
 
-    private fun ActivityScenario<MainActivity>.bodyIsShown(): Boolean {
+    private fun ActivityScenario<MainActivity>.bodyIsShown(tag: String): Boolean {
         var shown = false
-        onActivity { activity -> shown = activity.window.decorView.findViewWithTag<View>(ListItemFragment.DISCLOSURE_BODY)?.isShown == true }
+        onActivity { activity ->
+            shown = activity.window.decorView.findViewWithTag<View>(tag)?.findViewWithTag<View>(ListItemFragment.DISCLOSURE_BODY)?.isShown == true
+        }
         return shown
     }
 
@@ -92,26 +74,21 @@ class ContentComponentsTest {
         val snapshot = ListItemFragment.disclosure("snapshot")
         launchDemo().use { scenario ->
             openPage(DemoPageId.ListItem)
-            val (_, collapsed) = scenario.disclosureHeader(kotlin)
-            assertEquals("Kotlin, Apache License 2.0", collapsed.text.toString())
-            assertEquals(Button::class.java.name, collapsed.className)
-            assertEquals("Collapsed", collapsed.stateDescription.toString())
-            assertFalse(scenario.bodyIsShown())
+            scenario.viewOf(kotlin)
+            assertFalse(scenario.bodyIsShown(kotlin))
 
             tapHeaderOf(kotlin)
 
-            assertEquals("Expanded", scenario.disclosureHeader(kotlin).second.stateDescription.toString())
-            assertTrue(scenario.bodyIsShown())
+            assertTrue(scenario.bodyIsShown(kotlin))
 
             tapHeaderOf(snapshot)
 
-            assertEquals("Expanded", scenario.disclosureHeader(snapshot).second.stateDescription.toString())
-            assertEquals("Collapsed", scenario.disclosureHeader(kotlin).second.stateDescription.toString())
+            assertTrue(scenario.bodyIsShown(snapshot))
+            assertFalse(scenario.bodyIsShown(kotlin))
 
             tapHeaderOf(snapshot)
 
-            assertEquals("Collapsed", scenario.disclosureHeader(snapshot).second.stateDescription.toString())
-            assertFalse(scenario.bodyIsShown())
+            assertFalse(scenario.bodyIsShown(snapshot))
         }
     }
 
@@ -121,54 +98,46 @@ class ContentComponentsTest {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Text)
             TSTypeRole.entries.forEach { role ->
-                val (view, _) = scenario.nodeOf(TextFragment.role(role))
+                val view = scenario.viewOf(TextFragment.role(role))
                 assertEquals(pangram, (view as TextView).text.toString())
             }
             TSTextColor.entries.forEach { color ->
-                val (view, _) = scenario.nodeOf(TextFragment.color(color))
+                val view = scenario.viewOf(TextFragment.color(color))
                 assertEquals(color.name.lowercase(), (view as TextView).text.toString())
             }
-            val (truncated, _) = scenario.nodeOf(TextFragment.TRUNCATED)
+            val truncated = scenario.viewOf(TextFragment.TRUNCATED)
             assertEquals(1, (truncated as TextView).lineCount)
         }
     }
 
     @Test
-    fun badgeIsStaticTextLabelledByItsText() {
+    fun badgeIsStaticText() {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Badge)
-            val (plain, info) = scenario.nodeOf(BadgeFragment.PLAYGROUND_BADGE)
+            val plain = scenario.viewOf(BadgeFragment.PLAYGROUND_BADGE) as TSBadgeView
             val plainWidth = plain.width
-            assertEquals(resources.getString(DemoR.string.demo_sample_draft), info.text.toString())
-            assertEquals(TextView::class.java.name, info.className)
-            assertFalse(info.isClickable)
+            assertEquals(resources.getString(DemoR.string.demo_sample_draft), plain.text.toString())
             assertFalse(plain.isClickable)
 
             tap(BadgeFragment.PLAYGROUND_DOT)
             tap(BadgeFragment.PLAYGROUND_ICON)
 
-            val (decorated, decoratedInfo) = scenario.nodeOf(BadgeFragment.PLAYGROUND_BADGE)
-            assertEquals(resources.getString(DemoR.string.demo_sample_draft), decoratedInfo.text.toString())
-            assertFalse(decoratedInfo.isClickable)
+            val decorated = scenario.viewOf(BadgeFragment.PLAYGROUND_BADGE) as TSBadgeView
+            assertEquals(resources.getString(DemoR.string.demo_sample_draft), decorated.text.toString())
+            assertFalse(decorated.isClickable)
             assertTrue(decorated.width > plainWidth)
         }
     }
 
     @Test
-    fun avatarIsAnImageLabelledByTheName() {
-        val name = SampleData.people.first().name
+    fun avatarIsStaticAndSurvivesAPhoto() {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Avatar)
-            val (_, info) = scenario.nodeOf(AvatarFragment.PLAYGROUND_AVATAR)
-            assertEquals(name, info.contentDescription.toString())
-            assertEquals(ImageView::class.java.name, info.className)
-            assertFalse(info.isClickable)
+            assertFalse(scenario.viewOf(AvatarFragment.PLAYGROUND_AVATAR).isClickable)
 
             tap(AvatarFragment.PLAYGROUND_PHOTO)
 
-            val (_, photoInfo) = scenario.nodeOf(AvatarFragment.PLAYGROUND_AVATAR)
-            assertEquals(name, photoInfo.contentDescription.toString())
-            assertEquals(ImageView::class.java.name, photoInfo.className)
+            assertFalse(scenario.viewOf(AvatarFragment.PLAYGROUND_AVATAR).isClickable)
         }
     }
 
@@ -200,20 +169,14 @@ class ContentComponentsTest {
     fun listItemRowsPressOnlyWithAnAction() {
         launchDemo().use { scenario ->
             openPage(DemoPageId.ListItem)
-            val (_, info) = scenario.nodeOf(ListItemFragment.STATE_DEFAULT)
-            assertEquals(Button::class.java.name, info.className)
-            assertTrue(info.isEnabled)
+            assertTrue(scenario.viewOf(ListItemFragment.STATE_DEFAULT).isEnabled)
 
             tap(ListItemFragment.STATE_DEFAULT)
             assertCount(ListItemFragment.STATE_COUNT, 1)
 
-            val (disabled, disabledInfo) = scenario.nodeOf(ListItemFragment.STATE_DISABLED)
-            assertFalse(disabledInfo.isEnabled)
-            assertFalse(disabled.isEnabled)
+            assertFalse(scenario.viewOf(ListItemFragment.STATE_DISABLED).isEnabled)
             tapTitleOf(ListItemFragment.STATE_DISABLED)
-            val (static, staticInfo) = scenario.nodeOf(ListItemFragment.STATE_STATIC)
-            assertFalse(static.isClickable)
-            assertFalse(staticInfo.isClickable)
+            assertFalse(scenario.viewOf(ListItemFragment.STATE_STATIC).isClickable)
             tapTitleOf(ListItemFragment.STATE_STATIC)
 
             assertCount(ListItemFragment.STATE_COUNT, 1)
@@ -221,21 +184,16 @@ class ContentComponentsTest {
     }
 
     @Test
-    fun listItemSwitchRowExposesSwitchSemantics() {
+    fun listItemSwitchRowTogglesFromTitleAndSwitch() {
         launchDemo().use { scenario ->
             openPage(DemoPageId.ListItem)
-            val (_, info) = scenario.nodeOf(ListItemFragment.WIFI)
-            assertEquals(SwitchCompat::class.java.name, info.className)
-            assertTrue(info.isCheckable)
-            assertTrue(info.isChecked)
-            assertEquals(resources.getString(DemoR.string.demo_sample_wifi), info.text.toString())
-            assertEquals(resources.getString(DemoR.string.demo_state_on), info.stateDescription.toString())
+            assertTrue((scenario.viewOf(ListItemFragment.WIFI) as TSListItemView).isChecked)
 
             tapTitleOf(ListItemFragment.WIFI)
-            assertTrue(scenario.nodeOf(ListItemFragment.WIFI).second.isChecked)
+            assertTrue((scenario.viewOf(ListItemFragment.WIFI) as TSListItemView).isChecked)
 
             tapSwitchOf(ListItemFragment.WIFI)
-            assertFalse(scenario.nodeOf(ListItemFragment.WIFI).second.isChecked)
+            assertFalse((scenario.viewOf(ListItemFragment.WIFI) as TSListItemView).isChecked)
             assertText(ListItemFragment.WIFI_VALUE, DemoR.string.demo_state_off)
         }
     }
@@ -250,18 +208,16 @@ class ContentComponentsTest {
 
             tap("demo.list-item.playground.trailing.switch")
             onView(withTag("demo.list-item.playground.trailing.switch")).check(matches(isChecked()))
-            val (_, info) = scenario.nodeOf(ListItemFragment.PLAYGROUND_ROW)
-            assertEquals(SwitchCompat::class.java.name, info.className)
-            assertFalse(info.isChecked)
+            assertFalse((scenario.viewOf(ListItemFragment.PLAYGROUND_ROW) as TSListItemView).isChecked)
             tapSwitchOf(ListItemFragment.PLAYGROUND_ROW)
-            assertTrue(scenario.nodeOf(ListItemFragment.PLAYGROUND_ROW).second.isChecked)
+            assertTrue((scenario.viewOf(ListItemFragment.PLAYGROUND_ROW) as TSListItemView).isChecked)
             assertText(ListItemFragment.PLAYGROUND_VALUE, DemoR.string.demo_state_on)
 
             tap(ListItemFragment.PLAYGROUND_DISABLED)
             tapSwitchOf(ListItemFragment.PLAYGROUND_ROW)
-            val (_, disabledInfo) = scenario.nodeOf(ListItemFragment.PLAYGROUND_ROW)
-            assertFalse(disabledInfo.isEnabled)
-            assertTrue(disabledInfo.isChecked)
+            val disabled = scenario.viewOf(ListItemFragment.PLAYGROUND_ROW) as TSListItemView
+            assertFalse(disabled.isEnabled)
+            assertTrue(disabled.isChecked)
             assertCount(ListItemFragment.PLAYGROUND_COUNT, 2)
         }
     }
@@ -275,27 +231,15 @@ class ContentComponentsTest {
     }
 
     @Test
-    fun interactiveCardIsOneElementAndPresses() {
+    fun interactiveCardPresses() {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Card)
-            val (card, info) = scenario.nodeOf(CardFragment.STATE_DEFAULT)
-            assertEquals(Button::class.java.name, info.className)
-            assertEquals(
-                "${resources.getString(DemoR.string.demo_component_default)}, ${resources.getString(DemoR.string.demo_component_interactive)}",
-                info.contentDescription.toString(),
-            )
-            assertEquals(
-                listOf(resources.getString(DemoR.string.demo_sample_share), resources.getString(DemoR.string.demo_sample_open)),
-                info.actionList.mapNotNull { it.label?.toString() },
-            )
-            assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, (card as android.view.ViewGroup).getChildAt(0).importantForAccessibility)
+            assertTrue(scenario.viewOf(CardFragment.STATE_DEFAULT).isEnabled)
 
             tapAtPoint(CardFragment.STATE_DEFAULT, { it.width * 0.3f }, { 40 * it.resources.displayMetrics.density })
             assertCount(CardFragment.STATE_COUNT, 1)
 
-            val (disabled, disabledInfo) = scenario.nodeOf(CardFragment.STATE_DISABLED)
-            assertFalse(disabled.isEnabled)
-            assertFalse(disabledInfo.isEnabled)
+            assertFalse(scenario.viewOf(CardFragment.STATE_DISABLED).isEnabled)
             tapAtPoint(CardFragment.STATE_DISABLED, { it.width * 0.3f }, { it.height / 2f })
             assertCount(CardFragment.STATE_COUNT, 1)
         }

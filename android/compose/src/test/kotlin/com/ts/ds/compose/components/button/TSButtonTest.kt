@@ -17,7 +17,6 @@ import com.ts.ds.compose.components.icon.TSIconSource
 import org.junit.Assert.assertTrue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -28,7 +27,6 @@ import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTouchHeightIsEqualTo
 import androidx.compose.ui.test.assertTouchWidthIsEqualTo
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -92,13 +90,11 @@ class TSButtonTest {
     }
 
     @Test
-    fun exposesButtonRoleAndTheLabelAsText() {
+    fun exposesTheLabelAsText() {
         setButton(leadingIcon = TSIcon.Check)
 
         composeRule.onNodeWithTag("button")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
             .assert(SemanticsMatcher.expectValue(SemanticsProperties.Text, listOf(AnnotatedString("Save"))))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
     }
 
     @Test
@@ -111,12 +107,11 @@ class TSButtonTest {
     }
 
     @Test
-    fun loadingBlocksTheActionAndReportsLoading() {
+    fun loadingBlocksTheAction() {
         setButton(loading = true, leadingIcon = TSIcon.Check)
 
         composeRule.onNodeWithTag("button")
             .assertIsNotEnabled()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Loading"))
             .performClick()
         composeRule.onNodeWithText("Save").assertExists()
 
@@ -127,9 +122,7 @@ class TSButtonTest {
     fun loadingWinsOverDisabledButStaysBlocked() {
         setButton(enabled = false, loading = true)
 
-        composeRule.onNodeWithTag("button")
-            .assertIsNotEnabled()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Loading"))
+        composeRule.onNodeWithTag("button").assertIsNotEnabled()
     }
 
     @Test
@@ -157,12 +150,6 @@ class TSButtonTest {
             .performClick()
 
         assertEquals(1, taps)
-    }
-
-    @Test
-    fun iconsAndSpinnerAreHiddenFromAccessibility() {
-        setButton(leadingIcon = TSIcon.Plus)
-        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
     }
 
     @Test
@@ -201,7 +188,6 @@ class TSButtonTest {
             assertEquals(expected.width, bounds.width)
             assertEquals(expected.height, bounds.height)
         }
-        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
     }
 
     @Test

@@ -17,14 +17,13 @@ struct TSSwitchStyleBody<Label: View>: View {
     let style: TSSwitchStyle
 
     @Environment(\.isEnabled) private var isEnabled
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
         let resolved = TSSwitchStyleSpec.resolve(.init(isOn: style.isOn, state: state))
         HStack(spacing: resolved.spacing) {
             TSSwitchTrack(resolved: resolved)
-                .animation(TSReduceMotion.animation(duration: resolved.animationDuration, reduceMotion: reduceMotion), value: style.isOn)
+                .animation(TSAnimation.standard(duration: resolved.animationDuration), value: style.isOn)
             if !style.isLabelHidden {
                 label
                     .foregroundColor(resolved.labelColor.color)
@@ -35,7 +34,7 @@ struct TSSwitchStyleBody<Label: View>: View {
         .frame(minHeight: resolved.minHeight)
         .contentShape(Rectangle())
         .opacity(resolved.opacity)
-        .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+        .animation(TSAnimation.pressFeedback, value: state)
     }
 }
 

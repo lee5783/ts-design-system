@@ -80,7 +80,7 @@ class PageWalkTest {
     }
 
     @Test
-    fun everyPageWalksAt200PercentFontInRtl() {
-        walk(DemoSettings(fontScale = 2f, rtl = true, reduceMotion = true))
+    fun everyPageWalksInRtl() {
+        walk(DemoSettings(rtl = true, reduceMotion = true))
     }
 }

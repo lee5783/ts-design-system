@@ -14,15 +14,6 @@ struct TSAvatarViewBehaviorTests {
         avatar.subviews.compactMap { $0 as? View }.first { !$0.isHidden && ObjectIdentifier(type(of: $0)) == ObjectIdentifier(kind) }
     }
 
-    @Test("The name is the label of one image element", arguments: TSAvatarSize.allCases)
-    func accessibility(size: TSAvatarSize) {
-        let avatar = TSAvatarView(name: "Ada Lovelace", size: size)
-        #expect(avatar.isAccessibilityElement)
-        #expect(avatar.accessibilityLabel == "Ada Lovelace")
-        #expect(avatar.accessibilityTraits.contains(.image))
-        #expect(!avatar.accessibilityTraits.contains(.button))
-    }
-
     @Test("Each size is a fixed circle, even at AX5", arguments: TSAvatarSize.allCases)
     func size(size: TSAvatarSize) {
         let avatar = TSAvatarView(name: "Ada Lovelace", size: size)
@@ -70,14 +61,5 @@ struct TSAvatarViewBehaviorTests {
         #expect(icon?.name == .user)
         #expect(icon?.size == .lg)
         #expect(visible(UILabel.self, in: avatar) == nil)
-    }
-
-    @Test("A blank name is not an accessibility element, and naming it exposes it again")
-    func blankNameIsHidden() {
-        let avatar = TSAvatarView(name: " ")
-        #expect(!avatar.isAccessibilityElement)
-        avatar.name = "Ada Lovelace"
-        #expect(avatar.isAccessibilityElement)
-        #expect(avatar.accessibilityLabel == "Ada Lovelace")
     }
 }

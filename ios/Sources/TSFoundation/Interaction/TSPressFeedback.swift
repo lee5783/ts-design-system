@@ -20,10 +20,6 @@ public enum TSPressFeedback: String, CaseIterable, Hashable, Sendable {
         case .opacity: base
         }
     }
-
-    public static func animation(reduceMotion: Bool) -> Animation? {
-        TSReduceMotion.animation(duration: duration, reduceMotion: reduceMotion)
-    }
 }
 
 public extension View {
@@ -36,11 +32,9 @@ struct TSPressFeedbackModifier: ViewModifier {
     let feedback: TSPressFeedback
     let isPressed: Bool
 
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
     func body(content: Content) -> some View {
         content
             .opacity(feedback.opacity(isPressed: isPressed))
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: isPressed)
+            .animation(TSMotion.easingStandard.animation(duration: TSPressFeedback.duration), value: isPressed)
     }
 }

@@ -16,8 +16,8 @@ public final class TSTabBarController: UITabBarController {
         didSet { syncBottomNav() }
     }
 
-    public init(items: [TSBottomNavItem], viewControllers: [UIViewController], label: String? = nil) {
-        bottomNav = TSBottomNavView(items: items, label: label)
+    public init(items: [TSBottomNavItem], viewControllers: [UIViewController]) {
+        bottomNav = TSBottomNavView(items: items)
         super.init(nibName: nil, bundle: nil)
         setViewControllers(viewControllers, animated: false)
     }

@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -14,24 +13,17 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.TouchDelegate
 import android.view.View
-import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
-import com.ts.ds.core.logic.TSListItemAccessibility
 import com.ts.ds.core.logic.TSListItemRole
-import com.ts.ds.core.logic.TSToggleAccessibility
 import com.ts.ds.core.style.TSAvatarSize
 import com.ts.ds.core.style.TSBadgeTone
 import com.ts.ds.core.style.TSControlState
@@ -146,10 +138,7 @@ public class TSListItemView @JvmOverloads constructor(
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
         background = chrome
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        ViewCompat.setScreenReaderFocusable(this, true)
         contentView.gravity = Gravity.CENTER_VERTICAL
-        contentView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
         chevronView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
         tileView.background = tileChrome
         tileView.addView(tileIconView, FrameLayout.LayoutParams(0, 0, Gravity.CENTER))
@@ -238,49 +227,6 @@ public class TSListItemView @JvmOverloads constructor(
         updateSwitchTouchDelegate()
     }
 
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        val node = AccessibilityNodeInfoCompat.wrap(info)
-        val role = role
-        node.text = accessibilityLabel
-        node.className = when (role) {
-            TSListItemRole.Toggle -> SwitchCompat::class.java.name
-            TSListItemRole.Action, TSListItemRole.Navigation -> Button::class.java.name
-            TSListItemRole.Plain -> View::class.java.name
-        }
-        if (expansionState == null) TSListItemAccessibility.hint(context, role)?.let(node::setHintText)
-        expansionState?.takeIf { isEnabled }?.let { expanded ->
-            node.addAction(
-                if (expanded) {
-                    AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_COLLAPSE
-                } else {
-                    AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_EXPAND
-                },
-            )
-        }
-        if (role == TSListItemRole.Toggle) {
-            node.isCheckable = true
-            node.isChecked = isChecked
-            node.isClickable = isEnabled
-            if (isEnabled) node.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK)
-        }
-    }
-
-    override fun performAccessibilityAction(action: Int, arguments: Bundle?): Boolean {
-        val expanded = expansionState
-        if (expanded != null && isEnabled) {
-            val toggles = (action == AccessibilityNodeInfoCompat.ACTION_EXPAND && !expanded) ||
-                (action == AccessibilityNodeInfoCompat.ACTION_COLLAPSE && expanded)
-            if (toggles) return performClick()
-        }
-        if (role == TSListItemRole.Toggle && action == AccessibilityNodeInfoCompat.ACTION_CLICK) {
-            if (!isEnabled) return false
-            switchView.performClick()
-            return true
-        }
-        return super.performAccessibilityAction(action, arguments)
-    }
-
     internal val role: TSListItemRole
         get() = TSListItemRole.make(
             hasAction = hasOnClickListeners(),
@@ -303,17 +249,6 @@ public class TSListItemView @JvmOverloads constructor(
             ),
             currentState,
         )
-
-    internal val accessibilityLabel: String
-        get() = TSListItemAccessibility.label(title, subtitle)
-
-    internal val accessibilityValue: CharSequence?
-        get() = when (val trailing = trailing) {
-            is TSListItemTrailing.Text -> trailing.text
-            is TSListItemTrailing.Badge -> trailing.text
-            TSListItemTrailing.Switch -> TSToggleAccessibility.switchState(context, isChecked)
-            null -> null
-        }
 
     internal val switchTouchArea: Rect
         get() = Rect(switchTouchBounds)
@@ -447,7 +382,6 @@ public class TSListItemView @JvmOverloads constructor(
         dimmed.forEach { it.alpha = resolved.opacity }
         trailingContainer.alpha = if (trailing == TSListItemTrailing.Switch) 1f else resolved.opacity
         switchView.isEnabled = isEnabled
-        ViewCompat.setStateDescription(this, expansionState?.let { TSListItemAccessibility.expansionState(context, it) } ?: accessibilityValue)
     }
 
     private fun updateSwitchTouchDelegate() {

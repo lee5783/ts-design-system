@@ -130,8 +130,6 @@ public final class TSButtonView: UIButton {
             trailingIconView.name = trailingIcon
         }
         trailingIconView.tintColor = labelColor
-        accessibilityLabel = title
-        accessibilityValue = isLoading ? TSStrings.loading : nil
         setNeedsLayout()
     }
 
@@ -173,11 +171,6 @@ public final class TSButtonView: UIButton {
 
     override public func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         TSHitArea.expandedRect(bounds, minimum: resolved.minimumHitSize).contains(point)
-    }
-
-    override public var accessibilityTraits: UIAccessibilityTraits {
-        get { super.accessibilityTraits.union(isEnabled && !isLoading ? .button : [.button, .notEnabled]) }
-        set { super.accessibilityTraits = newValue }
     }
 
     override public func sendAction(_ action: UIAction) {

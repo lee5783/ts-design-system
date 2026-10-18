@@ -22,7 +22,7 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
     public var onDismiss: (() -> Void)?
 
     var presenter: TSDialogPresenter = .shared
-    var isReduceMotionEnabled: @MainActor () -> Bool = { TSReduceMotion.isEnabled }
+    var isReduceMotionEnabled: @MainActor () -> Bool = { false }
 
     let panelView: TSDialogPanelView
     private var animatesDismissal = true
@@ -176,7 +176,6 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         becomeFirstResponder()
-        UIAccessibility.post(notification: .screenChanged, argument: panelView.titleLabel)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {

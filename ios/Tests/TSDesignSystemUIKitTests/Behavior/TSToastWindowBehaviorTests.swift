@@ -3,15 +3,6 @@ import UIKit
 @testable import TSDesignSystemUIKit
 
 @MainActor
-final class AnnouncementLog {
-    private(set) var messages: [String] = []
-
-    func record(_ message: String) {
-        messages.append(message)
-    }
-}
-
-@MainActor
 @Suite("TSToastWindow behaviour")
 struct TSToastWindowBehaviorTests {
     private struct Fixture {
@@ -19,21 +10,19 @@ struct TSToastWindowBehaviorTests {
         let queue: TSToastQueue
         let queueClock: ManualToastScheduler
         let windowClock: ManualToastScheduler
-        let log: AnnouncementLog
     }
 
-    private func makeFixture(voiceOver: Bool = false) -> Fixture {
+    private func makeFixture() -> Fixture {
         let queueClock = ManualToastScheduler()
         let windowClock = ManualToastScheduler()
-        let log = AnnouncementLog()
-        let queue = TSToastQueue(scheduler: queueClock, isVoiceOverRunning: { voiceOver })
+        let queue = TSToastQueue(scheduler: queueClock)
         let window = TSToastWindow(
             frame: CGRect(x: 0, y: 0, width: 390, height: 844),
             queue: queue,
-            effects: TSToastShowEffects(announce: { log.record($0) }, haptics: TSHaptics(isEnabled: false)),
+            effects: TSToastShowEffects(haptics: TSHaptics(isEnabled: false)),
             scheduler: windowClock
         )
-        return Fixture(window: window, queue: queue, queueClock: queueClock, windowClock: windowClock, log: log)
+        return Fixture(window: window, queue: queue, queueClock: queueClock, windowClock: windowClock)
     }
 
     private func shownMessage(_ fixture: Fixture) -> String? {
@@ -49,7 +38,6 @@ struct TSToastWindowBehaviorTests {
         #expect(!window.isKeyWindow)
         fixture.queue.enqueue(TSToastItem(message: "Saved", tone: .success))
         #expect(!window.isHidden)
-        #expect(fixture.log.messages == ["Success, Saved"])
         fixture.queueClock.fire(after: 4)
         #expect(shownMessage(fixture) == nil)
         #expect(!window.isHidden)
@@ -57,7 +45,7 @@ struct TSToastWindowBehaviorTests {
         #expect(window.isHidden)
     }
 
-    @Test("Queued toasts are shown one at a time, in order, each announced once")
+    @Test("Queued toasts are shown one at a time, in order")
     func order() {
         let fixture = makeFixture()
         ["First", "Second", "Third"].forEach { fixture.queue.enqueue(TSToastItem(message: $0)) }
@@ -66,12 +54,11 @@ struct TSToastWindowBehaviorTests {
         #expect(shownMessage(fixture) == "Second")
         fixture.queueClock.fire(after: 4)
         #expect(shownMessage(fixture) == "Third")
-        #expect(fixture.log.messages == ["First", "Second", "Third"])
         #expect(fixture.windowClock.activeDelays.isEmpty)
         #expect(!fixture.window.isHidden)
     }
 
-    @Test("A plain toast leaves after 4 s, an undo toast after 10 s, and stays with VoiceOver and an action")
+    @Test("A plain toast leaves after 4 s and an undo toast after 10 s")
     func autoDismissTiming() {
         let fixture = makeFixture()
         fixture.queue.enqueue(TSToastItem(message: "Project archived", action: TSToastAction(title: "Undo") {}))
@@ -80,12 +67,6 @@ struct TSToastWindowBehaviorTests {
         #expect(shownMessage(fixture) == "Project archived")
         fixture.queueClock.fire(after: 10)
         #expect(shownMessage(fixture) == nil)
-
-        let voiceOver = makeFixture(voiceOver: true)
-        voiceOver.queue.enqueue(TSToastItem(message: "Project archived", action: TSToastAction(title: "Undo") {}))
-        #expect(voiceOver.queueClock.activeDelays.isEmpty)
-        #expect(shownMessage(voiceOver) == "Project archived")
-        #expect(voiceOver.log.messages == ["Project archived, Undo"])
     }
 
     @Test("The action runs the handler, dismisses the toast and shows the next one")
@@ -95,7 +76,6 @@ struct TSToastWindowBehaviorTests {
         fixture.queue.enqueue(TSToastItem(message: "Project archived", action: TSToastAction(title: "Undo") { counter.tap() }))
         fixture.queue.enqueue(TSToastItem(message: "Second"))
         let button = try #require(fixture.window.hostController.toastView?.actionButton)
-        #expect(button.accessibilityLabel == "Undo")
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 1)
         #expect(shownMessage(fixture) == "Second")

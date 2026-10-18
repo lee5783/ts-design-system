@@ -14,19 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.collapse
-import androidx.compose.ui.semantics.expand
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.shared.tsReduceMotion
-import com.ts.ds.core.logic.TSListItemAccessibility
 import com.ts.ds.core.style.TSListItemLayout
 import com.ts.ds.core.style.TSListItemStyleSpec
 
@@ -62,7 +56,6 @@ public fun TSDisclosureListItem(
         animationSpec = tween(disclosure.animationDurationMillis(tsReduceMotion()), easing = curve),
         label = "ts.list-item.disclosure",
     )
-    val expansionState = TSListItemAccessibility.expansionState(LocalContext.current, expanded)
     val inGroup = LocalTSListGroup.current
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -74,26 +67,9 @@ public fun TSDisclosureListItem(
                     interactionSource = source,
                     indication = null,
                     enabled = state.interactive,
-                    role = Role.Button,
                     onClick = { onExpandedChange(!expanded) },
                 )
-                .semantics {
-                    stateDescription = expansionState
-                    tsListItemDivider = inGroup
-                    if (enabled) {
-                        if (expanded) {
-                            collapse {
-                                onExpandedChange(false)
-                                true
-                            }
-                        } else {
-                            expand {
-                                onExpandedChange(true)
-                                true
-                            }
-                        }
-                    }
-                },
+                .semantics { tsListItemDivider = inGroup },
             title = title,
             subtitle = subtitle,
             showsChevron = true,

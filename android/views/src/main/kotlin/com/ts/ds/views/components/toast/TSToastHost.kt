@@ -23,7 +23,6 @@ public class TSToastHost @JvmOverloads constructor(
     private val presenter = TSToastPresenter(queue, scheduler, ::playShowEffects, ::render)
     private val layers = mutableListOf<TSToastLayer>()
     private var rootLayer: TSToastLayer? = null
-    private var announcedId: Long? = null
 
     public var anchorView: View? = null
         set(value) {
@@ -109,9 +108,7 @@ public class TSToastHost @JvmOverloads constructor(
 
     private fun render(entry: TSToastEntry?) {
         if (!presenter.isStarted) return
-        val announces = entry != null && entry.id != announcedId
-        if (entry != null) announcedId = entry.id
-        topLayer?.show(entry, announces) { presenter.performAction(it) }
+        topLayer?.show(entry) { presenter.performAction(it) }
     }
 
     private fun playShowEffects(entry: TSToastEntry) {
@@ -124,7 +121,7 @@ public class TSToastHost @JvmOverloads constructor(
         @JvmOverloads
         public fun install(
             activity: Activity,
-            queue: TSToastQueue = TSToastQueue(TSToastTimeouts.timeoutFor(activity)),
+            queue: TSToastQueue = TSToastQueue(TSToastTimeouts.default),
             scheduler: TSToastScheduler = TSToastScheduler.Main,
         ): TSToastHost {
             val content = activity.findViewById<ViewGroup>(android.R.id.content)

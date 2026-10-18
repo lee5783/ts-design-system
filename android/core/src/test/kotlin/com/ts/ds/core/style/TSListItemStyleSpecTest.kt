@@ -1,7 +1,6 @@
 package com.ts.ds.core.style
 
 import com.ts.ds.core.icon.TSIcon
-import com.ts.ds.core.logic.TSListItemAccessibility
 import com.ts.ds.core.logic.TSListItemRole
 import com.ts.ds.tokens.TSTokenValues
 import org.junit.Assert.assertEquals
@@ -181,12 +180,5 @@ class TSListItemStyleSpecMatrixTest {
         assertTrue(TSListItemRole.Navigation.isPressable)
         assertFalse(TSListItemRole.Plain.isPressable)
         assertFalse(TSListItemRole.Toggle.isPressable)
-    }
-
-    @Test
-    fun labelJoinsTitleAndSubtitle() {
-        assertEquals("Wi-Fi, Home", TSListItemAccessibility.label("Wi-Fi", "Home"))
-        assertEquals("Wi-Fi", TSListItemAccessibility.label("Wi-Fi", null))
-        assertEquals("Wi-Fi", TSListItemAccessibility.label("Wi-Fi", ""))
     }
 }

@@ -3,9 +3,6 @@ package com.ts.ds.views.components.badge
 import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
 import android.view.View
-import android.widget.TextView
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSBadgeTone
 import com.ts.ds.core.style.TSColorRole
@@ -33,24 +30,13 @@ class TSBadgeViewTest {
         }
     }
 
-    private fun TSBadgeView.nodeInfo(): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(this, it) }
-
     @Test
-    fun labelIsTheTextAndItIsStaticText() {
+    fun badgeIsStatic() {
         val view = badge { tone = TSBadgeTone.Success; showsDot = true; icon = TSIcon.Star }
-        val info = view.nodeInfo()
 
-        assertEquals("New", info.text.toString())
-        assertEquals(TextView::class.java.name, info.className)
-        assertFalse(info.isClickable)
         assertFalse(view.isClickable)
         assertFalse(view.isFocusable)
         assertFalse(view.hasOnClickListeners())
-        assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_YES, view.importantForAccessibility)
-        (0 until view.childCount).forEach {
-            assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO, view.getChildAt(it).importantForAccessibility)
-        }
     }
 
     @Test

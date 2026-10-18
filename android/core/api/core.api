@@ -144,12 +144,6 @@ public final class com/ts/ds/core/input/TSTextInputTraits$Companion {
 	public final fun getUsername ()Lcom/ts/ds/core/input/TSTextInputTraits;
 }
 
-public final class com/ts/ds/core/logic/TSAlertAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSAlertAccessibility;
-	public final fun label (Landroid/content/Context;Lcom/ts/ds/core/style/TSAlertTone;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-	public final fun toneName (Landroid/content/Context;Lcom/ts/ds/core/style/TSAlertTone;)Ljava/lang/String;
-}
-
 public final class com/ts/ds/core/logic/TSAvatarImage {
 	public static final field INSTANCE Lcom/ts/ds/core/logic/TSAvatarImage;
 	public final fun usable (Landroid/graphics/drawable/Drawable;)Landroid/graphics/drawable/Drawable;
@@ -165,29 +159,11 @@ public final class com/ts/ds/core/logic/TSBadgeCountFormatter {
 	public static synthetic fun format$default (Lcom/ts/ds/core/logic/TSBadgeCountFormatter;Landroid/content/Context;IIILjava/lang/Object;)Ljava/lang/String;
 }
 
-public final class com/ts/ds/core/logic/TSBottomNavAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSBottomNavAccessibility;
-	public final fun badgeText (Landroid/content/Context;Ljava/lang/Integer;)Ljava/lang/String;
-	public final fun value (Landroid/content/Context;IILjava/lang/Integer;Z)Ljava/lang/String;
-	public static synthetic fun value$default (Lcom/ts/ds/core/logic/TSBottomNavAccessibility;Landroid/content/Context;IILjava/lang/Integer;ZILjava/lang/Object;)Ljava/lang/String;
-}
-
-public final class com/ts/ds/core/logic/TSCardAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSCardAccessibility;
-	public final fun customActions (Ljava/util/List;Ljava/util/List;ZLcom/ts/ds/core/logic/TSCardAccessory;)Ljava/util/List;
-	public static synthetic fun customActions$default (Lcom/ts/ds/core/logic/TSCardAccessibility;Ljava/util/List;Ljava/util/List;ZLcom/ts/ds/core/logic/TSCardAccessory;ILjava/lang/Object;)Ljava/util/List;
-	public final fun label (Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-	public static synthetic fun label$default (Lcom/ts/ds/core/logic/TSCardAccessibility;Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;ILjava/lang/Object;)Ljava/lang/String;
-	public final fun value (Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-}
-
 public abstract interface class com/ts/ds/core/logic/TSCardAccessory {
-	public abstract fun getCustomAction ()Lcom/ts/ds/core/logic/TSCardAction;
 }
 
 public final class com/ts/ds/core/logic/TSCardAccessory$IconButton : com/ts/ds/core/logic/TSCardAccessory {
 	public fun <init> (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
-	public fun getCustomAction ()Lcom/ts/ds/core/logic/TSCardAction;
 	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
 	public final fun getLabel ()Ljava/lang/String;
 	public final fun getOnClick ()Lkotlin/jvm/functions/Function0;
@@ -262,13 +238,6 @@ public final class com/ts/ds/core/logic/TSInitials {
 	public final fun from (Ljava/lang/String;)Ljava/lang/String;
 }
 
-public final class com/ts/ds/core/logic/TSListItemAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSListItemAccessibility;
-	public final fun expansionState (Landroid/content/Context;Z)Ljava/lang/String;
-	public final fun hint (Landroid/content/Context;Lcom/ts/ds/core/logic/TSListItemRole;)Ljava/lang/String;
-	public final fun label (Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-}
-
 public final class com/ts/ds/core/logic/TSListItemRole : java/lang/Enum {
 	public static final field Action Lcom/ts/ds/core/logic/TSListItemRole;
 	public static final field Companion Lcom/ts/ds/core/logic/TSListItemRole$Companion;
@@ -283,27 +252,6 @@ public final class com/ts/ds/core/logic/TSListItemRole : java/lang/Enum {
 
 public final class com/ts/ds/core/logic/TSListItemRole$Companion {
 	public final fun make (ZZZ)Lcom/ts/ds/core/logic/TSListItemRole;
-}
-
-public final class com/ts/ds/core/logic/TSTabsAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSTabsAccessibility;
-	public final fun position (Landroid/content/Context;IIZ)Ljava/lang/String;
-	public static synthetic fun position$default (Lcom/ts/ds/core/logic/TSTabsAccessibility;Landroid/content/Context;IIZILjava/lang/Object;)Ljava/lang/String;
-}
-
-public final class com/ts/ds/core/logic/TSTextFieldAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSTextFieldAccessibility;
-	public final fun errorDescription (Landroid/content/Context;Ljava/lang/String;)Ljava/lang/String;
-	public final fun hasError (Ljava/lang/String;)Z
-	public final fun hint (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-	public final fun toggleLabel (Landroid/content/Context;Z)Ljava/lang/String;
-}
-
-public final class com/ts/ds/core/logic/TSToastAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToastAccessibility;
-	public final fun announcement (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastMessage;)Ljava/lang/String;
-	public final fun label (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastTone;Ljava/lang/CharSequence;)Ljava/lang/String;
-	public final fun toneName (Landroid/content/Context;Lcom/ts/ds/core/logic/TSToastTone;)Ljava/lang/String;
 }
 
 public final class com/ts/ds/core/logic/TSToastEntry {
@@ -365,12 +313,9 @@ public final class com/ts/ds/core/logic/TSToastScheduler$Companion {
 
 public final class com/ts/ds/core/logic/TSToastTimeouts {
 	public static final field DEFAULT_MILLIS J
+	public static final field EXTENDED_MILLIS J
 	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToastTimeouts;
-	public static final field RECOMMENDED_TIMEOUT_MIN_SDK I
-	public static final field SCREEN_READER_MILLIS J
-	public final fun resolve (Landroid/content/Context;Z)Ljava/lang/Long;
-	public final fun resolve (ZZILkotlin/jvm/functions/Function1;)Ljava/lang/Long;
-	public final fun timeoutFor (Landroid/content/Context;)Lkotlin/jvm/functions/Function1;
+	public final fun getDefault ()Lkotlin/jvm/functions/Function1;
 }
 
 public final class com/ts/ds/core/logic/TSToastTone : java/lang/Enum {
@@ -382,18 +327,6 @@ public final class com/ts/ds/core/logic/TSToastTone : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/ts/ds/core/logic/TSToastTone;
 	public static fun values ()[Lcom/ts/ds/core/logic/TSToastTone;
-}
-
-public final class com/ts/ds/core/logic/TSToggleAccessibility {
-	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToggleAccessibility;
-	public final fun checkboxState (Landroid/content/Context;Z)Ljava/lang/String;
-	public final fun switchState (Landroid/content/Context;Z)Ljava/lang/String;
-}
-
-public final class com/ts/ds/core/motion/TSReduceMotion {
-	public static final field INSTANCE Lcom/ts/ds/core/motion/TSReduceMotion;
-	public final fun durationMillis (IZ)I
-	public final fun isEnabled ()Z
 }
 
 public final class com/ts/ds/core/style/TSAlertStyleSpec : com/ts/ds/core/style/TSStyleSpec {
@@ -1285,27 +1218,23 @@ public final class com/ts/ds/core/style/TSIconStyleSpec : com/ts/ds/core/style/T
 
 public final class com/ts/ds/core/style/TSIconStyleSpec$Configuration {
 	public fun <init> ()V
-	public fun <init> (Lcom/ts/ds/core/style/TSIconSize;Z)V
-	public synthetic fun <init> (Lcom/ts/ds/core/style/TSIconSize;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/ts/ds/core/style/TSIconSize;)V
+	public synthetic fun <init> (Lcom/ts/ds/core/style/TSIconSize;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcom/ts/ds/core/style/TSIconSize;
-	public final fun component2 ()Z
-	public final fun copy (Lcom/ts/ds/core/style/TSIconSize;Z)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
-	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;Lcom/ts/ds/core/style/TSIconSize;ZILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
+	public final fun copy (Lcom/ts/ds/core/style/TSIconSize;)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;Lcom/ts/ds/core/style/TSIconSize;ILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Configuration;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getHasLabel ()Z
 	public final fun getSize ()Lcom/ts/ds/core/style/TSIconSize;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/ts/ds/core/style/TSIconStyleSpec$Resolved {
-	public fun <init> (FZ)V
+	public fun <init> (F)V
 	public final fun component1 ()F
-	public final fun component2 ()Z
-	public final fun copy (FZ)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
-	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;FZILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
+	public final fun copy (F)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
+	public static synthetic fun copy$default (Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;FILjava/lang/Object;)Lcom/ts/ds/core/style/TSIconStyleSpec$Resolved;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getImportantForAccessibility ()Z
 	public final fun getSizeDp ()F
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

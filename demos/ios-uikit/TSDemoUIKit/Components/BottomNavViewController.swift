@@ -125,7 +125,7 @@ final class BottomNavViewController: DemoPageViewController {
     }
 
     private static func bar(_ items: [TSBottomNavItem], selectedID: String? = nil) -> TSBottomNavView {
-        TSBottomNavView(items: items, selectedID: selectedID, label: DemoStrings.string(.sampleMainNavigation))
+        TSBottomNavView(items: items, selectedID: selectedID)
     }
 }
 

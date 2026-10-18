@@ -4,10 +4,6 @@ final class TSTabView: UIControl {
     let item: TSTabItem
     let labelView = UILabel()
 
-    var position: (index: Int, count: Int) {
-        didSet { applyStyle() }
-    }
-
     var variant: TSTabsVariant {
         didSet { applyStyle() }
     }
@@ -29,9 +25,8 @@ final class TSTabView: UIControl {
     private var minHeightConstraint: NSLayoutConstraint?
     private var labelInsets: [NSLayoutConstraint] = []
 
-    init(item: TSTabItem, position: (index: Int, count: Int), variant: TSTabsVariant) {
+    init(item: TSTabItem, variant: TSTabsVariant) {
         self.item = item
-        self.position = position
         self.variant = variant
         super.init(frame: .zero)
         configureHierarchy()
@@ -75,16 +70,9 @@ final class TSTabView: UIControl {
         TSHitArea.expandedRect(bounds).contains(point)
     }
 
-    override func accessibilityActivate() -> Bool {
-        guard isEnabled else { return false }
-        onSelect(self)
-        return true
-    }
-
     private func configureHierarchy() {
         labelView.translatesAutoresizingMaskIntoConstraints = false
         labelView.isUserInteractionEnabled = false
-        labelView.isAccessibilityElement = false
         labelView.setContentCompressionResistancePriority(.required, for: .vertical)
         labelView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         labelView.baselineAdjustment = .alignCenters
@@ -143,13 +131,6 @@ final class TSTabView: UIControl {
         layer.cornerCurve = .continuous
         alpha = resolved.opacity
 
-        isAccessibilityElement = true
-        accessibilityLabel = item.label
-        accessibilityValue = TSStrings.tabPosition(position.index + 1, of: position.count)
-        var accessibilityTraits: UIAccessibilityTraits = isSelected ? .selected : []
-        if !isEnabled {
-            accessibilityTraits.insert(.notEnabled)
-        }
-        self.accessibilityTraits = accessibilityTraits
+        isAccessibilityElement = false
     }
 }

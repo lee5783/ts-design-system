@@ -41,7 +41,6 @@ public struct TSDisclosureListItem<Leading: View, Content: View>: View {
             .buttonStyle(TSListItemStyle(isFocused: isFocused, stateOverride: stateOverride))
             .focused($isFocused)
             .tsFocusEffectDisabled()
-            .accessibilityValue(Text(TSListItemAccessibility.expansionValue(isExpanded: isExpanded)))
             if isExpanded {
                 content
                     .frame(maxWidth: .infinity, alignment: .leading)

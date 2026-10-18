@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.foundation.tsFocusRing
 import com.ts.ds.compose.foundation.tsVisibleFocusRing
@@ -49,7 +48,6 @@ internal fun Modifier.tsControlClickable(
     interactionSource = interactionSource,
     indication = null,
     enabled = enabled,
-    role = Role.Button,
     onClick = onClick,
 ).tsMinimumTouchTarget(minTouchTargetDp.dp)
 

@@ -11,29 +11,25 @@ final class FormComponentsTests: XCTestCase {
     func testTextFieldTypingErrorAndPasswordToggle() {
         let app = launch(page: "text-field")
         let field = app.textFields[fieldID].firstMatch
+        let container = app.descendants(matching: .any)[fieldID].firstMatch
         scrollTo(field, in: app)
-        XCTAssertEqual(field.label, "Email")
         field.tap()
         field.typeText("ada@example.com\n")
         XCTAssertEqual(field.value as? String, "ada@example.com")
 
         flip(app, "demo.text-field.playground.error")
         scrollTo(field, in: app)
-        XCTAssertEqual(field.value as? String, "ada@example.com, Error: Enter an email like name@example.com")
+        XCTAssertEqual(field.value as? String, "ada@example.com")
 
         flip(app, "demo.text-field.playground.error")
         flip(app, "demo.text-field.playground.secure")
         let secure = app.secureTextFields[fieldID].firstMatch
         scrollTo(secure, in: app)
         XCTAssertFalse(app.textFields[fieldID].exists)
-        let show = lastButton(app, "Show password")
-        XCTAssertTrue(show.waitForExistence(timeout: 5))
-        show.tap()
+        passwordToggle(app, container: container, field: secure).tap()
         XCTAssertTrue(app.textFields[fieldID].firstMatch.waitForExistence(timeout: 5))
         XCTAssertEqual(app.textFields[fieldID].firstMatch.value as? String, "ada@example.com")
-        let hide = lastButton(app, "Hide password")
-        XCTAssertTrue(hide.exists)
-        hide.tap()
+        passwordToggle(app, container: container, field: app.textFields[fieldID].firstMatch).tap()
         XCTAssertTrue(app.secureTextFields[fieldID].firstMatch.waitForExistence(timeout: 5))
     }
 
@@ -43,7 +39,6 @@ final class FormComponentsTests: XCTestCase {
         let codeID = "demo.text-field.code.field"
         let field = app.textFields[codeID].firstMatch
         scrollTo(field, in: app)
-        XCTAssertEqual(field.label, "Join code")
         field.tap()
         field.typeText("AB12CD\n")
         XCTAssertEqual(field.value as? String, "AB12CD")
@@ -62,7 +57,6 @@ final class FormComponentsTests: XCTestCase {
         let readOnly = app.textViews[fieldID].firstMatch
         scrollTo(readOnly, in: app)
         XCTAssertFalse(app.textFields[fieldID].exists)
-        XCTAssertEqual(readOnly.label, "Email")
     }
 
     @MainActor
@@ -80,22 +74,23 @@ final class FormComponentsTests: XCTestCase {
         let app = launch(page: page)
         let control = app.descendants(matching: .any)[identifier].firstMatch
         let counter = app.staticTexts["demo.\(page).playground.count"].firstMatch
+        let state = app.staticTexts["demo.\(page).playground.value"].firstMatch
         scrollTo(control, in: app)
         XCTAssertGreaterThanOrEqual(control.frame.height, 44)
-        XCTAssertEqual(control.value as? String, off)
+        XCTAssertEqual(state.label, off)
         control.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
-        XCTAssertEqual(control.value as? String, on)
+        XCTAssertEqual(state.label, on)
         control.tap()
-        XCTAssertEqual(control.value as? String, off)
+        XCTAssertEqual(state.label, off)
         control.tap()
-        XCTAssertEqual(control.value as? String, on)
+        XCTAssertEqual(state.label, on)
         XCTAssertEqual(counter.label, "Tapped 3 times")
 
         flip(app, "demo.\(page).playground.disabled")
         scrollTo(control, in: app)
         XCTAssertFalse(control.isEnabled)
         control.tap()
-        XCTAssertEqual(control.value as? String, on)
+        XCTAssertEqual(state.label, on)
         XCTAssertEqual(counter.label, "Tapped 3 times")
     }
 
@@ -109,9 +104,8 @@ final class FormComponentsTests: XCTestCase {
     }
 
     @MainActor
-    private func lastButton(_ app: XCUIApplication, _ label: String) -> XCUIElement {
-        let matches = app.buttons.matching(NSPredicate(format: "label == %@", label))
-        return matches.element(boundBy: max(0, matches.count - 1))
+    private func passwordToggle(_ app: XCUIApplication, container: XCUIElement, field: XCUIElement) -> XCUICoordinate {
+        app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: container.frame.maxX - 38, dy: field.frame.midY))
     }
 
     @MainActor

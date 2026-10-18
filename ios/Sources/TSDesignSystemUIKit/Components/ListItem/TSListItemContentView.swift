@@ -13,15 +13,10 @@ public final class TSListItemContentView: UIView, UIContentView {
         didSet { applyStyle() }
     }
 
-    var togglePath: TSCompatPath = TSCompat.toggleTrait {
-        didSet { applyStyle() }
-    }
-
     weak var accessibilityHost: UIView? {
         didSet { applyStyle() }
     }
 
-    var activate: (@MainActor () -> Bool)?
     var toggleDidChange: (@MainActor (Bool) -> Void)?
 
     let rowStack = UIStackView()
@@ -67,24 +62,6 @@ public final class TSListItemContentView: UIView, UIContentView {
     override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyStyle()
-    }
-
-    override public func accessibilityActivate() -> Bool {
-        performAccessibilityActivation()
-    }
-
-    func performAccessibilityActivation() -> Bool {
-        let configuration = itemConfiguration
-        guard configuration.isEnabled else { return false }
-        switch configuration.role {
-        case .toggle:
-            switchSlot.switchView.userDidToggle()
-            return true
-        case .action, .navigation:
-            return activate?() ?? false
-        case .plain:
-            return false
-        }
     }
 
     private func configureHierarchy() {
@@ -150,24 +127,12 @@ public final class TSListItemContentView: UIView, UIContentView {
         backgroundColor = resolved.background?.uiColor.resolvedColor(with: traits) ?? .clear
         alpha = resolved.opacity
 
-        applyAccessibility(configuration)
+        applyAccessibility()
     }
 
-    private func applyAccessibility(_ configuration: TSListItemConfiguration) {
-        let element = accessibilityHost ?? self
-        let role = configuration.role
-        isAccessibilityElement = accessibilityHost == nil
-        element.isAccessibilityElement = true
-        element.accessibilityLabel = TSListItemAccessibility.label(title: configuration.title, subtitle: configuration.subtitle)
-        element.accessibilityHint = configuration.expansionState == nil ? TSListItemAccessibility.hint(for: role) : nil
-        element.accessibilityTraits = role.isPressable ? .button : []
-        element.accessibilityValue = configuration.expansionState.map { TSListItemAccessibility.expansionValue(isExpanded: $0) } ?? trailingAccessibilityValue(configuration.trailing)
-        if let isOn = configuration.trailing.isOn {
-            TSAccessibilityTraitsCompat.apply(to: element, isOn: isOn, kind: .switch, path: togglePath)
-        }
-        if !configuration.isEnabled {
-            element.accessibilityTraits.insert(.notEnabled)
-        }
+    private func applyAccessibility() {
+        isAccessibilityElement = false
+        accessibilityHost?.isAccessibilityElement = false
     }
 
     private func applyLeading(_ leading: TSListItemLeading) {
@@ -239,14 +204,6 @@ public final class TSListItemContentView: UIView, UIContentView {
             }
         }
         return true
-    }
-
-    private func trailingAccessibilityValue(_ trailing: TSListItemTrailing) -> String? {
-        switch trailing {
-        case .none, .toggle: nil
-        case let .text(text): text
-        case let .badge(text, _): text
-        }
     }
 
     private func switchDidChange() {

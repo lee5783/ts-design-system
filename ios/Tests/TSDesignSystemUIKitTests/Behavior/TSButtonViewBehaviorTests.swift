@@ -21,7 +21,7 @@ struct TSButtonViewBehaviorTests {
         #expect(counter.count == 1)
     }
 
-    @Test("isEnabled = false blocks actions and adds the not-enabled trait")
+    @Test("isEnabled = false blocks actions")
     func disabledBlocks() {
         let counter = TapCounter()
         let button = makeButton(counter: counter)
@@ -29,12 +29,10 @@ struct TSButtonViewBehaviorTests {
         button.layoutIfNeeded()
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 0)
-        #expect(button.accessibilityTraits.contains(.notEnabled))
-        #expect(button.accessibilityTraits.contains(.button))
         #expect(abs(button.alpha - 0.45) < 0.001)
     }
 
-    @Test("Loading blocks actions and touches, keeps full opacity and reads Loading")
+    @Test("Loading blocks actions and touches and keeps full opacity")
     func loadingBlocks() {
         let counter = TapCounter()
         let button = makeButton(counter: counter)
@@ -43,25 +41,11 @@ struct TSButtonViewBehaviorTests {
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 0)
         #expect(!button.isUserInteractionEnabled)
-        #expect(button.accessibilityTraits.contains(.notEnabled))
-        #expect(button.accessibilityValue == "Loading")
-        #expect(button.accessibilityLabel == "Save changes")
         #expect(button.alpha == 1)
         button.isLoading = false
         button.layoutIfNeeded()
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 1)
-        #expect(button.accessibilityValue == nil)
-        #expect(!button.accessibilityTraits.contains(.notEnabled))
-    }
-
-    @Test("Traits and label at rest")
-    func accessibilityAtRest() {
-        let button = makeButton(counter: TapCounter())
-        #expect(button.accessibilityTraits.contains(.button))
-        #expect(!button.accessibilityTraits.contains(.notEnabled))
-        #expect(button.accessibilityLabel == "Save changes")
-        #expect(button.accessibilityValue == nil)
     }
 
     @Test("Height is at least the control height for the size", arguments: TSButtonSize.allCases)
@@ -158,7 +142,6 @@ struct TSButtonViewBehaviorTests {
         #expect(trailing?.isHidden == false)
         #expect(trailing?.image?.renderingMode == .alwaysTemplate)
         #expect(trailing?.frame.size == CGSize(width: resolved.iconSize, height: resolved.iconSize))
-        #expect(trailing?.isAccessibilityElement == false)
     }
 
     @Test("Loading replaces only the leading consumer image")

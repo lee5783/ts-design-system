@@ -13,16 +13,11 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
-import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -69,16 +64,6 @@ class TSAvatarTest {
     }
 
     @Test
-    fun labelIsTheNameWithTheImageRoleAndNoClick() {
-        setAvatar { TSAvatar("Ada Lovelace", modifier = Modifier.testTag("avatar")) }
-
-        composeRule.onNodeWithContentDescription("Ada Lovelace")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image))
-            .assert(!hasClickAction())
-        composeRule.onNodeWithTag("avatar").assertContentDescriptionEquals("Ada Lovelace")
-    }
-
-    @Test
     fun initialsWhenThereIsNoImage() {
         setAvatar { TSAvatar("Ada Lovelace", modifier = Modifier.testTag("avatar")) }
         assertContent(TSAvatarContent.Initials)
@@ -100,10 +85,6 @@ class TSAvatarTest {
     fun blankNameWithoutImageShowsThePlaceholder() {
         setAvatar { TSAvatar("  ", modifier = Modifier.testTag("avatar")) }
         assertContent(TSAvatarContent.Placeholder)
-        composeRule.onNodeWithTag("avatar")
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Role))
-            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.HideFromAccessibility))
     }
 
     @Test

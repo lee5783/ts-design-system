@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
 import com.ts.ds.compose.components.icon.TSIconSource
@@ -26,7 +24,6 @@ import com.ts.ds.core.style.TSIconButtonVariant
 @Composable
 public fun TSIconButton(
     icon: TSIcon,
-    contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     variant: TSIconButtonVariant = TSIconButtonVariant.Ghost,
@@ -36,7 +33,6 @@ public fun TSIconButton(
 ) {
     TSIconButton(
         icon = TSIconSource.Ts(icon),
-        contentDescription = contentDescription,
         onClick = onClick,
         modifier = modifier,
         variant = variant,
@@ -49,7 +45,6 @@ public fun TSIconButton(
 @Composable
 public fun TSIconButton(
     icon: TSIconSource,
-    contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     variant: TSIconButtonVariant = TSIconButtonVariant.Ghost,
@@ -64,7 +59,6 @@ public fun TSIconButton(
     Box(
         modifier = modifier
             .tsControlClickable(source, state.interactive, onClick, resolved.minTouchTargetDp)
-            .semantics { this.contentDescription = contentDescription }
             .tsControlChrome(
                 interactionSource = source,
                 shape = if (round) CircleShape else RoundedCornerShape(resolved.cornerRadiusDp.dp),

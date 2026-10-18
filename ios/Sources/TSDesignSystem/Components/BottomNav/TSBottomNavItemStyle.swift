@@ -18,7 +18,6 @@ struct TSBottomNavItemBody<Label: View>: View {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
@@ -34,7 +33,7 @@ struct TSBottomNavItemBody<Label: View>: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .contentShape(Rectangle())
         .opacity(resolved.opacity)
-        .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+        .animation(TSAnimation.pressFeedback, value: state)
     }
 
     private var labelMaximumSize: DynamicTypeSize {

@@ -83,7 +83,7 @@ final class OverlayFlowsTests: XCTestCase {
         let show = element(app, "demo.toast.typing.show")
         XCTAssertTrue(show.isHittable)
         show.tap()
-        let toast = app.staticTexts["Success, Changes saved"].firstMatch
+        let toast = app.staticTexts["Changes saved"].firstMatch
         XCTAssertTrue(toast.waitForExistence(timeout: 5))
         XCTAssertTrue(keyboard.exists)
         XCTAssertLessThanOrEqual(toast.frame.maxY, keyboard.frame.minY, "The toast \(toast.frame) is covered by the keyboard \(keyboard.frame)")
@@ -100,7 +100,7 @@ final class OverlayFlowsTests: XCTestCase {
         show.tap()
         let message = app.staticTexts["Message deleted"].firstMatch
         XCTAssertTrue(message.waitForExistence(timeout: 5))
-        let undo = app.buttons.matching(NSPredicate(format: "label == 'Undo'")).allElementsBoundByIndex
+        let undo = app.staticTexts.matching(NSPredicate(format: "label == 'Undo'")).allElementsBoundByIndex
             .first { $0.frame.minY >= message.frame.minY - 200 && $0.isHittable }
         XCTAssertNotNil(undo)
         attachScreenshot(app, named: "toast-undo-ax5-rtl")
@@ -118,7 +118,7 @@ final class OverlayFlowsTests: XCTestCase {
         let title = app.staticTexts["Toasts sit above sheets"].firstMatch
         XCTAssertTrue(title.waitForExistence(timeout: 5))
         app.buttons["Copy link"].firstMatch.tap()
-        let toast = app.staticTexts["Success, Link copied"].firstMatch
+        let toast = app.staticTexts["Link copied"].firstMatch
         XCTAssertTrue(toast.waitForExistence(timeout: 5))
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12)).tap()
         XCTAssertTrue(title.waitForNonExistence(timeout: 3))
@@ -141,15 +141,13 @@ final class OverlayFlowsTests: XCTestCase {
         attachScreenshot(app, named: "bottom-nav-shell-rtl")
         XCTAssertEqual(app.tabBars.count, 0)
         inbox.tap()
-        XCTAssertTrue(inbox.isSelected)
         XCTAssertTrue(app.staticTexts["demo.bottom-nav.shell.title.demo.sample.inbox"].firstMatch.waitForExistence(timeout: 2))
     }
 
     @MainActor
     private func shellTab(_ label: String, in app: XCUIApplication) -> XCUIElement {
-        app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@ AND value BEGINSWITH %@", label, "Tab, "))
-            .firstMatch
+        let matches = app.staticTexts.matching(NSPredicate(format: "label == %@", label)).allElementsBoundByIndex
+        return matches.max { $0.frame.midY < $1.frame.midY } ?? app.staticTexts[label].firstMatch
     }
 
     @MainActor

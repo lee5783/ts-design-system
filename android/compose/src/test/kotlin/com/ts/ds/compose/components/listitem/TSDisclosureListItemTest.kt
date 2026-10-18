@@ -14,11 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.getBoundsInRoot
@@ -26,7 +21,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.view.drawToBitmap
@@ -104,25 +98,9 @@ class TSDisclosureListItemTest {
     }
 
     @Test
-    fun headerIsAButtonThatReportsItsExpansionState() {
-        setContent { Disclosure() }
-        header()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Collapsed"))
-            .assert(SemanticsMatcher.keyIsDefined(SemanticsActions.Expand))
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsActions.Collapse))
-        header().performSemanticsAction(SemanticsActions.Expand)
-        header()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Expanded"))
-            .assert(SemanticsMatcher.keyIsDefined(SemanticsActions.Collapse))
-        header().performSemanticsAction(SemanticsActions.Collapse)
-        assertEquals(listOf(true, false), changes)
-    }
-
-    @Test
     fun disabledRowDoesNotToggle() {
         setContent { Disclosure(enabled = false) }
-        header().assertIsNotEnabled().assert(SemanticsMatcher.keyNotDefined(SemanticsActions.Expand))
+        header().assertIsNotEnabled()
         header().performClick()
         assertTrue(changes.isEmpty())
     }

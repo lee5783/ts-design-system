@@ -1,17 +1,14 @@
 package com.ts.ds.views.components.iconbutton
 
-import android.widget.ImageButton
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSIconButtonVariant
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
+import com.ts.ds.views.components.sampleController
 import com.ts.ds.views.components.shared.TSControlBackground
 import com.ts.ds.views.components.shared.TSIconSlotDrawable
 import com.ts.ds.views.components.tapCenter
-import com.ts.ds.views.snapshots.sampleController
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -51,12 +48,10 @@ class TSIconButtonViewTest {
     }
 
     @Test
-    fun labelIsTheContentDescriptionOfAnImageButton() {
+    fun labelIsTheContentDescription() {
         val view = iconButton()
-        val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
 
-        assertEquals("Search", info.contentDescription.toString())
-        assertEquals(ImageButton::class.java.name, info.className)
+        assertEquals("Search", view.label.toString())
     }
 
     @Test
@@ -101,12 +96,11 @@ class TSIconButtonViewTest {
             iconDrawable = context.sampleController(48f)
             label = "Controller"
         }
-        val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
 
         assertEquals(24, view.drawable.intrinsicWidth)
         assertEquals(24, view.drawable.intrinsicHeight)
         assertEquals(24, view.drawable.bounds.width())
-        assertEquals("Controller", info.contentDescription.toString())
+        assertEquals("Controller", view.label.toString())
         assertEquals(48, view.width)
 
         assertTrue(view.drawable is TSIconSlotDrawable)

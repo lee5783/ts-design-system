@@ -37,8 +37,8 @@ final class IconsViewController: DemoPageViewController {
             (.xCircle, .sampleError, .danger),
             (.info, .sampleInformation, .info)
         ]
-        let row = UIStackView(arrangedSubviews: status.map { name, key, color in
-            let icon = TSIconView(name, size: .lg, label: DemoStrings.string(key))
+        let row = UIStackView(arrangedSubviews: status.map { name, _, color in
+            let icon = TSIconView(name, size: .lg)
             icon.tintColor = color.uiColor
             return icon
         })

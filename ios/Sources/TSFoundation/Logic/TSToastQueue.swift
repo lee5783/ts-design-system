@@ -54,18 +54,6 @@ public struct TSToastItem: Identifiable {
 public enum TSToastTimeout {
     public static let standard: TimeInterval = 4
     public static let extended: TimeInterval = 10
-
-    public static func duration(
-        hasAction: Bool,
-        isVoiceOverRunning: Bool,
-        standard: TimeInterval = standard
-    ) -> TimeInterval? {
-        switch (hasAction, isVoiceOverRunning) {
-        case (true, true): nil
-        case (false, false): standard
-        default: max(standard, extended)
-        }
-    }
 }
 
 public protocol TSToastCancellable {
@@ -105,16 +93,14 @@ public final class TSToastQueue: ObservableObject {
     @Published public private(set) var pending: [TSToastItem] = []
 
     private let scheduler: any TSToastScheduling
-    private let isVoiceOverRunning: @MainActor () -> Bool
     private var timer: (any TSToastCancellable)?
 
     public convenience init() {
-        self.init(scheduler: TSToastTaskScheduler(), isVoiceOverRunning: { UIAccessibility.isVoiceOverRunning })
+        self.init(scheduler: TSToastTaskScheduler())
     }
 
-    public init(scheduler: any TSToastScheduling, isVoiceOverRunning: @escaping @MainActor () -> Bool) {
+    public init(scheduler: any TSToastScheduling) {
         self.scheduler = scheduler
-        self.isVoiceOverRunning = isVoiceOverRunning
     }
 
     @discardableResult
@@ -124,12 +110,9 @@ public final class TSToastQueue: ObservableObject {
         return item.id
     }
 
-    public func timeout(for item: TSToastItem) -> TimeInterval? {
-        TSToastTimeout.duration(
-            hasAction: item.action != nil,
-            isVoiceOverRunning: isVoiceOverRunning(),
-            standard: item.duration ?? TSToastTimeout.standard
-        )
+    public func timeout(for item: TSToastItem) -> TimeInterval {
+        let standard = item.duration ?? TSToastTimeout.standard
+        return item.action == nil ? standard : max(standard, TSToastTimeout.extended)
     }
 
     public func dismiss(_ id: TSToastItem.ID) {
@@ -165,10 +148,32 @@ public final class TSToastQueue: ObservableObject {
         guard current == nil, !pending.isEmpty else { return }
         let next = pending.removeFirst()
         current = next
-        guard let timeout = timeout(for: next) else { return }
+        let timeout = timeout(for: next)
         let id = next.id
         timer = scheduler.schedule(after: timeout) { [weak self] in
             self?.dismiss(id)
+        }
+    }
+}
+
+@MainActor
+package final class TSToastShowEffects {
+    private let haptics: TSHaptics
+    private var lastShownID: TSToastItem.ID?
+
+    package init(haptics: TSHaptics = .shared) {
+        self.haptics = haptics
+    }
+
+    package func didChange(to item: TSToastItem?) {
+        guard let item else {
+            lastShownID = nil
+            return
+        }
+        guard item.id != lastShownID else { return }
+        lastShownID = item.id
+        if let event = item.tone.hapticEvent {
+            haptics.play(event)
         }
     }
 }

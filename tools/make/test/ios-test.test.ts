@@ -47,7 +47,7 @@ async function fakeXcrun(runtimes: string[], devices: string[]): Promise<string>
 }
 
 async function dryRun(xcrun: string, ...variables: string[]): Promise<string> {
-  const { stdout } = await run("make", ["-n", "-s", "ios-test", `XCRUN=${xcrun}`, ...variables], { cwd: repoRoot });
+  const { stdout } = await run("make", ["-n", "-s", "ios-test", `XCRUN=${xcrun}`, "IOS_RUNTIMES=pinned oldest", ...variables], { cwd: repoRoot });
   return stdout;
 }
 
@@ -86,42 +86,46 @@ describe("make ios-test destinations", () => {
   });
 });
 
-describe("pinned snapshot simulator", () => {
-  const deviceSource = path.join(repoRoot, "ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift");
-
-  function swiftConstant(source: string, name: string): string {
-    const match = new RegExp(`public static let ${name} = "([^"]+)"`).exec(source);
-    if (!match?.[1]) throw new Error(`TSSnapshotDevice.swift has no ${name}`);
+describe("pinned simulator", () => {
+  function pinFile(source: string, name: string): string {
+    const match = new RegExp(`^${name}=(.+)$`, "m").exec(source);
+    if (!match?.[1]) throw new Error(`.ios-simulator has no ${name}`);
     return match[1];
   }
 
-  it("defaults IOS_SIM_DEVICE and IOS_SIM_OS to the constants the snapshot suites compare against", async () => {
-    const source = await readFile(deviceSource, "utf8");
+  it("defaults IOS_SIM_DEVICE and IOS_SIM_OS to the simulator pinned in .ios-simulator", async () => {
+    const pin = await readFile(path.join(repoRoot, ".ios-simulator"), "utf8");
     const output = await dryRun("false", "IOS_RUNTIMES=pinned");
-    expect(output).toContain(`-destination 'platform=iOS Simulator,name=${swiftConstant(source, "pinnedSimulator")},OS=${swiftConstant(source, "pinnedOSVersion")}'`);
+    expect(output).toContain(`-destination 'platform=iOS Simulator,name=${pinFile(pin, "device")},OS=${pinFile(pin, "os")}'`);
   });
 
-  it("follows a bump of the Swift constants with no Makefile edit", async () => {
-    const bumped = path.join(dir, "TSSnapshotDevice.swift");
-    const source = await readFile(deviceSource, "utf8");
-    await writeFile(bumped, source.replace(/pinnedSimulator = "[^"]+"/, 'pinnedSimulator = "iPhone 18"').replace(/pinnedOSVersion = "[^"]+"/, 'pinnedOSVersion = "27.0"'));
-    const output = await dryRun("false", "IOS_RUNTIMES=pinned", `IOS_SNAPSHOT_DEVICE_SWIFT=${bumped}`);
+  it("follows a bump of the pin file with no Makefile edit", async () => {
+    const bumped = path.join(dir, ".ios-simulator");
+    await writeFile(bumped, "device=iPhone 18\nos=27.0\n");
+    const output = await dryRun("false", "IOS_RUNTIMES=pinned", `IOS_SIMULATOR_FILE=${bumped}`);
     expect(output).toContain("-destination 'platform=iOS Simulator,name=iPhone 18,OS=27.0'");
   });
+});
 
-  it("leaves every snapshot key unset in ios-test, so the snapshot suites skip on both legs", async () => {
-    const source = await readFile(deviceSource, "utf8");
+describe("make ios-build-for-testing and ios-test-only", () => {
+  it("builds the tests once for the generic simulator, before any test run", async () => {
     const output = await dryRun(await fakeXcrun(RUNTIMES, DEVICES_WITH_OLD_IPHONE));
-    expect(output.match(/xcodebuild test/g)).toHaveLength(2);
-    for (const name of ["verifyEnvironmentKey", "recordEnvironmentKey", "requirePinnedEnvironmentKey"]) expect(output).not.toContain(swiftConstant(source, name));
+    expect(output.match(/xcodebuild build-for-testing/g)).toHaveLength(1);
+    expect(output).toContain("xcodebuild build-for-testing -scheme TSDesignSystem-Package -destination 'generic/platform=iOS Simulator'");
+    expect(output.indexOf("build-for-testing")).toBeLessThan(output.indexOf("test-without-building"));
+    expect(output.match(/xcodebuild test-without-building/g)).toHaveLength(2);
   });
 
-  it("verifies the snapshot targets once, on the pinned simulator, under the keys the Swift guard reads", async () => {
-    const source = await readFile(deviceSource, "utf8");
-    const { stdout } = await run("make", ["-n", "-s", "ios-snapshot-verify", `XCRUN=${await fakeXcrun(RUNTIMES, DEVICES_WITH_OLD_IPHONE)}`], { cwd: repoRoot });
-    expect(stdout.match(/xcodebuild test/g)).toHaveLength(1);
-    expect(stdout).toContain(`TEST_RUNNER_${swiftConstant(source, "verifyEnvironmentKey")}=1 TEST_RUNNER_${swiftConstant(source, "requirePinnedEnvironmentKey")}=1 xcodebuild test`);
-    expect(stdout).toContain(`-destination 'platform=iOS Simulator,name=${swiftConstant(source, "pinnedSimulator")},OS=${swiftConstant(source, "pinnedOSVersion")}'`);
-    expect(stdout).toContain("-only-testing:TSDesignSystemTests -only-testing:TSDesignSystemUIKitTests");
+  it("runs the selected tests without a build or the golden type-check", async () => {
+    const { stdout } = await run("make", ["-n", "-s", "ios-test-only", `XCRUN=${await fakeXcrun(RUNTIMES, DEVICES_WITH_OLD_IPHONE)}`, "IOS_RUNTIMES=pinned", "IOS_TESTS=TSFoundationTests/TSToastQueueTests TSTokensTests"], { cwd: repoRoot });
+    expect(stdout).not.toContain("build-for-testing");
+    expect(stdout).not.toContain("swiftc");
+    expect(stdout).toContain("-only-testing:TSFoundationTests/TSToastQueueTests -only-testing:TSTokensTests");
+  });
+
+  it("defaults the local run to the pinned runtime", async () => {
+    const { stdout } = await run("make", ["-n", "-s", "ios-test", `XCRUN=${await fakeXcrun(RUNTIMES, DEVICES_WITH_OLD_IPHONE)}`], { cwd: repoRoot });
+    expect(stdout.match(/xcodebuild test-without-building/g)).toHaveLength(1);
+    expect(stdout).not.toContain("OS=15.5");
   });
 });

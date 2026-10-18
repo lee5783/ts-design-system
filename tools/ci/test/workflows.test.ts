@@ -75,8 +75,6 @@ function allJobs(): [string, string, Job][] {
 }
 
 const RELEASE_GATES = { "codegen-check": "codegen-check.yml", ios: "ios.yml", android: "android.yml", demos: "demos.yml" } as const;
-const AUDIT_CONDITION =
-  "github.event_name != 'pull_request' || (github.event.action == 'labeled' && github.event.label.name == 'a11y-audit') || (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'a11y-audit'))";
 const AGGREGATORS: Record<string, string> = { "codegen-check.yml": "codegen-check-ok", "ios.yml": "ios-ok", "android.yml": "android-ok", "demos.yml": "demos-ok" };
 const RELEASE_WRITE_PERMISSIONS: Record<string, Record<string, string>> = {
   "publish-android": { contents: "read", packages: "write" },
@@ -103,7 +101,7 @@ async function miseTool(name: string): Promise<string> {
 
 describe("workflow files", () => {
   it("has the expected workflows", () => {
-    expect(files).toEqual(["android.yml", "codegen-check.yml", "demos-audit.yml", "demos.yml", "ios.yml", "release.yml"]);
+    expect(files).toEqual(["android.yml", "codegen-check.yml", "demos.yml", "ios.yml", "release.yml"]);
   });
 
   it("grants only read access to the repository contents, except the two release jobs that need write", () => {
@@ -177,7 +175,7 @@ describe("workflow files", () => {
   it("turns the hardware keyboard off before every iOS simulator test", () => {
     for (const [file, name, entry] of allJobs()) {
       const targets = makeTargets(entry);
-      const firstTest = targets.findIndex((target) => /^(ios-test|demo-ios-.*-(test|audit))$/.test(target));
+      const firstTest = targets.findIndex((target) => /^(ios-test|ios-test-only|demo-ios-.*-(test|test-only))$/.test(target));
       if (firstTest < 0) continue;
       expect(targets.indexOf("ci-ios-simulator"), `${file} ${name}`).toBeGreaterThanOrEqual(0);
       expect(targets.indexOf("ci-ios-simulator"), `${file} ${name}`).toBeLessThan(firstTest);
@@ -254,19 +252,6 @@ describe("required jobs", () => {
     expect(source).toContain("demo: ${{ fromJSON(needs.changes.outputs.android_demos) }}");
     expect(source).toContain("api: [26, 36]");
   });
-
-  it("keeps the iOS accessibility audits out of the pull request run", () => {
-    for (const [file, name, entry] of allJobs().filter(([candidate]) => candidate !== "demos-audit.yml")) {
-      expect(makeTargets(entry).filter((target) => target.endsWith("-audit") || target === "demos-audit"), `${file} ${name}`).toEqual([]);
-    }
-    const audit = workflow("demos-audit.yml");
-    expect(Object.keys(audit.on).sort()).toEqual(["pull_request", "schedule", "workflow_dispatch"]);
-    expect(audit.on.pull_request).toEqual({ types: ["labeled", "synchronize"] });
-    expect(job("demos-audit.yml", "ios-audit").if).toBe(AUDIT_CONDITION);
-    expect(audit.concurrency).toBeUndefined();
-    expect(job("demos-audit.yml", "ios-audit").concurrency).toEqual({ group: "demos-audit-${{ matrix.demo }}-${{ github.ref }}", "cancel-in-progress": "${{ github.event_name == 'pull_request' }}" });
-    expect(makeTargets(job("demos-audit.yml", "ios-audit"))).toEqual(["ci-xcode", "ci-ios-simulator", "demo-ios-$DEMO-audit"]);
-  });
 });
 
 describe("required-check aggregators", () => {
@@ -307,45 +292,6 @@ describe("theme override cross case", () => {
     expect(demo.steps[flip]?.env).toEqual({ IOS_SIM_APPEARANCE: "dark" });
     expect(demo.steps[flip]?.if).toBe("matrix.runtime == 'pinned'");
     expect(demo.steps[theme]?.if).toBe("matrix.runtime == 'pinned'");
-  });
-});
-
-describe("audit trigger", () => {
-  type Event = { name: string; action?: string; label?: string; labels?: string[] };
-
-  function auditRuns(event: Event): boolean {
-    const expression = job("demos-audit.yml", "ios-audit").if ?? "";
-    expect(expression).toBe(AUDIT_CONDITION);
-    if (event.name !== "pull_request") return true;
-    if (event.action === "labeled") return event.label === "a11y-audit";
-    if (event.action === "synchronize") return (event.labels ?? []).includes("a11y-audit");
-    return false;
-  }
-
-  it("runs when the a11y-audit label is added, and again on each push to a PR that carries it", () => {
-    expect(auditRuns({ name: "pull_request", action: "labeled", label: "a11y-audit", labels: ["a11y-audit"] })).toBe(true);
-    expect(auditRuns({ name: "pull_request", action: "synchronize", labels: ["ios", "a11y-audit"] })).toBe(true);
-  });
-
-  it("does not run for another label or for a push to an unlabelled PR", () => {
-    expect(auditRuns({ name: "pull_request", action: "labeled", label: "ios", labels: ["ios", "a11y-audit"] })).toBe(false);
-    expect(auditRuns({ name: "pull_request", action: "synchronize", labels: ["ios"] })).toBe(false);
-  });
-
-  it("always runs on the nightly schedule and on dispatch", () => {
-    expect(auditRuns({ name: "schedule" })).toBe(true);
-    expect(auditRuns({ name: "workflow_dispatch" })).toBe(true);
-  });
-});
-
-describe("snapshot references", () => {
-  it("never compares, records or downloads snapshot references in CI, since they are local and git-ignored", () => {
-    for (const [file, name, entry] of allJobs()) {
-      expect(makeTargets(entry).filter((target) => target.includes("snapshot")), `${file} ${name}`).toEqual([]);
-      for (const step of entry.steps.filter((candidate) => candidate.uses?.startsWith("actions/checkout@"))) expect(step.with?.lfs, `${file} ${name}`).toBeUndefined();
-      for (const step of entry.steps) expect(step.with?.path ?? "", `${file} ${name}`).not.toContain("snapshot");
-    }
-    for (const [file, source] of sources) expect(source, file).not.toMatch(/lfs|SNAPSHOT_ARTIFACTS|TS_SNAPSHOT_VERIFY|roborazzi\.test\.verify/i);
   });
 });
 

@@ -38,7 +38,6 @@ public struct TSListSection<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .tsFont(group.headerFont)
                     .padding(.horizontal, group.headerHorizontalPadding)
-                    .accessibilityAddTraits(.isHeader)
             }
             TSList {
                 content

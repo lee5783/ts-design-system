@@ -8,12 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.logic.TSDialogAction
 import com.ts.ds.core.logic.TSDialogLayout
 import com.ts.ds.core.style.TSDialogActionsAxis
@@ -37,7 +34,6 @@ internal class TSDialogPanelView @JvmOverloads constructor(
     private val scrollView = NestedScrollView(context)
     private val contentView = LinearLayout(context)
     private val bodyContainer = FrameLayout(context)
-    private var closeActionId = View.NO_ID
 
     var variant: TSDialogVariant = TSDialogVariant.Center
         set(value) {
@@ -91,7 +87,6 @@ internal class TSDialogPanelView @JvmOverloads constructor(
             it.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
             it.gravity = Gravity.START
         }
-        ViewCompat.setAccessibilityHeading(titleView, true)
         addView(grabberView, LayoutParams(0, 0).apply { gravity = Gravity.CENTER_HORIZONTAL })
         contentView.addView(titleView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
         bodyContainer.addView(messageView, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
@@ -148,7 +143,6 @@ internal class TSDialogPanelView @JvmOverloads constructor(
         messageView.setTextColor(tsColor(resolved.bodyColor))
         bodyContainer.isVisible = messageView.isVisible || bodyView != null
         applyActions(resolved)
-        applyAccessibility()
     }
 
     private fun applyActions(resolved: TSDialogStyleSpec.Resolved) {
@@ -174,19 +168,6 @@ internal class TSDialogPanelView @JvmOverloads constructor(
                     if (vertical) topMargin = if (index > 0) spacing else 0 else marginStart = if (index > 0) spacing else 0
                 },
             )
-        }
-    }
-
-    private fun applyAccessibility() {
-        ViewCompat.setAccessibilityPaneTitle(this, title)
-        if (closeActionId != View.NO_ID) ViewCompat.removeAccessibilityAction(this, closeActionId)
-        closeActionId = ViewCompat.addAccessibilityAction(this, context.getString(CoreR.string.ts_close)) { _, _ ->
-            onClose()
-            true
-        }
-        ViewCompat.replaceAccessibilityAction(this, AccessibilityActionCompat.ACTION_DISMISS, context.getString(CoreR.string.ts_close)) { _, _ ->
-            onClose()
-            true
         }
     }
 }

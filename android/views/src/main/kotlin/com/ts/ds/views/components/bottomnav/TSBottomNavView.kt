@@ -6,14 +6,9 @@ import android.graphics.Paint
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
-import android.view.View
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSBottomNavItem
 import com.ts.ds.core.style.TSBottomNavStyleSpec
 import com.ts.ds.views.R
@@ -38,7 +33,7 @@ public class TSBottomNavView @JvmOverloads constructor(
     private var selection = ""
     private var ready = false
 
-    internal var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    internal var reduceMotion: () -> Boolean = { false }
         set(value) {
             field = value
             itemViews.forEach { it.reduceMotion = value }
@@ -58,34 +53,12 @@ public class TSBottomNavView @JvmOverloads constructor(
             applySelection(animated = false)
         }
 
-    public var label: CharSequence? = null
-        set(value) {
-            field = value
-            contentDescription = value
-        }
-
     init {
         orientation = HORIZONTAL
         setWillNotDraw(false)
         val container = TSBottomNavStyleSpec.container
         setBackgroundColor(tsColor(container.fill))
         hairlinePaint.color = tsColor(container.border)
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.setCollectionInfo(
-                        AccessibilityNodeInfoCompat.CollectionInfoCompat.obtain(
-                            1,
-                            items.size,
-                            false,
-                            AccessibilityNodeInfoCompat.CollectionInfoCompat.SELECTION_MODE_SINGLE,
-                        ),
-                    )
-                }
-            },
-        )
         applySystemBarInsetsAsPadding(
             start = true,
             end = true,
@@ -93,7 +66,6 @@ public class TSBottomNavView @JvmOverloads constructor(
             insetTypes = WindowInsetsCompat.Type.navigationBars(),
         )
         context.obtainStyledAttributes(attrs, R.styleable.TSBottomNavView, defStyleAttr, 0).apply {
-            label = getText(R.styleable.TSBottomNavView_tsLabel)
             isEnabled = getBoolean(R.styleable.TSBottomNavView_android_enabled, true)
             recycle()
         }
@@ -178,7 +150,6 @@ public class TSBottomNavView @JvmOverloads constructor(
         if (!ready) return
         val selectedIndex = selectedIndex
         itemViews.forEachIndexed { index, view ->
-            view.updatePosition(index, itemViews.size)
             view.setItemSelected(index == selectedIndex, animated)
         }
     }

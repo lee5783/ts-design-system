@@ -16,14 +16,13 @@ struct TSToastViewBehaviorTests {
         return view
     }
 
-    @Test("The message is one element read as tone and message; the tone sets the on-inverse icon", arguments: TSToastTone.allCases)
+    @Test("The tone sets the on-inverse icon", arguments: TSToastTone.allCases)
     func messageElement(tone: TSToastTone) {
         let toast = layout(TSToastView("Project archived", tone: tone))
         let traits = toast.traitCollection
         let resolved = TSToastStyleSpec.resolve(.init(tone: tone))
         #expect(!toast.isAccessibilityElement)
-        #expect(toast.messageView.isAccessibilityElement)
-        #expect(toast.messageView.accessibilityLabel == TSToastAccessibility.label(tone: tone, message: "Project archived"))
+        #expect(!toast.messageView.isAccessibilityElement)
         #expect(toast.backgroundColor == TSColor.surfaceInverse.uiColor.resolvedColor(with: traits))
         #expect(toast.iconView.isHidden == (resolved.icon == nil))
         if let icon = resolved.icon, let color = resolved.iconColor {
@@ -32,21 +31,17 @@ struct TSToastViewBehaviorTests {
         }
     }
 
-    @Test("The action is a separate, underlined Undo button that fires from a tap or activation")
+    @Test("The action is a separate, underlined Undo button that fires from a tap")
     func actionFires() {
         let counter = TapCounter()
         let toast = layout(TSToastView("Project archived", actionTitle: "Undo", onAction: { counter.tap() }))
         let button = toast.actionButton
         #expect(!button.isHidden)
         #expect(!button.isDescendant(of: toast.messageView))
-        #expect(button.accessibilityLabel == "Undo")
-        #expect(button.accessibilityTraits.contains(.button))
         let underline = button.titleLabel.attributedText?.attribute(.underlineStyle, at: 0, effectiveRange: nil) as? Int
         #expect(underline == NSUnderlineStyle.single.rawValue)
         button.sendActions(for: .touchUpInside)
         #expect(counter.count == 1)
-        #expect(button.accessibilityActivate())
-        #expect(counter.count == 2)
     }
 
     @Test("Without an action the action button is hidden")

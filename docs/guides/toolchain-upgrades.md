@@ -14,9 +14,9 @@ Config: `.github/renovate.json` (tested by `tools/ci/test/renovate.test.ts`). It
 | AGP, Kotlin and KSP | AGP, the Android application/library plugins, Kotlin libraries and plugins | `android` |
 | Compose BOM | `androidx.compose:compose-bom` (calendar versions, so majors are not split off) | `android` |
 | Material Components | `com.google.android.material:material` | `android` |
-| Android test libraries | JUnit, Robolectric, Roborazzi, `androidx.test*`, ATF, Guava (limited to `-android` versions) | `android` |
+| Android test libraries | JUnit, Robolectric, `androidx.test*` | `android` |
 | Gradle wrapper | the library and both demo wrappers | `android` |
-| SPM test dependencies | swift-snapshot-testing, ViewInspector (`Package.swift`) | `ios` |
+| SPM test dependencies | ViewInspector (`Package.swift`) | `ios` |
 | npm tools | `tools/package.json` (`@types/node` capped below 23 to follow Node 22) | `tools` |
 | Codegen-sensitive npm packages | `canvaskit-wasm`, `opentype.js`, `style-dictionary` | `tools`, `codegen` |
 | GitHub Actions | action major tags | `ci` |
@@ -28,7 +28,7 @@ Not grouped (one PR each): `compose-lints`, the vanniktech publish plugin, the b
 **Reviewing a Renovate PR:**
 
 - CI runs only the areas the PR touches ([../integrations.md](../integrations.md)): a Compose BOM bump runs the Android library and Android demo jobs, an SPM bump the iOS jobs.
-- CI compares no snapshots. For a bump that can change pixels (Compose BOM, MDC, Xcode), record a baseline on `master`, check out the PR, run `make ios-snapshot-verify` / `make android-snapshot-verify` and review the diffs before approving ([snapshot-workflow.md](snapshot-workflow.md)).
+- CI compares no pixels. For a bump that can change visuals (Compose BOM, MDC, Xcode), take argent screenshots of the affected demo pages on `master` and on the PR (pinned iOS simulator, one Android emulator at API 36) and compare them before approving.
 - **SPM PRs edit `Package.swift` only.** Run `swift package resolve` locally and push the updated `Package.resolved` to the PR branch. Patch releases inside an `.upToNextMinor` range never get a PR, because the committed `Package.resolved` pins them.
 - A codegen-sensitive npm bump can change generated output: run `make codegen-check` and the golden tests.
 - Before approving a JDK or Node major, check AGP and Gradle support (Gradle 8.14 cannot run on JDK 25).
@@ -37,8 +37,8 @@ Not grouped (one PR each): `compose-lints`, the vanniktech publish plugin, the b
 
 | Item | Where | Together with |
 |---|---|---|
-| **Xcode** | `.xcode-version` | the `macos-*` runner image in the workflows; the simulator runtime; usually the pinned snapshot simulator (below) |
-| **Pinned snapshot simulator** | `pinnedSimulator` and `pinnedOSVersion` in `ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift` (the Makefile reads them; never set them in the Makefile) | every contributor re-records their local iOS baseline (`make ios-snapshot-record`); CI's `ci-ios-simulator` fails if the runner image lacks that simulator |
+| **Xcode** | `.xcode-version` | the `macos-*` runner image in the workflows; the simulator runtime; usually the pinned iOS simulator (below) |
+| **Pinned iOS simulator** | `device=` and `os=` in `.ios-simulator` (the Makefile reads them into `IOS_SIM_DEVICE` / `IOS_SIM_OS`; never set them in the Makefile) | local test runs and evidence screenshots move to the new simulator; CI's `ci-ios-simulator` fails if the runner image lacks it |
 | **Android SDK levels** | `COMPILE_SDK`, `TARGET_SDK`, `MIN_SDK` in `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt`; `compileSdk` / `targetSdk` / `minSdk` in both `demos/android-*/app/build.gradle.kts` | the emulator matrix `api: [26, 36]` in `.github/workflows/demos.yml`; `@Config(sdk = …)` values in tests; raising `MIN_SDK` is a major release |
 | **`swift-tools-version` and `.iOS(.v15)`** | `Package.swift`, `demos/ios-demo-support/Package.swift`, `IPHONEOS_DEPLOYMENT_TARGET` in both demo `project.pbxproj` files | raising either is a major release |
 | **`engines.node`** | `tools/package.json` (`>=22`) | a Node major (Renovate detects the range but opens no PR while it is satisfied) |
@@ -51,6 +51,6 @@ Once a year, when Apple and Google ship new OS versions:
 
 1. Move to the new Xcode and SDK, and to the new compile/target SDK on Android.
 2. Re-check the custom chrome that new OS designs break most often: the hidden system tab bar and `TSBottomNavShell` (Liquid Glass on iOS), sheet geometry and detents, predictive back, edge-to-edge insets, and the toast overlay window above sheets and the keyboard.
-3. Run the four demo apps and the snapshot suites on the beta OS versions; record OS-specific differences in [../architecture.md](../architecture.md) and [../concerns.md](../concerns.md).
-4. Re-record snapshots only for reviewed diffs, together with the pinned-simulator bump.
+3. Run the four demo apps and the behaviour suites on the beta OS versions; record OS-specific differences in [../architecture.md](../architecture.md) and [../concerns.md](../concerns.md).
+4. Bump the pinned simulator in `.ios-simulator` once the new runtime is on the CI runner image.
 5. Batch minimum-OS raises into a major release ([deprecation-policy.md](deprecation-policy.md)).

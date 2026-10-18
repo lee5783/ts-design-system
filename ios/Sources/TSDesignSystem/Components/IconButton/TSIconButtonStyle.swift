@@ -18,7 +18,6 @@ struct TSIconButtonStyleBody<Label: View>: View {
 
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.tsDimmedByContainer) private var isDimmedByContainer
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isFocused: style.isFocused)
@@ -35,6 +34,6 @@ struct TSIconButtonStyleBody<Label: View>: View {
             .contentShape(Rectangle())
             .tsFocusRing(isFocused: resolved.showsFocusRing, cornerRadius: resolved.cornerRadius, style: style.isRound ? .circular : .continuous)
             .opacity(isDimmedByContainer ? 1 : resolved.opacity)
-            .animation(TSPressFeedback.animation(reduceMotion: reduceMotion), value: state)
+            .animation(TSAnimation.pressFeedback, value: state)
     }
 }

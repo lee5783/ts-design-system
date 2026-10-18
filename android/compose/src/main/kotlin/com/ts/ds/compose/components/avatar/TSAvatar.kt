@@ -17,12 +17,8 @@ import androidx.compose.ui.geometry.isUnspecified
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,15 +52,7 @@ public fun TSAvatar(
 
     Box(
         modifier = modifier
-            .clearAndSetSemantics {
-                if (name.isNotBlank()) {
-                    contentDescription = name
-                    role = Role.Image
-                } else {
-                    hideFromAccessibility()
-                }
-                tsAvatarContent = content
-            }
+            .semantics { tsAvatarContent = content }
             .size(resolved.diameterDp.dp)
             .clip(CircleShape)
             .background(colors.color(resolved.fill)),

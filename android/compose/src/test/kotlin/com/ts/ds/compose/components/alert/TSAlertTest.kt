@@ -7,24 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -35,7 +26,6 @@ import com.ts.ds.core.style.TSAlertTone
 import com.ts.ds.core.style.TSButtonSize
 import com.ts.ds.core.style.TSButtonVariant
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -61,39 +51,12 @@ class TSAlertTest {
     }
 
     @Test
-    fun messageIsOneElementPerTone() {
-        val names = mapOf(
-            TSAlertTone.Info to "Information",
-            TSAlertTone.Success to "Success",
-            TSAlertTone.Warning to "Warning",
-            TSAlertTone.Danger to "Error",
-        )
-        setContent {
-            Column {
-                names.keys.forEach { tone ->
-                    TSAlert("Free up space", tone = tone, title = "Storage almost full", modifier = Modifier.testTag(tone.name))
-                }
-            }
-        }
-
-        names.forEach { (tone, name) ->
-            val message = composeRule.onAllNodesWithTag(TSAlertTestTags.MESSAGE)[tone.ordinal]
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("$name, Storage almost full, Free up space")))
-                .fetchSemanticsNode()
-            assertNull(message.config.getOrNull(SemanticsProperties.Text))
-        }
-    }
-
-    @Test
-    fun dismissFiresFromTheButtonAndTheAccessibilityAction() {
+    fun dismissFiresFromTheButton() {
         setContent { TSAlert("Saved", title = "Done", onDismiss = { dismissals++ }) }
 
-        composeRule.onNodeWithContentDescription("Dismiss")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
-            .performClick()
-        composeRule.onNodeWithTag(TSAlertTestTags.MESSAGE).performSemanticsAction(SemanticsActions.Dismiss)
+        composeRule.onNodeWithTag(TSAlertTestTags.DISMISS, useUnmergedTree = true).performClick()
 
-        assertEquals(2, dismissals)
+        assertEquals(1, dismissals)
     }
 
     @Test
@@ -101,7 +64,6 @@ class TSAlertTest {
         setContent { TSAlert("Saved", title = "Done") }
 
         composeRule.onAllNodesWithTag(TSAlertTestTags.DISMISS, useUnmergedTree = true).assertCountEquals(0)
-        assertNull(composeRule.onNodeWithTag(TSAlertTestTags.MESSAGE).fetchSemanticsNode().config.getOrNull(SemanticsActions.Dismiss))
     }
 
     @Test
@@ -126,25 +88,9 @@ class TSAlertTest {
             }
         }
 
-        composeRule.onNodeWithTag(TSAlertTestTags.MESSAGE)
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Error, Upload failed")))
         composeRule.onNodeWithText("Retry").performClick()
 
         assertEquals(1, retries)
-    }
-
-    @Test
-    fun liveRegionOnlyWhenShownDynamically() {
-        setContent {
-            Column {
-                TSAlert("Static", modifier = Modifier.testTag("static"))
-                TSAlert("Dynamic", announcesWhenShown = true, modifier = Modifier.testTag("dynamic"))
-            }
-        }
-
-        val messages = composeRule.onAllNodesWithTag(TSAlertTestTags.MESSAGE, useUnmergedTree = true)
-        assertNull(messages[0].fetchSemanticsNode().config.getOrNull(SemanticsProperties.LiveRegion))
-        messages[1].assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
     }
 
     @Test

@@ -11,7 +11,6 @@ class CheckboxFragment : DemoPageFragment(R.layout.page_checkbox) {
     override val page: DemoPageId = DemoPageId.Checkbox
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         rows.findViewById<LinearLayout>(R.id.toggle_states).bindToggleStates(SPEC)
         rows.findViewById<LinearLayout>(R.id.toggle_playground).bindTogglePlayground(SPEC)
     }

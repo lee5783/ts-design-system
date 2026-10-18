@@ -5,8 +5,6 @@ import android.graphics.Rect
 import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityManager
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
@@ -113,24 +111,6 @@ class TSListDecorationTest {
             val expectedBottom = if ((rows[position] as SampleRow.Item).position.roundsBottom) 24 else 0
             assertEquals(expectedBottom, offsets.bottom - view.bottom)
             assertEquals(0, view.top - offsets.top)
-        }
-    }
-
-    @Test
-    fun rowsKeepTheirAccessibilityWhenRecycledAfterAScreenReaderStarts() {
-        val (list, _) = host(groupedRows(listOf(12, 12)))
-        shadowOf(list.context.getSystemService(AccessibilityManager::class.java)).setEnabled(true)
-        repeat(6) {
-            list.scrollBy(0, 400)
-            idle()
-        }
-
-        val rows = list.rows()
-        assertTrue(rows.isNotEmpty())
-        rows.forEach { (_, row) ->
-            val info = row.createAccessibilityNodeInfo()
-            assertEquals(row.title.toString(), info.text?.toString())
-            assertEquals(Button::class.java.name, info.className?.toString())
         }
     }
 

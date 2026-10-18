@@ -40,25 +40,6 @@ struct TSInteractionTests {
         #expect(TSPressFeedback.duration == TSMotion.durationFast)
     }
 
-    @Test("Reduce motion removes animation and turns transitions into fades")
-    func reduceMotion() {
-        #expect(TSReduceMotion.animation(reduceMotion: true) == nil)
-        #expect(TSReduceMotion.animation(reduceMotion: false) != nil)
-        #expect(TSPressFeedback.animation(reduceMotion: true) == nil)
-        #expect(TSReduceMotion.duration(TSMotion.durationSlow, reduceMotion: true) == 0)
-        #expect(TSReduceMotion.duration(TSMotion.durationSlow, reduceMotion: false) == TSMotion.durationSlow)
-    }
-
-    @Test("UIKit animations run immediately with reduce motion on")
-    @MainActor
-    func reduceMotionUIKit() {
-        var animated = false
-        var completed = false
-        TSReduceMotion.animate(reduceMotion: true, animations: { animated = true }, completion: { completed = true })
-        #expect(animated)
-        #expect(completed)
-    }
-
     @Test("Haptics map to UIFeedbackGenerator types")
     func hapticMapping() {
         #expect(TSHapticEvent.selection.notificationType == nil)

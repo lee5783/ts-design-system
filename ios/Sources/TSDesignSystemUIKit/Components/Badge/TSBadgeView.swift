@@ -75,8 +75,7 @@ public final class TSBadgeView: UIView {
         let fitsContent = heightAnchor.constraint(equalToConstant: resolved.minHeight)
         fitsContent.priority = .defaultLow
         fitsContent.isActive = true
-        isAccessibilityElement = true
-        accessibilityTraits = .staticText
+        isAccessibilityElement = false
     }
 
     private func applyStyle() {
@@ -93,7 +92,6 @@ public final class TSBadgeView: UIView {
         iconView.size = resolved.iconSize
         iconView.tintColor = foreground
         textLabel.attributedText = truncatingText(resolved.font, color: foreground)
-        accessibilityLabel = text
     }
 
     private func truncatingText(_ font: TSFont, color: UIColor) -> NSAttributedString {

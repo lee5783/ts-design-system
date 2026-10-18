@@ -54,7 +54,7 @@ enum TSDialogRoute: String, Hashable, CaseIterable {
     case sheetBridge
     case nativeSheet
 
-    static func resolve(variant: TSDialogVariant, sheetPath: TSCompatPath, reduceMotion: Bool) -> TSDialogRoute {
+    static func resolve(variant: TSDialogVariant, sheetPath: TSCompatPath, reduceMotion: Bool = false) -> TSDialogRoute {
         switch variant {
         case .center:
             .overFullScreen
@@ -140,14 +140,13 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
 
     @StateObject private var session = TSDialogSession()
     @State private var sheetHeight: CGFloat?
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.locale) private var locale
 
     var route: TSDialogRoute {
-        TSDialogRoute.resolve(variant: variant, sheetPath: sheetPath, reduceMotion: reduceMotion)
+        TSDialogRoute.resolve(variant: variant, sheetPath: sheetPath)
     }
 
     private var resolved: TSDialogStyleSpec.Resolved {
@@ -199,7 +198,6 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
                     environment: environment,
                     cornerRadius: resolved.cornerRadius,
                     background: resolved.fill.uiColor,
-                    reduceMotion: reduceMotion,
                     detentPath: detentPath,
                     onDidDismiss: didDismiss,
                     onRefused: refuseLater,
@@ -226,7 +224,7 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
             .onAppear(perform: session.didAppear)
     }
 
-    func panel(focusesTitle: Bool = true) -> TSDialogPanel<DialogContent> {
+    func panel() -> TSDialogPanel<DialogContent> {
         TSDialogPanel(
             title: title,
             variant: variant,
@@ -234,13 +232,12 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
             hasBody: hasBody,
             onAction: perform,
             onClose: close,
-            content: content,
-            focusesTitle: focusesTitle
+            content: content
         )
     }
 
     private func measure(width: CGFloat) -> CGFloat {
-        let host = UIHostingController(rootView: panel(focusesTitle: false).tsPresentationEnvironment(environment))
+        let host = UIHostingController(rootView: panel().tsPresentationEnvironment(environment))
         return host.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
     }
 

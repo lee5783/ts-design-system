@@ -49,47 +49,18 @@ struct TSBottomNavViewBehaviorTests {
         nav.selectedID = "profile"
         #expect(counter.count == 0)
         #expect(nav.selectedItemView?.item.id == "profile")
-        #expect(nav.itemViews[3].accessibilityTraits.contains(.selected))
     }
 
-    @Test("isEnabled = false blocks selection, adds the not-enabled trait and dims the items")
+    @Test("isEnabled = false blocks selection and dims the items")
     func disabledBlocks() {
         let counter = TapCounter()
         let nav = TSBottomNavView(items: items)
         nav.addAction(UIAction { _ in counter.tap() }, for: .valueChanged)
         nav.isEnabled = false
         nav.itemViews[1].sendActions(for: .touchUpInside)
-        #expect(!nav.itemViews[1].accessibilityActivate())
         #expect(nav.selectedID == "home")
         #expect(counter.count == 0)
-        #expect(nav.itemViews.allSatisfy { $0.accessibilityTraits.contains(.notEnabled) })
         #expect(nav.itemViews.allSatisfy { abs($0.alpha - 0.45) < 0.001 })
-    }
-
-    @Test("VoiceOver activation selects like a tap")
-    func accessibilityActivate() {
-        let nav = TSBottomNavView(items: items)
-        nav.reduceMotion = { true }
-        #expect(nav.itemViews[3].accessibilityActivate())
-        #expect(nav.selectedID == "profile")
-    }
-
-    @Test("Each item is one element: label, \"Tab, n of N\" plus the badge, the selected trait only when selected, no button trait")
-    func accessibility() {
-        let nav = TSBottomNavView(items: items, selectedID: "inbox", label: "Main")
-        #expect(!nav.isAccessibilityElement)
-        #expect(nav.accessibilityLabel == "Main")
-        #expect(nav.accessibilityContainerType == .semanticGroup)
-        let values = ["Tab, 1 of 4", "Tab, 2 of 4, 3 new", "Tab, 3 of 4", "Tab, 4 of 4, 99+ new"]
-        for (index, itemView) in nav.itemViews.enumerated() {
-            #expect(itemView.isAccessibilityElement)
-            #expect(itemView.accessibilityLabel == items[index].label)
-            #expect(itemView.accessibilityValue == values[index])
-            #expect(itemView.accessibilityTraits.contains(.selected) == (index == 1))
-            #expect(!itemView.accessibilityTraits.contains(.button))
-            #expect(!itemView.labelView.isAccessibilityElement)
-            #expect(!itemView.badgeLabel.isAccessibilityElement)
-        }
     }
 
     @Test("Badges show the formatted count and hide without one; updating a badge keeps the item views")
@@ -103,7 +74,6 @@ struct TSBottomNavViewBehaviorTests {
         #expect(nav.itemViews.count == views.count)
         #expect(zip(nav.itemViews, views).allSatisfy { $0 === $1 })
         #expect(nav.itemViews[1].badgeView.isHidden)
-        #expect(nav.itemViews[1].accessibilityValue == "Tab, 2 of 4")
     }
 
     @Test("Replacing the items rebuilds them and keeps a valid selection")
@@ -112,7 +82,6 @@ struct TSBottomNavViewBehaviorTests {
         nav.items = Array(items.prefix(3))
         #expect(nav.itemViews.count == 3)
         #expect(nav.selectedID == "home")
-        #expect(nav.itemViews[2].accessibilityValue == "Tab, 3 of 3")
     }
 
     @Test("Five items share the width equally; the bar is 64 plus the bottom safe area")
@@ -180,8 +149,7 @@ struct TSTabBarControllerBehaviorTests {
     private func makeController() -> (TSTabBarController, UIWindow) {
         let controller = TSTabBarController(
             items: items,
-            viewControllers: items.map { _ in UIViewController() },
-            label: "Main"
+            viewControllers: items.map { _ in UIViewController() }
         )
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
         window.rootViewController = controller
@@ -203,7 +171,7 @@ struct TSTabBarControllerBehaviorTests {
         return bars
     }
 
-    @Test("The system tab bar is hidden and out of VoiceOver; the TS bottom nav is on top")
+    @Test("The system tab bar is hidden; the TS bottom nav is on top")
     func systemTabBarIsHidden() {
         let (controller, window) = makeController()
         _ = window
@@ -215,7 +183,6 @@ struct TSTabBarControllerBehaviorTests {
         #expect(visibleTabBars(in: window).isEmpty)
         #expect(controller.bottomNav.superview === controller.view)
         #expect(controller.view.subviews.last === controller.bottomNav)
-        #expect(controller.bottomNav.accessibilityLabel == "Main")
     }
 
     @Test("The system tab bar stays hidden after the selection changes and after a relayout")

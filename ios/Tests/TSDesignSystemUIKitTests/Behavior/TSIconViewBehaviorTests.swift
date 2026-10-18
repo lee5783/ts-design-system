@@ -12,16 +12,6 @@ struct TSIconViewBehaviorTests {
         #expect(view.image?.renderingMode == .alwaysTemplate)
     }
 
-    @Test("An unlabelled icon is hidden; a labelled icon is an image element")
-    func accessibility() {
-        let decorative = TSIconView(.home)
-        #expect(!decorative.isAccessibilityElement)
-        let labelled = TSIconView(.bell, label: "Notifications")
-        #expect(labelled.isAccessibilityElement)
-        #expect(labelled.accessibilityLabel == "Notifications")
-        #expect(labelled.accessibilityTraits.contains(.image))
-    }
-
     @Test("Directional icons mirror in right-to-left layouts")
     func mirroring() {
         let rightToLeft = UITraitCollection(layoutDirection: .rightToLeft)

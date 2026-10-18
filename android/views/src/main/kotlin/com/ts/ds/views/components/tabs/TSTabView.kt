@@ -3,12 +3,7 @@ package com.ts.ds.views.components.tabs
 import android.content.Context
 import android.text.TextUtils
 import android.view.Gravity
-import android.view.View
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.logic.TSTabsAccessibility
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSTabItem
@@ -44,8 +39,6 @@ internal class TSTabView(context: Context) : MaterialTextView(context) {
             applyConfiguration()
         }
 
-    var index: Int = 0
-    var count: Int = 1
 
     init {
         background = chrome
@@ -54,17 +47,6 @@ internal class TSTabView(context: Context) : MaterialTextView(context) {
         ellipsize = TextUtils.TruncateAt.END
         isClickable = true
         isFocusable = true
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = View::class.java.name
-                    info.isSelected = isTabSelected
-                    info.setCollectionItemInfo(AccessibilityNodeInfoCompat.CollectionItemInfoCompat.obtain(0, 1, index, 1, false, isTabSelected))
-                }
-            },
-        )
         ready = true
         applyConfiguration()
     }
@@ -74,12 +56,6 @@ internal class TSTabView(context: Context) : MaterialTextView(context) {
 
     internal val resolved: TSTabsStyleSpec.Resolved
         get() = TSTabsStyleSpec.resolve(TSTabsStyleSpec.Configuration(variant, isTabSelected), currentState)
-
-    fun updatePosition(index: Int, count: Int) {
-        this.index = index
-        this.count = count
-        applyState()
-    }
 
     override fun drawableStateChanged() {
         super.drawableStateChanged()
@@ -122,6 +98,5 @@ internal class TSTabView(context: Context) : MaterialTextView(context) {
             ringWidth = focusRingWidth,
             showsRing = resolved.showsFocusRing,
         )
-        ViewCompat.setStateDescription(this, TSTabsAccessibility.position(context, index, count))
     }
 }

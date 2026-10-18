@@ -37,10 +37,8 @@ dependencyResolutionManagement {
             from(files("../../android/gradle/libs.versions.toml"))
             version("androidx-activity", "1.11.0")
             version("androidx-test-runner", "1.7.0")
-            version("guava-android", "31.0.1-android")
             library("androidx-activity-compose", "androidx.activity", "activity-compose").versionRef("androidx-activity")
             library("androidx-test-runner", "androidx.test", "runner").versionRef("androidx-test-runner")
-            library("guava-android", "com.google.guava", "guava").versionRef("guava-android")
             plugin("android-application", "com.android.application").versionRef("agp")
         }
     }

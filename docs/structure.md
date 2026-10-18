@@ -35,7 +35,7 @@ ts-design-system/
 | `design/assets/icons/icons.meta.json` | `mirrorsInRTL` per icon | by hand, when icons change |
 | `design/assets/{icons,logos}/normalized/` | Normalized SVGs (generated) | `make codegen` |
 | `design/extensions/native-tokens.json` | Local token additions with an `upstream` status, plus the `renames` map for deprecated aliases | by hand, see [guides/ds-update-flow.md](guides/ds-update-flow.md) |
-| `design/specs/components/<name>.md` | The cross-toolkit contract per component: API mapping for all 4 toolkits, matrix, accessibility, tests, platform notes | by hand; one spec per component is also what `demos-check-boundaries` checks against |
+| `design/specs/components/<name>.md` | The cross-toolkit contract per component: API mapping for all 4 toolkits, matrix, tests, platform notes | by hand; one spec per component is also what `demos-check-boundaries` checks against |
 
 ### `tools/` (Node 22, `tools/package.json`)
 
@@ -63,8 +63,8 @@ ts-design-system/
 | `TSFoundation` | `ios/Sources/TSFoundation/` | none (re-exported) | Shared, non-rendering layer, see the folder map below |
 | `TSDesignSystem` | `ios/Sources/TSDesignSystem/` | `TSDesignSystem` | SwiftUI: `Components/<Name>/`, `Components/Shared/`, `Presentation/` |
 | `TSDesignSystemUIKit` | `ios/Sources/TSDesignSystemUIKit/` | `TSDesignSystemUIKit` | UIKit: `Components/<Name>/`, `Components/Shared/` |
-| `TSTestSupport` | `ios/Tests/TSTestSupport/` | none (test only) | Snapshot harness: `assertTSSnapshot`, `TSSnapshotConfiguration`, `TSSnapshotDevice` (the pinned simulator) |
-| test targets | `ios/Tests/{TSTokensTests,TSFoundationTests,TSDesignSystemTests,TSDesignSystemUIKitTests}/` | — | UI targets split into `Behavior/` and `Snapshots/` (local, git-ignored references in `Snapshots/__Snapshots__/`) |
+| `TSTestSupport` | `ios/Tests/TSTestSupport/` | none (test only) | Shared test helpers: `TSSampleIconImage`, `TSTestAppearance` |
+| test targets | `ios/Tests/{TSTokensTests,TSFoundationTests,TSDesignSystemTests,TSDesignSystemUIKitTests}/` | — | UI targets keep their suites in `Behavior/` |
 
 Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/TSDesignSystem/Exports.swift`, `ios/Sources/TSDesignSystemUIKit/Exports.swift`), so a consumer imports one module.
 
@@ -73,9 +73,9 @@ Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/T
 | Folder | Holds |
 |---|---|
 | `Styles/` | `TS<Name>StyleSpec` per component, `TSStyleSpec`, `TSControlState+Make` |
-| `Logic/` | Accessibility text (`TS<Name>Accessibility`), `TSInitials`, `TSBadgeCountFormatter`, `TSAvatarImage`, `TSCardAction` (+ `TSCardAccessory`), `TSDialogAction`, `TSDialogPresenter`, `TSToastQueue`, `TSToastWindowing` |
-| `Interaction/` | `TSFocusRing`, `TSHaptics`, `TSHitArea`, `TSPressFeedback`, `TSReduceMotion`, `TSTextInputTraits` |
-| `Compat/` | Every `#available` branch: `TSCompat` (the paths), `TSAccessibilityTraitsCompat`, `TSSheetCompat`, `TSTabBarCompat`, `TSTrackingCompat`, `TSTraitOverridesCompat`, `TSGrowingTextView`, `View+OnChangeCompat`, `View+FocusEffectCompat`, `View+SheetPresentationCompat` |
+| `Logic/` | `TSInitials`, `TSBadgeCountFormatter`, `TSAvatarImage`, `TSCardAction` (+ `TSCardAccessory`), `TSDialogAction`, `TSDialogPresenter`, `TSListItemRole`, `TSToastQueue`, `TSToastWindowing` |
+| `Interaction/` | `TSFocusRing`, `TSHaptics`, `TSHitArea`, `TSPressFeedback`, `TSTextInputTraits` |
+| `Compat/` | Every `#available` branch: `TSCompat` (the paths), `TSSheetCompat`, `TSTabBarCompat`, `TSTrackingCompat`, `TSTraitOverridesCompat`, `TSGrowingTextView`, `View+OnChangeCompat`, `View+FocusEffectCompat`, `View+SheetPresentationCompat` |
 | `Typography/` | `TSFont`, `TSFont+SwiftUI` (`tsFont(_:)`), `TSTypeRole` (`role.font`), `TSTextColor` |
 | `Shadow/` | `TSShadow` |
 | `Icons/` | `TSIconImage` |
@@ -89,15 +89,14 @@ Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/T
 | Module | Published as | Contents |
 |---|---|---|
 | `:tokens` | `com.ts.ds:tokens` | `src/generated/kotlin/com/ts/ds/tokens/TSTokenValues.kt`, `src/generated/res/values{,-night}/ts_{colors,dimens,integers}.xml`, plus the controller palette `ts_controller_colors.xml` (light + night) and `ts_controller_dimens.xml` |
-| `:core` | `com.ts.ds:core` | `core/{style,logic,input,motion,haptics,icon}`; generated `src/generated/kotlin/com/ts/ds/core/icon/TSIcon.kt` and `src/generated/res/drawable{,-night}/ts_ic_*`, `ts_logo_*` |
+| `:core` | `com.ts.ds:core` | `core/{style,logic,input,haptics,icon}`; generated `src/generated/kotlin/com/ts/ds/core/icon/TSIcon.kt` and `src/generated/res/drawable{,-night}/ts_ic_*`, `ts_logo_*` |
 | `:compose` | `com.ts.ds:compose` | `compose/{theme,foundation,components/<name>,components/shared}`; generated `src/generated/kotlin/com/ts/ds/compose/theme/TS{Colors,Typography,Spacing,Size,Shapes,Elevation,Motion,ControllerColors,ControllerSize}.kt` |
 | `:views` | `com.ts.ds:views` | `views/{theme,foundation,components/<name>,components/shared}`; `src/main/res/values/{ts_themes,ts_component_attrs,ts_component_styles,ts_views_dimens,ts_views_ids}.xml`; generated `src/generated/res/values{,-v28}/ts_{theme_attrs,theme_colors,text_appearances,shape_appearances}.xml` |
 | `:bom` | `com.ts.ds:bom` | `java-platform` constraining the four libraries at `VERSION` |
-| `:test-support` | never | Roborazzi matrix helpers (`SnapshotMatrix`, `SnapshotEnvironment`, `captureComposeSnapshot`, view snapshots) |
 | `:golden-check` | never | Compiles the Kotlin and Compose codegen golden fixtures (`tools/codegen/test/fixtures/expected/compose/**`), the Android twin of `make ios-golden-typecheck` |
 | `build-logic/convention` | never | Convention plugins `ds.android.library`, `ds.android.compose`, `ds.android.testing`, `ds.publishing`, `ds.api-validation`; constants in `ProjectExtensions.kt` (`DsBuildConstants`) |
 
-Each library module keeps its public API dump in `android/<module>/api/<module>.api`. Tests live in `src/test/kotlin/com/ts/ds/<module>/{components/<name>,snapshots,…}`; local, git-ignored Roborazzi references in `src/test/snapshots/<TestClass>/`.
+Each library module keeps its public API dump in `android/<module>/api/<module>.api`. Tests live in `src/test/kotlin/com/ts/ds/<module>/{components/<name>,…}`.
 
 Android component folders use the lowercase name: `switch` is `switchcontrol` (a Kotlin keyword), `iconbutton`, `listitem`, `textfield`, `bottomnav`. The Views toolkit has no `icon` component; Views icons are `ImageView` plus `TSIcon.drawableRes` (see `design/specs/components/icon.md`).
 
@@ -118,7 +117,7 @@ Both iOS projects use folder-synchronized groups: a new Swift file in a page fol
 
 - **Entry points:** `Makefile` (start with `make help`); `Package.swift`; `android/settings.gradle.kts`; `demos/*/settings.gradle.kts`; `demos/ios-swiftui/TSDemoSwiftUI/App/TSDemoSwiftUIApp.swift`; `demos/ios-uikit/TSDemoUIKit/App/SceneDelegate.swift`; `demos/android-*/app/src/main/kotlin/com/ts/ds/demo/*/MainActivity.kt`.
 - **Configuration:** `VERSION`, `.xcode-version`, `mise.toml`, `android/gradle/libs.versions.toml`, `android/gradle.properties`, `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt`, `.github/renovate.json`, `.gitattributes`.
-- **Pinned snapshot simulator:** `ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift` (`pinnedSimulator`, `pinnedOSVersion`); the Makefile reads it.
+- **Pinned iOS simulator:** `.ios-simulator` (`device=`, `os=`); the Makefile reads it.
 - **API baselines:** `android/*/api/*.api`; iOS acknowledgements in `ios/api/breaking-changes.txt` (created by `make ios-api-check-record`).
 
 ## Naming conventions
@@ -133,7 +132,7 @@ Both iOS projects use folder-synchronized groups: a new Swift file in a page fol
 |---|---|
 | A token | Upstream DS first. Until it ships: `design/extensions/native-tokens.json`, then `make codegen` |
 | A component | Follow [guides/adding-a-component.md](guides/adding-a-component.md): spec, style spec in `TSFoundation/Styles` and `:core/style`, four toolkit folders, tests, four demo pages |
-| Shared logic or accessibility text | `ios/Sources/TSFoundation/Logic/` and `android/core/src/main/kotlin/com/ts/ds/core/logic/` |
+| Shared logic | `ios/Sources/TSFoundation/Logic/` and `android/core/src/main/kotlin/com/ts/ds/core/logic/` |
 | An `#available` / `SDK_INT` branch | iOS: a shim in `TSFoundation/Compat/` with a `TSCompat` path; Android: a resource qualifier (`values-v28`) or a `sdkInt` parameter on the helper |
 | A SwiftUI-only presentation bridge | `ios/Sources/TSDesignSystem/Presentation/` |
 | A tooling step | A new folder under `tools/` with `src/` and `test/`, an npm script in `tools/package.json`, and a Make target |
@@ -143,5 +142,4 @@ Both iOS projects use folder-synchronized groups: a new Swift file in a page fol
 
 - **Generated** (never edit; `make codegen-check` fails on drift): `ios/Sources/TSTokens/Generated/`, `ios/Sources/TSFoundation/Resources/{Icons,Logos}.xcassets/`, `android/*/src/generated/`, `design/assets/*/normalized/`.
 - **Vendored:** `design/source/` (`linguist-vendored`).
-- **Local snapshot references (ignored, never committed):** `ios/Tests/**/__Snapshots__/` and `android/*/src/test/snapshots/`, written by `make ios-snapshot-record` / `make android-snapshot-record` (see [guides/snapshot-workflow.md](guides/snapshot-workflow.md)).
-- **Build output (ignored):** `.build/xcode`, `.build/xcode-demos`, `.build/api-check`, `.build/tools/actionlint`, `.build/release`, `.build/snapshot-artifacts`; `android/**/build/`; `tools/node_modules/`.
+- **Build output (ignored):** `.build/xcode`, `.build/xcode-demos`, `.build/api-check`, `.build/tools/actionlint`, `.build/release`; `android/**/build/`; `tools/node_modules/`.

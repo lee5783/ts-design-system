@@ -15,7 +15,6 @@ class IconButtonFragment : DemoPageFragment(R.layout.page_icon_button) {
     private var playgroundVariant = TSIconButtonVariant.Ghost
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         listOf(R.id.icon_button_consumer_icon, R.id.icon_button_consumer_icon_secondary, R.id.icon_button_consumer_icon_round).forEach {
             rows.findViewById<TSIconButtonView>(it).setIconResource(R.drawable.demo_ic_controller)
         }

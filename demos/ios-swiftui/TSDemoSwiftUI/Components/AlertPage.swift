@@ -8,7 +8,6 @@ struct AlertPage: View {
     @State private var isDismissible = true
     @State private var showsAction = false
     @State private var isShown = true
-    @State private var hasBeenDismissed = false
     @State private var actionCount = 0
 
     var body: some View {
@@ -58,14 +57,14 @@ struct AlertPage: View {
     @ViewBuilder
     private var playgroundAlert: some View {
         let title = showsTitle ? SampleMessages.offline.title : nil
-        let onDismiss: (() -> Void)? = isDismissible ? { isShown = false; hasBeenDismissed = true } : nil
+        let onDismiss: (() -> Void)? = isDismissible ? { isShown = false } : nil
         if showsAction {
-            TSAlert(tone: tone, title: title, message: SampleMessages.offline.body, announcesOnAppear: hasBeenDismissed, onDismiss: onDismiss) {
+            TSAlert(tone: tone, title: title, message: SampleMessages.offline.body, onDismiss: onDismiss) {
                 TSButton(SampleMessages.offline.actionTitle ?? "", variant: .link) { actionCount += 1 }
                     .accessibilityIdentifier("demo.alert.playground.retry")
             }
         } else {
-            TSAlert(tone: tone, title: title, message: SampleMessages.offline.body, announcesOnAppear: hasBeenDismissed, onDismiss: onDismiss)
+            TSAlert(tone: tone, title: title, message: SampleMessages.offline.body, onDismiss: onDismiss)
         }
     }
 

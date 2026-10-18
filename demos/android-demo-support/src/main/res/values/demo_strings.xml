@@ -180,8 +180,6 @@
     <string name="demo_sample_notifications">Notifications</string>
     <string name="demo_sample_dark_mode">Dark mode</string>
     <string name="demo_sample_long_setting">Download updates automatically over mobile data when Wi-Fi is not available</string>
-    <string name="demo_sample_project_sections">Project sections</string>
-    <string name="demo_sample_time_range">Time range</string>
     <string name="demo_sample_overview">Overview</string>
     <string name="demo_sample_activity">Activity</string>
     <string name="demo_sample_members">Members</string>
@@ -290,7 +288,6 @@
     <string name="demo_sample_home">Home</string>
     <string name="demo_sample_alerts">Alerts</string>
     <string name="demo_sample_profile">Profile</string>
-    <string name="demo_sample_main_navigation">Main navigation</string>
     <string name="demo_sample_new_message">New message</string>
     <string name="demo_sample_add_hundred">Add 100</string>
     <string name="demo_sample_mark_all_read">Mark all as read</string>

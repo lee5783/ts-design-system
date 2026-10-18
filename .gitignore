@@ -43,6 +43,3 @@ captures/
 *.aab
 *.ap_
 *.hprof
-
-ios/Tests/**/__Snapshots__/
-android/*/src/test/snapshots/

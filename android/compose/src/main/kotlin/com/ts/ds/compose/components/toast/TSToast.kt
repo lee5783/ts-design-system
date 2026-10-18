@@ -17,11 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
@@ -31,7 +27,6 @@ import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.shadow
 import com.ts.ds.compose.theme.style
 import com.ts.ds.compose.theme.withDsFontWeight
-import com.ts.ds.core.logic.TSToastAccessibility
 import com.ts.ds.core.logic.TSToastTone
 import com.ts.ds.core.style.TSToastStyleSpec
 import com.ts.ds.core.style.resolve
@@ -58,7 +53,6 @@ public fun TSToast(
     val typography = TSTheme.typography
     val shape = RoundedCornerShape(resolved.cornerRadiusDp.dp)
     val shadow = TSTheme.elevation.shadow(resolved.shadow)
-    val label = TSToastAccessibility.label(LocalContext.current, tone, message)
     val spacing = resolved.spacingDp.dp
 
     Row(
@@ -74,8 +68,7 @@ public fun TSToast(
         Row(
             modifier = Modifier
                 .weight(1f, fill = false)
-                .testTag(TSToastTestTags.MESSAGE)
-                .clearAndSetSemantics { contentDescription = label },
+                .testTag(TSToastTestTags.MESSAGE),
             horizontalArrangement = Arrangement.spacedBy(spacing),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -123,7 +116,7 @@ private fun TSToastActionButton(
         modifier = Modifier
             .testTag(TSToastTestTags.ACTION)
             .alpha(if (pressed) resolved.actionPressedOpacity else 1f)
-            .clickable(interactionSource = source, indication = null, role = Role.Button, onClick = onAction)
+            .clickable(interactionSource = source, indication = null, onClick = onAction)
             .padding(start = resolved.actionHorizontalPaddingDp.dp),
     )
 }

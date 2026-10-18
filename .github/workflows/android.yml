@@ -60,7 +60,7 @@ jobs:
           retention-days: 14
 
   test:
-    name: test (unit, behaviour, snapshot render)
+    name: test (unit, behaviour)
     needs: changes
     if: needs.changes.outputs.android == 'true'
     runs-on: macos-26

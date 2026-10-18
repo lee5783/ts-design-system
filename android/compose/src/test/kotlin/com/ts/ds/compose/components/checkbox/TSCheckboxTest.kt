@@ -9,11 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -25,7 +20,6 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -87,16 +81,11 @@ class TSCheckboxTest {
     }
 
     @Test
-    fun exposesTheCheckboxRoleToggleStateAndStateDescription() {
+    fun clickFlipsTheToggleState() {
         setCheckbox(initial = true)
 
-        composeRule.onNodeWithTag("checkbox")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Checkbox))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ToggleableState, ToggleableState.On))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Checked"))
-            .performClick()
-        composeRule.onNodeWithTag("checkbox")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Unchecked"))
+        composeRule.onNodeWithTag("checkbox").assertIsOn().performClick()
+        composeRule.onNodeWithTag("checkbox").assertIsOff()
     }
 
     @Test
@@ -118,11 +107,10 @@ class TSCheckboxTest {
     }
 
     @Test
-    fun hiddenLabelKeepsTheLabelForAccessibilityAndA48dpTarget() {
+    fun hiddenLabelHidesTheTextAndKeepsA48dpTarget() {
         setCheckbox(labelHidden = true)
 
         composeRule.onAllNodesWithText("Remember me").assertCountEquals(0)
-        composeRule.onNodeWithContentDescription("Remember me").assertIsOff()
         composeRule.onNodeWithTag("container").assertWidthIsEqualTo(48.dp).assertHeightIsEqualTo(48.dp)
         composeRule.onNodeWithTag("checkbox").assertTouchWidthIsEqualTo(48.dp).assertTouchHeightIsEqualTo(48.dp)
     }

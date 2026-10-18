@@ -3,7 +3,6 @@ package com.ts.ds.views.components.listitem
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.view.ViewCompat
 import com.google.android.material.textview.MaterialTextView
 import com.ts.ds.core.style.TSListItemStyleSpec
 import com.ts.ds.views.components.shared.dpToPx
@@ -23,6 +22,5 @@ public class TSListSectionHeaderView @JvmOverloads constructor(
         textAlignment = View.TEXT_ALIGNMENT_VIEW_START
         val horizontal = dpToPx(group.headerHorizontalPaddingDp)
         setPaddingRelative(horizontal, 0, horizontal, dpToPx(group.headerSpacingDp))
-        ViewCompat.setAccessibilityHeading(this, true)
     }
 }

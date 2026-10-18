@@ -41,9 +41,5 @@ public struct TSAvatar: View {
         .foregroundColor(resolved.foreground.color)
         .frame(width: resolved.diameter, height: resolved.diameter)
         .clipShape(Circle())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(name))
-        .accessibilityAddTraits(.isImage)
-        .accessibilityHidden(!TSAvatarAccessibility.isExposed(name: name))
     }
 }

@@ -3,13 +3,11 @@ import SwiftUI
 public struct TSIcon: View {
     let name: TSIconName
     let size: TSIconSize
-    let label: String?
     var pointSize: CGFloat?
 
-    public init(_ name: TSIconName, size: TSIconSize = .md, label: String? = nil) {
+    public init(_ name: TSIconName, size: TSIconSize = .md) {
         self.name = name
         self.size = size
-        self.label = label
     }
 
     init(_ name: TSIconName, pointSize: CGFloat) {
@@ -18,13 +16,12 @@ public struct TSIcon: View {
     }
 
     public var body: some View {
-        let resolved = TSIconStyleSpec.resolve(.init(size: size, hasLabel: label != nil))
+        let resolved = TSIconStyleSpec.resolve(.init(size: size))
         let side = pointSize ?? resolved.pointSize
         image
             .frame(width: side, height: side)
             .flipsForRightToLeftLayoutDirection(name.flipsForRightToLeftLayoutDirection)
-            .accessibilityHidden(!resolved.isAccessibilityElement)
-            .accessibilityLabel(Text(label ?? ""))
+            .accessibilityHidden(true)
     }
 
     @ViewBuilder

@@ -2353,18 +2353,6 @@
         }
       }
     },
-    "demo.sample.main-navigation" : {
-      "comment" : "Accessible name of the sample bottom navigation.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Main navigation"
-          }
-        }
-      }
-    },
     "demo.sample.managed" : {
       "comment" : "Sample field hint for a disabled field.",
       "extractionState" : "manual",
@@ -2689,18 +2677,6 @@
         }
       }
     },
-    "demo.sample.project-sections" : {
-      "comment" : "Sample accessible name of a tab list.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Project sections"
-          }
-        }
-      }
-    },
     "demo.sample.remember-me" : {
       "comment" : "Sample checkbox label.",
       "extractionState" : "manual",
@@ -2949,18 +2925,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Success"
-          }
-        }
-      }
-    },
-    "demo.sample.time-range" : {
-      "comment" : "Sample accessible name of a tab list.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time range"
           }
         }
       }

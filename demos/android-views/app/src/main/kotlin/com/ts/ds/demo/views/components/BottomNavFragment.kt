@@ -55,7 +55,6 @@ class BottomNavFragment : DemoPageFragment(R.layout.page_bottom_nav) {
             TSBottomNavView(context).apply {
                 this.items = items
                 selectedId = selected
-                label = getString(DemoR.string.demo_sample_main_navigation)
                 setOnApplyWindowInsetsListener(null)
                 configure()
             },
@@ -103,7 +102,6 @@ class BottomNavFragment : DemoPageFragment(R.layout.page_bottom_nav) {
         val nav = TSBottomNavView(context).apply {
             items = context.navItems(itemCount, inboxBadge = badge)
             selectedId = "home"
-            label = getString(DemoR.string.demo_sample_main_navigation)
             tag = PLAYGROUND_NAV
             setOnApplyWindowInsetsListener(null)
         }

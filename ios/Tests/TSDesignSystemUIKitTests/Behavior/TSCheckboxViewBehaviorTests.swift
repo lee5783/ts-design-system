@@ -42,49 +42,16 @@ struct TSCheckboxViewBehaviorTests {
         #expect(!checkbox.checkView.isHidden)
     }
 
-    @Test("isEnabled = false blocks toggling and adds the not-enabled trait")
+    @Test("isEnabled = false blocks toggling")
     func disabledBlocks() {
         let counter = TapCounter()
         let checkbox = TSCheckboxView(label: "Remember me")
         checkbox.addAction(UIAction { _ in counter.tap() }, for: .valueChanged)
         checkbox.isEnabled = false
         checkbox.sendActions(for: .touchUpInside)
-        #expect(!checkbox.accessibilityActivate())
         #expect(!checkbox.isOn)
         #expect(counter.count == 0)
-        #expect(checkbox.accessibilityTraits.contains(.notEnabled))
         #expect(abs(checkbox.alpha - 0.45) < 0.001)
-    }
-
-    @Test("VoiceOver activation toggles like a tap")
-    func accessibilityActivate() {
-        let checkbox = TSCheckboxView(label: "Remember me")
-        #expect(checkbox.accessibilityActivate())
-        #expect(checkbox.isOn)
-    }
-
-    @Test(
-        "The row is one element: the label, a checked/unchecked value, and the toggle trait on 17+ or the button trait on 15–16",
-        arguments: [TSCompatPath.native, .fallback], [false, true]
-    )
-    func accessibilityHierarchy(path: TSCompatPath, isOn: Bool) {
-        let checkbox = layout(TSCheckboxView(label: "Email me about updates", isOn: isOn))
-        checkbox.togglePath = path
-        #expect(checkbox.isAccessibilityElement)
-        #expect(checkbox.accessibilityLabel == "Email me about updates")
-        #expect(checkbox.accessibilityValue == (isOn ? "Checked" : "Unchecked"))
-        #expect(!checkbox.accessibilityTraits.contains(.selected))
-        if path == .native, #available(iOS 17, *) {
-            #expect(checkbox.accessibilityTraits.contains(.toggleButton))
-            #expect(!checkbox.accessibilityTraits.contains(.button))
-        } else {
-            #expect(checkbox.accessibilityTraits.contains(.button))
-            if #available(iOS 17, *) {
-                #expect(!checkbox.accessibilityTraits.contains(.toggleButton))
-            }
-        }
-        #expect(!checkbox.labelView.isAccessibilityElement)
-        #expect(!checkbox.checkView.isAccessibilityElement)
     }
 
     @Test("The whole row is at least 44 pt high and hit-testable across the label", arguments: [false, true])

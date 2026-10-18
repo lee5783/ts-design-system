@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsAtLeast
@@ -16,7 +15,6 @@ import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasClickAction
-import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -53,13 +51,10 @@ class TSBadgeTest {
     }
 
     @Test
-    fun labelIsTheTextAndItIsNotAButton() {
+    fun badgeIsNotAButton() {
         setBadges { TSBadge("New", tone = TSBadgeTone.Accent, showsDot = true, icon = TSIcon.Star) }
 
-        composeRule.onNodeWithText("New")
-            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Role))
-            .assert(!hasClickAction())
-            .assert(!hasContentDescription("Star", substring = true))
+        composeRule.onNodeWithText("New").assert(!hasClickAction())
         assertEquals(0, composeRule.onAllNodesCount(hasClickAction()))
     }
 
@@ -94,7 +89,6 @@ class TSBadgeTest {
 
         assertEquals((plain + 10.dp).value, dot.value, 0.5f)
         assertEquals((plain + 20.dp).value, icon.value, 0.5f)
-        assertEquals(0, composeRule.onAllNodesCount(hasContentDescription("star", substring = true, ignoreCase = true)))
     }
 
     @Test

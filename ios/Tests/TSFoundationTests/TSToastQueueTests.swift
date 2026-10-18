@@ -43,9 +43,9 @@ final class ManualToastScheduler: TSToastScheduling {
 @MainActor
 @Suite("TSToastQueue")
 struct TSToastQueueTests {
-    private func makeQueue(voiceOver: Bool = false) -> (TSToastQueue, ManualToastScheduler) {
+    private func makeQueue() -> (TSToastQueue, ManualToastScheduler) {
         let scheduler = ManualToastScheduler()
-        let queue = TSToastQueue(scheduler: scheduler, isVoiceOverRunning: { voiceOver })
+        let queue = TSToastQueue(scheduler: scheduler)
         return (queue, scheduler)
     }
 
@@ -88,21 +88,6 @@ struct TSToastQueueTests {
         queue.enqueue(TSToastItem(message: "Deleted", action: TSToastAction(title: "Undo") {}))
         #expect(scheduler.activeDelays == [TSToastTimeout.extended])
         #expect(TSToastTimeout.extended > TSToastTimeout.standard)
-    }
-
-    @Test("VoiceOver extends the timeout")
-    func voiceOverExtends() {
-        let (queue, scheduler) = makeQueue(voiceOver: true)
-        queue.enqueue(TSToastItem(message: "Saved"))
-        #expect(scheduler.activeDelays == [TSToastTimeout.extended])
-    }
-
-    @Test("VoiceOver with an action disables auto-dismiss")
-    func voiceOverWithAction() {
-        let (queue, scheduler) = makeQueue(voiceOver: true)
-        queue.enqueue(TSToastItem(message: "Deleted", action: TSToastAction(title: "Undo") {}))
-        #expect(scheduler.activeDelays.isEmpty)
-        #expect(queue.current?.message == "Deleted")
     }
 
     @Test("Cancelling the current toast stops its timer and shows the next one")

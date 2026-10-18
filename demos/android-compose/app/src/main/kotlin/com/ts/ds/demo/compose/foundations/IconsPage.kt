@@ -25,7 +25,7 @@ fun LazyListScope.iconsPage() {
         TSIconSize.entries.forEach { size ->
             Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3), verticalAlignment = Alignment.CenterVertically) {
                 listOf(TSIcon.Home, TSIcon.Search, TSIcon.ChevronRight, TSIcon.ArrowLeft).forEach { icon ->
-                    TSIcon(icon, contentDescription = null, size = size)
+                    TSIcon(icon, size = size)
                 }
                 DemoCaption(text = "${size.name.lowercase()} · ${size.dp.toInt()}dp")
             }
@@ -38,8 +38,8 @@ fun LazyListScope.iconsPage() {
                 Triple(TSIcon.Alert, TSColorRole.Warning, DemoR.string.demo_sample_warning),
                 Triple(TSIcon.XCircle, TSColorRole.Danger, DemoR.string.demo_sample_error),
                 Triple(TSIcon.Info, TSColorRole.Info, DemoR.string.demo_sample_information),
-            ).forEach { (icon, role, label) ->
-                TSIcon(icon, contentDescription = stringResource(label), size = TSIconSize.Lg, tint = TSTheme.colors.color(role))
+            ).forEach { (icon, role, _) ->
+                TSIcon(icon, size = TSIconSize.Lg, tint = TSTheme.colors.color(role))
             }
         }
     }
@@ -49,7 +49,7 @@ fun LazyListScope.iconsPage() {
             name = icon.name,
             value = if (icon.autoMirrored) "${icon.dsName} · mirrored" else icon.dsName,
         ) {
-            TSIcon(icon, contentDescription = null, size = TSIconSize.Lg)
+            TSIcon(icon, size = TSIconSize.Lg)
         }
     }
 }

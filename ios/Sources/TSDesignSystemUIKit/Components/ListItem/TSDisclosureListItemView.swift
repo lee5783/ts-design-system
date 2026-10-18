@@ -135,11 +135,6 @@ public final class TSDisclosureListItemView: UIControl {
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         headerView.isUserInteractionEnabled = false
-        headerView.activate = { [weak self] in
-            guard let self, self.isEnabled else { return false }
-            self.userDidToggle()
-            return true
-        }
         isAccessibilityElement = false
     }
 
@@ -166,15 +161,12 @@ public final class TSDisclosureListItemView: UIControl {
         bodyContainer.isHidden = !isExpanded
         applyConfiguration()
         let disclosure = TSListItemStyleSpec.disclosure
-        TSReduceMotion.animate(
+        TSAnimation.animate(
             duration: disclosure.animationDuration,
             easing: disclosure.animationEasing,
-            reduceMotion: !animated || TSReduceMotion.isEnabled
+            isInstant: !animated
         ) { [weak self] in
             self?.applyChevronRotation()
-        }
-        if animated {
-            UIAccessibility.post(notification: .layoutChanged, argument: nil)
         }
     }
 

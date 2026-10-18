@@ -15,7 +15,6 @@ public struct TSTextField<Trailing: View>: View {
     let trailing: Trailing
     var stateOverride: TSControlState?
     var multilinePath: TSCompatPath = TSCompat.multilineTextField
-    var announce: @MainActor (String) -> Void = { TSTextFieldAccessibility.post($0) }
 
     @State var isRevealed = false
     @State private var isEditingMultiline = false
@@ -93,18 +92,12 @@ public struct TSTextField<Trailing: View>: View {
                 .foregroundColor(resolved.labelColor.color)
                 .fixedSize(horizontal: false, vertical: true)
                 .tsFont(resolved.labelFont)
-                .accessibilityHidden(true)
             box(resolved)
             if let message = error ?? hint {
                 messageRow(message, resolved: resolved)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .tsOnChange(of: error) { oldValue, newValue in
-            if let announcement = TSTextFieldAccessibility.announcement(from: oldValue, to: newValue) {
-                announce(announcement)
-            }
-        }
     }
 
     func forcingState(_ state: TSControlState) -> Self {
@@ -122,12 +115,6 @@ public struct TSTextField<Trailing: View>: View {
     func revealingPassword() -> Self {
         var copy = self
         copy._isRevealed = State(initialValue: true)
-        return copy
-    }
-
-    func announcing(with announce: @escaping @MainActor (String) -> Void) -> Self {
-        var copy = self
-        copy.announce = announce
         return copy
     }
 
@@ -164,17 +151,12 @@ public struct TSTextField<Trailing: View>: View {
 
     @ViewBuilder
     private func input(_ resolved: TSTextFieldStyleSpec.Resolved) -> some View {
-        let value = TSTextFieldAccessibility.value(text: text, error: error, isSecure: isSecure)
-        let accessibilityHint = TSTextFieldAccessibility.hint(hint, error: error)
         if isReadOnly {
             readOnlyText(resolved)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
-                .accessibilityElement(children: .combine)
-                .modifier(TSTextFieldAccessibilityModifier(label: label, hint: accessibilityHint, value: value ?? TSTextFieldStyleSpec.readOnlyText(text, isSecure: isSecure)))
         } else if isMultiline {
             multilineInput(resolved)
-                .modifier(TSTextFieldAccessibilityModifier(label: label, hint: accessibilityHint, value: value))
         } else {
             singleLineInput(resolved)
                 .foregroundColor(resolved.inputColor.color)
@@ -183,7 +165,6 @@ public struct TSTextField<Trailing: View>: View {
                 .focused($isFocused)
                 .tsFocusEffectDisabled()
                 .tsTextInputTraits(inputTraits)
-                .modifier(TSTextFieldAccessibilityModifier(label: label, hint: accessibilityHint, value: value))
         }
     }
 
@@ -308,23 +289,6 @@ public extension TSTextField where Trailing == EmptyView {
             contentStyle: contentStyle
         ) {
             EmptyView()
-        }
-    }
-}
-
-struct TSTextFieldAccessibilityModifier: ViewModifier {
-    let label: String
-    let hint: String?
-    let value: String?
-
-    func body(content: Content) -> some View {
-        let labelled = content
-            .accessibilityLabel(Text(label))
-            .accessibilityHint(Text(hint ?? ""))
-        if let value {
-            labelled.accessibilityValue(Text(value))
-        } else {
-            labelled
         }
     }
 }

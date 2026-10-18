@@ -11,7 +11,6 @@ class SwitchFragment : DemoPageFragment(R.layout.page_switch) {
     override val page: DemoPageId = DemoPageId.Switch
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         rows.findViewById<LinearLayout>(R.id.toggle_states).bindToggleStates(SPEC)
         rows.findViewById<LinearLayout>(R.id.toggle_playground).bindTogglePlayground(SPEC)
     }

@@ -107,7 +107,7 @@ final class ThemeOverrideTests: XCTestCase {
             attempts += 1
         }
         show.tap()
-        let message = app.staticTexts["Message deleted"].firstMatch
+        let message = app.images["info"].firstMatch
         XCTAssertTrue(message.waitForExistence(timeout: 5))
         let strip = CGRect(x: message.frame.minX - 8, y: message.frame.minY - 6, width: 6, height: 4)
         let before = luminance(app, in: strip)

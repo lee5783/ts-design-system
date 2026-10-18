@@ -19,7 +19,6 @@ class AvatarFragment : DemoPageFragment(R.layout.page_avatar) {
     private var playgroundPerson = 0
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindSizes(rows.findViewById(R.id.avatar_sizes))
         bindContents(rows.findViewById(R.id.avatar_contents))
         bindInitials(rows.findViewById(R.id.avatar_initials))

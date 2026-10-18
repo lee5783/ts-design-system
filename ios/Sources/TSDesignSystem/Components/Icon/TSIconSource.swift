@@ -20,7 +20,6 @@ struct TSIconSourceView: View {
                 .scaledToFit()
                 .frame(width: pointSize, height: pointSize)
                 .accessibilityHidden(true)
-                .accessibilityLabel(Text(""))
         }
     }
 }

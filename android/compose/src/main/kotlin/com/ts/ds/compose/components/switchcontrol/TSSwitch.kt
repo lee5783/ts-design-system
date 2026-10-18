@@ -20,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.ts.ds.compose.components.shared.TSToggleRow
@@ -31,7 +29,6 @@ import com.ts.ds.compose.components.shared.tsReduceMotion
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.compose.theme.shadow
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.style.TSControlState
 import com.ts.ds.core.style.TSSwitchStyleSpec
 
@@ -58,8 +55,6 @@ public fun TSSwitch(
         checked = checked,
         label = label,
         onCheckedChange = onCheckedChange,
-        role = Role.Switch,
-        stateDescription = stringResource(if (checked) CoreR.string.ts_switch_on else CoreR.string.ts_switch_off),
         labelHidden = labelHidden,
         enabled = state.interactive,
         labelTypeRole = resolved.labelTypeRole,

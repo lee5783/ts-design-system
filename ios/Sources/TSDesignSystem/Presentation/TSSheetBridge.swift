@@ -6,7 +6,7 @@ struct TSSheetBridge: UIViewControllerRepresentable {
     let environment: TSPresentationEnvironment
     let cornerRadius: CGFloat
     let background: UIColor
-    let reduceMotion: Bool
+    var reduceMotion = false
     var detentPath: TSCompatPath = TSCompat.customSheetDetents
     let onDidDismiss: () -> Void
     var onRefused: () -> Void = {}

@@ -7,6 +7,6 @@ import com.ts.ds.core.logic.TSToastQueue
 import com.ts.ds.core.logic.TSToastTimeouts
 
 class DemoSession(application: Application) : AndroidViewModel(application) {
-    val toasts = TSToastQueue(TSToastTimeouts.timeoutFor(application))
+    val toasts = TSToastQueue(TSToastTimeouts.default)
     val toastUndoTaps = MutableLiveData(0)
 }

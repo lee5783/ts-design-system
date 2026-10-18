@@ -8,21 +8,13 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.textview.MaterialTextView
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
-import com.ts.ds.core.logic.TSAlertAccessibility
 import com.ts.ds.core.style.TSAlertStyleSpec
 import com.ts.ds.core.style.TSAlertTone
 import com.ts.ds.core.style.TSTypeRole
@@ -89,12 +81,6 @@ public class TSAlertView @JvmOverloads constructor(
             applyConfiguration()
         }
 
-    public var announcesWhenShown: Boolean = false
-        set(value) {
-            field = value
-            applyConfiguration()
-        }
-
     init {
         orientation = HORIZONTAL
         gravity = Gravity.TOP
@@ -106,9 +92,7 @@ public class TSAlertView @JvmOverloads constructor(
             it.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
             it.gravity = Gravity.START
         }
-        messageView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
-        ViewCompat.setScreenReaderFocusable(messageView, true)
-        listOf(iconView, textColumn).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS }
+        iconView.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
         textColumn.addView(titleView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
         textColumn.addView(bodyView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
         messageView.addView(iconView, LayoutParams(0, 0))
@@ -118,33 +102,13 @@ public class TSAlertView @JvmOverloads constructor(
         addView(dismissButton, LayoutParams(0, 0))
         dismissButton.isClickable = true
         dismissButton.isFocusable = true
-        dismissButton.contentDescription = context.getString(CoreR.string.ts_dismiss)
         dismissButton.setOnClickListener { onDismiss?.invoke() }
         dismissButton.applyPressedAlpha(TSAlertStyleSpec.resolve(TSAlertStyleSpec.Configuration()).dismissPressedOpacity)
-        ViewCompat.setAccessibilityDelegate(
-            dismissButton,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = Button::class.java.name
-                }
-            },
-        )
-        ViewCompat.setAccessibilityDelegate(
-            messageView,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = TextView::class.java.name
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSAlertView, defStyleAttr, 0).apply {
             tone = TSAlertTone.entries[getInt(R.styleable.TSAlertView_tsAlertTone, TSAlertTone.Info.ordinal)]
             title = getText(R.styleable.TSAlertView_tsTitle)
             message = getText(R.styleable.TSAlertView_tsMessage) ?: ""
             icon = getString(R.styleable.TSAlertView_tsIcon)?.let(TSIcons::fromDsName)
-            announcesWhenShown = getBoolean(R.styleable.TSAlertView_tsAnnouncesWhenShown, false)
             recycle()
         }
         ready = true
@@ -155,9 +119,6 @@ public class TSAlertView @JvmOverloads constructor(
         get() = TSAlertStyleSpec.resolve(
             TSAlertStyleSpec.Configuration(tone = tone, hasTitle = !title.isNullOrEmpty(), isDismissible = onDismiss != null),
         )
-
-    internal val accessibilityLabel: String
-        get() = TSAlertAccessibility.label(context, tone, title, message)
 
     private fun applyConfiguration() {
         if (!ready) return
@@ -198,26 +159,8 @@ public class TSAlertView @JvmOverloads constructor(
         dismissButton.setImageResource(resolved.dismissIcon.drawableRes)
         ImageViewCompat.setImageTintList(dismissButton, ColorStateList.valueOf(tsColor(resolved.dismissColor)))
         dismissButton.ensureMinTouchTarget(dpToPx(resolved.minTouchTargetDp))
-        applyAccessibility()
     }
 
     private fun lineHeightPx(role: TSTypeRole): Int =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, role.values.lineHeight, resources.displayMetrics).roundToInt()
-
-    private fun applyAccessibility() {
-        messageView.contentDescription = accessibilityLabel
-        ViewCompat.setAccessibilityLiveRegion(
-            messageView,
-            if (announcesWhenShown) ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE else ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE,
-        )
-        val dismiss = onDismiss
-        if (dismiss == null) {
-            ViewCompat.removeAccessibilityAction(messageView, AccessibilityNodeInfoCompat.ACTION_DISMISS)
-        } else {
-            ViewCompat.replaceAccessibilityAction(messageView, AccessibilityActionCompat.ACTION_DISMISS, dismissButton.contentDescription) { _, _ ->
-                dismiss()
-                true
-            }
-        }
-    }
 }

@@ -9,8 +9,6 @@ public struct TSListItem<Leading: View, Trailing: View>: View {
     let leading: Leading
     let trailing: Trailing
     var stateOverride: TSControlState?
-    var togglePath: TSCompatPath = TSCompat.toggleTrait
-    var playHaptic: @MainActor (TSHapticEvent) -> Void = { TSHaptics.shared.play($0) }
 
     @FocusState private var isFocused: Bool
     @Environment(\.isEnabled) private var isEnabled
@@ -63,18 +61,6 @@ public struct TSListItem<Leading: View, Trailing: View>: View {
         return copy
     }
 
-    func usingTogglePath(_ path: TSCompatPath) -> Self {
-        var copy = self
-        copy.togglePath = path
-        return copy
-    }
-
-    func playingHaptics(with playHaptic: @escaping @MainActor (TSHapticEvent) -> Void) -> Self {
-        var copy = self
-        copy.playHaptic = playHaptic
-        return copy
-    }
-
     private var content: TSListItemContent<Leading, Trailing> {
         TSListItemContent(title: title, subtitle: subtitle, showsChevron: showsChevron, leading: leading, trailing: trailing)
     }
@@ -86,32 +72,20 @@ public struct TSListItem<Leading: View, Trailing: View>: View {
         .buttonStyle(TSListItemStyle(isFocused: isFocused, stateOverride: stateOverride))
         .focused($isFocused)
         .tsFocusEffectDisabled()
-        .accessibilityHint(Text(TSListItemAccessibility.hint(for: role) ?? ""))
     }
 
     private var toggleRow: some View {
         content
             .modifier(TSListItemChrome(state: stateOverride ?? .make(isEnabled: isEnabled), isInteractive: false))
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(TSListItemAccessibility.label(title: title, subtitle: subtitle)))
-            .tsToggleAccessibility(isOn: toggle?.wrappedValue ?? false, kind: .switch, path: togglePath)
-            .accessibilityAction { flipToggle() }
     }
 
     private var plainRow: some View {
         content
             .modifier(TSListItemChrome(state: stateOverride ?? .make(isEnabled: isEnabled), isInteractive: false))
-            .accessibilityElement(children: .combine)
     }
 
     private func perform() {
         action?()
-    }
-
-    func flipToggle() {
-        guard isEnabled, let toggle else { return }
-        toggle.wrappedValue.toggle()
-        playHaptic(.selection)
     }
 }
 

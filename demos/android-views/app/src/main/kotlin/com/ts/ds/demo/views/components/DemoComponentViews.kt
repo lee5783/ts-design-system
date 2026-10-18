@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.core.view.ViewCompat
 import com.google.android.material.chip.Chip
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.ts.ds.core.style.TSColorRole
@@ -19,7 +18,6 @@ import com.ts.ds.views.theme.tsColor
 fun LinearLayout.addSectionHeader(@StringRes title: Int): TextView =
     (LayoutInflater.from(context).inflate(R.layout.item_section_header, this, false) as TextView).also {
         it.setText(title)
-        ViewCompat.setAccessibilityHeading(it, true)
         addView(it)
     }
 
@@ -74,12 +72,6 @@ fun ViewGroup.addTapCounter(tag: String): DemoTapCounter = DemoTapCounter(contex
     it.setTextColor(context.tsColor(TSColorRole.TextSecondary))
     it.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
     it.tag = tag
-    ViewCompat.setAccessibilityLiveRegion(it, ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE)
     it.count = 0
     addView(it)
-}
-
-fun ViewGroup.markSectionHeadings() {
-    val tag = context.getString(R.string.demo_heading_tag)
-    (0 until childCount).map(::getChildAt).filter { it.tag == tag }.forEach { ViewCompat.setAccessibilityHeading(it, true) }
 }

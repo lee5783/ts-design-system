@@ -13,24 +13,7 @@ struct TSCardBehaviorTests {
         return host.sizeThatFits(in: CGSize(width: 358, height: CGFloat.greatestFiniteMagnitude)).height
     }
 
-    private func callCustomAction(_ name: String, on card: some View) throws {
-        let modifier = try card.inspect().find(TextCardContent.self).modifier(TSAccessibilityCustomActions.self).actualView()
-        let actions = modifier.isEnabled ? modifier.actions : []
-        guard let action = actions.first(where: { $0.label == name }) else {
-            throw InspectionError.notSupported("No accessibility action named \(name)")
-        }
-        action.handler()
-    }
-
-    @Test("An interactive card is one button element labelled by title and subtitle")
-    func interactiveIsOneElement() throws {
-        let sut = TSCard(title: "Weekly report", subtitle: "Updated today", text: "Revenue is up 12%.", action: {})
-        let element = try sut.inspect().find(TextCardContent.self)
-        #expect(try element.accessibilityLabel().string() == "Weekly report, Updated today")
-        #expect(try element.accessibilityTraits().contains(.isButton))
-    }
-
-    @Test("A typed accessory renders an icon button and is also an accessibility custom action")
+    @Test("A typed accessory renders an icon button that fires its action")
     func typedAccessory() throws {
         var fired = 0
         let sut = TSCard(
@@ -39,26 +22,11 @@ struct TSCardBehaviorTests {
             accessory: .iconButton(icon: .more, label: "More options") { fired += 1 },
             action: {}
         )
-        #expect(sut.customActions.map(\.label) == ["More options"])
-        let content = try sut.inspect().find(TSCardContent<TSCardAccessoryButton, Text>.self)
-        let modifier = try content.modifier(TSAccessibilityCustomActions.self).actualView()
-        #expect(modifier.isEnabled)
-        try #require(modifier.actions.first).handler()
-        #expect(fired == 1)
         try sut.inspect().find(TSIconButton.self).button().tap()
-        #expect(fired == 2)
+        #expect(fired == 1)
     }
 
-    @Test("The body text is read: as the value under a heading, or as the label when there is no heading")
-    func bodyIsRead() throws {
-        let headed = try TSCard(title: "Weekly report", text: "Revenue is up 12%.", action: {}).inspect().find(TextCardContent.self)
-        #expect(try headed.accessibilityLabel().string() == "Weekly report")
-        #expect(try headed.accessibilityValue().string() == "Revenue is up 12%.")
-        let textOnly = try TSCard(text: "Revenue is up 12%.", action: {}).inspect().find(TextCardContent.self)
-        #expect(try textOnly.accessibilityLabel().string() == "Revenue is up 12%.")
-    }
-
-    @Test("An interactive card fires its action from a tap and from accessibility activation")
+    @Test("An interactive card fires its action from a tap")
     func actionFires() throws {
         let counter = TapCounter()
         let sut = TSCard(title: "Weekly report", text: "Revenue is up 12%.", action: { counter.tap() })
@@ -66,23 +34,6 @@ struct TSCardBehaviorTests {
         #expect(counter.count == 1)
         sut.perform()
         #expect(counter.count == 2)
-    }
-
-    @Test("An interactive card exposes its footer and extra actions as accessibility custom actions")
-    func customActions() throws {
-        var fired: [String] = []
-        let sut = TSCard(
-            title: "Weekly report",
-            text: "Revenue is up 12%.",
-            footerActions: [TSCardAction("Share") { fired.append("Share") }, TSCardAction("Open", variant: .primary) { fired.append("Open") }],
-            accessibilityActions: [TSCardAction("More options") { fired.append("More options") }],
-            action: {}
-        )
-        #expect(sut.customActions.map(\.label) == ["Share", "Open", "More options"])
-        try callCustomAction("Open", on: sut)
-        try callCustomAction("More options", on: sut)
-        try callCustomAction("Share", on: sut)
-        #expect(fired == ["Open", "More options", "Share"])
     }
 
     @Test("Footer actions render as buttons that fire their handlers")
@@ -95,26 +46,20 @@ struct TSCardBehaviorTests {
         #expect(fired == ["Send"])
     }
 
-    @Test("A static card is not a button: its children stay separate elements")
+    @Test("A static card is not a button")
     func staticCardContainsChildren() throws {
         let sut = TSCard(title: "Weekly report", subtitle: "Updated today", text: "Revenue is up 12%.")
         #expect(throws: (any Error).self) {
             try sut.inspect().find(ViewType.Button.self)
         }
-        let element = try sut.inspect().find(TextCardContent.self)
-        #expect((try? element.accessibilityTraits().contains(.isButton)) != true)
-        #expect(try sut.inspect().find(text: "Weekly report").accessibilityTraits().contains(.isHeader))
     }
 
-    @Test("A disabled interactive card blocks its action and drops its custom actions")
+    @Test("A disabled interactive card blocks its action")
     func disabledBlocks() throws {
         let counter = TapCounter()
         let card = TSCard(title: "Weekly report", text: "Body", footerActions: [TSCardAction("Share") { counter.tap() }], action: { counter.tap() })
         #expect(throws: (any Error).self) {
             try card.disabled(true).inspect().find(ViewType.Button.self).tap()
-        }
-        #expect(throws: (any Error).self) {
-            try callCustomAction("Share", on: card.environment(\.isEnabled, false))
         }
         #expect(counter.count == 0)
     }

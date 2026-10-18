@@ -18,24 +18,19 @@ public enum TSIconSize: String, CaseIterable, Hashable, Sendable {
 public enum TSIconStyleSpec: TSStyleSpec {
     public struct Configuration: Hashable, Sendable {
         public let size: TSIconSize
-        public let hasLabel: Bool
 
-        public init(size: TSIconSize = .md, hasLabel: Bool = false) {
+        public init(size: TSIconSize = .md) {
             self.size = size
-            self.hasLabel = hasLabel
         }
     }
 
     public struct Resolved: Equatable, Sendable {
         public let pointSize: CGFloat
-        public let isAccessibilityElement: Bool
     }
 
-    public static let allConfigurations: [Configuration] = TSIconSize.allCases.flatMap { size in
-        [false, true].map { Configuration(size: size, hasLabel: $0) }
-    }
+    public static let allConfigurations: [Configuration] = TSIconSize.allCases.map { Configuration(size: $0) }
 
     public static func resolve(_ configuration: Configuration) -> Resolved {
-        Resolved(pointSize: configuration.size.pointSize, isAccessibilityElement: configuration.hasLabel)
+        Resolved(pointSize: configuration.size.pointSize)
     }
 }

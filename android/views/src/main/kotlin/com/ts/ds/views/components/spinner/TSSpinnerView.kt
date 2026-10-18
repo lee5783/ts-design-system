@@ -5,9 +5,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.ProgressBar
-import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.style.TSSpinnerSize
 import com.ts.ds.core.style.TSSpinnerStyleSpec
 import com.ts.ds.core.style.TSSpinnerTone
@@ -39,13 +36,11 @@ public class TSSpinnerView @JvmOverloads constructor(
         }
 
     init {
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         context.obtainStyledAttributes(attrs, R.styleable.TSSpinnerView, defStyleAttr, 0).apply {
             size = TSSpinnerSize.entries[getInt(R.styleable.TSSpinnerView_tsSpinnerSize, TSSpinnerSize.Md.ordinal)]
             tone = TSSpinnerTone.entries[getInt(R.styleable.TSSpinnerView_tsSpinnerTone, TSSpinnerTone.Primary.ordinal)]
             recycle()
         }
-        if (contentDescription == null) contentDescription = context.getString(CoreR.string.ts_loading)
         ready = true
         rebuild()
     }
@@ -83,11 +78,6 @@ public class TSSpinnerView @JvmOverloads constructor(
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
         if (ready) updateAnimation()
-    }
-
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        info.className = ProgressBar::class.java.name
     }
 
     private fun makeDrawable(size: TSSpinnerSize): TSSpinnerDrawable {

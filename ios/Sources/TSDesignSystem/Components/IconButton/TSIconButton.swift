@@ -41,7 +41,6 @@ public struct TSIconButton: View {
         .buttonStyle(TSIconButtonStyle(variant: variant, isRound: isRound, isFocused: isFocused, stateOverride: stateOverride))
         .focused($isFocused)
         .tsFocusEffectDisabled()
-        .accessibilityLabel(Text(label))
         .accessibilityShowsLargeContentViewer {
             TSIconSourceView(source: icon, pointSize: iconSize)
             Text(label)

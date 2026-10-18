@@ -4,9 +4,6 @@ import android.content.pm.ApplicationInfo
 import android.os.Looper
 import android.view.View
 import android.view.animation.PathInterpolator
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.haptics.DsHaptics
 import com.ts.ds.core.style.TSColorRole
@@ -78,19 +75,14 @@ class TSSwitchViewTest {
     }
 
     @Test
-    fun nodeIsACheckableSwitchWithOnOffStateDescription() {
+    fun checkedStateFollowsTheSetter() {
         val view = switch()
-        val node = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
 
-        assertEquals(SwitchCompat::class.java.name, node.className)
-        assertEquals("Wi-Fi", node.text.toString())
-        assertTrue(node.isCheckable)
-        assertEquals("Off", ViewCompat.getStateDescription(view).toString())
-        assertEquals(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS, view.trackView.importantForAccessibility)
+        assertFalse(view.isChecked)
 
         view.isChecked = true
 
-        assertEquals("On", ViewCompat.getStateDescription(view).toString())
+        assertTrue(view.isChecked)
     }
 
     @Test

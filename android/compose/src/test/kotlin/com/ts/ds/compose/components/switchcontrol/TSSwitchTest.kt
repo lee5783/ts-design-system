@@ -11,10 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
@@ -95,17 +91,12 @@ class TSSwitchTest {
     }
 
     @Test
-    fun tapOnTheLabelTogglesAndExposesTheSwitchRole() {
+    fun tapOnTheLabelToggles() {
         setSwitch()
 
-        composeRule.onNodeWithTag("switch")
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Switch))
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Off"))
-            .assertIsOff()
+        composeRule.onNodeWithTag("switch").assertIsOff()
         composeRule.onNodeWithText("Wi-Fi").performClick()
-        composeRule.onNodeWithTag("switch")
-            .assertIsOn()
-            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "On"))
+        composeRule.onNodeWithTag("switch").assertIsOn()
 
         assertEquals(listOf(true), changes)
         assertEquals(DsHaptics.constantFor(DsHapticEvent.ToggleOn), shadowOf(hostView).lastHapticFeedbackPerformed())

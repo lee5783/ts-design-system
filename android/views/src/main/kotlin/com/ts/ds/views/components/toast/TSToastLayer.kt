@@ -10,7 +10,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.ts.ds.core.logic.TSToastEntry
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSToastStyleSpec
 import com.ts.ds.core.style.resolve
 import com.ts.ds.views.components.shared.dpToPx
@@ -31,7 +30,7 @@ internal class TSToastLayer(context: Context) : FrameLayout(context) {
             requestLayout()
         }
 
-    var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    var reduceMotion: () -> Boolean = { false }
 
     var toastView: TSToastView? = null
         private set
@@ -45,7 +44,6 @@ internal class TSToastLayer(context: Context) : FrameLayout(context) {
     private val anchorListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> requestLayout() }
 
     init {
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_AUTO
         clipChildren = false
         clipToPadding = false
         ViewCompat.setOnApplyWindowInsetsListener(this) { _, insets ->
@@ -62,7 +60,7 @@ internal class TSToastLayer(context: Context) : FrameLayout(context) {
         ViewCompat.requestApplyInsets(this)
     }
 
-    fun show(entry: TSToastEntry?, announces: Boolean, perform: (TSToastEntry) -> Unit) {
+    fun show(entry: TSToastEntry?, perform: (TSToastEntry) -> Unit) {
         if (entry?.id == shownEntry?.id) return
         toastView?.let(::animateOut)
         toastView = null
@@ -73,7 +71,6 @@ internal class TSToastLayer(context: Context) : FrameLayout(context) {
             tone = entry.message.tone
             actionLabel = entry.message.actionLabel
             onAction = entry.message.actionLabel?.let { { perform(entry) } }
-            if (announces) ViewCompat.setAccessibilityLiveRegion(this, ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE)
             visibility = INVISIBLE
         }
         addView(toast, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL))
@@ -122,7 +119,6 @@ internal class TSToastLayer(context: Context) : FrameLayout(context) {
     }
 
     private fun animateOut(toast: TSToastView) {
-        ViewCompat.setAccessibilityLiveRegion(toast, ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE)
         toast.actionView.isEnabled = false
         toast.animate().cancel()
         toast.animate()

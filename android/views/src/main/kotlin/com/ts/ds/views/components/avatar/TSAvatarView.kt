@@ -9,15 +9,11 @@ import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.withClip
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.TextViewCompat
 import com.google.android.material.textview.MaterialTextView
@@ -75,22 +71,10 @@ public class TSAvatarView @JvmOverloads constructor(
         initialsView.isSingleLine = true
         initialsView.includeFontPadding = false
         initialsView.setTextAppearance(R.style.TextAppearance_TS_Component_AvatarInitials)
-        listOf(imageView, initialsView, placeholderView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
-        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
+        listOf(imageView, placeholderView).forEach { it.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO }
         addView(imageView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(initialsView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         addView(placeholderView, LayoutParams(0, 0, Gravity.CENTER))
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = ImageView::class.java.name
-                    info.contentDescription = name.takeIf { it.isNotBlank() }
-                    info.isClickable = false
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSAvatarView, defStyleAttr, 0).apply {
             name = getString(R.styleable.TSAvatarView_tsName) ?: ""
             image = getDrawable(R.styleable.TSAvatarView_android_src)

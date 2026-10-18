@@ -16,12 +16,9 @@ struct TSStringsTests {
         #expect(TSStrings.loading == "Loading")
         #expect(TSStrings.close == "Close")
         #expect(TSStrings.dismiss == "Dismiss")
-        #expect(TSStrings.position(2, of: 4, locale: Locale(identifier: "en_US")) == "2 of 4")
-        #expect(TSStrings.tabPosition(2, of: 4, locale: Locale(identifier: "en_US")) == "Tab, 2 of 4")
         #expect(TSStrings.countOverflow(99, locale: Locale(identifier: "en_US")) == "99+")
-        #expect(TSStrings.bottomNavBadge("3", locale: Locale(identifier: "en_US")) == "3 new")
-        #expect(TSStrings.listItemNavigates == "Opens another screen")
-        #expect(TSAlertTone.allCases.map(TSStrings.alertTone) == ["Information", "Success", "Warning", "Error"])
+        #expect(TSStrings.showPassword == "Show password")
+        #expect(TSStrings.hidePassword == "Hide password")
     }
 
     @Test("A bundle without the override table falls back to the library catalog")

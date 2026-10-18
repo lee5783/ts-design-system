@@ -266,7 +266,6 @@ class ThemeOverrideTest {
         setDeviceDark(false)
         val title = resources.getString(DemoR.string.demo_sample_toast_sheet_title)
         val linkCopied = resources.getString(DemoR.string.demo_sample_link_copied)
-        val toast = "${resources.getString(DemoR.string.demo_sample_success)}, $linkCopied"
         launchWithTheme(DemoTheme.Dark).use { scenario ->
             openPage(DemoPageId.Toast)
             tap(ToastFragment.SHEET_OPEN)
@@ -279,7 +278,7 @@ class ThemeOverrideTest {
             onView(withText(title)).inRoot(isDialog()).check(matches(isDisplayed()))
             assertTrue(!scenario.dialogIsDark(ToastFragment.SHEET_TAG, title))
             scenario.awaitToast(linkCopied)
-            onView(withContentDescription(toast)).inRoot(isDialog()).check(matches(isDisplayed()))
+            onView(withText(linkCopied)).inRoot(isDialog()).check(matches(isDisplayed()))
         }
     }
 
@@ -300,7 +299,7 @@ class ThemeOverrideTest {
                 assertEquals(firstId, host.current?.id)
                 assertEquals(listOf(second, resources.getString(DemoR.string.demo_sample_backup_complete)), host.queue.pending.map { it.message.text })
             }
-            onView(withContentDescription("${resources.getString(DemoR.string.demo_sample_success)}, $first")).check(matches(isDisplayed()))
+            onView(withText(first)).check(matches(isDisplayed()))
             scenario.awaitToast(second)
         }
     }

@@ -21,7 +21,6 @@ struct DemoComponentSection<Content: View>: View {
             Text(title)
                 .foregroundColor(TSColor.textMuted.color)
                 .tsFont(.overline)
-                .accessibilityAddTraits(.isHeader)
             content
         }
         .frame(maxWidth: .infinity, alignment: .leading)

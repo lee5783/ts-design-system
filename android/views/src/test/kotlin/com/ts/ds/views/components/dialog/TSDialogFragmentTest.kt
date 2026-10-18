@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ts.ds.core.logic.TSDialogAction
@@ -90,17 +89,12 @@ class TSDialogFragmentTest {
         idle()
     }
 
-    private fun nodeOf(view: View): AccessibilityNodeInfoCompat =
-        AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-
     @Test
-    fun centerPresentsAModalPanelWithPaneTitleAndHeading() {
+    fun centerPresentsAModalPanel() {
         val fragment = center()
         assertTrue(fragment.presentAndIdle())
         assertTrue(fragment.requireDialog().isShowing)
         val panel = requireNotNull(fragment.panel)
-        assertEquals("Delete this project?", ViewCompat.getAccessibilityPaneTitle(panel))
-        assertTrue(nodeOf(panel.titleView).isHeading)
         assertEquals("This cannot be undone.", panel.messageView.text.toString())
         assertEquals(View.GONE, panel.grabberView.visibility)
         assertTrue(presenter.isActive(fragment))
@@ -318,17 +312,6 @@ class TSDialogFragmentTest {
         idle()
         assertEquals(1, dismissals)
         assertFalse(presenter.isPresenting)
-    }
-
-    @Test
-    fun accessibilityCloseAndDismissActionsDismiss() {
-        val fragment = center().also { it.presentAndIdle() }
-        val panel = requireNotNull(fragment.panel)
-        val labels = nodeOf(panel).actionList.mapNotNull { it.label?.toString() }
-        assertTrue(labels.contains("Close"))
-        assertTrue(ViewCompat.performAccessibilityAction(panel, AccessibilityNodeInfoCompat.ACTION_DISMISS, null))
-        idle()
-        assertEquals(1, dismissals)
     }
 
     @Test

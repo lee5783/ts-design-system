@@ -81,7 +81,6 @@ private fun AlertPlayground() {
     var dismissible by rememberSaveable { mutableStateOf(true) }
     var showsAction by rememberSaveable { mutableStateOf(false) }
     var shown by rememberSaveable { mutableStateOf(true) }
-    var dismissedOnce by rememberSaveable { mutableStateOf(false) }
     var actions by rememberSaveable { mutableIntStateOf(0) }
     val offline = SampleData.message("offline")
 
@@ -120,11 +119,9 @@ private fun AlertPlayground() {
             stringResource(offline.bodyRes),
             tone = tone,
             title = if (showsTitle) stringResource(offline.titleRes) else null,
-            announcesWhenShown = dismissedOnce,
             onDismiss = if (dismissible) {
                 {
                     shown = false
-                    dismissedOnce = true
                 }
             } else {
                 null

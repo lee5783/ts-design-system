@@ -19,14 +19,10 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.ts.ds.core.haptics.DsHapticEvent
 import com.ts.ds.core.haptics.DsHaptics
-import com.ts.ds.core.motion.TSReduceMotion
 import com.ts.ds.core.style.TSTabItem
 import com.ts.ds.core.style.TSTabsStyleSpec
 import com.ts.ds.core.style.TSTabsVariant
@@ -102,7 +98,7 @@ public class TSTabsView @JvmOverloads constructor(
     private var selection = ""
     private var ready = false
 
-    internal var reduceMotion: () -> Boolean = { TSReduceMotion.isEnabled }
+    internal var reduceMotion: () -> Boolean = { false }
 
     public var items: List<TSTabItem> = emptyList()
         set(value) {
@@ -129,12 +125,6 @@ public class TSTabsView @JvmOverloads constructor(
             applyConfiguration()
         }
 
-    public var label: CharSequence? = null
-        set(value) {
-            field = value
-            contentDescription = value
-        }
-
     init {
         setWillNotDraw(false)
         scrollView.isHorizontalScrollBarEnabled = false
@@ -150,26 +140,9 @@ public class TSTabsView @JvmOverloads constructor(
         content.addView(indicatorView, LayoutParams(0, 0))
         scrollView.addView(content, LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         addView(scrollView, LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START or Gravity.TOP))
-        ViewCompat.setAccessibilityDelegate(
-            this,
-            object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.setCollectionInfo(
-                        AccessibilityNodeInfoCompat.CollectionInfoCompat.obtain(
-                            1,
-                            items.size,
-                            false,
-                            AccessibilityNodeInfoCompat.CollectionInfoCompat.SELECTION_MODE_SINGLE,
-                        ),
-                    )
-                }
-            },
-        )
         context.obtainStyledAttributes(attrs, R.styleable.TSTabsView, defStyleAttr, 0).apply {
             variant = TSTabsVariant.entries[getInt(R.styleable.TSTabsView_tsTabsVariant, 0)]
             isBlock = getBoolean(R.styleable.TSTabsView_tsBlock, false)
-            label = getText(R.styleable.TSTabsView_tsLabel)
             getTextArray(R.styleable.TSTabsView_android_entries)?.let { entries ->
                 items = entries.map { TSTabItem(it.toString(), it.toString()) }
             }
@@ -336,7 +309,6 @@ public class TSTabsView @JvmOverloads constructor(
         val selectedIndex = selectedIndex
         tabViews.forEachIndexed { index, tab ->
             tab.isTabSelected = index == selectedIndex
-            tab.updatePosition(index, tabViews.size)
         }
         if (animated) {
             animateMarker()
@@ -385,7 +357,7 @@ public class TSTabsView @JvmOverloads constructor(
         animator?.cancel()
         animator = null
         val reference = TSTabsStyleSpec.resolve(TSTabsStyleSpec.Configuration(variant, selected = true))
-        val duration = TSReduceMotion.durationMillis(reference.animationDurationMillis, reduceMotion())
+        val duration = if (reduceMotion()) 0 else reference.animationDurationMillis
         if (duration == 0 || !markerPlaced) return
         val startLeft = markerLeft
         val startWidth = markerWidth

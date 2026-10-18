@@ -108,8 +108,8 @@ struct TSListItemStyleSpecTests {
     }
 }
 
-@Suite("TSListItemAccessibility")
-struct TSListItemAccessibilityTests {
+@Suite("TSListItemRole")
+struct TSListItemRoleTests {
     @Test(
         "The role comes from the action, the chevron and a trailing switch",
         arguments: [
@@ -125,22 +125,5 @@ struct TSListItemAccessibilityTests {
         let role = TSListItemRole.make(hasAction: hasAction, showsChevron: showsChevron, hasToggle: hasToggle)
         #expect(role == expected)
         #expect(role.isPressable == (expected == .action || expected == .navigation))
-    }
-
-    @Test("The label joins the title and subtitle; only navigation rows get a hint")
-    func labelAndHint() {
-        #expect(TSListItemAccessibility.label(title: "Inbox", subtitle: "12 unread") == "Inbox, 12 unread")
-        #expect(TSListItemAccessibility.label(title: "Inbox", subtitle: nil) == "Inbox")
-        #expect(TSListItemAccessibility.label(title: "Inbox", subtitle: "") == "Inbox")
-        #expect(TSListItemAccessibility.hint(for: .navigation) == "Opens another screen")
-        #expect(TSListItemAccessibility.hint(for: .action) == nil)
-        #expect(TSListItemAccessibility.hint(for: .toggle) == nil)
-        #expect(TSListItemAccessibility.hint(for: .plain) == nil)
-    }
-
-    @Test("A disclosure row reports Expanded or Collapsed")
-    func expansionValue() {
-        #expect(TSListItemAccessibility.expansionValue(isExpanded: true) == "Expanded")
-        #expect(TSListItemAccessibility.expansionValue(isExpanded: false) == "Collapsed")
     }
 }

@@ -12,7 +12,7 @@ export const IOS_DEMOS = ["swiftui", "uikit"] as const;
 export const ANDROID_DEMOS = ["compose", "views"] as const;
 
 const SHARED = ["Makefile", ".gitattributes", "tools/package.json", "tools/package-lock.json", "tools/ci/**"];
-const IOS_LIBRARY = ["ios/**", "Package.swift", "Package.resolved", ".xcode-version", "design/**", "tools/codegen/**"];
+const IOS_LIBRARY = ["ios/**", "Package.swift", "Package.resolved", ".xcode-version", ".ios-simulator", "design/**", "tools/codegen/**"];
 const ANDROID_LIBRARY = ["android/**", "design/**", "tools/codegen/**", "mise.toml"];
 const DEMOS_WORKFLOW = ".github/workflows/demos.yml";
 
