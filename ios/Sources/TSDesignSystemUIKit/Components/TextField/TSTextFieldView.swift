@@ -181,7 +181,6 @@ public final class TSTextFieldView: UIControl {
         addSubview(stackView)
 
         labelView.numberOfLines = 0
-        labelView.isAccessibilityElement = false
 
         contentStack.axis = .horizontal
         contentStack.alignment = .center
@@ -207,7 +206,6 @@ public final class TSTextFieldView: UIControl {
         messageStack.spacing = resolved.messageSpacing
         [messageIconView, messageLabel].forEach(messageStack.addArrangedSubview)
         messageLabel.numberOfLines = 0
-        messageLabel.isAccessibilityElement = false
         messageIconView.isAccessibilityElement = false
 
         NSLayoutConstraint.activate([

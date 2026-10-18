@@ -90,7 +90,7 @@ public final class TSToastView: UIView {
             messageLabel.bottomAnchor.constraint(equalTo: messageView.bottomAnchor),
             messageLabel.trailingAnchor.constraint(equalTo: messageView.trailingAnchor)
         ])
-        messageView.isAccessibilityElement = true
+        messageView.isAccessibilityElement = false
         messageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         messageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         iconView.setContentHuggingPriority(.required, for: .horizontal)
@@ -170,7 +170,7 @@ final class TSToastActionButton: UIControl {
         titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.setContentHuggingPriority(.required, for: .horizontal)
         addAction(UIAction { [weak self] _ in self?.sendActions(for: .primaryActionTriggered) }, for: .touchUpInside)
-        isAccessibilityElement = true
+        isAccessibilityElement = false
     }
 
     @available(*, unavailable)

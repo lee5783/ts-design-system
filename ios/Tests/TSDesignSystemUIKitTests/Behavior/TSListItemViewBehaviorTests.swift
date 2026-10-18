@@ -60,7 +60,7 @@ struct TSListItemViewBehaviorTests {
         #expect(toggle.itemContentView.backgroundColor == .clear)
     }
 
-    @Test("The row is one element and its content view is not")
+    @Test("Neither the row nor its content view is an element")
     func rowElement() {
         let row = makeRow(TSListItemConfiguration(
             title: "Inbox",
@@ -70,7 +70,7 @@ struct TSListItemViewBehaviorTests {
             showsChevron: true,
             isInteractive: true
         ))
-        #expect(row.isAccessibilityElement)
+        #expect(!row.isAccessibilityElement)
         #expect(!row.itemContentView.isAccessibilityElement)
     }
 

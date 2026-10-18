@@ -88,7 +88,7 @@ public final class TSAvatarView: UIView {
             placeholderView.centerXAnchor.constraint(equalTo: centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
-        isAccessibilityElement = true
+        isAccessibilityElement = false
     }
 
     private func applyStyle() {

@@ -15,7 +15,7 @@ struct TSListItemCellBehaviorTests {
         return state
     }
 
-    @Test("The item becomes a TSListItemConfiguration content configuration and the cell is the accessibility element")
+    @Test("The item becomes a TSListItemConfiguration content configuration and the cell exposes its content")
     func contentConfiguration() throws {
         let cell = makeCell()
         cell.item = TSListItemConfiguration(title: "Inbox", subtitle: "12 unread", showsChevron: true, isInteractive: true)
@@ -24,7 +24,7 @@ struct TSListItemCellBehaviorTests {
         #expect(configuration.title == "Inbox")
         let content = try #require(cell.itemContentView)
         #expect(!content.isAccessibilityElement)
-        #expect(cell.isAccessibilityElement)
+        #expect(!cell.isAccessibilityElement)
     }
 
     @Test("A highlighted interactive cell draws surface-pressed; a highlighted static cell does not")

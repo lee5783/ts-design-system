@@ -22,7 +22,7 @@ struct TSToastViewBehaviorTests {
         let traits = toast.traitCollection
         let resolved = TSToastStyleSpec.resolve(.init(tone: tone))
         #expect(!toast.isAccessibilityElement)
-        #expect(toast.messageView.isAccessibilityElement)
+        #expect(!toast.messageView.isAccessibilityElement)
         #expect(toast.backgroundColor == TSColor.surfaceInverse.uiColor.resolvedColor(with: traits))
         #expect(toast.iconView.isHidden == (resolved.icon == nil))
         if let icon = resolved.icon, let color = resolved.iconColor {

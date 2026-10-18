@@ -119,10 +119,18 @@ final class FeedbackComponentsTests: XCTestCase {
         let app = launch(page: "toast")
         let show = element(app, "demo.toast.queue.show")
         scrollTo(show, in: app)
-        let baseline = iconCount(app, "check-circle")
         show.tap()
-        XCTAssertTrue(waitForIconCount(app, "check-circle", baseline + 1, timeout: 5))
-        XCTAssertTrue(waitForIconCount(app, "check-circle", baseline, timeout: 40))
+        let first = app.staticTexts["Photo uploaded"].firstMatch
+        let second = app.staticTexts["Album shared"].firstMatch
+        let third = app.staticTexts["Backup complete"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 5))
+        XCTAssertFalse(second.exists)
+        XCTAssertTrue(second.waitForExistence(timeout: 8))
+        XCTAssertFalse(first.exists)
+        XCTAssertFalse(third.exists)
+        XCTAssertTrue(third.waitForExistence(timeout: 8))
+        XCTAssertFalse(second.exists)
+        XCTAssertTrue(third.waitForNonExistence(timeout: 8))
     }
 
     @MainActor
@@ -131,12 +139,15 @@ final class FeedbackComponentsTests: XCTestCase {
         let show = element(app, "demo.toast.playground.show")
         let counter = element(app, "demo.toast.playground.count")
         scrollTo(counter, in: app)
-        let baseline = iconCount(app, "info")
         show.tap()
-        XCTAssertTrue(waitForIconCount(app, "info", baseline + 1, timeout: 5))
-        let window = app.windows.firstMatch.frame
-        app.windows.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.88, dy: toastIcon(app, "info").frame.midY / window.height)).tap()
-        XCTAssertTrue(waitForIconCount(app, "info", baseline, timeout: 5))
+        let message = app.staticTexts["Message deleted"].firstMatch
+        XCTAssertTrue(message.waitForExistence(timeout: 5))
+        let undo = app.staticTexts.matching(NSPredicate(format: "label == 'Undo'")).allElementsBoundByIndex
+            .first { abs($0.frame.midY - message.frame.midY) < 30 }
+        XCTAssertNotNil(undo)
+        XCTAssertTrue(undo?.isHittable == true)
+        undo?.tap()
+        XCTAssertTrue(message.waitForNonExistence(timeout: 5))
         XCTAssertEqual(counter.label, "Tapped 1 times")
     }
 
@@ -148,10 +159,10 @@ final class FeedbackComponentsTests: XCTestCase {
         open.tap()
         let title = app.staticTexts["Toasts sit above sheets"].firstMatch
         XCTAssertTrue(title.waitForExistence(timeout: 5))
-        let baseline = iconCount(app, "check-circle")
         app.buttons["Copy link"].firstMatch.tap()
-        XCTAssertTrue(waitForIconCount(app, "check-circle", baseline + 1, timeout: 5))
-        XCTAssertTrue(toastIcon(app, "check-circle").isHittable)
+        let toast = app.staticTexts["Link copied"].firstMatch
+        XCTAssertTrue(toast.waitForExistence(timeout: 5))
+        XCTAssertTrue(toast.isHittable)
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12)).tap()
         XCTAssertTrue(title.waitForNonExistence(timeout: 5))
     }
@@ -167,27 +178,6 @@ final class FeedbackComponentsTests: XCTestCase {
         }
         XCTAssertTrue(element(app, "demo.spinner.labelled").exists)
         XCTAssertEqual(element(app, "demo.spinner.in-context").label, "Loading messages")
-    }
-
-    @MainActor
-    private func iconCount(_ app: XCUIApplication, _ identifier: String) -> Int {
-        app.images.matching(identifier: identifier).count
-    }
-
-    @MainActor
-    private func toastIcon(_ app: XCUIApplication, _ identifier: String) -> XCUIElement {
-        let icons = app.images.matching(identifier: identifier).allElementsBoundByIndex
-        return icons.max { $0.frame.midY < $1.frame.midY } ?? app.images[identifier].firstMatch
-    }
-
-    @MainActor
-    private func waitForIconCount(_ app: XCUIApplication, _ identifier: String, _ count: Int, timeout: TimeInterval) -> Bool {
-        let deadline = Date().addingTimeInterval(timeout)
-        while Date() < deadline {
-            if iconCount(app, identifier) == count { return true }
-            usleep(100_000)
-        }
-        return false
     }
 
     @MainActor

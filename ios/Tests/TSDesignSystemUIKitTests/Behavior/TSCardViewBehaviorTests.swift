@@ -16,10 +16,10 @@ struct TSCardViewBehaviorTests {
         return view
     }
 
-    @Test("An interactive card is one element and owns its hits")
-    func interactiveIsOneElement() {
+    @Test("An interactive card exposes its content and owns its hits")
+    func interactiveExposesContent() {
         let card = layout(TSCardView(title: "Weekly report", subtitle: "Updated today", bodyText: "Revenue is up 12%.", isInteractive: true))
-        #expect(card.isAccessibilityElement)
+        #expect(!card.isAccessibilityElement)
         #expect(card.hitTest(CGPoint(x: 40, y: 30), with: nil) === card)
         #expect(card.hitTest(CGPoint(x: 40, y: card.bounds.height - 20), with: nil) === card)
     }

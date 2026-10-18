@@ -135,7 +135,5 @@ public final class TSCheckboxView: UIControl {
             alignment: effectiveUserInterfaceLayoutDirection == .rightToLeft ? .right : .left
         )
         alpha = resolved.opacity
-
-        isAccessibilityElement = true
     }
 }

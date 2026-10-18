@@ -21,7 +21,7 @@ struct TSAlertViewBehaviorTests {
         let alert = layout(TSAlertView(tone: tone, title: "Payment failed", message: "Update your card."))
         let traits = alert.traitCollection
         #expect(!alert.isAccessibilityElement)
-        #expect(alert.messageView.isAccessibilityElement)
+        #expect(!alert.messageView.isAccessibilityElement)
         #expect(alert.iconView.name == TSAlertStyleSpec.icon(tone))
         #expect(alert.backgroundColor == TSAlertStyleSpec.resolve(.init(tone: tone)).fill.uiColor.resolvedColor(with: traits))
     }

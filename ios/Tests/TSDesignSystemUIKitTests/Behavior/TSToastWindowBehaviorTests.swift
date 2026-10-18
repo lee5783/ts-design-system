@@ -58,12 +58,14 @@ struct TSToastWindowBehaviorTests {
         #expect(!fixture.window.isHidden)
     }
 
-    @Test("A plain toast and an undo toast both leave after 4 s")
+    @Test("A plain toast leaves after 4 s and an undo toast after 10 s")
     func autoDismissTiming() {
         let fixture = makeFixture()
         fixture.queue.enqueue(TSToastItem(message: "Project archived", action: TSToastAction(title: "Undo") {}))
-        #expect(fixture.queueClock.activeDelays == [4])
+        #expect(fixture.queueClock.activeDelays == [10])
         fixture.queueClock.fire(after: 4)
+        #expect(shownMessage(fixture) == "Project archived")
+        fixture.queueClock.fire(after: 10)
         #expect(shownMessage(fixture) == nil)
     }
 

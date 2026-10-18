@@ -310,7 +310,7 @@ public final class TSCardView: UIControl {
         accessoryView.flatMap { $0 as? UIControl }?.isEnabled = isEnabled
         (accessoryView as? TSIconButtonView)?.isDimmedByContainer = !isEnabled
         (accessoryView as? TSButtonView)?.isDimmedByContainer = !isEnabled
-        isAccessibilityElement = isInteractive
+        isAccessibilityElement = false
         setNeedsLayout()
     }
 }

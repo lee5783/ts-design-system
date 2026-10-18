@@ -66,7 +66,7 @@ struct TSToastBehaviorTests {
         #expect(throws: (any Error).self) { try host.inspect().find(TSToast.self) }
     }
 
-    @Test("A plain toast and an undo toast both leave after 4 s")
+    @Test("A plain toast leaves after 4 s and an undo toast after 10 s")
     func autoDismissTiming() throws {
         let (queue, clock) = makeQueue()
         let host = TSToastHostView(queue: queue, bottomInset: 0) { _ in }
@@ -76,8 +76,10 @@ struct TSToastBehaviorTests {
         #expect(throws: (any Error).self) { try host.inspect().find(TSToast.self) }
 
         queue.enqueue(TSToastItem(message: "Project archived", action: TSToastAction(title: "Undo") {}))
-        #expect(clock.activeDelays == [4])
+        #expect(clock.activeDelays == [10])
         clock.fire(after: 4)
+        #expect(try shownMessage(in: host) == "Project archived")
+        clock.fire(after: 10)
         #expect(throws: (any Error).self) { try host.inspect().find(TSToast.self) }
     }
 

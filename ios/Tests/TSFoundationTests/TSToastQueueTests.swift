@@ -82,11 +82,12 @@ struct TSToastQueueTests {
         #expect(scheduler.activeDelays == [6])
     }
 
-    @Test("An action does not change the 4 second default")
-    func actionKeepsDefault() {
+    @Test("An action extends the timeout")
+    func actionExtends() {
         let (queue, scheduler) = makeQueue()
         queue.enqueue(TSToastItem(message: "Deleted", action: TSToastAction(title: "Undo") {}))
-        #expect(scheduler.activeDelays == [TSToastTimeout.standard])
+        #expect(scheduler.activeDelays == [TSToastTimeout.extended])
+        #expect(TSToastTimeout.extended > TSToastTimeout.standard)
     }
 
     @Test("Cancelling the current toast stops its timer and shows the next one")

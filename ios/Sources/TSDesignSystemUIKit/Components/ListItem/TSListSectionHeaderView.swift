@@ -36,7 +36,7 @@ public final class TSListSectionHeaderView: UICollectionReusableView {
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -group.headerHorizontalPadding),
             bottom
         ])
-        isAccessibilityElement = true
+        isAccessibilityElement = false
     }
 
     private func applyStyle() {

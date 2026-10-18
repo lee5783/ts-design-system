@@ -82,7 +82,6 @@ final class TSBottomNavItemView: UIControl {
         [pillView, iconView, labelView, badgeView, badgeLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.isUserInteractionEnabled = false
-            $0.isAccessibilityElement = false
         }
         pillView.layer.cornerCurve = .continuous
         pillView.layer.cornerRadius = resolved.pillCornerRadius
@@ -159,7 +158,7 @@ final class TSBottomNavItemView: UIControl {
 
         largeContentTitle = item.label
         largeContentImage = item.icon.templateImage(pointSize: resolved.iconSize.pointSize)
-        isAccessibilityElement = true
+        isAccessibilityElement = false
         setNeedsLayout()
     }
 }

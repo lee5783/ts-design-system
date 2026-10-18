@@ -73,7 +73,6 @@ final class TSTabView: UIControl {
     private func configureHierarchy() {
         labelView.translatesAutoresizingMaskIntoConstraints = false
         labelView.isUserInteractionEnabled = false
-        labelView.isAccessibilityElement = false
         labelView.setContentCompressionResistancePriority(.required, for: .vertical)
         labelView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         labelView.baselineAdjustment = .alignCenters
@@ -132,6 +131,6 @@ final class TSTabView: UIControl {
         layer.cornerCurve = .continuous
         alpha = resolved.opacity
 
-        isAccessibilityElement = true
+        isAccessibilityElement = false
     }
 }

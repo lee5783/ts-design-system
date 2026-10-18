@@ -75,7 +75,7 @@ public final class TSBadgeView: UIView {
         let fitsContent = heightAnchor.constraint(equalToConstant: resolved.minHeight)
         fitsContent.priority = .defaultLow
         fitsContent.isActive = true
-        isAccessibilityElement = true
+        isAccessibilityElement = false
     }
 
     private func applyStyle() {

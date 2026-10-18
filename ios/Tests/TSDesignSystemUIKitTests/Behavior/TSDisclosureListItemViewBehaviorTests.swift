@@ -47,12 +47,12 @@ struct TSDisclosureListItemViewBehaviorTests {
         #expect(counter.count == 0)
     }
 
-    @Test("The header is the element and carries the row's identifier")
+    @Test("The header exposes its content and carries the row's identifier")
     func headerElement() {
         let (row, _) = makeRow()
         let header = row.headerView
         #expect(!row.isAccessibilityElement)
-        #expect(header.isAccessibilityElement)
+        #expect(!header.isAccessibilityElement)
         row.accessibilityIdentifier = "licence.kotlin"
         #expect(header.accessibilityIdentifier == "licence.kotlin")
     }

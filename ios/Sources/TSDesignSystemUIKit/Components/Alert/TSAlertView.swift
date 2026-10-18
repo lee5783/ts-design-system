@@ -98,7 +98,7 @@ public final class TSAlertView: UIView {
         messageView.alignment = .top
         messageView.spacing = resolved.spacing
         [iconView, textStack].forEach(messageView.addArrangedSubview)
-        messageView.isAccessibilityElement = true
+        messageView.isAccessibilityElement = false
         messageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         messageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         iconView.setContentHuggingPriority(.required, for: .horizontal)

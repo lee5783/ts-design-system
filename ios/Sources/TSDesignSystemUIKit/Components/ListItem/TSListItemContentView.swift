@@ -131,8 +131,8 @@ public final class TSListItemContentView: UIView, UIContentView {
     }
 
     private func applyAccessibility() {
-        isAccessibilityElement = accessibilityHost == nil
-        accessibilityHost?.isAccessibilityElement = true
+        isAccessibilityElement = false
+        accessibilityHost?.isAccessibilityElement = false
     }
 
     private func applyLeading(_ leading: TSListItemLeading) {

@@ -313,6 +313,7 @@ public final class com/ts/ds/core/logic/TSToastScheduler$Companion {
 
 public final class com/ts/ds/core/logic/TSToastTimeouts {
 	public static final field DEFAULT_MILLIS J
+	public static final field EXTENDED_MILLIS J
 	public static final field INSTANCE Lcom/ts/ds/core/logic/TSToastTimeouts;
 	public final fun getDefault ()Lkotlin/jvm/functions/Function1;
 }

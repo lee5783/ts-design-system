@@ -111,7 +111,8 @@ public final class TSToastQueue: ObservableObject {
     }
 
     public func timeout(for item: TSToastItem) -> TimeInterval {
-        item.duration ?? TSToastTimeout.standard
+        let standard = item.duration ?? TSToastTimeout.standard
+        return item.action == nil ? standard : max(standard, TSToastTimeout.extended)
     }
 
     public func dismiss(_ id: TSToastItem.ID) {

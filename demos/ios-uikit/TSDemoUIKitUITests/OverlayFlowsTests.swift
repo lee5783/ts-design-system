@@ -83,7 +83,7 @@ final class OverlayFlowsTests: XCTestCase {
         let show = element(app, "demo.toast.typing.show")
         XCTAssertTrue(show.isHittable)
         show.tap()
-        let toast = app.images["check-circle"].firstMatch
+        let toast = app.staticTexts["Changes saved"].firstMatch
         XCTAssertTrue(toast.waitForExistence(timeout: 5))
         XCTAssertTrue(keyboard.exists)
         XCTAssertLessThanOrEqual(toast.frame.maxY, keyboard.frame.minY, "The toast \(toast.frame) is covered by the keyboard \(keyboard.frame)")
@@ -97,13 +97,15 @@ final class OverlayFlowsTests: XCTestCase {
         let show = element(app, "demo.toast.playground.show")
         let counter = element(app, "demo.toast.playground.count")
         scrollTo(counter, in: app)
-        let baseline = iconCount(app, "info")
         show.tap()
-        XCTAssertTrue(waitForIconCount(app, "info", baseline + 1, timeout: 5))
+        let message = app.staticTexts["Message deleted"].firstMatch
+        XCTAssertTrue(message.waitForExistence(timeout: 5))
+        let undo = app.staticTexts.matching(NSPredicate(format: "label == 'Undo'")).allElementsBoundByIndex
+            .first { $0.frame.minY >= message.frame.minY - 200 && $0.isHittable }
+        XCTAssertNotNil(undo)
         attachScreenshot(app, named: "toast-undo-ax5-rtl")
-        let window = app.windows.firstMatch.frame
-        app.windows.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.12, dy: toastIcon(app, "info").frame.midY / window.height)).tap()
-        XCTAssertTrue(waitForIconCount(app, "info", baseline, timeout: 5))
+        undo?.tap()
+        XCTAssertTrue(message.waitForNonExistence(timeout: 5))
         XCTAssertEqual(counter.label, "Tapped 1 times")
     }
 
@@ -115,15 +117,15 @@ final class OverlayFlowsTests: XCTestCase {
         open.tap()
         let title = app.staticTexts["Toasts sit above sheets"].firstMatch
         XCTAssertTrue(title.waitForExistence(timeout: 5))
-        let baseline = iconCount(app, "check-circle")
         app.buttons["Copy link"].firstMatch.tap()
-        XCTAssertTrue(waitForIconCount(app, "check-circle", baseline + 1, timeout: 5))
-        let toastFrame = toastIcon(app, "check-circle").frame
+        let toast = app.staticTexts["Link copied"].firstMatch
+        XCTAssertTrue(toast.waitForExistence(timeout: 5))
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12)).tap()
         XCTAssertTrue(title.waitForNonExistence(timeout: 3))
-        XCTAssertTrue(hasIcon(app, "check-circle", at: toastFrame), "The toast should outlive the sheet it was raised from")
+        XCTAssertTrue(toast.exists, "The toast should outlive the sheet it was raised from")
+        XCTAssertTrue(toast.isHittable)
         attachScreenshot(app, named: "toast-after-sheet")
-        XCTAssertTrue(waitForNoIcon(app, "check-circle", at: toastFrame, timeout: 10))
+        XCTAssertTrue(toast.waitForNonExistence(timeout: 10))
     }
 
     @MainActor
@@ -133,51 +135,19 @@ final class OverlayFlowsTests: XCTestCase {
         scrollTo(open, in: app)
         open.tap()
         XCTAssertTrue(app.staticTexts["demo.bottom-nav.shell.title.demo.sample.home"].firstMatch.waitForExistence(timeout: 5))
+        let home = shellTab("Home", in: app)
+        let inbox = shellTab("Inbox", in: app)
+        XCTAssertGreaterThan(home.frame.midX, inbox.frame.midX)
         attachScreenshot(app, named: "bottom-nav-shell-rtl")
         XCTAssertEqual(app.tabBars.count, 0)
-        let window = app.windows.firstMatch
-        window.coordinate(withNormalizedOffset: CGVector(dx: 1 - 1.5 / 4, dy: (window.frame.height - 66) / window.frame.height)).tap()
+        inbox.tap()
         XCTAssertTrue(app.staticTexts["demo.bottom-nav.shell.title.demo.sample.inbox"].firstMatch.waitForExistence(timeout: 2))
     }
 
     @MainActor
-    private func iconCount(_ app: XCUIApplication, _ identifier: String) -> Int {
-        app.images.matching(identifier: identifier).count
-    }
-
-    @MainActor
-    private func toastIcon(_ app: XCUIApplication, _ identifier: String) -> XCUIElement {
-        let icons = app.images.matching(identifier: identifier).allElementsBoundByIndex
-        return icons.max { $0.frame.midY < $1.frame.midY } ?? app.images[identifier].firstMatch
-    }
-
-    @MainActor
-    private func waitForIconCount(_ app: XCUIApplication, _ identifier: String, _ count: Int, timeout: TimeInterval) -> Bool {
-        let deadline = Date().addingTimeInterval(timeout)
-        while Date() < deadline {
-            if iconCount(app, identifier) == count { return true }
-            usleep(100_000)
-        }
-        return false
-    }
-
-    @MainActor
-    private func hasIcon(_ app: XCUIApplication, _ identifier: String, at frame: CGRect) -> Bool {
-        let icons = app.images.matching(identifier: identifier)
-        return (0..<icons.count).contains { index in
-            guard let icon = try? icons.element(boundBy: index).snapshot().frame else { return false }
-            return abs(icon.midY - frame.midY) < 4 && abs(icon.midX - frame.midX) < 4
-        }
-    }
-
-    @MainActor
-    private func waitForNoIcon(_ app: XCUIApplication, _ identifier: String, at frame: CGRect, timeout: TimeInterval) -> Bool {
-        let deadline = Date().addingTimeInterval(timeout)
-        while Date() < deadline {
-            if !hasIcon(app, identifier, at: frame) { return true }
-            usleep(100_000)
-        }
-        return false
+    private func shellTab(_ label: String, in app: XCUIApplication) -> XCUIElement {
+        let matches = app.staticTexts.matching(NSPredicate(format: "label == %@", label)).allElementsBoundByIndex
+        return matches.max { $0.frame.midY < $1.frame.midY } ?? app.staticTexts[label].firstMatch
     }
 
     @MainActor

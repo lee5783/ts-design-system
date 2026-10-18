@@ -77,10 +77,12 @@ class TSToastQueueTest {
     }
 
     @Test
-    fun defaultTimeoutIsFourSecondsOnModernApis() {
-        val entry = queue().enqueue(TSToastMessage("Saved"))
+    fun defaultTimeoutIsFourSecondsAndTenWithAnAction() {
+        val queue = queue()
+        val entry = queue.enqueue(TSToastMessage("Saved"))
 
         assertEquals(4_000L, entry.timeoutMillis)
         assertTrue(entry.autoDismisses)
+        assertEquals(10_000L, queue.enqueue(TSToastMessage("Archived", actionLabel = "Undo")).timeoutMillis)
     }
 }
