@@ -74,13 +74,13 @@ Hard-code them in the app; do not map them to a TS role, and do not invert them 
 |---|---|---|---|
 | Pressed feedback | flat pressed fill (fixed) | flat fill; `TSTheme(rippleEnabled = true)` for a ripple | flat fill |
 | Haptics | `TSHaptics.shared.isEnabled = false` turns tone and toggle haptics off | `TSTheme(hapticsEnabled = false)` | follows the system haptic setting |
-| Reduce motion | follows the system setting | follows the system setting | follows the system setting |
+| Reduce motion | not read by the library; DS animations always run | not read by the library | not read by the library (platform animators still follow the system animation scale) |
 
 ## Overriding library strings
 
-The library ships English strings for accessibility labels and built-in text ("Close", "Loading", "Show password", tone names, "n of N", …).
+The library ships English strings for its built-in text ("Close", "Dismiss", "Loading", "Show password", "Hide password", the badge overflow "n+").
 
-- **iOS:** add a string table named **`TSDesignSystem`** to your app's main bundle (`TSDesignSystem.xcstrings` or `TSDesignSystem.strings`) with any of the keys from `TSStringKey` (`ios/Sources/TSFoundation/Localization/TSStrings.swift`), for example `ts.close`, `ts.loading`, `ts.alert.danger`, `ts.tab.position`. Keys you do not define fall back to the library's English text. Format strings keep their placeholders (`ts.position` takes two integers).
-- **Android:** define the same resource name in your app (`res/values-<locale>/strings.xml`), for example `ts_close`, `ts_loading`, `ts_position_of_total`; app resources override library resources. The full list is `android/core/src/main/res/values/ts_strings.xml`.
+- **iOS:** add a string table named **`TSDesignSystem`** to your app's main bundle (`TSDesignSystem.xcstrings` or `TSDesignSystem.strings`) with any of the keys from `TSStringKey` (`ios/Sources/TSFoundation/Localization/TSStrings.swift`), for example `ts.close`, `ts.loading`, `ts.text-field.show-password`. Keys you do not define fall back to the library's English text. Format strings keep their placeholders (`ts.count.overflow` takes one integer).
+- **Android:** define the same resource name in your app (`res/values-<locale>/strings.xml`), for example `ts_close`, `ts_loading`, `ts_badge_count_overflow`; app resources override library resources. The full list is `android/core/src/main/res/values/ts_strings.xml`.
 
 String keys are not covered by the API checks, so a renamed key would be listed in the [migration guides](migration-guides.md).

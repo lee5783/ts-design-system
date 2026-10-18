@@ -1,6 +1,6 @@
 # Card
 
-Cross-toolkit contract for the TS Card. Source: `design/source/components/Card/README.md`, `bundle.css` (`.ts-card*`), `index.d.ts` (`CardProps`). Tokens: `surface-card`, `surface-pressed`, `border-subtle`, `radius-lg`, `shadow-sm`, `title-3`, `body-sm`, `text-primary/secondary/muted`, `space-2/3/4`, `opacity-disabled`, `card-subtitle-spacing` (`design/extensions/native-tokens.json`). Decisions: C-12 (pressed fill `surface-pressed`), C-27 (i) (an interactive card may have footer actions; they become accessibility custom actions).
+Cross-toolkit contract for the TS Card. Source: `design/source/components/Card/README.md`, `bundle.css` (`.ts-card*`), `index.d.ts` (`CardProps`). Tokens: `surface-card`, `surface-pressed`, `border-subtle`, `radius-lg`, `shadow-sm`, `title-3`, `body-sm`, `text-primary/secondary/muted`, `space-2/3/4`, `opacity-disabled`, `card-subtitle-spacing` (`design/extensions/native-tokens.json`). Decisions: C-12 (pressed fill `surface-pressed`), C-27 (i) (an interactive card may have footer actions; they stay ordinary buttons).
 
 ## API mapping
 
@@ -21,7 +21,7 @@ Cross-toolkit contract for the TS Card. Source: `design/source/components/Card/R
 
 `TSCardAccessory` is the typed form of the top-right action: today one case, an icon button (`.iconButton(icon:label:action:)` on iOS, `TSCardAccessory.IconButton(icon, label, onClick)` on Android). The card renders it as a `TSIconButton` / `TSIconButtonView` and keeps it independently tappable on an interactive card. A free-form accessory (`@ViewBuilder accessory`, `accessoryView`, the Compose `accessory` slot) is also independently tappable.
 
-**UIKit and Views: last writer wins.** `TSCardView` has both `accessory` (typed) and `accessoryView` (any view). Setting `accessory` builds the icon button and stores it as `accessoryView`; setting `accessoryView` directly clears the typed `accessory`, so its custom action disappears with it. Whichever was set last is shown and exposed. When a previous `TSButtonView` / `TSIconButtonView` accessory is replaced, its container dimming flag is reset.
+**UIKit and Views: last writer wins.** `TSCardView` has both `accessory` (typed) and `accessoryView` (any view). Setting `accessory` builds the icon button and stores it as `accessoryView`; setting `accessoryView` directly clears the typed `accessory`. Whichever was set last is shown. When a previous `TSButtonView` / `TSIconButtonView` accessory is replaced, its container dimming flag is reset.
 
 ## Matrix
 
@@ -37,20 +37,20 @@ Cross-toolkit contract for the TS Card. Source: `design/source/components/Card/R
 
 The web hover lift (`shadow-md`) has no touch equivalent and is dropped.
 
-Geometry: 1 pt `border-subtle`, `radius-lg` (12, continuous), content clipped. Header padding 16 / 16 / 0 (16 at the bottom when there is no body), gap 12; title `title-3` 18/24 in `text-primary` (header trait); subtitle `body-sm` 14/20 in `text-muted`, 2 below the title. Body padding 16, `body-sm` in `text-secondary`. Footer: 1 pt `border-subtle` top divider, padding 12 / 16, trailing-aligned buttons 8 apart; at accessibility text sizes the buttons stack vertically, still trailing. Cards stack 16 apart on mobile (`TSCardStyleSpec.stackSpacing`). Heights at the default text size: 56 title only, 92 title + one-line body, +69 with a footer.
+Geometry: 1 pt `border-subtle`, `radius-lg` (12, continuous), content clipped. Header padding 16 / 16 / 0 (16 at the bottom when there is no body), gap 12; title `title-3` 18/24 in `text-primary`; subtitle `body-sm` 14/20 in `text-muted`, 2 below the title. Body padding 16, `body-sm` in `text-secondary`. Footer: 1 pt `border-subtle` top divider, padding 12 / 16, trailing-aligned buttons 8 apart; at accessibility text sizes the buttons stack vertically, still trailing. Cards stack 16 apart on mobile (`TSCardStyleSpec.stackSpacing`). Heights at the default text size: 56 title only, 92 title + one-line body, +69 with a footer.
 
 ## Tests
 
 | Layer | File | What |
 |---|---|---|
-| Spec | `ios/Tests/TSFoundationTests/TSCardStyleSpecTests.swift` | 16 configurations → fill (pressed only when interactive), ring, opacity, shadow, tokens; stack spacing; label and custom-action order |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSCardBehaviorTests.swift` | interactive card is one button element with the label; action fires (tap + activation); custom actions fire; footer buttons fire; static card is not a button and its title is a header; disabled blocks and drops custom actions; pressed treatment; heights; AX5 footer reflow |
-| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSCardViewBehaviorTests.swift` | one element + hit testing; `UIAccessibilityCustomAction`s fire; `.primaryActionTriggered` and activation; footer buttons stay hittable; static card; pressed fill; disabled; raised shadow + clipping surface; heights; accessory; AX5 footer reflow |
-| Spec (Android) | `android/core/src/test/kotlin/com/ts/ds/core/style/TSCardStyleSpecTest.kt` | 4 configurations × 4 states → fill, ring, opacity, shadow, tokens; stack spacing; footer stacking threshold; label and custom-action order (dropped while disabled) |
-| Compose | `android/compose/src/test/kotlin/com/ts/ds/compose/components/card/TSCardTest.kt` (sdk 26 + 36) | one button node with the label and no child semantics; tap + `OnClick` fire; `CustomActions` order and handlers; footer buttons and accessory tappable without firing the card; static card is a container with a heading title; disabled blocks and drops custom actions; pressed fill only when interactive; heights 56 / 92 / 165; footer stacks at fontScale 2 |
-| Views | `android/views/src/test/kotlin/com/ts/ds/views/components/card/TSCardViewTest.kt` (sdk 26 + 36) | Button node with the label, content hidden from accessibility; tap + `ACTION_CLICK`; custom actions fire; footer buttons and accessory tappable; static card (heading title, footer buttons accessible); disabled; pressed fill; raised elevation + `clipToOutline`; heights; footer stacking |
-| Demo | `ContentComponentsTests` (both iOS demos): `testInteractiveCardIsOneElementAndPresses`, `testCardFooterButtonsStayTappable` | |
-| Demo (Android) | `ContentComponentsTest` (both Android demos): `interactiveCardIsOneElementAndPresses`, `cardFooterButtonsStayTappable` | |
+| Spec | `ios/Tests/TSFoundationTests/TSCardStyleSpecTests.swift` | 16 configurations → fill (pressed only when interactive), ring, opacity, shadow, tokens; stack spacing |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSCardBehaviorTests.swift` | typed accessory; action fires; footer buttons fire; static card is not a button; disabled blocks; pressed treatment; heights; AX5 footer reflow; the container owns the disabled dimming |
+| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSCardViewBehaviorTests.swift` | an interactive card is not an accessibility element (its content stays reachable) and hit-tests as the card; typed accessory; `.primaryActionTriggered` fires; footer buttons stay hittable; static card; pressed fill; disabled and the container-owned dimming; raised shadow + clipping surface; heights; accessory last writer wins; AX5 footer reflow |
+| Spec (Android) | `android/core/src/test/kotlin/com/ts/ds/core/style/TSCardStyleSpecTest.kt` | 4 configurations × 4 states → fill, ring, opacity, shadow, tokens; stack spacing; footer stacking threshold; loading neither dims nor presses |
+| Compose | `android/compose/src/test/kotlin/com/ts/ds/compose/components/card/TSCardTest.kt` (sdk 26 + 36) | tap fires the action; footer buttons and accessory tappable without firing the card; static card has no click action; disabled blocks and dims the footer once; pressed fill only when interactive; badge and typed accessories; heights 56 / 92 / 165; footer stacks at fontScale 2 |
+| Views | `android/views/src/test/kotlin/com/ts/ds/views/components/card/TSCardViewTest.kt` (sdk 26 + 36) | tap fires the action; footer buttons and accessory tappable; static card is not clickable; disabled blocks and dims the footer and accessory once; typed and replaced accessories; pressed fill; raised elevation + `clipToOutline`; heights; footer stacking |
+| Demo | `ContentComponentsTests` (both iOS demos): `testInteractiveCardPresses`, `testCardFooterButtonsStayTappable` | |
+| Demo (Android) | `ContentComponentsTest` (both Android demos): `interactiveCardPresses`, `cardFooterButtonsStayTappable` | |
 
 ## Platform notes
 

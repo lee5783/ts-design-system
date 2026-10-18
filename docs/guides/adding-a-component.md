@@ -1,6 +1,6 @@
 # Adding a component
 
-A component is done when it exists in all four toolkits, reads one shared style spec per platform, has spec, behaviour and snapshot tests, and has a page in all four demo apps. Use the closest existing component as the template (for a control, `Button`; for a container, `Card`; for an overlay, `Dialog` or `Toast`) and mirror its files one for one. Names below use `Chip` / `chip` as the example.
+A component is done when it exists in all four toolkits, reads one shared style spec per platform, has spec and behaviour tests, and has a page in all four demo apps. Use the closest existing component as the template (for a control, `Button`; for a container, `Card`; for an overlay, `Dialog` or `Toast`) and mirror its files one for one. Names below use `Chip` / `chip` as the example.
 
 ## 1. Write the contract
 
@@ -9,9 +9,8 @@ Create `design/specs/components/chip.md` (kebab-case, matching the DS component)
 - **Header:** the DS sources (`design/source/components/Chip/README.md`, `bundle.css`, `index.d.ts`), the tokens used, the decisions that apply.
 - **API mapping:** one row per DS prop, one column each for the style spec, SwiftUI, UIKit, Compose and Views.
 - **Matrix:** `allConfigurations` (variants × sizes × states) and what each state resolves to. Mark estimated values `[est]`.
-- **Accessibility:** element structure, traits/roles, labels, values, actions, announcements.
 - **Tests:** one row per layer with the file path.
-- **Platform notes:** every intentional difference between toolkits.
+- **Platform notes:** every intentional difference between toolkits, plus Dynamic Type layout, hit areas, RTL and identifiers.
 
 The spec file is also what the catalog check reads: once it exists, `make demos-check-boundaries` fails until all four demos have a page for it (step 6).
 
@@ -24,7 +23,7 @@ Use DS tokens only. A value the DS hard-codes goes into `design/extensions/nativ
 | | iOS | Android |
 |---|---|---|
 | Style spec | `ios/Sources/TSFoundation/Styles/TSChipStyleSpec.swift` | `android/core/src/main/kotlin/com/ts/ds/core/style/TSChipStyleSpec.kt` |
-| Accessibility text, logic | `ios/Sources/TSFoundation/Logic/TSChipAccessibility.swift` | `android/core/src/main/kotlin/com/ts/ds/core/logic/TSChipAccessibility.kt` |
+| Shared logic (if any) | `ios/Sources/TSFoundation/Logic/` | `android/core/src/main/kotlin/com/ts/ds/core/logic/` |
 | Library strings | `ios/Sources/TSFoundation/Resources/Localizable.xcstrings` + a `TSStringKey` case (`ts.chip.*`) | `android/core/src/main/res/values/ts_strings.xml` (`ts_chip_*`) |
 | Spec tests | `ios/Tests/TSFoundationTests/TSChipStyleSpecTests.swift` | `android/core/src/test/kotlin/com/ts/ds/core/style/TSChipStyleSpecTest.kt` |
 
@@ -34,20 +33,19 @@ The spec takes a `Configuration` (including the `TSControlState`), returns a `Re
 
 | Toolkit | Files | Tests |
 |---|---|---|
-| SwiftUI | `ios/Sources/TSDesignSystem/Components/Chip/TSChip.swift` (+ `TSChipStyle.swift` for a `ButtonStyle`) | `ios/Tests/TSDesignSystemTests/Behavior/TSChipBehaviorTests.swift`, `Snapshots/TSChipSnapshotTests.swift` |
-| UIKit | `ios/Sources/TSDesignSystemUIKit/Components/Chip/TSChipView.swift` | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSChipViewBehaviorTests.swift`, `Snapshots/TSChipViewSnapshotTests.swift` |
-| Compose | `android/compose/src/main/kotlin/com/ts/ds/compose/components/chip/TSChip.kt` | `android/compose/src/test/kotlin/com/ts/ds/compose/components/chip/TSChipTest.kt`, `…/snapshots/TSChipSnapshotTest.kt` |
-| Views | `android/views/src/main/kotlin/com/ts/ds/views/components/chip/TSChipView.kt`; `app:ts*` attrs in `android/views/src/main/res/values/ts_component_attrs.xml`; default styles in `ts_component_styles.xml` | `android/views/src/test/kotlin/com/ts/ds/views/components/chip/TSChipViewTest.kt`, `…/snapshots/TSChipViewSnapshotTest.kt` |
+| SwiftUI | `ios/Sources/TSDesignSystem/Components/Chip/TSChip.swift` (+ `TSChipStyle.swift` for a `ButtonStyle`) | `ios/Tests/TSDesignSystemTests/Behavior/TSChipBehaviorTests.swift` |
+| UIKit | `ios/Sources/TSDesignSystemUIKit/Components/Chip/TSChipView.swift` | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSChipViewBehaviorTests.swift` |
+| Compose | `android/compose/src/main/kotlin/com/ts/ds/compose/components/chip/TSChip.kt` | `android/compose/src/test/kotlin/com/ts/ds/compose/components/chip/TSChipTest.kt` |
+| Views | `android/views/src/main/kotlin/com/ts/ds/views/components/chip/TSChipView.kt`; `app:ts*` attrs in `android/views/src/main/res/values/ts_component_attrs.xml`; default styles in `ts_component_styles.xml` | `android/views/src/test/kotlin/com/ts/ds/views/components/chip/TSChipViewTest.kt` |
 
-Rules that every component meets (details in [../conventions.md](../conventions.md)): the C-29 names (`TSChip` / `TSChipView`); 44 pt / 48 dp hit areas; the TS focus ring; reduce motion; RTL; Dynamic Type and font scale; strings from the shared layer; Android behaviour tests at `@Config(sdk = [26, 36])`; snapshot state forcing through `forcingState` / `LocalTSForcedControlState`. If the component uses weight-600 text or line heights, add an sdk-26 snapshot subset (`TSChipSdkSnapshotTest` with `SnapshotMatrix.sdkSubset`).
+Rules that every component meets (details in [../conventions.md](../conventions.md)): the C-29 names (`TSChip` / `TSChipView`); 44 pt / 48 dp hit areas; the TS focus ring; RTL; Dynamic Type and font scale; strings from the shared layer; an identifier / test tag; no screen-reader semantics (no labels, values, traits, announcements or custom actions); Android behaviour tests at `@Config(sdk = [26, 36])`; state forcing in tests through `forcingState` / `LocalTSForcedControlState`.
 
-## 5. Record, then check the API
+## 5. Test, then check the API
 
 ```bash
-make ios-snapshot-record IOS_SNAPSHOT_TEST_TARGETS="TSDesignSystemTests/TSChipSnapshotTests TSDesignSystemUIKitTests/TSChipViewSnapshotTests"
-cd android && ./gradlew :compose:recordRoborazziDebug --tests '*TSChipSnapshotTest' :views:recordRoborazziDebug --tests '*TSChipViewSnapshotTest'
-make ios-snapshot-verify android-snapshot-verify    # the fresh references reproduce
-make ios-test android-test
+make ios-build-for-testing
+IOS_TESTS="TSFoundationTests/TSChipStyleSpecTests TSDesignSystemTests/TSChipBehaviorTests TSDesignSystemUIKitTests/TSChipViewBehaviorTests" make ios-test-only
+cd android && ./gradlew :core:testDebugUnitTest --tests '*TSChipStyleSpecTest' :compose:testDebugUnitTest --tests '*TSChipTest' :views:testDebugUnitTest --tests '*TSChipViewTest'
 cd android && ./gradlew apiDump    # commit the changed android/*/api/*.api files
 make api-check BASELINE=<last-release-tag>
 ```
@@ -70,8 +68,8 @@ New public API is additive (minor). Mark unstable API `@ExperimentalTSApi` (Kotl
 
    The iOS projects use folder-synchronized groups, so a new file needs no `project.pbxproj` edit.
 3. **Content:** every variant, size and state, using the shared sample data; follow the sibling page's sections (`DemoComponentSection` / `DemoPageViewController` / `DemoPageFragment` with `DemoPageState`). Interactive demos show a result caption that the UI tests can read.
-4. **UI tests:** extend the matching component suite in each demo (`ActionComponentsTests`, `FormComponentsTests`, `ContentComponentsTests`, `FeedbackComponentsTests` or `NavigationComponentsTests`, and the `…Test` twins on Android). The page walk and accessibility suites pick the new page up from the catalog.
-5. **Check:** `make demos-check-boundaries` (boundaries plus the catalog cross-check), `make demos-build`, `make demos-test`, and `make demos-audit` for the iOS audits.
+4. **UI tests:** extend the matching component suite in each demo (`ActionComponentsTests`, `FormComponentsTests`, `ContentComponentsTests`, `FeedbackComponentsTests` or `NavigationComponentsTests`, and the `…Test` twins on Android). Find elements by identifier / test tag and visible text. The page walk suites pick the new page up from the catalog.
+5. **Check:** `make demos-check-boundaries` (boundaries plus the catalog cross-check), `make demos-build`, the demo test classes you extended, and argent screenshots of the new page on the pinned iOS simulator and one Android emulator at API 36.
 
 ## 7. Finish
 

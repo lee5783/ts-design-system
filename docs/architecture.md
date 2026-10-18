@@ -21,7 +21,7 @@
 iOS                                          Android
 TSTokens (generated)                         :tokens (generated values + res)
    ▲                                            ▲
-TSFoundation (specs, logic, a11y, compat)    :core (style specs, logic, strings, icons, haptics)
+TSFoundation (specs, logic, compat)          :core (style specs, logic, strings, icons, haptics)
    ▲                  ▲                         ▲                  ▲
 TSDesignSystem   TSDesignSystemUIKit         :compose (M3 impl)   :views (AppCompat + MDC)
 ───────────────────── library boundary (public products / com.ts.ds coordinates) ─────────────────────
@@ -32,7 +32,7 @@ demos/ios-swiftui   demos/ios-uikit          demos/android-compose   demos/andro
 | Layer | Path | Responsibility | Depends on |
 |---|---|---|---|
 | Tokens | `ios/Sources/TSTokens/Generated/`, `android/tokens/src/generated/` | Generated values: colours (light/dark), spacing, radius, size, opacity, shadow, typography, motion, component constants | nothing |
-| Shared spec layer | `ios/Sources/TSFoundation/`, `android/core/` | `TS<Name>StyleSpec` (role-based: colour roles, type roles, shadow roles), `TSControlState`, accessibility text, presenters and queues, strings, icon mapping, compat shims, haptics (`TSHaptics` / `DsHaptics`) | tokens |
+| Shared spec layer | `ios/Sources/TSFoundation/`, `android/core/` | `TS<Name>StyleSpec` (role-based: colour roles, type roles, shadow roles), `TSControlState`, presenters and queues, strings, icon mapping, compat shims, haptics (`TSHaptics` / `DsHaptics`) | tokens |
 | SwiftUI | `ios/Sources/TSDesignSystem/` | Views, styles, modifiers, presentation bridges | foundation, tokens |
 | UIKit | `ios/Sources/TSDesignSystemUIKit/` | `UIControl` / `UIView` / view-controller types | foundation, tokens |
 | Compose | `android/compose/` | `TSTheme`, composables, M3 bridge (`TSMaterialBridge`) | `:core` (api), Compose BOM (api), Material3 (implementation) |
@@ -41,7 +41,7 @@ demos/ios-swiftui   demos/ios-uikit          demos/android-compose   demos/andro
 Rules:
 
 - Dependencies point downward only. **SwiftUI never imports `TSDesignSystemUIKit`; Compose never depends on `:views`** (and the reverse). A SwiftUI component may call UIKit *framework* APIs internally (the presentation bridges do).
-- Style specs are unit-tested once in the shared layer; behaviour and snapshot tests then cover each toolkit. This is the main defence against parity drift.
+- Style specs are unit-tested once in the shared layer; behaviour tests then cover each toolkit. This is the main defence against parity drift.
 - `TSFoundation` helpers and the `:core` specs are **public API** (C-43, C-44 U-2), frozen by the API checks from the first tag.
 
 ## Data flow
@@ -51,12 +51,12 @@ Rules:
 1. `make ds-sync FROM=<export> DS_VERSION=<v>` copies the artifact into `design/source/` and the SVGs into `design/assets/*/source/`, and rewrites `design/manifest.json`.
 2. `make codegen` loads `tokens.json` (`load-ts-tokens`), drops web-only families, merges `design/extensions/native-tokens.json` and its `renames` (deprecated aliases), and writes Swift, Android XML, Compose Kotlin and icon assets.
 3. `codegen diff-report` classifies the token change and suggests a semver bump.
-4. Snapshot tests show exactly where visuals changed; references are re-recorded and reviewed.
+4. Visual changes are reviewed through argent screenshots of the four demo apps (pinned iOS simulator, one Android emulator at API 36); no test compares pixels.
 5. One lockstep release (`VERSION`) ships both platforms. Full procedure: [guides/ds-update-flow.md](guides/ds-update-flow.md), [guides/release.md](guides/release.md).
 
 ### Component rendering
 
-`TS<Name>StyleSpec.resolve(_ configuration:)` (iOS, the configuration carries the `TSControlState`) / `TS<Name>StyleSpec.resolve(configuration, state)` (Android) returns a `Resolved` value of roles; the toolkit maps roles to tokens (`TSColor` / `TSTheme.colors` / `?attr/tsColor*`) and draws natively. Interaction state comes from `TSControlState.make(…)` on iOS and `TSControlState` on Android; snapshot tests force a state through each toolkit's forcing hook (`forcingState`, `LocalTSForcedControlState`).
+`TS<Name>StyleSpec.resolve(_ configuration:)` (iOS, the configuration carries the `TSControlState`) / `TS<Name>StyleSpec.resolve(configuration, state)` (Android) returns a `Resolved` value of roles; the toolkit maps roles to tokens (`TSColor` / `TSTheme.colors` / `?attr/tsColor*`) and draws natively. Interaction state comes from `TSControlState.make(…)` on iOS and `TSControlState` on Android; tests force a state through the internal forcing hooks (SwiftUI `forcingState`, Compose `LocalTSForcedControlState`).
 
 ### State management
 
@@ -73,21 +73,21 @@ Routes per OS:
 
 | Toolkit | Center | Sheet |
 |---|---|---|
-| SwiftUI | `TSOverFullScreenBridge` (`.overFullScreen` + cross-dissolve) on every OS | native `.sheet` on 16.4+; `TSSheetBridge` (`UISheetPresentationController`) on 15–16.3 and under reduce motion |
+| SwiftUI | `TSOverFullScreenBridge` (`.overFullScreen` + cross-dissolve) on every OS | native `.sheet` on 16.4+; `TSSheetBridge` (`UISheetPresentationController`) on 15–16.3 |
 | UIKit | `TSDialogViewController`, `.overFullScreen` + cross-dissolve | `.pageSheet` + `UISheetPresentationController` (fit + large on 16+, medium + large on 15) |
 | Compose | `Dialog` window with the DS scrim; `PredictiveBackHandler` | M3 `ModalBottomSheet` |
 | Views | `TSDialogFragment` (`ThemeOverlay.TS.CenterDialog`) | `TSBottomSheetDialogFragment` (MDC `BottomSheetDialog`) |
 
-The route logic is `TSDialogRoute.resolve(variant:sheetPath:reduceMotion:)` (SwiftUI). UIKit dialogs inherit the source's appearance, text size and layout direction live; they pin a trait only when the source has its own explicit override (`overrideUserInterfaceStyle`, a parent's `overrideTraitCollection(forChild:)`, a presentation controller override, or `traitOverrides` on iOS 17+ through `TSTraitOverridesCompat`). The full contract is `design/specs/components/dialog.md`.
+The route logic is `TSDialogRoute.resolve(variant:sheetPath:)` (SwiftUI). UIKit dialogs inherit the source's appearance, text size and layout direction live; they pin a trait only when the source has its own explicit override (`overrideUserInterfaceStyle`, a parent's `overrideTraitCollection(forChild:)`, a presentation controller override, or `traitOverrides` on iOS 17+ through `TSTraitOverridesCompat`). The full contract is `design/specs/components/dialog.md`.
 
 ### Toast overlay model
 
 The library owns the toast queue, the timer and the host (C-10). Data flows **queue → presenter (timer, show once) → host → layer**:
 
-- **Queue:** `TSToastQueue` (FIFO, one `current` item). The timeout is resolved from the tone, the action and the screen-reader state (iOS `TSToastTimeout`, Android `TSToastTimeouts`, fixed at enqueue on Android).
+- **Queue:** `TSToastQueue` (FIFO, one `current` item). The timeout is fixed: 4 s, or 10 s when the toast has an action, on both platforms (iOS `TSToastTimeout.standard` / `.extended` via `TSToastQueue.timeout(for:)`, which also honours a longer custom `duration`; Android `TSToastTimeouts.DEFAULT_MILLIS` / `EXTENDED_MILLIS`, fixed at enqueue). It does not depend on screen-reader state.
 - **iOS hosts are separate windows.** SwiftUI `.tsToastHost()` opens an internal `TSToastOverlayWindow`; UIKit uses the public `TSToastWindow`. Both sit at `UIWindow.Level.alert + 1`, are never key, pass touches through outside the toast, and therefore cover any sheet or dialog presented in the app window. The overlay window does its own keyboard avoidance (`TSToastWindowing.keyboardInset` → `additionalSafeAreaInsets.bottom`; UIKit pins to `keyboardLayoutGuide`), including a floating iPad keyboard in SwiftUI.
 - **Android hosts are layers.** Compose `TSToastHost(state) { content }` draws a pass-through layer over the content, and each `TSDialog` adds its own layer inside its window. Views `TSToastHost.install(activity)` adds a layer to `android.R.id.content`; `TSDialogFragment` / `TSBottomSheetDialogFragment` attach an overlay layer in `onStart`. The top-most layer shows the toast, so a toast opened under a dialog moves into the dialog's window.
-- **One host per scene (iOS) or Activity (Android).** Announcements happen once per toast id.
+- **One host per scene (iOS) or Activity (Android).** Toasts post no accessibility announcements.
 
 Full contract, timing tables and hosts: `design/specs/components/toast.md`.
 
@@ -117,7 +117,6 @@ Every newer-OS API goes through a shim, and tests force the fallback path (`TSCo
 | `NavigationStack` (16) | SwiftUI demo only | `DemoNavigationContainer`: `NavigationView` on 15 |
 | `ViewThatFits`, `Layout` (16) | ListItem reflow, BottomNav widths | Not used; `dynamicTypeSize.isAccessibilitySize` and `frame(maxWidth: .infinity)` |
 | `TextField(axis:)`, `lineLimit(_:)` ranges (16) | Multiline text field | `TSCompat.multilineTextField`: native on 16+, `TSMultilineTextView` (wrapping `TSGrowingTextView`) on 15 |
-| `.toggleButton` trait (17) | Checkbox, Switch, ListItem switch row | `TSAccessibilityTraitsCompat`: toggle trait on 17+, button trait + "on/off" value on 15–16 |
 | `focusEffectDisabled` (17) | TS focus ring | `View+FocusEffectCompat` (`tsFocusEffectDisabled()`); on 15–16 the system effect stays (accepted difference) |
 | `View.tracking` / `View.fontWeight` (16) | Typography | `TSTrackingCompat` (`tsTracking`, `tsFontWeight` on `Text`) |
 | `onChange(of:initial:_:)` (17) | State reactions | `View+OnChangeCompat` (`tsOnChange`) |
@@ -128,7 +127,7 @@ Every newer-OS API goes through a shim, and tests force the fallback path (`TSCo
 | Liquid Glass tab bar (26) | BottomNav | System bar hidden on every OS |
 | Floating inset sheet (26) | Sheet dialog | System geometry on iOS 26; see `design/specs/components/dialog.md` |
 
-The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`onChange`, `toggleTrait`, `focusEffect`, `multilineTextField`, `sheetPresentation`, `customSheetDetents`, `traitOverrides`, `tabBarHidden`).
+The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`onChange`, `focusEffect`, `multilineTextField`, `sheetPresentation`, `customSheetDetents`, `traitOverrides`, `tabBarHidden`).
 
 ### Android: APIs newer than API 26
 
@@ -137,8 +136,6 @@ The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`
 | `android:lineHeight` (28) | Text appearances | Generated styles emit both the platform and the AppCompat/MDC attr; Compose `TextStyle.lineHeight` works on all levels |
 | Weight 600 via `Typeface.create(family, weight, italic)` (28) | title-2, title-3, overline, Alert title, initials, badges, toast action | 28+: true 600. 26–27: Medium 500. Compose: `DsFontWeights` / `withDsFontWeight` switch to the `sans-serif-medium` family below 28. Views: `values-v28/ts_text_appearances.xml` vs `values/` with `sans-serif-medium` |
 | Shadow colour (`outlineSpotShadowColor`, Compose `shadow(spotColor)`) (28) | Shadow tint | 28+: tinted; 26–27: default black |
-| `AccessibilityManager.getRecommendedTimeoutMillis` (29) | Toast timeout | 29+: system value; 26–28: 4 s, or 10 s with TalkBack (`TSToastTimeouts`) |
-| `setStateDescription` (30), pane title / heading / screen-reader focusable (28) | Views accessibility | Always through `ViewCompat` |
 | `HapticFeedbackConstants` `CONFIRM`/`REJECT` (30), `TOGGLE_ON`/`TOGGLE_OFF`/`SEGMENT_TICK` (34) | Haptics | `DsHaptics.constantFor(event, sdkInt)` maps to older constants |
 | Predictive back (33/34) | Dialogs | `OnBackPressedDispatcher` / `PredictiveBackHandler` with a plain back fallback |
 | `Configuration.isNightModeActive` (30) | Theme checks | `uiMode and UI_MODE_NIGHT_MASK` |
@@ -157,7 +154,7 @@ The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`
 
 ## Cross-cutting concerns
 
-- **Accessibility:** Dynamic Type and font scale, VoiceOver and TalkBack semantics from the shared `*Accessibility` logic, a keyboard focus ring, reduce motion (`TSReduceMotion` on both platforms), 44 pt / 48 dp hit areas.
+- **Accessibility (layout only):** Dynamic Type and font scale, a keyboard focus ring, 44 pt / 48 dp hit areas, RTL, and identifiers / test tags on every component. The library authors no screen-reader semantics (labels, values, roles, announcements, custom actions) and does not follow reduce motion; screen readers read the visible text and native controls. UIKit cards, list rows, tabs, bottom-nav items, checkboxes, switches, alerts and toasts are not accessibility elements themselves, so the visible text inside them stays reachable (and findable by XCUITest).
 - **RTL:** supported from v1; directional icons mirror (`icons.meta.json` → asset and VectorDrawable flags).
 - **Strings:** English base, overridable by consumers (see [consumers/theming.md](consumers/theming.md)).
 - **Demo theme (C-42, demos only):** each demo stores one theme (`system`, `light`, `dark`) in its demo-support settings and applies it at window or Activity level, so library overlays follow: SwiftUI `preferredColorScheme` plus `overrideUserInterfaceStyle` on the window; UIKit `overrideUserInterfaceStyle` on every window of the scene; Compose `TSTheme(darkTheme)` plus system bar styles; Views `AppCompatDelegate.setDefaultNightMode` with an Activity recreate. It can be set from outside through a launch argument, an intent extra or a deep link ([guides/running-demos.md](guides/running-demos.md)). There is no library API for it.

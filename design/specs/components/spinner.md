@@ -31,21 +31,21 @@ The Button keeps drawing its loading spinner through the same internal drawing (
 
 - **Stroke** keeps the Button spinner's ratio: `spinner-stroke-width / spinner-size` (2 / 16) times the diameter. `sm` is pixel-identical to the Button's loading spinner. The md and lg strokes are estimates until the DS defines spinner sizes.
 - **Arc:** 270° open arc starting at 45°, butt caps, drawn inside the frame (inset by half the stroke).
-- **Motion:** one linear turn every `spinner-rotation-duration` (700 ms), repeating. Reduce motion does not stop it, as for the Button spinner: an indeterminate indicator is the only signal that work is in progress.
+- **Motion:** one linear turn every `spinner-rotation-duration` (700 ms), repeating. It always runs, as for the Button spinner: an indeterminate indicator is the only signal that work is in progress.
 - No pressed, focused or disabled state; the spinner is not interactive.
-- Snapshot and Robolectric tests draw a still frame at 0° (Compose `LocalTSForcedControlState`, SwiftUI and UIKit render the first frame); never let the infinite rotation run in a Robolectric test.
+- Behaviour and Robolectric tests draw a still frame at 0° (Compose `LocalTSForcedControlState`, SwiftUI and UIKit render the first frame); never let the infinite rotation run in a Robolectric test.
 
 ## Tests
 
 | Layer | File | What |
 |---|---|---|
 | Spec | `ios/Tests/TSFoundationTests/TSSpinnerStyleSpecTests.swift` | 9 configurations; diameter from `icon-*`; stroke ratio (sm equals the Button spinner); tone → colour; rotation duration |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSSpinnerBehaviorTests.swift` | frame per size; default and custom label; hidden with `nil` |
-| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSSpinnerViewBehaviorTests.swift` | intrinsic size per size; stroke and colour per tone; label; rotation only in a window |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSSpinnerBehaviorTests.swift` | frame per size |
+| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSSpinnerViewBehaviorTests.swift` | intrinsic size per size; stroke and colour per tone; size change; rotation only in a window |
 | Spec (Android) | `android/core/src/test/.../style/TSSpinnerStyleSpecTest.kt` | same as iOS |
-| Compose | `android/compose/src/test/.../spinner/TSSpinnerTest.kt` (sdk 26/36) | size per token; content description and indeterminate progress; hidden with `null` |
-| Views | `android/views/src/test/.../spinner/TSSpinnerViewTest.kt` (sdk 26/36) | measured size; XML attrs; content description and class name |
-| Demo | Spinner page in all four demos; `FeedbackComponentsTests.testSpinnerPageShowsSpinnersLabelledLoading` (both iOS demos), `FeedbackComponentsTest.spinnerPageShowsSpinnersLabelledLoading` (both Android demos) | page shows every size × tone; spinners are labelled "Loading" |
+| Compose | `android/compose/src/test/.../spinner/TSSpinnerTest.kt` (sdk 26/36) | size per token |
+| Views | `android/views/src/test/.../spinner/TSSpinnerViewTest.kt` (sdk 26/36) | measured size; defaults medium / primary; XML attrs select size and tone; spins only while shown |
+| Demo | Spinner page in all four demos; `FeedbackComponentsTests.testSpinnerPageShowsEverySizeAndTone` (both iOS demos), `FeedbackComponentsTest.spinnerPageShowsEverySizeAndTone` (both Android demos) | page shows every size × tone |
 
 ## Platform notes
 

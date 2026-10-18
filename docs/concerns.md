@@ -27,11 +27,9 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 |---|---|
 | iOS 15 | Sheet dialogs open at `.medium()` / `.large()`; there is no fit-content detent |
 | iOS 15–16 | The system focus effect stays visible under the TS focus ring |
-| iOS 15–16 | Checkbox and Switch read as a button with an "on/off" value instead of a toggle |
 | iOS 26 | Sheet dialogs use the system's floating inset sheet geometry (`design/specs/components/dialog.md`) |
 | iOS, all | The sheet scrim and grabber are the system's (36 × 5), not the DS 36 × 4 `border-strong` bar |
 | Android 26–27 | Weight 600 renders as Medium 500 in both toolkits (`sans-serif-medium`); shadows are untinted black |
-| Android 26–28 | Toast timeout is 4 s, or 10 s with TalkBack; 29+ uses `getRecommendedTimeoutMillis` (table in `design/specs/components/toast.md`) |
 | Android Views | The sheet scrim is the window dim at the `overlay` alpha, so in light mode it is black at 40 %, not `#18181B` at 40 % |
 | Android Views | The focus ring is drawn inside full-bleed shapes; icon buttons, segmented tabs and toggles have no outside ring (D-060) |
 
@@ -39,15 +37,15 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 
 **Toast placement (D-010, D-011):** a bottom toast covers an open sheet's bottom actions (its Close button) for its 4 s on all toolkits; with the keyboard up, the iOS toast sits above the keyboard but over the focused field. Both need a design call.
 
-**Dynamic Type for non-text (D-014):** icons, badge dots, checkbox marks and bottom-nav badge counts do not scale with Dynamic Type or font scale. The Views bottom-nav `TextSizeCheck` ATF suppression points to this.
+**Dynamic Type for non-text (D-014):** icons, badge dots, checkbox marks and bottom-nav badge counts do not scale with Dynamic Type or font scale.
 
 **Tab touch targets (D-015, D-061):** short underline labels get overlapping 48 dp touch areas (Views) or trimmed ones (Compose, about 45 dp); the Views touch area outside the first and last tab gets no touches.
 
-**Screen-reader device pass (D-021, D-107):** VoiceOver and TalkBack were not run on devices, and keyboard / Full Keyboard Access evidence is part of the same pass. Required before the first release.
+**No screen-reader layer (a user decision):** the library sets no accessibility labels, values, hints, roles or traits, posts no announcements, adds no custom actions and does not follow the system reduce-motion setting. VoiceOver and TalkBack read only what the platform derives from the visible text and native controls. Dynamic Type / font scale, 44 pt / 48 dp touch targets, RTL, identifiers / test tags and the structural hide and modal flags remain. Removed API and behaviour: [consumers/migration-guides.md](consumers/migration-guides.md). Keyboard / Full Keyboard Access evidence (D-107) was never captured on devices.
 
-**Inline Alert Escape (D-016):** hardware-keyboard Escape is not handled for the inline Alert; the accessibility escape works.
+**Inline Alert Escape (D-016):** hardware-keyboard Escape is not handled for the inline Alert.
 
-**Toast host lifecycle (Android):** `TSToastHost` never detaches itself. An app that keeps its queue across an Activity recreate must call `detach()` in `onDestroy`; on any recreate (rotation included) the current toast restarts its full timeout and is announced again (C-43, `design/specs/components/toast.md`).
+**Toast host lifecycle (Android):** `TSToastHost` never detaches itself. An app that keeps its queue across an Activity recreate must call `detach()` in `onDestroy`; on any recreate (rotation included) the current toast restarts its full timeout (C-43, `design/specs/components/toast.md`).
 
 **Dialog queue and action order (issue #5, `design/specs/components/dialog.md`):**
 - Under the `refuse` policy a follow-up dialog requested from a dismissing handler is refused (the first dialog still owns the presenter), so `refuse` and chaining do not mix.
@@ -68,10 +66,6 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 
 **Views dialogs after recreation:** handlers cannot be saved, so a restored `TSDialogFragment` removes itself and emits `TSDialogFragmentResults.DROPPED`; the app re-presents from its own state (`design/specs/components/dialog.md`).
 
-**Views accessibility delegates (D-123):** Views components other than ListItem, Card, Checkbox and Switch use a replaceable accessibility delegate that a `RecyclerView` can wipe on recycle (Alert, Button, IconButton, Badge, Avatar, Toast, Tabs, BottomNav, TextField).
-
-**Placeholder accessibility (D-064):** both Android toolkits drop the text-field placeholder from accessibility.
-
 **High-contrast themes (C-34):** the token model keys colours by theme id, but every format writes only `light` / `dark`. Adding an increase-contrast theme needs format work in `tools/codegen/src/formats/**`.
 
 **API checks do not cover resources:** string keys, asset names and Android resource names are unchecked on both platforms; treat a rename as breaking by hand ([guides/deprecation-policy.md](guides/deprecation-policy.md)).
@@ -81,7 +75,7 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 - **Style Dictionary is unused in production (D-013):** `tools/codegen/src/model/to-style-dictionary.ts` and its tests are a bridge kept under test; removal is the default unless a DTCG/web export is wanted.
 - **iOS API check tool:** `tools/api-check/src/ios.ts` exists because `swift package diagnose-api-breaking-changes --triple arm64-apple-ios15.0-simulator` builds the package but runs `swift-api-digester -dump-sdk` without `-target`, so every baseline dump is empty and the command fails (Swift 6.3.3, Xcode 26.6); a macOS host build is impossible because the package uses UIKit. The tool builds each module for the simulator triple and runs the digester itself. Delete it when `diagnose-api-breaking-changes --triple` works for this package.
 - **Compose below-28 font family** lives in `DsFontWeights` instead of codegen, and the 48 dp touch target and 2 dp ring width are local dimens rather than tokens (D-079).
-- **Demo cleanup (D-082):** demo-only versions repeated outside the version catalog; unused Views `PendingComponentFragment`, `page_pending.xml` and `demo_page_pending`; `AccessibilityAuditPolicy.swift` duplicated in both iOS demos with broad acceptances (D-057).
+- **Demo cleanup (D-082):** demo-only versions repeated outside the version catalog; unused Views `PendingComponentFragment`, `page_pending.xml` and `demo_page_pending`.
 - **Tooling (D-080):** no Make target for `codegen diff-report`, which also classifies an `aliasOf` change as a value change; `release-bump` does not suggest the semver level; Renovate leaves `Package.resolved` stale on SPM PRs.
 - **iOS presentation internals (D-072, D-073, D-114, D-116):** the SwiftUI `tsDialog` session can stay claimed after a dismissal from below; the coordinator retries an off-window presentation every main-queue turn; the sheet fit-height measure builds a new hosting controller each time.
 
@@ -97,16 +91,13 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 
 - The release re-runs all four gate workflows, including the emulator and simulator matrices (hours, D-004).
 - The iOS API check rebuilds the baseline on every run (about 40 s); emulators cold-boot each leg (D-081).
-- SPM clones the whole monorepo, `android/` included (about 114 MB of working tree). Snapshot PNGs are not in the repository at all (C-45).
+- SPM clones the whole monorepo, `android/` included (about 114 MB of working tree).
 
 ## Fragile areas
 
-- **No visual-regression gate in CI (C-45, a user decision):** snapshot references are git-ignored and never committed, and CI runs `ios-test` (snapshot suites skipped) and `android-test` (snapshots rendered, nothing compared). CI still catches crashes and behaviour regressions, but a pixel change merges unnoticed unless the contributor recorded a baseline before the change and ran `make ios-snapshot-verify` / `make android-snapshot-verify` ([guides/snapshot-workflow.md](guides/snapshot-workflow.md)). Reviewers rely on the before/after screenshots in the PR's Evidence section. Each contributor's baseline is their own, so two machines can disagree after a toolchain change.
-- **Pinned snapshot runtime:** references match iPhone 17 / iOS 26.5 only. A pin bump means every contributor re-records their local baseline ([guides/toolchain-upgrades.md](guides/toolchain-upgrades.md)). The F-02 guard reports a mismatch by crashing the test runner, with the message only in the crash log (D-126).
-- **Snapshot tolerance:** Android `changeThreshold` 0.001 can hide a regression the size of a focus ring or dot (D-120).
-- **Compose ATF scroll suppression (D-124):** an element taller than about 20 % of the viewport that only straddles the top edge is checked partly.
+- **No visual-regression testing (a user decision):** the repo has no snapshot or screenshot-comparison tests, and CI compares no pixels. CI catches crashes and behaviour regressions; a pixel change is caught only by the argent screenshots in the PR's Evidence section (pinned iOS simulator plus one Android emulator at API 36), so layout regressions on other OS versions and text sizes can merge unnoticed.
 - **Release edge cases:** a module upload that breaks halfway (files uploaded, no POM) gets HTTP 409 on re-run and needs that version deleted by hand (D-102); commits merged between `release-bump` and the dispatch are released but not listed in the changelog (D-098).
 
 ## Test coverage gaps
 
-From the final review audit (D-103 to D-112): no end-to-end test from `tokens.json` to every platform's generated colour; no app-icon or wordmark-switch test; no Views page with a plain `EditText` and MDC `Snackbar`; no 200-row smooth-scroll check; no focus-order or keyboard-vs-touch ring test; no reduce-motion test for the Compose toast, dialog and sheet or the iOS toast; no pseudo-locale or long-string test; parity rests on contact sheets; no live settings test in the SwiftUI demo; the four demos were never installed side by side. Instrumented Android runs on API 26 and 36 happen in CI only (D-054). From issues #2–#6: no test covers the Compose dialog order after a recreate with a queued request (TC-026); the UIKit `afterDismissal` unit test uses the not-presented path because the SPM test host never completes a dismissal (real presentation is covered by the demo chain UI tests); no demo page hides the system bars, so immersive dialogs are covered by Robolectric (`TSDialogSystemBarsTest`, `TSDialogFragmentTest`) plus a one-off device check; the Button / IconButton demo sections for consumer icons and one-line labels have no UI test; the Compose disclosure chevron rotation is covered by spec tests and snapshots only.
+From the final review audit (D-103 to D-112): no end-to-end test from `tokens.json` to every platform's generated colour; no app-icon or wordmark-switch test; no Views page with a plain `EditText` and MDC `Snackbar`; no 200-row smooth-scroll check; no focus-order or keyboard-vs-touch ring test; no pseudo-locale or long-string test; parity rests on spec tests and side-by-side screenshots; no live settings test in the SwiftUI demo; the four demos were never installed side by side. Instrumented Android runs on API 26 and 36 happen in CI only (D-054). From issues #2–#6: no test covers the Compose dialog order after a recreate with a queued request (TC-026); the UIKit `afterDismissal` unit test uses the not-presented path because the SPM test host never completes a dismissal (real presentation is covered by the demo chain UI tests); no demo page hides the system bars, so immersive dialogs are covered by Robolectric (`TSDialogSystemBarsTest`, `TSDialogFragmentTest`) plus a one-off device check; the Button / IconButton demo sections for consumer icons and one-line labels have no UI test; the Compose disclosure chevron rotation is covered by spec tests only.

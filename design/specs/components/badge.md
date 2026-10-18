@@ -42,13 +42,13 @@ States: static only. A badge is never a button (DS: "Don't use badges as buttons
 | Layer | File | What |
 |---|---|---|
 | Spec | `ios/Tests/TSFoundationTests/TSBadgeStyleSpecTests.swift` | 24 configurations → fill, foreground, border, dot and icon flags; anatomy (min 22, padding, radius, dot 6, icon 16, 12/16 at 500) |
-| SwiftUI | `…/Behavior/TSBadgeBehaviorTests.swift` | label = text; static-text trait, no button trait; no `Button`; decorative icon only when set; 6 pt dot only when requested |
-| UIKit | `…/Behavior/TSBadgeViewBehaviorTests.swift` | label, static-text trait, not a `UIControl`; tone colours and border; dot and icon toggling and updates; height 22 at default and taller at AX5 |
-| Demo | `ContentComponentsTests.testBadgeIsStaticTextLabelledByItsText` (both apps) | |
+| SwiftUI | `…/Behavior/TSBadgeBehaviorTests.swift` | not a `Button`; icon only when set; 6 pt dot only when requested |
+| UIKit | `…/Behavior/TSBadgeViewBehaviorTests.swift` | not a `UIControl`; tone colours and border; dot and icon toggling and updates; height 22 at default and taller at AX5 |
+| Demo | `ContentComponentsTests.testBadgeIsStaticTextLabelledByItsText` (SwiftUI), `testBadgeIsStaticText` (UIKit) | |
 | Spec (Android) | `android/core/src/test/.../core/style/TSBadgeStyleSpecTest.kt` | the same 24 configurations → fill, foreground, border, dot and icon flags; anatomy; state does not change the result |
-| Compose | `.../components/badge/TSBadgeTest.kt` | merged text label, no role, no click action; 22 dp at default and taller at 200 %; dot +10 dp and icon +20 dp, no content description; long text stays one line and ellipsizes |
-| Views | `.../components/badge/TSBadgeViewTest.kt` | node text and `TextView` class, not clickable or focusable, children hidden; tone colours and neutral border; dot and icon toggling; 22 px at default and taller at 200 %; one-line ellipsis at 120 px; XML attributes |
-| Demo (Android) | `demos/android-*/app/src/androidTest/.../ContentComponentsTest.kt` | `badgeIsStaticTextLabelledByItsText` |
+| Compose | `.../components/badge/TSBadgeTest.kt` | not a button (no click action); 22 dp at default and taller at 200 %; dot +10 dp and icon +20 dp; long text stays one line and ellipsizes |
+| Views | `.../components/badge/TSBadgeViewTest.kt` | not clickable or focusable; tone colours and neutral border; dot and icon toggling; 22 px at default and taller at 200 %; one-line ellipsis at 120 px; XML attributes |
+| Demo (Android) | `demos/android-*/app/src/androidTest/.../ContentComponentsTest.kt` | `badgeIsStaticText` |
 
 ## Platform notes
 

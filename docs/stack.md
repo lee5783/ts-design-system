@@ -31,7 +31,7 @@ Raising either minimum is a major release (see [guides/deprecation-policy.md](gu
 | Tool | Pin | Source |
 |---|---|---|
 | Xcode | 26.6 | `.xcode-version` (CI selects it with `make ci-xcode`) |
-| Pinned snapshot simulator | iPhone 17 / iOS 26.5 | `ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift` (`pinnedSimulator`, `pinnedOSVersion`); the Makefile reads it |
+| Pinned iOS simulator | iPhone 17 / iOS 26.5 | `.ios-simulator` (`device=`, `os=`); the Makefile reads it into `IOS_SIM_DEVICE` / `IOS_SIM_OS` |
 | Node | 22 | `mise.toml`, `tools/package.json` `engines.node >=22`, `setup-node` in the workflows |
 | JDK | Temurin 21 (host and Gradle) | `mise.toml`, `setup-java` in the workflows |
 | Bytecode target | Java 17 | `DsBuildConstants.JVM_TARGET`; host tests run on JDK 21 (`HOST_TEST_JVM`) through the Gradle toolchain and the foojay resolver (`android/settings.gradle.kts`) |
@@ -51,8 +51,8 @@ Install with `mise install` (Node, JDK, git-cliff) and Xcode 26.6 from Apple.
 
 **Testing:** see [testing.md](testing.md).
 
-- iOS: Swift Testing, ViewInspector 0.10.5, swift-snapshot-testing 1.19.6 (both `.upToNextMinor`, test targets only; `Package.resolved` also pins swift-custom-dump, swift-syntax and xctest-dynamic-overlay as their dependencies).
-- Android: JUnit 4.13.2, Robolectric 4.16.1, Roborazzi 1.51.0, Compose UI test, AndroidX Test (core 1.7.0, ext-junit 1.3.0), Espresso 3.7.0, Accessibility Test Framework 4.1.1.
+- iOS: Swift Testing, ViewInspector 0.10.5 (`.upToNextMinor`, test targets only; the only entry in `Package.resolved`).
+- Android: JUnit 4.13.2, Robolectric 4.16.1, Compose UI test, AndroidX Test (core 1.7.0, ext-junit 1.3.0), Espresso 3.7.0.
 - Tools: Vitest ^5.
 
 **Build/dev:**
@@ -76,11 +76,11 @@ Install with `mise install` (Node, JDK, git-cliff) and Xcode 26.6 from Apple.
 **Build:**
 
 - `Package.swift` (root), `android/settings.gradle.kts`, `android/gradle.properties` (`org.gradle.jvmargs=-Xmx4g`, caching, parallel, `android.nonTransitiveRClass=true`, the `ds.pom.*` POM values), `android/gradle/libs.versions.toml`.
-- Convention plugins: `ds.android.library` (SDK levels, `resourcePrefix "ts_"`, explicit API, lint), `ds.android.compose`, `ds.android.testing` (JDK 21 host tests, 2 GB heap, local snapshot references as optional task inputs), `ds.publishing`, `ds.api-validation`.
+- Convention plugins: `ds.android.library` (SDK levels, `resourcePrefix "ts_"`, explicit API, lint), `ds.android.compose`, `ds.android.testing` (JDK 21 host tests, 2 GB heap, the shared test dependencies), `ds.publishing`, `ds.api-validation`.
 - `VERSION` feeds the Android `version` (`dsVersion()`), the Makefile banner and both demos' About screens.
 
 ## Platform requirements
 
-**Development:** macOS with Xcode 26.6 and an iPhone 17 / iOS 26.5 simulator (for the snapshot suites), the Android SDK with an API 26 and an API 36 emulator image for demo tests, JDK 21, Node 22.
+**Development:** macOS with Xcode 26.6 and an iPhone 17 / iOS 26.5 simulator (the pinned one for local test runs and evidence screenshots), the Android SDK with an API 26 and an API 36 emulator image for demo tests, JDK 21, Node 22.
 
 **Distribution:** iOS through SPM only (git tag `X.Y.Z` on this repo); Android through GitHub Packages (`com.ts.ds:*`). CocoaPods, Maven Central, Kotlin Multiplatform and web are out of scope.

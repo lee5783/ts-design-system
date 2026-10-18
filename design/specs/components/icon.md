@@ -24,8 +24,8 @@ Raw images: `TSIconName.image(compatibleWith:)` (asset, template) and `TSIconNam
 
 | Layer | File | What |
 |---|---|---|
-| Spec | `ios/Tests/TSFoundationTests/TSIconStyleSpecTests.swift` | size → token; accessibility element only with a label; template image size and RTL flag |
-| SwiftUI | `…/Behavior/TSIconBehaviorTests.swift` | hidden without label; label exposed; frame per size |
-| UIKit | `…/Behavior/TSIconViewBehaviorTests.swift` | intrinsic size per token; accessibility; RTL mirroring |
-| Spec (Android) | `android/core/src/test/.../core/style/TSIconButtonStyleSpecTest.kt` (`TSIconStyleSpecTest`) | size → token; important for accessibility only with a label |
-| Compose | `.../components/icon/TSIconTest.kt` | size per token; no content description without a label; label exposed |
+| Spec | `ios/Tests/TSFoundationTests/TSIconStyleSpecTests.swift` | size → token; template image size and RTL flag |
+| SwiftUI | `…/Behavior/TSIconBehaviorTests.swift` | decorative (hidden); frame per size |
+| UIKit | `…/Behavior/TSIconViewBehaviorTests.swift` | intrinsic size per token; RTL mirroring |
+| Spec (Android) | `android/core/src/test/.../core/style/TSIconButtonStyleSpecTest.kt` | size → token (`sizesMapToIconTokens`) |
+| Compose | `.../components/icon/TSIconTest.kt` | size per token |

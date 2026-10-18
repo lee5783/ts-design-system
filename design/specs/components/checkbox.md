@@ -6,7 +6,7 @@ Cross-toolkit contract for the TS Checkbox. Source: `design/source/components/Ch
 
 | DS (web) | Style spec (`TSFoundation` / `:core`) | SwiftUI | UIKit | Compose | Views |
 |---|---|---|---|---|---|
-| `Checkbox` | `TSCheckboxStyleSpec` | `TSCheckbox` (a `Button` with the internal `TSCheckboxStyle`) | `TSCheckboxView: UIControl` | `TSCheckbox` (`toggleable`, `Role.Checkbox`) | `TSCheckboxView : LinearLayout, Checkable` |
+| `Checkbox` | `TSCheckboxStyleSpec` | `TSCheckbox` (a `Button` with the internal `TSCheckboxStyle`) | `TSCheckboxView: UIControl` | `TSCheckbox` (`toggleable` row) | `TSCheckboxView : LinearLayout, Checkable` |
 | `label` | — | `_ label:` (required) | `label` | `label` (required) | `label` / `android:text` |
 | `checked` / `defaultChecked` / `onChange` | `Configuration.isOn` | `isOn: Binding<Bool>` | `isOn` + `.valueChanged` (programmatic sets are silent) | `checked` + `onCheckedChange` (hoisted) | `isChecked` (`android:checked`) + `setOnCheckedChangeListener` (user toggles only; programmatic sets are silent) |
 | `disabled` | `TSControlState.disabled` | `.disabled(_:)` | `isEnabled` | `enabled` | `isEnabled` |
@@ -31,20 +31,19 @@ Geometry: mark 20 × 20, radius `radius-xs`; label `body` 16/24 `text-primary`; 
 | Layer | File | What |
 |---|---|---|
 | Spec | `ios/Tests/TSFoundationTests/TSCheckboxStyleSpecTests.swift` | 8 configurations (off/on × default, pressed, disabled, focused) → fill, border, check, opacity, focus; geometry |
-| Compat | `ios/Tests/TSFoundationTests/TSCompatTests.swift` | explicit path honoured; the selected trait is stripped |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSCheckboxBehaviorTests.swift` | tap flips the binding and plays a haptic; disabled blocks; label, value and trait on the native and fallback paths; mark hidden; check shown only when on; row ≥ 44 |
-| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSCheckboxViewBehaviorTests.swift` | tap flips `isOn`, fires `.valueChanged` once and plays a haptic; programmatic set is silent; disabled blocks; `accessibilityActivate`; label, value and trait on both paths; row ≥ 44 and hit area; AX5 growth |
-| Demo | `FormComponentsTests.testCheckboxTogglesFromTheLabelAndDisabledBlocks` (both iOS demos) | tap on the label side toggles; value Checked/Unchecked; counter; disabled blocks |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSCheckboxBehaviorTests.swift` | tap flips the binding and plays a haptic; disabled blocks; mark hidden (decorative); check shown only when on; row ≥ 44 |
+| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSCheckboxViewBehaviorTests.swift` | tap flips `isOn`, fires `.valueChanged` once and plays a haptic; programmatic set is silent; disabled blocks; row ≥ 44 and hit area; AX5 growth |
+| Demo | `FormComponentsTests.testCheckboxTogglesFromTheLabelAndDisabledBlocks` (both iOS demos) | tap on the label side toggles; the demo's Checked/Unchecked caption; counter; disabled blocks |
 | Android spec | `android/core/src/test/.../core/style/TSCheckboxStyleSpecTest.kt` | 8 configurations → fill, border, check, opacity, focus; geometry; disabled press is not pressed |
-| Compose | `android/compose/src/test/.../components/checkbox/TSCheckboxTest.kt` (sdk 26/36) | tap on the label toggles and reports the value; `Role.Checkbox`, `ToggleableState`, `StateDescription` "Checked"/"Unchecked"; disabled blocks; row 48 dp and the far end of the row toggles; hidden label → content description and 48 × 48 target; ToggleOn/ToggleOff haptic and the `hapticsEnabled` opt-out |
-| Views | `android/views/src/test/.../components/checkbox/TSCheckboxViewTest.kt` (sdk 26/36) | tap toggles and notifies; programmatic sets are silent; disabled blocks and dims; node is a checkable `CheckBox` with the label and `ViewCompat` state description; row 48 dp hit; hidden label 48 × 48; pressed fills; haptic; XML attributes |
-| Android demo | `FormComponentsTest.checkboxTogglesFromTheLabelAndDisabledBlocks` (both Android demos) | tap near the label end toggles; state description; value caption; counter; disabled blocks |
+| Compose | `android/compose/src/test/.../components/checkbox/TSCheckboxTest.kt` (sdk 26/36) | tap on the label toggles and reports the value; click flips the toggle state; disabled blocks; row 48 dp and the far end of the row toggles; hidden label hides the text and keeps a 48 × 48 target; ToggleOn/ToggleOff haptic and the `hapticsEnabled` opt-out |
+| Views | `android/views/src/test/.../components/checkbox/TSCheckboxViewTest.kt` (sdk 26/36) | tap toggles and notifies; programmatic sets are silent; disabled blocks and dims; tap toggles `isChecked`; row 48 dp hit; hidden label 48 × 48; pressed fills; haptic; XML attributes |
+| Android demo | `FormComponentsTest.checkboxTogglesFromTheLabelAndDisabledBlocks` (both Android demos) | tap near the label end toggles; value caption; counter; disabled blocks |
 
 ## Platform notes
 
-- iOS: the SwiftUI pressed and focused states are forced in snapshots through the internal `forcingState(_:)`; UIKit uses `isHighlighted` and `UIFocusHaloEffect` around the mark (not snapshotted).
-- Android Compose: `toggleable(role = Role.Checkbox)` on the whole row with an explicit `stateDescription`; the row is at least 48 dp (`tsMinimumTouchTarget`), so a hidden label gives a 48 × 48 target. Focus ring around the mark (`tsFocusRing`); pressed and focused are forced in snapshots through `LocalTSForcedControlState`.
-- Android Views: `TSCheckboxView` is a row (`LinearLayout`) with the mark and a `MaterialTextView`; the node is a checkable `android.widget.CheckBox` with the label as text and the state description set through `ViewCompat`. The mark uses `TSControlBackground`, so the focus ring is drawn inside the mark (the T32 Views limitation). Listeners fire on user toggles only, matching iOS.
+- iOS: the SwiftUI pressed and focused states can be forced in tests through the internal `forcingState(_:)`; UIKit uses `isHighlighted` and `UIFocusHaloEffect` around the mark.
+- Android Compose: `toggleable` on the whole row; the row is at least 48 dp (`tsMinimumTouchTarget`), so a hidden label gives a 48 × 48 target. Focus ring around the mark (`tsFocusRing`); pressed and focused can be forced in tests through `LocalTSForcedControlState`.
+- Android Views: `TSCheckboxView` is a row (`LinearLayout`) with the mark and a `MaterialTextView`. The mark uses `TSControlBackground`, so the focus ring is drawn inside the mark (the T32 Views limitation). Listeners fire on user toggles only, matching iOS.
 - Android haptics: `DsHaptics.toggleEvent(checked)` → TOGGLE_ON/OFF on 34+, KEYBOARD_TAP below (not the iOS selection haptic). Compose honours `TSTheme(hapticsEnabled)`, Views honours `View.isHapticFeedbackEnabled`.
 - Hit area: the whole row (mark + gap + label), at least 44 pt high. With `isLabelHidden`, UIKit expands `point(inside:)` to 44 × 44 and SwiftUI expands the content shape.
 - Toggling plays the selection haptic (`TSHaptics`, opt-out through `TSHaptics.shared.isEnabled`).

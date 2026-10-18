@@ -57,13 +57,13 @@ Content (`TSAvatarContent`), resolved by `TSAvatarContent.make(initials:hasImage
 | Layer | File | What |
 |---|---|---|
 | Spec | `ios/Tests/TSFoundationTests/TSAvatarStyleSpecTests.swift` | 12 configurations → diameter, radius, font size/weight, colours, the visible content (exactly one); content fallback order; `TSAvatarImage.usable` rejects nil, empty and undecodable images |
-| SwiftUI | `…/Behavior/TSAvatarBehaviorTests.swift` | label = name with the image trait, no button; initials when there is no image, at a fixed size with line limit and scale factor; usable image replaces the initials; undecodable image, `.failure` and `.empty` fall back to initials; blank name → placeholder |
-| UIKit | `…/Behavior/TSAvatarViewBehaviorTests.swift` | label and image trait; fixed circle per size at AX5; initials; image and clearing it; failed image → initials; blank name → placeholder |
-| Demo | `ContentComponentsTests.testAvatarIsAnImageLabelledByTheName` (both apps) | |
+| SwiftUI | `…/Behavior/TSAvatarBehaviorTests.swift` | initials when there is no image, at a fixed size with line limit and scale factor; usable image replaces the initials; undecodable image, `.failure` and `.empty` fall back to initials; blank name → placeholder |
+| UIKit | `…/Behavior/TSAvatarViewBehaviorTests.swift` | fixed circle per size at AX5; initials; image and clearing it; failed image → initials; blank name → placeholder |
+| Demo | `ContentComponentsTests.testAvatarIsStaticAndSurvivesAPhoto` (both apps) | |
 | Spec (Android) | `android/core/src/test/.../core/style/TSAvatarStyleSpecTest.kt`, `.../core/logic/TSAvatarImageTest.kt` | the same 12 configurations; content fallback order; `TSAvatarImage` rejects null, undecodable, recycled and zero-size images (sdk 26/36, native graphics) |
-| Compose | `.../components/avatar/TSAvatarTest.kt` | label = name with `Role.Image`, no click; initials without an image; a usable `Painter` replaces them; a zero-size `Painter` falls back; blank name → placeholder and no description; fixed circle per size at 200 % |
-| Views | `.../components/avatar/TSAvatarViewTest.kt` | content description and `ImageView` class, not clickable; initials with uniform auto-size 7–14 px at md; image and clearing it; undecodable bitmap → initials; blank name → placeholder; fixed circle per size; circle and initials do not scale at 200 %; XML attributes |
-| Demo (Android) | `demos/android-*/app/src/androidTest/.../ContentComponentsTest.kt` | `avatarIsAnImageLabelledByTheName`, before and after the photo toggle |
+| Compose | `.../components/avatar/TSAvatarTest.kt` | initials without an image; a usable `Painter` replaces them; a failed or zero-size `Painter` falls back; blank name → placeholder; fixed circle at 200 %; `Painter` usability rule |
+| Views | `.../components/avatar/TSAvatarViewTest.kt` | initials with uniform auto-size 7–14 px at md; image and clearing it; undecodable bitmap → initials; blank name → placeholder; fixed circle per size; circle and initials do not scale at 200 %; XML attributes |
+| Demo (Android) | `demos/android-*/app/src/androidTest/.../ContentComponentsTest.kt` | `avatarIsStaticAndSurvivesAPhoto`, before and after the photo toggle |
 
 ## Platform notes
 
@@ -72,6 +72,6 @@ Content (`TSAvatarContent`), resolved by `TSAvatarContent.make(initials:hasImage
   - Initials use a fixed size: the dp value is converted with `Dp.toSp()`, so the system font scale does not change it. `BasicText(autoSize = TextAutoSize.StepBased(…))` shrinks wide pairs down to 0.5 inside the 2 dp inset. Weight 600 goes through `withDsFontWeight`.
   - The image is drawn with `ContentScale.Crop`, clipped to `CircleShape`.
 - **Views:**
-  - `TSAvatarView` is a `FrameLayout` measured at exactly the diameter. Children are clipped to the circle in `dispatchDraw`, because `clipToOutline` is ignored by software rendering (the sdk 26 snapshots showed square photos).
+  - `TSAvatarView` is a `FrameLayout` measured at exactly the diameter. Children are clipped to the circle in `dispatchDraw`, because `clipToOutline` is ignored by software rendering (sdk 26 drew square photos).
   - Initials: a `MaterialTextView` with uniform auto-size in px (`TextViewCompat`), so the font scale does not change it. The weight comes from `TextAppearance.TS.Component.AvatarInitials`: `sans-serif-medium` below API 28, and `textFontWeight` 600 from `values-v28`.
   - The node reports `name` as the content description with the `ImageView` class.

@@ -39,14 +39,14 @@ States: default, pressed, disabled (0.45), focused (ring as Button; circular rin
 | Layer | File | What |
 |---|---|---|
 | Spec | `ios/Tests/TSFoundationTests/TSIconButtonStyleSpecTests.swift` | 24 configurations → fill, icon, border, opacity, focus; size, icon size, round radius |
-| SwiftUI | `…/Behavior/TSIconButtonBehaviorTests.swift` | tap fires; disabled blocks; label; icon hidden |
-| UIKit | `…/Behavior/TSIconButtonViewBehaviorTests.swift` | `.touchUpInside` fires; disabled blocks; label, trait, large content; 44 × 44 |
+| SwiftUI | `…/Behavior/TSIconButtonBehaviorTests.swift` | tap fires; disabled blocks; glyph hidden (decorative) |
+| UIKit | `…/Behavior/TSIconButtonViewBehaviorTests.swift` | `.touchUpInside` fires; disabled blocks; Large Content Viewer title; 44 × 44; fixed corners; disabled icon dimmed once; icon ink |
 | Demo | `ActionComponentsTests.testIconButtonPlaygroundFiresAndDisabledBlocks` | |
 | Spec (Android) | `android/core/src/test/.../core/style/TSIconButtonStyleSpecTest.kt` | the same 24 configurations; round radius 22; icon 24; touch target 48 |
-| Compose | `.../components/iconbutton/TSIconButtonTest.kt` | click through the label; disabled blocks; 44 dp inside a 48 × 48 target; icon hidden |
-| Views | `.../components/iconbutton/TSIconButtonViewTest.kt` | tap fires; disabled blocks and dims; content description and `ImageButton` class; 48 px target with a 44 px visual; pressed primary fill; XML attributes |
+| Compose | `.../components/iconbutton/TSIconButtonTest.kt` | click fires; disabled blocks; 44 dp inside a 48 × 48 target |
+| Views | `.../components/iconbutton/TSIconButtonViewTest.kt` | tap fires; disabled blocks and dims; the label is the content description; 48 px target with a 44 px visual; pressed primary fill; XML attributes |
 | Demo (Android) | `demos/android-*/app/src/androidTest/.../ActionComponentsTest.kt` | playground fires; disabled blocks |
-| Consumer icon | `TSIconButtonBehaviorTests` `consumerImage`, `tsIconSize`; `TSIconButtonViewBehaviorTests.consumerImage`; `TSIconButtonTest.consumerIconKeepsTheLabelAndTheSize`; `TSIconButtonViewTest.consumerDrawableIsSizedToTheIconAndKeepsTheLabel`; snapshots `iconButtonCustomIcon` in `TSButtonSnapshotTests`, `TSButtonViewSnapshotTests`, `TSButtonSnapshotTest`, `TSButtonViewSnapshotTest` | label kept; resolved icon size; large content title (UIKit); custom icon per variant × state |
+| Consumer icon | `TSIconButtonBehaviorTests` `consumerImage`, `tsIconSize`; `TSIconButtonViewBehaviorTests.consumerImage`; `TSIconButtonTest.consumerIconKeepsTheSize`; `TSIconButtonViewTest.consumerDrawableIsSizedToTheIconAndKeepsTheLabel` | resolved icon size; label kept (Views content description) |
 | Demo | IconButton page, "Consumer icon" section in all four demos (`demo.icon-button.consumer-icon`) | shown, not asserted by a UI test |
 
 ## Platform notes

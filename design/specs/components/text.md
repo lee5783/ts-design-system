@@ -40,7 +40,7 @@ The values above are the token values at the default text size; the generated to
 | Layer | File | What |
 |---|---|---|
 | Shared (iOS) | `ios/Tests/TSFoundationTests/TSTextStyleTests.swift` | every role → its `TSFont`; every colour → its `text-*` role |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSTextBehaviorTests.swift` | label is the string; height equals the role's line height |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSTextBehaviorTests.swift` | the text is the string verbatim (no localization lookup); height equals the role's line height; defaults |
 | Shared (Android) | `android/core/src/test/.../style/TSTextColorTest.kt` | every colour → its `text-*` role |
 | Compose | `android/compose/src/test/.../text/TSTextTest.kt` (sdk 26/36) | text node; line height and colour per role; `maxLines` / `overflow` |
 | Demo | Text page in all four demos; `ContentComponentsTests.testTextPageShowsEveryTypeRoleAndTextColor` (both iOS demos), `ContentComponentsTest.textPageShowsEveryTypeRoleAndTextColor` (both Android demos) | SwiftUI / Compose show `TSText`; UIKit / Views show the documented equivalents |

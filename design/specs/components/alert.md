@@ -33,14 +33,14 @@ Geometry: padding 12 / 16 plus the web's 1 px transparent border (content inset 
 
 | Layer | File | What |
 |---|---|---|
-| Spec | `ios/Tests/TSFoundationTests/TSAlertStyleSpecTests.swift` | 16 configurations → fill, icon, icon colour, title/dismiss flags, tokens; label/announcement text per tone |
-| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSAlertBehaviorTests.swift` | one message element per tone; icon override; **dismiss callback fires** (button + escape); no dismiss without `onDismiss`; action stays separate; **announcement posted on appear** only when asked; heights |
-| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSAlertViewBehaviorTests.swift` | message element + fill + icon per tone; **dismiss fires** (touch, activation, escape); hidden without `onDismiss`; 44 pt dismiss hit area; action view order; **announcement posted** when added to a window and when unhidden, never for a static alert; heights |
-| Spec (Android) | `android/core/src/test/kotlin/com/ts/ds/core/style/TSAlertStyleSpecTest.kt`, `logic/TSStringsTest.kt` | 16 configurations → fill, icon, icon colour, flags, insets 17/13, title weight 600, dismiss tokens; state-independent; tone names and label |
-| Compose | `android/compose/src/test/kotlin/com/ts/ds/compose/components/alert/TSAlertTest.kt` (sdk 26 + 36) | one message node per tone; **dismiss fires** (button + `Dismiss` semantics action); none without `onDismiss`; dismiss hit area beyond the 20 dp glyph; action separate; **`liveRegion = Polite` only when `announcesWhenShown`**; heights 46 / 66; custom icon |
-| Views | `android/views/src/test/kotlin/com/ts/ds/views/components/alert/TSAlertViewTest.kt` (sdk 26 + 36) | message node per tone; **dismiss fires** (touch + `ACTION_DISMISS`); hidden without `onDismiss`; touch delegate around the glyph; action before dismiss; **live region**; heights |
-| Demo | `FeedbackComponentsTests` (both iOS demos): `testAlertDismissRemovesItAndShowAgainBringsItBack`, `testAlertMessageIsOneElementWithSeparateAction` | |
-| Demo (Android) | `FeedbackComponentsTest` (both Android demos): `alertMessageIsOneElementWithSeparateAction`, `alertDismissRemovesItAndShowAgainBringsItBack` | |
+| Spec | `ios/Tests/TSFoundationTests/TSAlertStyleSpecTests.swift` | 16 configurations → fill, icon, icon colour, title/dismiss flags, tokens |
+| SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSAlertBehaviorTests.swift` | tone icon; icon override; **dismiss callback fires** from the button; no dismiss without `onDismiss`; action stays separate; heights |
+| UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSAlertViewBehaviorTests.swift` | fill + icon per tone, and the alert and message are not accessibility elements (the text stays reachable); **dismiss fires** from a tap; hidden without `onDismiss`; 44 pt dismiss hit area; action view order; heights; icons ignore modal tint dimming |
+| Spec (Android) | `android/core/src/test/kotlin/com/ts/ds/core/style/TSAlertStyleSpecTest.kt`, `logic/TSStringsTest.kt` | 16 configurations → fill, icon, icon colour, flags, insets 17/13, title weight 600, dismiss tokens; state-independent; library strings resolve |
+| Compose | `android/compose/src/test/kotlin/com/ts/ds/compose/components/alert/TSAlertTest.kt` (sdk 26 + 36) | **dismiss fires** from the button; none without `onDismiss`; dismiss hit area beyond the 20 dp glyph; action separate; heights 46 / 66; custom icon replaces the tone icon |
+| Views | `android/views/src/test/kotlin/com/ts/ds/views/components/alert/TSAlertViewTest.kt` (sdk 26 + 36) | **dismiss fires** from touch; hidden without `onDismiss`; touch delegate around the glyph; action before dismiss; heights |
+| Demo | `FeedbackComponentsTests` (both iOS demos): `testAlertDismissRemovesItAndShowAgainBringsItBack`, `testAlertPlaygroundActionIsSeparateFromTheMessage` | |
+| Demo (Android) | `FeedbackComponentsTest` (both Android demos): `alertPlaygroundActionIsSeparateFromTheMessage`, `alertDismissRemovesItAndShowAgainBringsItBack` | |
 
 ## Platform notes
 

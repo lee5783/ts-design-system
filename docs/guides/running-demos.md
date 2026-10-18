@@ -32,7 +32,7 @@ cd demos/android-compose && ./gradlew :app:installDebug
 adb shell am start -n com.ts.ds.demo.compose/.MainActivity
 ```
 
-**All four:** `make demos-build`; tests: `make demos-test` (no iOS audits), `make demos-audit` (iOS audits only). See [../testing.md](../testing.md#demo-ui-tests).
+**All four:** `make demos-build`; tests: `make demos-test`, or one class through the `*-build-for-testing` / `*-test-only` targets. See [../testing.md](../testing.md#demo-ui-tests).
 
 ## Launch options
 

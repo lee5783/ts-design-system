@@ -31,7 +31,6 @@ This table matches the routing table in the root `CLAUDE.md`.
 | Cut a release, acknowledge API breaks, recover a failed publish | [guides/release.md](guides/release.md) |
 | What is breaking, how to deprecate, how the API checks work | [guides/deprecation-policy.md](guides/deprecation-policy.md) |
 | Renovate PRs, manual toolchain bumps, the yearly platform bump | [guides/toolchain-upgrades.md](guides/toolchain-upgrades.md) |
-| Write, record and verify snapshot tests (local only) | [guides/snapshot-workflow.md](guides/snapshot-workflow.md) |
 | Build and run the demos, launch options, theme deep links, argent | [guides/running-demos.md](guides/running-demos.md) |
 
 ## Consumer pages (`consumers/`)
