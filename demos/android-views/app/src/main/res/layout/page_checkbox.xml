@@ -26,7 +26,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_states" />
             <LinearLayout
                 android:id="@+id/toggle_states"
@@ -47,7 +46,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_label_hidden" />
             <LinearLayout
                 style="@style/Widget.Demo.ComponentSample"
@@ -70,7 +68,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_wrapping" />
             <com.ts.ds.views.components.checkbox.TSCheckboxView
                 style="@style/Widget.Demo.ComponentSample"

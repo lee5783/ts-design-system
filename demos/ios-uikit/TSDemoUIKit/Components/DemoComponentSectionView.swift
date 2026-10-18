@@ -5,7 +5,6 @@ import UIKit
 final class DemoComponentSectionView: UIStackView {
     init(_ key: DemoStringKey, views: [UIView]) {
         let title = DemoLabel(DemoStrings.string(key), font: .overline, color: .textMuted)
-        title.accessibilityTraits = .header
         super.init(frame: .zero)
         axis = .vertical
         alignment = .leading

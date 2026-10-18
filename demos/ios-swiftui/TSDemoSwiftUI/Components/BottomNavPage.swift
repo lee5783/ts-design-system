@@ -115,7 +115,6 @@ struct BottomNavShellTab: View {
                 Text(item.label)
                     .foregroundColor(TSColor.textPrimary.color)
                     .tsFont(.title2)
-                    .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("demo.bottom-nav.shell.title.\(item.id)")
                 Text(DemoStrings.string(.sampleShellBody))
                     .foregroundColor(TSColor.textSecondary.color)

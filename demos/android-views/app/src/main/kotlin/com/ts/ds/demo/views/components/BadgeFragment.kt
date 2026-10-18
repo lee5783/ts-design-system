@@ -16,7 +16,6 @@ class BadgeFragment : DemoPageFragment(R.layout.page_badge) {
     private var playgroundShowsIcon = false
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindTones(rows.findViewById(R.id.badge_tones))
         bindWithDot(rows.findViewById(R.id.badge_with_dot))
         bindWithIcons(rows.findViewById(R.id.badge_with_icons))

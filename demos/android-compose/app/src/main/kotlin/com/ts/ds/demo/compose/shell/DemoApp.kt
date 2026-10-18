@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import com.ts.ds.compose.components.toast.TSToastHost
@@ -99,7 +98,6 @@ private fun DemoShell(
         Crossfade(
             targetState = route,
             animationSpec = motionSpec(settings.reduceMotion),
-            modifier = if (settingsVisible) Modifier.clearAndSetSemantics {} else Modifier,
             label = "demo-route",
         ) { current ->
             when (current) {

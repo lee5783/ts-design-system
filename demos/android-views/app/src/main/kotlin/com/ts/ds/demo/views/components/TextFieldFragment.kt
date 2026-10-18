@@ -15,7 +15,6 @@ class TextFieldFragment : DemoPageFragment(R.layout.page_text_field) {
     override val page: DemoPageId = DemoPageId.TextField
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindWithIcons(rows.findViewById(R.id.text_field_with_icons))
         bindPlayground(rows.findViewById(R.id.text_field_playground))
     }

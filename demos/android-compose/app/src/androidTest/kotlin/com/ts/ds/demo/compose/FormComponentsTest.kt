@@ -12,12 +12,13 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
@@ -60,8 +61,8 @@ class FormComponentsTest {
 
     private fun ComposeTestRule.field() = onNodeWithTag(TextFieldPageTags.PLAYGROUND_FIELD)
 
-    private fun ComposeTestRule.toggle(label: String) =
-        onNode(hasContentDescription(label) and hasAnyAncestor(hasTestTag(TextFieldPageTags.PLAYGROUND_FIELD)), useUnmergedTree = true)
+    private fun ComposeTestRule.toggle() =
+        onNode(hasClickAction() and hasAnyAncestor(hasTestTag(TextFieldPageTags.PLAYGROUND_FIELD)), useUnmergedTree = true)
 
     @Test
     fun textFieldTypingErrorAndPasswordToggle() {
@@ -70,20 +71,19 @@ class FormComponentsTest {
             composeRule.openPage(DemoPageId.TextField)
             composeRule.scrollTo(TextFieldPageTags.PLAYGROUND_FIELD)
             composeRule.field().performClick().assertIsFocused().performTextInput("ada")
-            composeRule.field()
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("ada")))
-                .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Error))
+            composeRule.field().assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("ada")))
+            composeRule.onNodeWithText(error, useUnmergedTree = true).assertDoesNotExist()
 
             composeRule.tap(TextFieldPageTags.PLAYGROUND_ERROR)
             composeRule.scrollTo(TextFieldPageTags.PLAYGROUND_FIELD)
-            composeRule.field().assert(SemanticsMatcher.expectValue(SemanticsProperties.Error, error))
+            composeRule.onNodeWithText(error, useUnmergedTree = true).assertExists()
 
             composeRule.tap(TextFieldPageTags.PLAYGROUND_SECURE)
             composeRule.scrollTo(TextFieldPageTags.PLAYGROUND_FIELD)
             composeRule.field().assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Password))
-            composeRule.toggle("Show password").performClick()
+            composeRule.toggle().performClick()
             composeRule.field().assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Password))
-            composeRule.toggle("Hide password").performClick()
+            composeRule.toggle().performClick()
             composeRule.field()
                 .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Password))
                 .assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("•••")))
@@ -120,7 +120,7 @@ class FormComponentsTest {
         }
     }
 
-    private fun toggleTogglesFromTheLabelAndDisabledBlocks(page: DemoPageId, spec: DemoTogglePageSpec, onState: String, offState: String) {
+    private fun toggleTogglesFromTheLabelAndDisabledBlocks(page: DemoPageId, spec: DemoTogglePageSpec) {
         val on = resources.getString(spec.onRes)
         val off = resources.getString(spec.offRes)
         launchDemo().use {
@@ -128,11 +128,9 @@ class FormComponentsTest {
             composeRule.scrollTo(spec.playgroundCountTag)
             composeRule.onNodeWithTag(spec.playgroundControlTag)
                 .assertIsOff()
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, offState))
                 .performTouchInput { click(centerRight.copy(x = right - 4f)) }
             composeRule.onNodeWithTag(spec.playgroundControlTag)
                 .assertIsOn()
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, onState))
             composeRule.onNodeWithTag(spec.playgroundValueTag).assertTextEquals(on)
             composeRule.onNodeWithTag(spec.playgroundControlTag).performClick()
             composeRule.onNodeWithTag(spec.playgroundValueTag).assertTextEquals(off)
@@ -148,11 +146,11 @@ class FormComponentsTest {
 
     @Test
     fun checkboxTogglesFromTheLabelAndDisabledBlocks() {
-        toggleTogglesFromTheLabelAndDisabledBlocks(DemoPageId.Checkbox, CheckboxPageSpec, "Checked", "Unchecked")
+        toggleTogglesFromTheLabelAndDisabledBlocks(DemoPageId.Checkbox, CheckboxPageSpec)
     }
 
     @Test
     fun switchTogglesFromTheLabelAndDisabledBlocks() {
-        toggleTogglesFromTheLabelAndDisabledBlocks(DemoPageId.Switch, SwitchPageSpec, "On", "Off")
+        toggleTogglesFromTheLabelAndDisabledBlocks(DemoPageId.Switch, SwitchPageSpec)
     }
 }

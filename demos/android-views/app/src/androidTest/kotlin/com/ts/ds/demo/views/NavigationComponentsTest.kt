@@ -4,7 +4,6 @@ import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.CoordinatesProvider
@@ -21,7 +20,6 @@ import com.ts.ds.demo.support.catalog.DemoPageId
 import com.ts.ds.demo.views.components.BottomNavFragment
 import com.ts.ds.demo.views.components.BottomNavShellFragment
 import com.ts.ds.demo.views.components.TabsFragment
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import org.hamcrest.Matchers.allOf
@@ -78,10 +76,6 @@ class NavigationComponentsTest {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Tabs)
             onView(withTag(TabsFragment.PLAYGROUND_COUNT)).perform(scrollIntoView())
-            assertEquals(
-                "Tab, 2 of 4",
-                scenario.readTag(TabsFragment.PLAYGROUND_TABS) { ViewCompat.getStateDescription(requireNotNull(it.findText("Week"))).toString() },
-            )
             assertFalse(scenario.tabSelected(TabsFragment.PLAYGROUND_TABS, "Week"))
 
             tab(TabsFragment.PLAYGROUND_TABS, "Week").perform(clickNearTop())
@@ -123,19 +117,19 @@ class NavigationComponentsTest {
         }
     }
 
-    private fun View.findDescribed(label: String): View? = when {
-        contentDescription?.toString() == label && isClickable -> this
-        this is ViewGroup -> (0 until childCount).firstNotNullOfOrNull { getChildAt(it).findDescribed(label) }
-        else -> null
+    private fun View.findItem(label: String): View? {
+        var view: View? = findText(label)
+        while (view != null && !view.isClickable) view = view.parent as? View
+        return view
     }
 
-    private fun navItem(nav: String, label: String) = onView(allOf(withContentDescription(label), isDescendantOfA(withTag(nav))))
+    private fun navItem(nav: String, label: String) = onView(allOf(withText(label), isDescendantOfA(withTag(nav))))
 
-    private fun ActivityScenario<MainActivity>.navValue(nav: String, label: String): String =
-        readTag(nav) { ViewCompat.getStateDescription(requireNotNull(it.findDescribed(label))).toString() }
+    private fun ActivityScenario<MainActivity>.navShows(nav: String, label: String, text: String): Boolean =
+        readTag(nav) { requireNotNull(it.findItem(label)).findText(text) != null }
 
     private fun ActivityScenario<MainActivity>.navSelected(nav: String, label: String): Boolean =
-        readTag(nav) { requireNotNull(it.findDescribed(label)).isSelected }
+        readTag(nav) { requireNotNull(it.findItem(label)).isSelected }
 
     @Test
     fun bottomNavSelectionBadgeAndDisabled() {
@@ -143,7 +137,6 @@ class NavigationComponentsTest {
             openPage(DemoPageId.BottomNav)
             onView(withTag(BottomNavFragment.PLAYGROUND_CHANGES)).perform(scrollIntoView())
             val nav = BottomNavFragment.PLAYGROUND_NAV
-            assertEquals("Tab, 3 of 4", scenario.navValue(nav, "Search"))
             assertFalse(scenario.navSelected(nav, "Search"))
 
             navItem(nav, "Search").perform(click())
@@ -155,11 +148,11 @@ class NavigationComponentsTest {
             navItem(nav, "Search").perform(click())
             assertEquals("Tapped 1 time", scenario.text(BottomNavFragment.PLAYGROUND_CHANGES))
 
-            assertEquals("Tab, 2 of 4, 3 new", scenario.navValue(nav, "Inbox"))
+            assertTrue(scenario.navShows(nav, "Inbox", "3"))
             tap(BottomNavFragment.PLAYGROUND_ADD_HUNDRED)
-            assertEquals("Tab, 2 of 4, 99+ new", scenario.navValue(nav, "Inbox"))
+            assertTrue(scenario.navShows(nav, "Inbox", "99+"))
             tap(BottomNavFragment.PLAYGROUND_CLEAR)
-            assertEquals("Tab, 2 of 4", scenario.navValue(nav, "Inbox"))
+            assertFalse(scenario.navShows(nav, "Inbox", "99+"))
 
             tap(BottomNavFragment.PLAYGROUND_DISABLED)
             navItem(nav, "Alerts").perform(scrollIntoView(), click())
@@ -181,7 +174,7 @@ class NavigationComponentsTest {
             assertTrue(scenario.navSelected(nav, "Inbox"))
             onView(withTag("demo.bottom-nav.shell.title.inbox")).check(matches(isDisplayed()))
             onView(withTag("demo.bottom-nav.shell.add-one.inbox")).perform(click())
-            assertEquals("Tab, 2 of 4, 4 new", scenario.navValue(nav, "Inbox"))
+            assertTrue(scenario.navShows(nav, "Inbox", "4"))
 
             onView(withTag("demo.bottom-nav.shell.toast.inbox")).perform(click())
             onView(withText("Message sent")).check(matches(isDisplayed()))

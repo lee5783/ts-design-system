@@ -46,7 +46,6 @@
                 style="@style/Widget.Demo.SectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:tag="@string/demo_heading_tag"
                 android:text="@string/demo_component_truncation" />
             <com.ts.ds.views.components.listitem.TSListView
                 style="@style/Widget.Demo.ComponentSample"

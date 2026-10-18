@@ -20,7 +20,6 @@ class TabsFragment : DemoPageFragment(R.layout.page_tabs) {
     private var playgroundVariant = TSTabsVariant.Segmented
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindStates(rows.findViewById(R.id.tabs_states))
         bindOverflow(rows.findViewById(R.id.tabs_overflow))
         bindPlayground(rows.findViewById(R.id.tabs_playground))

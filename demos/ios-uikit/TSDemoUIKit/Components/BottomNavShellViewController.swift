@@ -54,7 +54,6 @@ final class BottomNavShellTabViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.backgroundColor = TSColor.backgroundPrimary.uiColor
         let title = DemoLabel(item.label, font: .title2, color: .textPrimary)
-        title.accessibilityTraits = .header
         title.accessibilityIdentifier = "demo.bottom-nav.shell.title.\(item.id)"
         let body = DemoLabel(DemoStrings.string(.sampleShellBody), font: .body, color: .textSecondary)
         let add = TSButtonView(

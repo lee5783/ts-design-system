@@ -2,16 +2,17 @@ package com.ts.ds.demo.views
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import android.widget.ImageView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isClickable
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -36,21 +37,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class FeedbackComponentsTest {
     private val resources = InstrumentationRegistry.getInstrumentation().targetContext.resources
-    private val offline = SampleData.message("offline")
-
-    private val playgroundLabel: String
-        get() = listOf(
-            resources.getString(DemoR.string.demo_sample_information),
-            resources.getString(offline.titleRes),
-            resources.getString(offline.bodyRes),
-        ).joinToString(", ")
 
     @After
     fun resetSettings() {
@@ -65,59 +57,43 @@ class FeedbackComponentsTest {
         onView(withTag(tag)).perform(scrollIntoView()).check(matches(withText(resources.getQuantityString(DemoR.plurals.demo_component_tap_count, count, count))))
     }
 
-    private fun View.findByDescription(description: String): View? {
-        if (contentDescription?.toString() == description) return this
+    private fun View.findDismiss(): View? {
+        if (this is ImageView && isClickable) return this
         if (this is ViewGroup) {
-            (0 until childCount).forEach { index -> getChildAt(index).findByDescription(description)?.let { return it } }
+            (0 until childCount).forEach { index -> getChildAt(index).findDismiss()?.let { return it } }
         }
         return null
     }
 
-    private fun ActivityScenario<MainActivity>.alertState(): Triple<Int, AccessibilityNodeInfoCompat?, Int?> {
-        var result: Triple<Int, AccessibilityNodeInfoCompat?, Int?>? = null
-        onActivity { activity ->
-            val alert = activity.window.decorView.findViewWithTag<View>(AlertFragment.PLAYGROUND_ALERT)
-            val message = alert.findByDescription(playgroundLabel)
-            val info = message?.let { view -> AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) } }
-            result = Triple(alert.visibility, info, message?.let(ViewCompat::getAccessibilityLiveRegion))
-        }
+    private val dismissButton = allOf(
+        isAssignableFrom(ImageView::class.java),
+        isClickable(),
+        isDescendantOfA(withTag(AlertFragment.PLAYGROUND_ALERT)),
+        isDisplayed(),
+    )
+
+    private fun ActivityScenario<MainActivity>.alertVisibility(): Int {
+        var result: Int? = null
+        onActivity { activity -> result = activity.window.decorView.findViewWithTag<View>(AlertFragment.PLAYGROUND_ALERT).visibility }
         return requireNotNull(result)
     }
 
     @Test
-    fun spinnerPageShowsSpinnersLabelledLoading() {
-        val loading = resources.getString(com.ts.ds.core.R.string.ts_loading)
-        launchDemo().use { scenario ->
+    fun spinnerPageShowsEverySizeAndTone() {
+        launchDemo().use {
             openPage(DemoPageId.Spinner)
             val tags = TSSpinnerSize.entries.map(SpinnerFragment::size) + TSSpinnerTone.entries.map(SpinnerFragment::tone)
-            tags.forEach { tag ->
-                onView(withTag(tag)).perform(scrollIntoView())
-                scenario.onActivity { activity ->
-                    val view = activity.window.decorView.findViewWithTag<View>(tag)
-                    val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
-                    assertEquals(loading, info.contentDescription.toString())
-                    assertEquals(android.widget.ProgressBar::class.java.name, info.className)
-                }
-            }
-            onView(withTag(SpinnerFragment.LABELLED)).perform(scrollIntoView())
-            scenario.onActivity { activity ->
-                val view = activity.window.decorView.findViewWithTag<View>(SpinnerFragment.LABELLED)
-                assertEquals(resources.getString(DemoR.string.demo_sample_loading_messages), view.contentDescription.toString())
-            }
+            tags.forEach { tag -> onView(withTag(tag)).perform(scrollIntoView()).check(matches(isDisplayed())) }
+            onView(withTag(SpinnerFragment.LABELLED)).perform(scrollIntoView()).check(matches(isDisplayed()))
         }
     }
 
     @Test
-    fun alertMessageIsOneElementWithSeparateAction() {
-        launchDemo().use { scenario ->
+    fun alertPlaygroundActionIsSeparateFromTheMessage() {
+        launchDemo().use {
             openPage(DemoPageId.Alert)
             tap(AlertFragment.PLAYGROUND_ACTION)
-            onView(withTag(AlertFragment.PLAYGROUND_ALERT)).perform(scrollIntoView())
-
-            val (_, info, liveRegion) = scenario.alertState()
-            assertNotNull(info)
-            assertEquals(TextView::class.java.name, info?.className)
-            assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_NONE, liveRegion)
+            onView(withTag(AlertFragment.PLAYGROUND_ALERT)).perform(scrollIntoView()).check(matches(isDisplayed()))
 
             tap(AlertFragment.PLAYGROUND_RETRY)
             assertCount(AlertFragment.PLAYGROUND_COUNT, 1)
@@ -129,27 +105,21 @@ class FeedbackComponentsTest {
         launchDemo().use { scenario ->
             openPage(DemoPageId.Alert)
             onView(withTag(AlertFragment.PLAYGROUND_ALERT)).perform(scrollIntoView())
-            onView(allOf(withContentDescription(DISMISS), isDisplayed())).perform(click())
-            assertEquals(View.GONE, scenario.alertState().first)
+            onView(dismissButton).perform(click())
+            assertEquals(View.GONE, scenario.alertVisibility())
 
             tap(AlertFragment.PLAYGROUND_SHOW)
-            val (visibility, _, liveRegion) = scenario.alertState()
-            assertEquals(View.VISIBLE, visibility)
-            assertEquals(ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE, liveRegion)
+            assertEquals(View.VISIBLE, scenario.alertVisibility())
 
             tap(AlertFragment.PLAYGROUND_DISMISSIBLE)
             var dismissVisible: Boolean? = null
             scenario.onActivity { activity ->
                 val alert = activity.window.decorView.findViewWithTag<View>(AlertFragment.PLAYGROUND_ALERT)
-                dismissVisible = alert.findByDescription(DISMISS)?.isShown
+                dismissVisible = alert.findDismiss()?.isShown
             }
             assertEquals(false, dismissVisible ?: false)
         }
     }
-
-
-    private fun successLabel(message: Int): String =
-        "${resources.getString(DemoR.string.demo_sample_success)}, ${resources.getString(message)}"
 
     private fun ActivityScenario<MainActivity>.currentToast(): String? {
         var text: String? = null
@@ -179,10 +149,10 @@ class FeedbackComponentsTest {
                 DemoR.string.demo_sample_backup_complete,
             ).forEach { message ->
                 scenario.awaitToast(resources.getString(message))
-                onView(allOf(withContentDescription(successLabel(message)), isDisplayed())).check(matches(isDisplayed()))
+                onView(allOf(withText(resources.getString(message)), isDisplayed())).check(matches(isDisplayed()))
             }
             scenario.awaitToast(null)
-            onView(withContentDescription(successLabel(DemoR.string.demo_sample_backup_complete))).check(doesNotExist())
+            onView(withText(resources.getString(DemoR.string.demo_sample_backup_complete))).check(doesNotExist())
         }
     }
 
@@ -193,9 +163,9 @@ class FeedbackComponentsTest {
             openPage(DemoPageId.Toast)
             tap(ToastFragment.PLAYGROUND_SHOW)
             scenario.awaitToast(deleted)
-            onView(withContentDescription(deleted)).check(matches(isDisplayed()))
+            onView(allOf(withText(deleted), isDisplayed())).check(matches(isDisplayed()))
 
-            onView(allOf(withText(resources.getString(DemoR.string.demo_sample_undo)), isDisplayed(), hasSibling(withContentDescription(deleted))))
+            onView(allOf(withText(resources.getString(DemoR.string.demo_sample_undo)), isDisplayed(), hasSibling(hasDescendant(withText(deleted)))))
                 .perform(click())
             scenario.awaitToast(null)
             assertCount(ToastFragment.PLAYGROUND_COUNT, 1)
@@ -205,15 +175,15 @@ class FeedbackComponentsTest {
     @Test
     fun toastIsShownInsideAnOpenSheetAndPassesTouchesThrough() {
         val title = resources.getString(DemoR.string.demo_sample_toast_sheet_title)
-        val label = successLabel(DemoR.string.demo_sample_link_copied)
+        val linkCopied = resources.getString(DemoR.string.demo_sample_link_copied)
         launchDemo().use { scenario ->
             openPage(DemoPageId.Toast)
             tap(ToastFragment.SHEET_OPEN)
             onView(withText(title)).inRoot(isDialog()).check(matches(isDisplayed()))
 
             onView(withText(resources.getString(DemoR.string.demo_sample_copy_link))).inRoot(isDialog()).perform(click())
-            scenario.awaitToast(resources.getString(DemoR.string.demo_sample_link_copied))
-            onView(withContentDescription(label)).inRoot(isDialog()).check(matches(isDisplayed()))
+            scenario.awaitToast(linkCopied)
+            onView(withText(linkCopied)).inRoot(isDialog()).check(matches(isDisplayed()))
 
             onView(isRoot()).inRoot(isDialog()).perform(
                 GeneralClickAction(
@@ -234,7 +204,6 @@ class FeedbackComponentsTest {
     }
 
     private companion object {
-        const val DISMISS = "Dismiss"
         const val TOAST_WAIT_MILLIS = 8_000L
         const val POLL_MILLIS = 100L
         const val SETTLE_MILLIS = 400L

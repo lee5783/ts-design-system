@@ -55,18 +55,14 @@ class SpinnerFragment : DemoPageFragment(R.layout.page_spinner) {
             gravity = Gravity.CENTER_VERTICAL
             tag = IN_CONTEXT
             isFocusable = true
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
         }
         row.addView(
-            spinner(TSSpinnerSize.Sm, TSSpinnerTone.Secondary).apply {
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-            },
+            spinner(TSSpinnerSize.Sm, TSSpinnerTone.Secondary),
         )
         row.addCaption(loading).apply { setPaddingRelative(resources.getDimensionPixelSize(TokensR.dimen.ts_space_2), 0, 0, 0) }
         section.addSpaced(row, matchWidth = true)
         section.addSpaced(
             spinner(TSSpinnerSize.Lg, TSSpinnerTone.Accent).apply {
-                contentDescription = loading
                 tag = LABELLED
             },
         )

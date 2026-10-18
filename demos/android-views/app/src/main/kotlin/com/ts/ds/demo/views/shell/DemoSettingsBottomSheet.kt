@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -42,10 +41,6 @@ class DemoSettingsBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.tag = DemoTags.SETTINGS
-        ViewCompat.setAccessibilityPaneTitle(view, getString(DemoR.string.demo_settings_title))
-        ViewCompat.setAccessibilityHeading(view.findViewById(R.id.settings_title), true)
-        ViewCompat.setAccessibilityHeading(view.findViewById(R.id.settings_theme_header), true)
-        ViewCompat.setAccessibilityHeading(view.findViewById(R.id.settings_font_scale_header), true)
         view.applySystemBarInsetsAsPadding(start = true, end = true, bottom = true)
 
         view.findViewById<View>(R.id.settings_close).setOnClickListener { dismiss() }

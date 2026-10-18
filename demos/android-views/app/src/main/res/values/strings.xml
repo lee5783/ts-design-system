@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">TS Views</string>
     <string name="toolkit_name">Android Views</string>
-    <string name="demo_heading_tag" translatable="false">demo.heading</string>
     <string name="demo_text_field_sample_email" translatable="false">ada@example.com</string>
     <string name="demo_text_field_sample_short_password" translatable="false">abc</string>
     <string name="demo_text_field_sample_name" translatable="false">Ada Lovelace</string>

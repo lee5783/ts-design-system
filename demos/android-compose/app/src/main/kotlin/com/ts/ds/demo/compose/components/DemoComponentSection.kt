@@ -11,9 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
 import com.ts.ds.compose.theme.TSSpacing
 import com.ts.ds.core.style.TSColorRole
 import com.ts.ds.core.style.TSTypeRole
@@ -51,8 +48,6 @@ fun DemoTapCounter(count: Int, tag: String, modifier: Modifier = Modifier) {
         text = pluralStringResource(DemoR.plurals.demo_component_tap_count, count, count),
         role = TSTypeRole.BodySm,
         color = TSColorRole.TextSecondary,
-        modifier = modifier
-            .testTag(tag)
-            .semantics { liveRegion = LiveRegionMode.Polite },
+        modifier = modifier.testTag(tag),
     )
 }

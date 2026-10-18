@@ -46,7 +46,6 @@ class ListItemFragment : DemoPageFragment(R.layout.page_list_item) {
     private var playgroundChevron = false
 
     override fun bindRows(rows: LinearLayout) {
-        rows.markSectionHeadings()
         bindContents(rows.findViewById(R.id.list_item_contents))
         bindStates(rows.findViewById(R.id.list_item_states))
         bindDivider(rows.findViewById(R.id.list_item_divider))

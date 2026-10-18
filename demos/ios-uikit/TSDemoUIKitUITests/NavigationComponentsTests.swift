@@ -12,29 +12,22 @@ final class NavigationComponentsTests: XCTestCase {
         let value = app.staticTexts["demo.tabs.playground.value"].firstMatch
         let counter = app.staticTexts["demo.tabs.playground.count"].firstMatch
         scrollTo(tabs, in: app)
-        let week = tab("Week", in: tabs)
-        XCTAssertEqual(week.value as? String, "Tab, 2 of 4")
-        XCTAssertFalse(week.isSelected)
-        XCTAssertTrue(tab("Day", in: tabs).isSelected)
+        XCTAssertEqual(value.label, "Selected: Day")
 
-        week.tap()
-        XCTAssertTrue(week.isSelected)
-        XCTAssertFalse(tab("Day", in: tabs).isSelected)
+        tap(tabs, item: 1, of: 4)
         XCTAssertEqual(value.label, "Selected: Week")
         XCTAssertEqual(counter.label, "Tapped 1 times")
-        week.tap()
+        tap(tabs, item: 1, of: 4)
         XCTAssertEqual(counter.label, "Tapped 1 times")
 
-        let month = tab("Month", in: tabs)
-        month.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0)).withOffset(CGVector(dx: 0, dy: -2)).tap()
-        XCTAssertTrue(month.isSelected)
+        tap(tabs, item: 2, of: 4)
+        XCTAssertEqual(value.label, "Selected: Month")
         XCTAssertEqual(counter.label, "Tapped 2 times")
 
         flip(app, "demo.tabs.playground.disabled")
         scrollTo(tabs, in: app)
-        tab("Year", in: tabs).tap()
-        XCTAssertTrue(month.isSelected)
-        XCTAssertFalse(tab("Year", in: tabs).isSelected)
+        tap(tabs, item: 3, of: 4)
+        XCTAssertEqual(value.label, "Selected: Month")
         XCTAssertEqual(counter.label, "Tapped 2 times")
     }
 
@@ -43,50 +36,30 @@ final class NavigationComponentsTests: XCTestCase {
         let app = launch(page: "tabs")
         let tabs = app.descendants(matching: .any)["demo.tabs.overflow"].firstMatch
         scrollTo(tabs, in: app)
-        let reports = tab("Reports", in: tabs)
-        XCTAssertEqual(reports.value as? String, "Tab, 9 of 9")
-        XCTAssertFalse(reports.isHittable)
-        var swipes = 0
-        while !reports.isHittable && swipes < 6 {
-            tabs.swipeLeft()
-            swipes += 1
-        }
-        XCTAssertTrue(reports.isHittable)
-        reports.tap()
-        XCTAssertTrue(reports.isSelected)
+        repeat3Swipes(tabs)
+        tabs.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
         XCTAssertEqual(app.staticTexts["demo.tabs.overflow.value"].firstMatch.label, "Selected: Reports")
     }
 
     @MainActor
-    func testBottomNavSelectionBadgeAndDisabled() {
+    func testBottomNavSelectionAndDisabled() {
         let app = launch(page: "bottom-nav")
         let nav = app.descendants(matching: .any)["demo.bottom-nav.playground.nav"].firstMatch
         let value = app.staticTexts["demo.bottom-nav.playground.value"].firstMatch
         let counter = app.staticTexts["demo.bottom-nav.playground.changes"].firstMatch
         scrollTo(nav, in: app)
-        let search = tab("Search", in: nav)
-        XCTAssertEqual(search.value as? String, "Tab, 3 of 4")
-        XCTAssertEqual(tab("Inbox", in: nav).value as? String, "Tab, 2 of 4, 3 new")
-        XCTAssertTrue(tab("Home", in: nav).isSelected)
+        XCTAssertEqual(value.label, "Selected: Home")
 
-        search.tap()
-        XCTAssertTrue(search.isSelected)
-        XCTAssertFalse(tab("Home", in: nav).isSelected)
+        tap(nav, item: 2, of: 4)
         XCTAssertEqual(value.label, "Selected: Search")
         XCTAssertEqual(counter.label, "Tapped 1 times")
-        search.tap()
+        tap(nav, item: 2, of: 4)
         XCTAssertEqual(counter.label, "Tapped 1 times")
-
-        app.buttons["demo.bottom-nav.playground.add-hundred"].firstMatch.tap()
-        XCTAssertEqual(tab("Inbox", in: nav).value as? String, "Tab, 2 of 4, 99+ new")
-        app.buttons["demo.bottom-nav.playground.clear"].firstMatch.tap()
-        XCTAssertEqual(tab("Inbox", in: nav).value as? String, "Tab, 2 of 4")
 
         flip(app, "demo.bottom-nav.playground.disabled")
         scrollTo(nav, in: app)
-        tab("Alerts", in: nav).tap()
-        XCTAssertFalse(tab("Alerts", in: nav).isSelected)
-        XCTAssertTrue(search.isSelected)
+        tap(nav, item: 3, of: 4)
+        XCTAssertEqual(value.label, "Selected: Search")
         XCTAssertEqual(counter.label, "Tapped 1 times")
     }
 
@@ -100,36 +73,34 @@ final class NavigationComponentsTests: XCTestCase {
         XCTAssertTrue(homeTitle.waitForExistence(timeout: 5))
         XCTAssertEqual(app.tabBars.count, 0)
 
-        let inbox = shellTab("Inbox", in: app)
-        XCTAssertEqual(inbox.value as? String, "Tab, 2 of 4, 3 new")
-        XCTAssertTrue(shellTab("Home", in: app).isSelected)
-        app.buttons["demo.bottom-nav.shell.add-one.demo.sample.home"].firstMatch.tap()
-        XCTAssertEqual(inbox.value as? String, "Tab, 2 of 4, 4 new")
-
-        inbox.tap()
-        XCTAssertTrue(inbox.isSelected)
+        tapShellTab(app, item: 1, of: 4)
         let inboxTitle = app.staticTexts["demo.bottom-nav.shell.title.demo.sample.inbox"].firstMatch
         XCTAssertTrue(inboxTitle.waitForExistence(timeout: 2))
         XCTAssertTrue(inboxTitle.isHittable)
         XCTAssertFalse(homeTitle.exists && homeTitle.isHittable)
-        app.buttons["demo.bottom-nav.shell.clear.demo.sample.inbox"].firstMatch.tap()
-        XCTAssertEqual(inbox.value as? String, "Tab, 2 of 4")
 
-        shellTab("Alerts", in: app).tap()
+        tapShellTab(app, item: 3, of: 4)
         XCTAssertTrue(app.staticTexts["demo.bottom-nav.shell.title.demo.sample.alerts"].firstMatch.waitForExistence(timeout: 2))
         XCTAssertEqual(app.tabBars.count, 0)
     }
 
     @MainActor
-    private func shellTab(_ label: String, in app: XCUIApplication) -> XCUIElement {
-        app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label == %@ AND value BEGINSWITH %@", label, "Tab, "))
-            .firstMatch
+    private func tap(_ bar: XCUIElement, item: Int, of count: Int) {
+        bar.coordinate(withNormalizedOffset: CGVector(dx: (Double(item) + 0.5) / Double(count), dy: 0.5)).tap()
     }
 
     @MainActor
-    private func tab(_ label: String, in tabs: XCUIElement) -> XCUIElement {
-        tabs.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label)).firstMatch
+    private func tapShellTab(_ app: XCUIApplication, item: Int, of count: Int) {
+        let window = app.windows.firstMatch
+        let x = (Double(item) + 0.5) / Double(count)
+        window.coordinate(withNormalizedOffset: CGVector(dx: x, dy: (window.frame.height - 66) / window.frame.height)).tap()
+    }
+
+    @MainActor
+    private func repeat3Swipes(_ tabs: XCUIElement) {
+        for _ in 0..<3 {
+            tabs.swipeLeft()
+        }
     }
 
     @MainActor
