@@ -35,7 +35,7 @@ The artifact needs an authenticated claude.ai session, so the copy is agent-assi
 | `controller-size` | one px value (a themed size is rejected) | Compose `TSControllerSize`, Swift `TSControllerSize`, Views `ts_controller_dimens.xml` |
 
 - Member names drop the `controller-` prefix (`controller-key-pressed` → `keyPressed`). Codegen rejects a controller name that already exists in the main model, a duplicate, or two names that map to the same member.
-- The contrast of the controller pairs is asserted in `tools/codegen/test/unit/merge-extensions.test.ts`, alpha-composited over black and white frames with the helpers in `tools/codegen/src/transforms/contrast.ts` (`compositeOver`, `flatten`, `compositedContrastRatio`). A value change that drops a label pair below 4.5:1 or the outline below 3:1 fails `make tools-test`.
+- No test checks contrast: the repo has no contrast tooling. When a controller value changes, re-check by hand that, alpha-composited over a black and a white frame in each theme, every label pair stays at least 4.5:1 and the outline at least 3:1 against the backing. When a main-palette colour changes, re-check the per-surface table in [../consumers/theming.md](../consumers/theming.md#text-contrast-per-surface).
 - The `renames` map and `diff-report` do not cover controller tokens (they are not in `TOKEN_FAMILIES`): renaming or removing one generates no deprecated alias and is caught only by the API checks. Treat it as breaking by hand.
 
 `npm --prefix tools run --silent codegen -- model` prints the merged model: token counts per family (controller colours and sizes included), aliases, extension statuses and deprecated aliases.
