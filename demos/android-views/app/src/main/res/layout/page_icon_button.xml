@@ -66,6 +66,42 @@
                     app:tsVariant="secondary" />
             </LinearLayout>
 
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_consumer_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                    android:id="@+id/icon_button_consumer_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/demo_sample_controller" />
+
+                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                    android:id="@+id/icon_button_consumer_icon_secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ts_space_2"
+                    android:contentDescription="@string/demo_sample_controller"
+                    app:tsVariant="secondary" />
+
+                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                    android:id="@+id/icon_button_consumer_icon_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ts_space_2"
+                    android:contentDescription="@string/demo_sample_controller"
+                    app:tsRound="true"
+                    app:tsVariant="primary" />
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/icon_button_states"
                 android:layout_width="match_parent"

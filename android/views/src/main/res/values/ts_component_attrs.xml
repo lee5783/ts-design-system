@@ -94,6 +94,8 @@
         <attr name="tsLeadingIcon" />
         <attr name="tsTrailingIcon" />
         <attr name="tsLoading" />
+        <attr name="android:maxLines" />
+        <attr name="android:ellipsize" />
     </declare-styleable>
 
     <declare-styleable name="TSIconButtonView">

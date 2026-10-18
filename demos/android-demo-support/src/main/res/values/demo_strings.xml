@@ -66,6 +66,8 @@
     <string name="demo_component_sizes">Sizes</string>
     <string name="demo_component_states">States</string>
     <string name="demo_component_with_icons">With icons</string>
+    <string name="demo_component_consumer_icon">Consumer icon</string>
+    <string name="demo_component_line_limit">One-line label</string>
     <string name="demo_component_shapes">Shapes</string>
     <string name="demo_component_playground">Playground</string>
     <string name="demo_component_variant">Variant</string>
@@ -128,6 +130,9 @@
     <string name="demo_sample_delete">Delete</string>
     <string name="demo_sample_learn_more">Learn more</string>
     <string name="demo_sample_continue">Continue</string>
+    <string name="demo_sample_play_together">Play together</string>
+    <string name="demo_sample_join_tournament">Join the weekend tournament with your friends</string>
+    <string name="demo_sample_controller">Game controller</string>
     <string name="demo_sample_get_started">Get started</string>
     <string name="demo_sample_search">Search</string>
     <string name="demo_sample_more_options">More options</string>

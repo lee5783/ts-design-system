@@ -1,7 +1,7 @@
 import SwiftUI
 
 public struct TSIconButton: View {
-    let icon: TSIconName
+    let icon: TSIconSource
     let label: String
     let variant: TSIconButtonVariant
     let isRound: Bool
@@ -17,6 +17,16 @@ public struct TSIconButton: View {
         isRound: Bool = false,
         action: @escaping () -> Void
     ) {
+        self.init(TSIconSource.ts(icon), label: label, variant: variant, isRound: isRound, action: action)
+    }
+
+    public init(
+        _ icon: TSIconSource,
+        label: String,
+        variant: TSIconButtonVariant = .ghost,
+        isRound: Bool = false,
+        action: @escaping () -> Void
+    ) {
         self.icon = icon
         self.label = label
         self.variant = variant
@@ -26,16 +36,20 @@ public struct TSIconButton: View {
 
     public var body: some View {
         Button(action: action) {
-            TSIcon(icon, size: .lg)
+            TSIconSourceView(source: icon, pointSize: iconSize)
         }
         .buttonStyle(TSIconButtonStyle(variant: variant, isRound: isRound, isFocused: isFocused, stateOverride: stateOverride))
         .focused($isFocused)
         .tsFocusEffectDisabled()
         .accessibilityLabel(Text(label))
         .accessibilityShowsLargeContentViewer {
-            TSIcon(icon, size: .lg)
+            TSIconSourceView(source: icon, pointSize: iconSize)
             Text(label)
         }
+    }
+
+    private var iconSize: CGFloat {
+        TSIconButtonStyleSpec.resolve(.init(variant: variant, isRound: isRound)).iconSize
     }
 
     func forcingState(_ state: TSControlState) -> TSIconButton {

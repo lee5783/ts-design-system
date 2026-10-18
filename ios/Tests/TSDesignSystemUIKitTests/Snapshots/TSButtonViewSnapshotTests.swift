@@ -11,6 +11,16 @@ struct TSButtonViewSnapshotTests {
         assertTSSnapshot(of: ButtonGalleryUIView(variant: variant), configuration: configuration, named: variant.rawValue)
     }
 
+    @Test("Button with a consumer image per variant", arguments: TSButtonVariant.allCases, TSSnapshotConfiguration.standardMatrix)
+    func buttonCustomIcon(variant: TSButtonVariant, configuration: TSSnapshotConfiguration) {
+        assertTSSnapshot(of: ButtonCustomIconGalleryUIView(variant: variant), configuration: configuration, named: variant.rawValue)
+    }
+
+    @Test("IconButton with a consumer image", arguments: TSSnapshotConfiguration.standardMatrix)
+    func iconButtonCustomIcon(configuration: TSSnapshotConfiguration) {
+        assertTSSnapshot(of: IconButtonCustomIconGalleryUIView(), configuration: configuration)
+    }
+
     @Test("IconButton matrix", arguments: TSSnapshotConfiguration.standardMatrix)
     func iconButton(configuration: TSSnapshotConfiguration) {
         assertTSSnapshot(of: IconButtonGalleryUIView(), configuration: configuration)

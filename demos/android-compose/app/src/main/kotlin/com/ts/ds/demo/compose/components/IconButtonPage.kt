@@ -12,11 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import com.ts.ds.compose.components.icon.TSIconSource
 import com.ts.ds.compose.components.iconbutton.TSIconButton
 import com.ts.ds.compose.theme.TSSpacing
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSIconButtonVariant
+import com.ts.ds.demo.compose.R
 import com.ts.ds.demo.compose.shell.OptionChip
 import com.ts.ds.demo.compose.shell.OptionGroup
 import com.ts.ds.demo.compose.shell.ToggleRow
@@ -26,6 +30,7 @@ object IconButtonPageTags {
     const val PLAYGROUND_BUTTON = "demo.icon-button.playground.button"
     const val PLAYGROUND_COUNT = "demo.icon-button.playground.count"
     const val PLAYGROUND_DISABLED = "demo.icon-button.playground.disabled"
+    const val CONSUMER_ICON = "demo.icon-button.consumer-icon"
 }
 
 fun LazyListScope.iconButtonPage() {
@@ -43,6 +48,15 @@ fun LazyListScope.iconButtonPage() {
             TSIconButton(TSIcon.Plus, add, onClick = {}, variant = TSIconButtonVariant.Primary)
             TSIconButton(TSIcon.Plus, add, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
             TSIconButton(TSIcon.More, stringResource(DemoR.string.demo_sample_more_options), onClick = {}, variant = TSIconButtonVariant.Secondary, round = true)
+        }
+    }
+    componentSection("icon-button.consumer-icon", DemoR.string.demo_component_consumer_icon) {
+        Row(horizontalArrangement = Arrangement.spacedBy(TSSpacing.space3)) {
+            val controller = TSIconSource.Vector(ImageVector.vectorResource(R.drawable.demo_ic_controller))
+            val label = stringResource(DemoR.string.demo_sample_controller)
+            TSIconButton(controller, label, onClick = {}, modifier = Modifier.testTag(IconButtonPageTags.CONSUMER_ICON))
+            TSIconButton(controller, label, onClick = {}, variant = TSIconButtonVariant.Secondary)
+            TSIconButton(controller, label, onClick = {}, variant = TSIconButtonVariant.Primary, round = true)
         }
     }
     componentSection("icon-button.states", DemoR.string.demo_component_states) {

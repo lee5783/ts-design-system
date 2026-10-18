@@ -19,8 +19,10 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
+import com.ts.ds.compose.components.icon.TSIconSource
 import com.ts.ds.compose.components.shared.TSSpinner
 import com.ts.ds.compose.components.shared.collectTSControlState
 import com.ts.ds.compose.components.shared.tsControlChrome
@@ -47,6 +49,39 @@ public fun TSButton(
     enabled: Boolean = true,
     loading: Boolean = false,
     loadingDescription: String = stringResource(CoreR.string.ts_loading),
+    interactionSource: MutableInteractionSource? = null,
+) {
+    TSButton(
+        text = text,
+        onClick = onClick,
+        modifier = modifier,
+        variant = variant,
+        size = size,
+        leadingIconSource = leadingIcon?.let(TSIconSource::Ts),
+        trailingIconSource = trailingIcon?.let(TSIconSource::Ts),
+        enabled = enabled,
+        loading = loading,
+        loadingDescription = loadingDescription,
+        maxLines = Int.MAX_VALUE,
+        overflow = TextOverflow.Clip,
+        interactionSource = interactionSource,
+    )
+}
+
+@Composable
+public fun TSButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    variant: TSButtonVariant = TSButtonVariant.Primary,
+    size: TSButtonSize = TSButtonSize.Md,
+    leadingIconSource: TSIconSource? = null,
+    trailingIconSource: TSIconSource? = null,
+    enabled: Boolean = true,
+    loading: Boolean = false,
+    loadingDescription: String = stringResource(CoreR.string.ts_loading),
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
     interactionSource: MutableInteractionSource? = null,
 ) {
     val source = interactionSource ?: remember { MutableInteractionSource() }
@@ -92,12 +127,12 @@ public fun TSButton(
                     rotationMillis = resolved.spinnerRotationMillis,
                 )
             }
-        } else if (leadingIcon != null) {
-            TSIconImage(leadingIcon, contentDescription = null, size = resolved.iconSizeDp.dp, tint = contentColor)
+        } else if (leadingIconSource != null) {
+            TSIconImage(leadingIconSource, contentDescription = null, size = resolved.iconSizeDp.dp, tint = contentColor)
         }
-        BasicText(text = text, style = textStyle)
-        if (trailingIcon != null) {
-            TSIconImage(trailingIcon, contentDescription = null, size = resolved.iconSizeDp.dp, tint = contentColor)
+        BasicText(text = text, style = textStyle, overflow = overflow, maxLines = maxLines)
+        if (trailingIconSource != null) {
+            TSIconImage(trailingIconSource, contentDescription = null, size = resolved.iconSizeDp.dp, tint = contentColor)
         }
     }
 }

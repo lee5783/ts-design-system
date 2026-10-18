@@ -1,6 +1,20 @@
 package com.ts.ds.compose.components.button
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.style.TextOverflow
+import com.ts.ds.compose.components.icon.TSIconSource
+import org.junit.Assert.assertTrue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -20,6 +34,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.height
+import androidx.compose.ui.unit.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.icon.TSIcon
@@ -148,4 +164,116 @@ class TSButtonTest {
         setButton(leadingIcon = TSIcon.Plus)
         composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
     }
+
+    @Test
+    fun consumerIconsTakeTheSameSpaceAsTSIcons() {
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                Column {
+                    TSButton(
+                        text = "Save",
+                        onClick = {},
+                        leadingIcon = TSIcon.Plus,
+                        trailingIcon = TSIcon.Plus,
+                        modifier = Modifier.testTag("ts"),
+                    )
+                    TSButton(
+                        text = "Save",
+                        onClick = {},
+                        leadingIconSource = TSIconSource.Vector(consumerVector(24)),
+                        trailingIconSource = TSIconSource.Painter(ColorPainter(Color.Red)),
+                        modifier = Modifier.testTag("vector"),
+                    )
+                    TSButton(
+                        text = "Save",
+                        onClick = {},
+                        leadingIconSource = TSIconSource.Vector(consumerVector(48)),
+                        trailingIconSource = TSIconSource.Ts(TSIcon.Plus),
+                        modifier = Modifier.testTag("large"),
+                    )
+                }
+            }
+        }
+
+        val expected = composeRule.onNodeWithTag("ts").getUnclippedBoundsInRoot()
+        listOf("vector", "large").forEach { tag ->
+            val bounds = composeRule.onNodeWithTag(tag).getUnclippedBoundsInRoot()
+            assertEquals(expected.width, bounds.width)
+            assertEquals(expected.height, bounds.height)
+        }
+        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun loadingReplacesOnlyTheLeadingConsumerIcon() {
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                Column {
+                    TSButton(
+                        text = "Save",
+                        onClick = {},
+                        loading = true,
+                        leadingIconSource = TSIconSource.Vector(consumerVector(24)),
+                        trailingIconSource = TSIconSource.Vector(consumerVector(24)),
+                        modifier = Modifier.testTag("both"),
+                    )
+                    TSButton(
+                        text = "Save",
+                        onClick = {},
+                        loading = true,
+                        modifier = Modifier.testTag("none"),
+                    )
+                }
+            }
+        }
+
+        val both = composeRule.onNodeWithTag("both").getUnclippedBoundsInRoot()
+        val none = composeRule.onNodeWithTag("none").getUnclippedBoundsInRoot()
+        assertEquals(none.width + 20.dp + 8.dp, both.width)
+    }
+
+    @Test
+    fun maxLinesKeepsTheLabelOnOneLineWithAnEllipsis() {
+        val label = "Join the session with a very long label"
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                Column(Modifier.width(160.dp)) {
+                    TSButton(
+                        text = label,
+                        onClick = {},
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.testTag("limited"),
+                    )
+                    TSButton(text = label, onClick = {}, modifier = Modifier.testTag("wrapping"))
+                }
+            }
+        }
+
+        val limited = composeRule.onNodeWithTag("limited").textLayout()
+        assertEquals(1, limited.lineCount)
+        assertTrue(limited.isLineEllipsized(0))
+        composeRule.onNodeWithTag("limited").assertHeightIsEqualTo(48.dp)
+        composeRule.onNodeWithTag("limited")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Text, listOf(AnnotatedString(label))))
+        assertTrue(composeRule.onNodeWithTag("wrapping").textLayout().lineCount > 1)
+    }
+
+    private fun SemanticsNodeInteraction.textLayout(): TextLayoutResult {
+        val results = mutableListOf<TextLayoutResult>()
+        fetchSemanticsNode().config[SemanticsActions.GetTextLayoutResult].action?.invoke(results)
+        return results.single()
+    }
+
+    private fun consumerVector(sizeDp: Int): ImageVector = ImageVector.Builder(
+        defaultWidth = sizeDp.dp,
+        defaultHeight = sizeDp.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(stroke = SolidColor(Color.Black), strokeLineWidth = 1.75f) {
+            moveTo(4f, 12f)
+            horizontalLineTo(20f)
+        }
+    }.build()
 }

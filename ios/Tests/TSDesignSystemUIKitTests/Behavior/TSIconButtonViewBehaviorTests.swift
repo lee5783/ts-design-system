@@ -1,6 +1,7 @@
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
+import TSTestSupport
 
 @MainActor
 @Suite("TSIconButtonView behaviour")
@@ -74,5 +75,18 @@ struct TSIconButtonViewBehaviorTests {
         #expect(abs(button.alpha - (isEnabled ? 1 : TSOpacity.opacityDisabled)) < 0.001)
         let imageView = try #require(button.imageView)
         return try #require(RenderedInk.strongest(in: imageView))
+    }
+
+    @Test("A consumer image keeps the label, the large content title and the resolved icon size")
+    func consumerImage() {
+        let button = TSIconButtonView(iconImage: TSSampleIconImage.controller(side: 48), label: "Controller", variant: .secondary)
+        button.updateConfiguration()
+        let image = button.configuration?.image
+        #expect(image?.size == CGSize(width: button.resolved.iconSize, height: button.resolved.iconSize))
+        #expect(image?.renderingMode == .alwaysTemplate)
+        #expect(button.accessibilityLabel == "Controller")
+        #expect(button.largeContentTitle == "Controller")
+        #expect(button.largeContentImage?.renderingMode == .alwaysTemplate)
+        #expect(button.intrinsicContentSize == CGSize(width: 44, height: 44))
     }
 }

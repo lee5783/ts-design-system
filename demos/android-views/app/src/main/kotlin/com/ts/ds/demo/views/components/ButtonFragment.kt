@@ -20,6 +20,9 @@ class ButtonFragment : DemoPageFragment(R.layout.page_button) {
 
     override fun bindRows(rows: LinearLayout) {
         rows.markSectionHeadings()
+        listOf(R.id.button_consumer_icon, R.id.button_consumer_icon_secondary, R.id.button_consumer_icon_loading, R.id.button_line_limit).forEach {
+            rows.findViewById<TSButtonView>(it).setLeadingIconResource(R.drawable.demo_ic_controller)
+        }
         bindStates(rows.findViewById(R.id.button_states))
         bindPlayground(rows.findViewById(R.id.button_playground))
     }

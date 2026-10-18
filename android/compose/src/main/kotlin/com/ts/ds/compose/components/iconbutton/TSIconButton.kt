@@ -13,6 +13,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.icon.TSIconImage
+import com.ts.ds.compose.components.icon.TSIconSource
 import com.ts.ds.compose.components.shared.collectTSControlState
 import com.ts.ds.compose.components.shared.tsControlChrome
 import com.ts.ds.compose.components.shared.tsControlClickable
@@ -25,6 +26,29 @@ import com.ts.ds.core.style.TSIconButtonVariant
 @Composable
 public fun TSIconButton(
     icon: TSIcon,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    variant: TSIconButtonVariant = TSIconButtonVariant.Ghost,
+    round: Boolean = false,
+    enabled: Boolean = true,
+    interactionSource: MutableInteractionSource? = null,
+) {
+    TSIconButton(
+        icon = TSIconSource.Ts(icon),
+        contentDescription = contentDescription,
+        onClick = onClick,
+        modifier = modifier,
+        variant = variant,
+        round = round,
+        enabled = enabled,
+        interactionSource = interactionSource,
+    )
+}
+
+@Composable
+public fun TSIconButton(
+    icon: TSIconSource,
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

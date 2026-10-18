@@ -2,6 +2,7 @@ import SwiftUI
 import Testing
 import ViewInspector
 @testable import TSDesignSystem
+import TSTestSupport
 
 @MainActor
 @Suite("TSButton behaviour")
@@ -67,5 +68,39 @@ struct TSButtonBehaviorTests {
     func title() throws {
         let sut = TSButton("Learn more", variant: .link) {}
         #expect(try sut.inspect().find(text: "Learn more").string() == "Learn more")
+    }
+
+    @Test("TS icons and consumer images draw at the resolved icon size")
+    func iconsUseResolvedSize() throws {
+        let image = Image(uiImage: TSSampleIconImage.controller(side: 48))
+        let resolved = TSButtonStyleSpec.resolve(.init())
+        let sut = TSButton("Play", leadingIconSource: .image(image), trailingIconSource: .ts(.arrowRight)) {}
+        let icons = try sut.inspect().findAll(TSIconSourceView.self)
+        #expect(icons.count == 2)
+        for icon in icons {
+            #expect(try icon.actualView().pointSize == resolved.iconSize)
+        }
+        #expect(try sut.inspect().find(TSIcon.self).actualView().pointSize == resolved.iconSize)
+        #expect(try sut.inspect().find(ViewType.Image.self).accessibilityHidden())
+    }
+
+    @Test("Loading replaces only the leading consumer icon")
+    func loadingReplacesLeadingConsumerIcon() throws {
+        let image = Image(uiImage: TSSampleIconImage.controller())
+        let sut = TSButton("Play", leadingIconSource: .image(image), trailingIconSource: .image(image), isLoading: true) {}
+        #expect(throws: Never.self) { try sut.inspect().find(TSSpinner.self) }
+        #expect(try sut.inspect().findAll(TSIconSourceView.self).count == 1)
+    }
+
+    @Test("A line limit from the environment keeps the label on one line; the default still wraps")
+    func lineLimit() {
+        let title = "Join the session with a very long label"
+        let proposal = CGSize(width: 180, height: CGFloat.greatestFiniteMagnitude)
+        let limited = UIHostingController(rootView: TSButton(title) {}.lineLimit(1).truncationMode(.tail)).sizeThatFits(in: proposal)
+        let wrapping = UIHostingController(rootView: TSButton(title) {}).sizeThatFits(in: proposal)
+        let single = UIHostingController(rootView: TSButton("Join") {}).sizeThatFits(in: proposal)
+        #expect(limited.height == single.height)
+        #expect(limited.width <= proposal.width)
+        #expect(wrapping.height > single.height)
     }
 }

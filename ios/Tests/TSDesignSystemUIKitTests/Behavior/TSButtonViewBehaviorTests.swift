@@ -1,6 +1,7 @@
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
+import TSTestSupport
 
 @MainActor
 @Suite("TSButtonView behaviour")
@@ -135,5 +136,60 @@ struct TSButtonViewBehaviorTests {
         button.layoutIfNeeded()
         let imageView = try #require(button.imageView)
         return try #require(RenderedInk.strongest(in: imageView))
+    }
+
+    @Test("A consumer image is a template at the resolved icon size and takes the same space as a TS icon")
+    func consumerImage() {
+        let ts = TSButtonView(title: "Play", leadingIcon: .plus, trailingIcon: .plus)
+        let custom = TSButtonView(title: "Play")
+        custom.leadingIconImage = TSSampleIconImage.controller(side: 48)
+        custom.trailingIconImage = TSSampleIconImage.controller()
+        for button in [ts, custom] {
+            button.updateConfiguration()
+            button.frame = CGRect(origin: .zero, size: button.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize))
+            button.layoutIfNeeded()
+        }
+        let resolved = custom.resolved
+        let image = custom.configuration?.image
+        #expect(image?.size == CGSize(width: resolved.iconSize, height: resolved.iconSize))
+        #expect(image?.renderingMode == .alwaysTemplate)
+        #expect(custom.frame.size == ts.frame.size)
+        let trailing = custom.subviews.compactMap { $0 as? TSIconView }.first
+        #expect(trailing?.isHidden == false)
+        #expect(trailing?.image?.renderingMode == .alwaysTemplate)
+        #expect(trailing?.frame.size == CGSize(width: resolved.iconSize, height: resolved.iconSize))
+        #expect(trailing?.isAccessibilityElement == false)
+    }
+
+    @Test("Loading replaces only the leading consumer image")
+    func loadingKeepsTrailingConsumerImage() {
+        let button = TSButtonView(title: "Play")
+        button.leadingIconImage = TSSampleIconImage.controller()
+        button.trailingIconImage = TSSampleIconImage.controller()
+        button.isLoading = true
+        button.updateConfiguration()
+        #expect(button.configuration?.image?.renderingMode != .alwaysTemplate)
+        #expect(button.subviews.compactMap { $0 as? TSIconView }.first?.isHidden == false)
+    }
+
+    @Test("numberOfLines = 1 keeps the label on one line with an ellipsis; the default wraps")
+    func lineLimit() {
+        let title = "Join the session with a very long label"
+        let limited = TSButtonView(title: title)
+        limited.numberOfLines = 1
+        limited.lineBreakMode = .byTruncatingTail
+        let wrapping = TSButtonView(title: title)
+        let single = TSButtonView(title: "Join")
+        let fitting = CGSize(width: 180, height: CGFloat.greatestFiniteMagnitude)
+        var heights: [CGFloat] = []
+        for button in [limited, wrapping, single] {
+            button.updateConfiguration()
+            heights.append(button.sizeThatFits(fitting).height)
+        }
+        #expect(limited.titleLabel?.numberOfLines == 1)
+        #expect(limited.configuration?.titleLineBreakMode == .byTruncatingTail)
+        #expect(heights[0] == heights[2])
+        #expect(heights[1] > heights[2])
+        #expect(wrapping.titleLabel?.numberOfLines == 0)
     }
 }

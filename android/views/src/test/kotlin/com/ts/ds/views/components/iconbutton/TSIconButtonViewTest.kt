@@ -9,7 +9,9 @@ import com.ts.ds.core.style.TSIconButtonVariant
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
 import com.ts.ds.views.components.shared.TSControlBackground
+import com.ts.ds.views.components.shared.TSIconSlotDrawable
 import com.ts.ds.views.components.tapCenter
+import com.ts.ds.views.snapshots.sampleController
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -91,5 +93,24 @@ class TSIconButtonViewTest {
         assertEquals(TSIconButtonVariant.Secondary, view.variant)
         assertEquals(TSIcon.More, view.icon)
         assertTrue(view.isRound)
+    }
+
+    @Test
+    fun consumerDrawableIsSizedToTheIconAndKeepsTheLabel() {
+        val view = iconButton {
+            iconDrawable = context.sampleController(48f)
+            label = "Controller"
+        }
+        val info = AccessibilityNodeInfoCompat.obtain().also { ViewCompat.onInitializeAccessibilityNodeInfo(view, it) }
+
+        assertEquals(24, view.drawable.intrinsicWidth)
+        assertEquals(24, view.drawable.intrinsicHeight)
+        assertEquals(24, view.drawable.bounds.width())
+        assertEquals("Controller", info.contentDescription.toString())
+        assertEquals(48, view.width)
+
+        assertTrue(view.drawable is TSIconSlotDrawable)
+        view.iconDrawable = null
+        assertTrue(view.drawable != null && view.drawable !is TSIconSlotDrawable)
     }
 }

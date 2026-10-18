@@ -2,6 +2,7 @@ import SwiftUI
 import Testing
 import ViewInspector
 @testable import TSDesignSystem
+import TSTestSupport
 
 @MainActor
 @Suite("TSIconButton behaviour")
@@ -30,5 +31,22 @@ struct TSIconButtonBehaviorTests {
         let button = try sut.inspect().find(ViewType.Button.self)
         #expect(try button.accessibilityLabel().string() == "More options")
         #expect(try button.find(TSIcon.self).actualView().body.inspect().accessibilityHidden())
+    }
+
+    @Test("A consumer image keeps the required label and draws at the resolved icon size")
+    func consumerImage() throws {
+        let image = Image(uiImage: TSSampleIconImage.controller())
+        let sut = TSIconButton(.image(image), label: "Controller", variant: .secondary) {}
+        let button = try sut.inspect().find(ViewType.Button.self)
+        #expect(try button.accessibilityLabel().string() == "Controller")
+        let resolved = TSIconButtonStyleSpec.resolve(.init(variant: .secondary))
+        #expect(try button.find(TSIconSourceView.self).actualView().pointSize == resolved.iconSize)
+        #expect(try button.find(ViewType.Image.self).accessibilityHidden())
+    }
+
+    @Test("TS icons draw at the resolved icon size")
+    func tsIconSize() throws {
+        let sut = TSIconButton(.more, label: "More options") {}
+        #expect(try sut.inspect().find(TSIcon.self).actualView().pointSize == TSIconButtonStyleSpec.resolve(.init()).iconSize)
     }
 }

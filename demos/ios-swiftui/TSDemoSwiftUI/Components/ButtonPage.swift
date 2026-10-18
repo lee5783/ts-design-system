@@ -44,6 +44,18 @@ struct ButtonPage: View {
                 TSButton(DemoStrings.string(.trailingIcon), variant: .secondary, trailingIcon: .chevronRight) {}
                 TSButton(DemoStrings.string(.bothIcons), variant: .secondary, leadingIcon: .upload, trailingIcon: .arrowRight) {}
             }
+            DemoComponentSection(.consumerIcon) {
+                TSButton(DemoStrings.string(.samplePlayTogether), leadingIconSource: .image(Image("DemoController"))) {}
+                    .accessibilityIdentifier("demo.button.consumer-icon")
+                TSButton(DemoStrings.string(.samplePlayTogether), variant: .secondary, leadingIconSource: .image(Image("DemoController"))) {}
+                TSButton(DemoStrings.string(.samplePlayTogether), leadingIconSource: .image(Image("DemoController")), isLoading: true) {}
+            }
+            DemoComponentSection(.lineLimit) {
+                TSButton(DemoStrings.string(.sampleJoinTournament), variant: .secondary, leadingIconSource: .image(Image("DemoController"))) {}
+                    .lineLimit(1)
+                    .frame(maxWidth: 240)
+                    .accessibilityIdentifier("demo.button.line-limit")
+            }
             DemoComponentSection(.playground) {
                 Picker(DemoStrings.string(.variant), selection: $variant) {
                     ForEach(TSButtonVariant.allCases, id: \.self) { Text($0.rawValue).tag($0) }

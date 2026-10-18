@@ -205,6 +205,18 @@
         }
       }
     },
+    "demo.component.consumer-icon" : {
+      "comment" : "Component page section: a button or icon button with an icon supplied by the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consumer icon"
+          }
+        }
+      }
+    },
     "demo.component.contents" : {
       "comment" : "Component page section: avatar content kinds.",
       "extractionState" : "manual",
@@ -441,6 +453,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leading icon"
+          }
+        }
+      }
+    },
+    "demo.component.line-limit" : {
+      "comment" : "Component page section: a button label limited to one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-line label"
           }
         }
       }
@@ -1729,6 +1753,18 @@
         }
       }
     },
+    "demo.sample.controller" : {
+      "comment" : "Sample accessibility label for an icon button with the app-supplied controller icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game controller"
+          }
+        }
+      }
+    },
     "demo.sample.copy-hint" : {
       "comment" : "Sample field hint for a read-only field.",
       "extractionState" : "manual",
@@ -2037,6 +2073,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ABCDEF"
+          }
+        }
+      }
+    },
+    "demo.sample.join-tournament" : {
+      "comment" : "Sample long button label that is truncated to one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Join the weekend tournament with your friends"
           }
         }
       }
@@ -2397,6 +2445,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photo uploaded"
+          }
+        }
+      }
+    },
+    "demo.sample.play-together" : {
+      "comment" : "Sample button label next to the app-supplied controller icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play together"
           }
         }
       }

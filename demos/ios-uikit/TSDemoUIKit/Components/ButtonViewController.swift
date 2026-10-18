@@ -20,7 +20,7 @@ final class ButtonViewController: DemoPageViewController {
     }
 
     override func makeContentViews() -> [UIView] {
-        [variantsSection(), sizesSection(), statesSection(), iconsSection(), playgroundSection()]
+        [variantsSection(), sizesSection(), statesSection(), iconsSection(), consumerIconSection(), lineLimitSection(), playgroundSection()]
     }
 
     private func variantsSection() -> UIView {
@@ -68,6 +68,30 @@ final class ButtonViewController: DemoPageViewController {
             TSButtonView(title: DemoStrings.string(.trailingIcon), variant: .secondary, trailingIcon: .chevronRight),
             TSButtonView(title: DemoStrings.string(.bothIcons), variant: .secondary, leadingIcon: .upload, trailingIcon: .arrowRight)
         ])
+    }
+
+    private func consumerIconSection() -> UIView {
+        let primary = consumerIconButton(variant: .primary)
+        primary.accessibilityIdentifier = "demo.button.consumer-icon"
+        let loading = consumerIconButton(variant: .primary)
+        loading.isLoading = true
+        return DemoComponentSectionView(.consumerIcon, views: [primary, consumerIconButton(variant: .secondary), loading])
+    }
+
+    private func lineLimitSection() -> UIView {
+        let button = TSButtonView(title: DemoStrings.string(.sampleJoinTournament), variant: .secondary)
+        button.leadingIconImage = UIImage(named: "DemoController")
+        button.numberOfLines = 1
+        button.lineBreakMode = .byTruncatingTail
+        button.accessibilityIdentifier = "demo.button.line-limit"
+        button.widthAnchor.constraint(lessThanOrEqualToConstant: 240).isActive = true
+        return DemoComponentSectionView(.lineLimit, views: [button])
+    }
+
+    private func consumerIconButton(variant: TSButtonVariant) -> TSButtonView {
+        let button = TSButtonView(title: DemoStrings.string(.samplePlayTogether), variant: variant)
+        button.leadingIconImage = UIImage(named: "DemoController")
+        return button
     }
 
     private func playgroundSection() -> UIView {
