@@ -149,8 +149,25 @@ override fun onCreate(savedInstanceState: Bundle?) {
 Rules that matter from day one:
 
 - Install **one toast host per Activity**: `TSToastHost(state) { … }` around the Compose content, `TSToastHost.install(activity)` after `setContentView` in Views. If you keep the queue across a recreate, call `detach()` in `onDestroy` (`design/specs/components/toast.md`).
-- Dialogs never stack: Views `present(manager, tag)` returns `false` when refused, Compose calls `onRefused`. A Views dialog is not restored after recreation; re-present it from your own state and listen for `TSDialogFragmentResults.DROPPED` (`design/specs/components/dialog.md`).
+- Dialogs never stack. A second Compose `TSDialog` is **queued** and shown when the first closes (its `isPresented` stays `true`); set `TSDialogPresenter.shared.policy = TSDialogPolicy.Refuse` to refuse instead (then `onRefused` is called). Views `present(manager, tag)` returns `false` while another dialog is open. Always wire `onPresentedChange` to your state. An action's handler runs **before** the dialog closes, so it still sees the state the dialog was opened for. A Views dialog is not restored after recreation; re-present it from your own state and listen for `TSDialogFragmentResults.DROPPED` (`design/specs/components/dialog.md`).
+- Dialogs keep immersive mode: a dialog opened over a screen with hidden system bars keeps them hidden. Nothing to configure.
 - Give `TSListItemView` rows stable ids, so switch state survives a recreate.
 - Dynamic colour is never applied; the TS palette is fixed. Theming, typography and string overrides: [theming.md](theming.md).
+
+## TS building blocks instead of Material
+
+Use these inside TS screens rather than a Material fallback, so stroke, size, colour and type stay on the spec:
+
+| Need | Compose | Views | Instead of |
+|---|---|---|---|
+| Stand-alone loading indicator | `TSSpinner(size = TSSpinnerSize.Md, tone = TSSpinnerTone.Primary)` | `TSSpinnerView` (`app:tsSpinnerSize`, `app:tsSpinnerTone`) | `CircularProgressIndicator`, `ProgressBar` |
+| Divider between rows outside a `TSList` (a `LazyColumn`, a plain stack) | `TSDivider()` | `TSDividerView`; in a `RecyclerView` keep `TSListDecoration` | `HorizontalDivider`, `MaterialDivider` |
+| Row that expands into body text (licences, FAQs) | `TSDisclosureListItem(title, expanded, onExpandedChange) { … }` | `TSDisclosureListItemView` (XML children become the body) | a hand-built clickable `Column` |
+| Text in a TS type role and colour | `TSText(text, role = TSTypeRole.Body, color = TSTextColor.Primary)` | `TextView` + `@style/TextAppearance.TS.<Role>` + `?attr/tsColorText<Colour>` | `Text` with `MaterialTheme.typography` |
+| A product icon in a button | `TSButton(…, leadingIconSource = TSIconSource.Vector(myIcon))`, `TSIconButton(icon = TSIconSource.Painter(…), …)` | `leadingIconDrawable`, `setLeadingIconResource(…)`, `iconDrawable` | a Material `Button` / `IconButton` |
+| A join-code / room-token field | `TSTextField(value, label, onValueChange, contentStyle = TSTextFieldContentStyle.Code, inputTraits = TSTextInputTraits.Code)` | `app:tsContentStyle="code"` + `app:tsInputTraits="code"` | `OutlinedTextField` |
+| UI over live media or a game controller | `TSTheme.controllerColors` ([theming.md](theming.md#controller-and-media-overlay-colours)) | `@color/ts_controller_*` | app-local copies of the palette |
+
+Contracts: `design/specs/components/{spinner,list-item,text,button,icon-button,text-field}.md`.
 
 Each component's API is in `design/specs/components/<name>.md`; the Compose and Views demo apps show every variant ([../guides/running-demos.md](../guides/running-demos.md)).

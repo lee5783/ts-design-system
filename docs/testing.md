@@ -59,7 +59,7 @@ make api-check BASELINE=<ref>  # iOS digester + Android apiCheck
 | `IOS_SNAPSHOT_DEVICE_SWIFT` | `ios/Tests/TSTestSupport/Snapshots/TSSnapshotDevice.swift` | File the pin is read from |
 | `IOS_OLDEST_DEVICE` | first iPhone on the oldest installed runtime | Device for the oldest leg |
 | `IOS_REQUIRE_OLDEST=1` | unset (warn) | Fail when no runtime older than the pinned one exists (C-44 U-5: not set in CI) |
-| `IOS_SNAPSHOT_TEST_TARGETS` | `TSDesignSystemTests TSDesignSystemUIKitTests` | What `ios-snapshot-record` and `ios-snapshot-verify` run; accepts `<Target>/<Suite>` |
+| `IOS_SNAPSHOT_TEST_TARGETS` | `TSDesignSystemTests TSDesignSystemUIKitTests` | What `ios-snapshot-record` and `ios-snapshot-verify` run; accepts `<Target>/<Suite>`. **Pass it as a make argument** (`make ios-snapshot-verify IOS_SNAPSHOT_TEST_TARGETS=TSDesignSystemTests/TSButtonSnapshotTests`): the Makefile assigns it with `:=`, so an environment variable (`IOS_SNAPSHOT_TEST_TARGETS=… make …`) is ignored and both targets run in full |
 | `IOS_SIM_APPEARANCE` | unset | `ci-ios-simulator` boots the pinned device in `light` or `dark` |
 | `SNAPSHOT_ARTIFACTS=<dir>` | unset | `ios-snapshot-verify` keeps failed snapshot images there (`TEST_RUNNER_SNAPSHOT_ARTIFACTS`) |
 | `GRADLE_WORKERS=<n>` | Gradle default | `-Dorg.gradle.workers.max` for every Gradle target (CI uses 2) |

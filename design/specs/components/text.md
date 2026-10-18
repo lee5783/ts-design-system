@@ -51,10 +51,11 @@ The values above are the token values at the default text size; the generated to
 | Shared (Android) | `android/core/src/test/.../style/TSTextColorTest.kt` | every colour → its `text-*` role |
 | Compose | `android/compose/src/test/.../text/TSTextTest.kt` (sdk 26/36) | text node; line height and colour per role; `maxLines` / `overflow` |
 | Snapshots (Android) | `TSTextSnapshotTest`, `TSTextSdkSnapshotTest` (`roles_*`, `colors_*`) | same galleries; sdk 26 subset for the weight-600 fallback |
-| Demo | Text page in all four demos; `ContentComponentsTests` / `ContentComponentsTest` | SwiftUI / Compose show `TSText`; UIKit / Views show the documented equivalents |
+| Demo | Text page in all four demos; `ContentComponentsTests.testTextPageShowsEveryTypeRoleAndTextColor` (both iOS demos), `ContentComponentsTest.textPageShowsEveryTypeRoleAndTextColor` (both Android demos) | SwiftUI / Compose show `TSText`; UIKit / Views show the documented equivalents |
 
 ## Platform notes
 
 - SwiftUI `TSText` is `Text(verbatim:)` with `.tsFont(role.font)` and the colour; it takes plain strings (localise before passing).
 - Compose `TSText` is `BasicText` with `TSTheme.typography.style(role)`, `TSTheme.colors.color(color.role)` and `TextDirection.Content`; the weight-600 roles fall back to `sans-serif-medium` below API 28 like every TS text.
 - UIKit and Views have no `TSText` (C-002): `UILabel` with `TSFont` attributes, and `TextView` with `TextAppearance.TS.*`, already give the same result, and a wrapper view would only re-expose their properties.
+- Use `TSText` (or the UIKit / Views equivalents) instead of Material `Text` with `MaterialTheme.typography`, so a TS screen never mixes the two type scales.

@@ -27,7 +27,18 @@ The artifact needs an authenticated claude.ai session, so the copy is agent-assi
 - **The DS renamed or removed a token** that the libraries expose: add `"old-name": "new-name"` to the `renames` map. Codegen then emits a deprecated alias on every platform (Swift `@available(*, deprecated, renamed:)`, Kotlin `@Deprecated(…, ReplaceWith(…))`), and the rename is a minor change instead of a major one. Codegen refuses a rename whose old name still exists or whose target does not.
 - Update an entry's `upstream` status when design accepts or rejects it.
 
-`npm --prefix tools run --silent codegen -- model` prints the merged model: token counts per family, aliases, extension statuses and deprecated aliases.
+**Controller families.** Two extension families hold the controller and media-overlay palette ([../consumers/theming.md](../consumers/theming.md#controller-and-media-overlay-colours)) and are merged into their own model bucket (`TokenModel.controller`), never into `model.color` / `model.size`:
+
+| Family | Entry value | Generates |
+|---|---|---|
+| `controller-color` | `{ light, dark }` or a single colour; aliases such as `{text-primary}` resolve against the main palette | Compose `TSControllerColors` + `lightTSControllerColors()` / `darkTSControllerColors()` (read through `TSTheme.controllerColors`), Swift `TSControllerColor`, Views `ts_controller_colors.xml` (light + night) |
+| `controller-size` | one px value (a themed size is rejected) | Compose `TSControllerSize`, Swift `TSControllerSize`, Views `ts_controller_dimens.xml` |
+
+- Member names drop the `controller-` prefix (`controller-key-pressed` → `keyPressed`). Codegen rejects a controller name that already exists in the main model, a duplicate, or two names that map to the same member.
+- The contrast of the controller pairs is asserted in `tools/codegen/test/unit/merge-extensions.test.ts`, alpha-composited over black and white frames with the helpers in `tools/codegen/src/transforms/contrast.ts` (`compositeOver`, `flatten`, `compositedContrastRatio`). A value change that drops a label pair below 4.5:1 or the outline below 3:1 fails `make tools-test`.
+- The `renames` map and `diff-report` do not cover controller tokens (they are not in `TOKEN_FAMILIES`): renaming or removing one generates no deprecated alias and is caught only by the API checks. Treat it as breaking by hand.
+
+`npm --prefix tools run --silent codegen -- model` prints the merged model: token counts per family (controller colours and sizes included), aliases, extension statuses and deprecated aliases.
 
 ## 3. Generate
 

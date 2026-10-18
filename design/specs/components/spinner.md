@@ -54,10 +54,13 @@ The Button keeps drawing its loading spinner through the same internal drawing (
 | Compose | `android/compose/src/test/.../spinner/TSSpinnerTest.kt` (sdk 26/36) | size per token; content description and indeterminate progress; hidden with `null` |
 | Views | `android/views/src/test/.../spinner/TSSpinnerViewTest.kt` (sdk 26/36) | measured size; XML attrs; content description and class name |
 | Snapshots (Android) | `TSSpinnerSnapshotTest`, `TSSpinnerViewSnapshotTest` (`gallery_*`) | sizes × tones, standard matrix |
-| Demo | Spinner page in all four demos; `FeedbackComponentsTests` / `FeedbackComponentsTest` | page shows every size × tone |
+| Demo | Spinner page in all four demos; `FeedbackComponentsTests.testSpinnerPageShowsSpinnersLabelledLoading` (both iOS demos), `FeedbackComponentsTest.spinnerPageShowsSpinnersLabelledLoading` (both Android demos) | page shows every size × tone; spinners are labelled "Loading" |
 
 ## Platform notes
 
 - SwiftUI: the arc is a trimmed `Circle` rotated with `.rotationEffect`; UIKit a `CAShapeLayer` with a `transform.rotation.z` animation that runs only while the view is in a window and not hidden.
 - Compose: an infinite transition that rotates a `Canvas` arc; it stops under `LocalTSForcedControlState` (test hook).
 - Views: `TSSpinnerView` draws `TSSpinnerDrawable` (an `Animatable` drawable) and starts it while attached and visible.
+- UIKit: `TSSpinnerView()` and `TSSpinnerView(size:tone:)` resolve the style spec. `TSSpinnerView(frame:)` is the unstyled path the Button uses internally (no spec, hidden from accessibility); do not use it for a stand-alone spinner.
+- Views: the "spins right after attach" path is not asserted under Robolectric (the test window reports `GONE`); hide / show is.
+- Use the spinner instead of Material `CircularProgressIndicator` / `ProgressBar` or a plain `ProgressView` / `UIActivityIndicatorView` inside TS screens, so the stroke, size and tint match the Button's loading state.
