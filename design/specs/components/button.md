@@ -31,7 +31,6 @@ A consumer can pass its own icon (a product mark, a game controller, a QR glyph)
 - **Tint:** one colour, the resolved label colour, in every state (pressed, disabled, loading). Compose `ColorFilter.tint` (SrcIn), SwiftUI `.renderingMode(.template)`, UIKit `.alwaysTemplate`, Views a `SRC_IN` colour filter (works for any `Drawable`). A multi-colour source therefore renders as a single-colour silhouette.
 - **Spacing:** the same slot and gap (`space-2` 8) as a `TSIcon`; a custom icon in a Primary md button takes exactly the space a `TSIcon` takes.
 - **Loading:** the spinner still replaces only the leading slot; a trailing consumer icon stays.
-- **Accessibility:** the image is decorative and hidden (SwiftUI pairs `.accessibilityHidden(true)` with an empty label, as `TSIcon` does, because `Image("name")` otherwise exposes its asset name).
 
 ### Icon contract
 
@@ -73,20 +72,12 @@ Icons: `icon-md` 20 (`Resolved.iconSize`, for TS icons and consumer icons alike 
 | State | Rule |
 |---|---|
 | default | as the tables above |
-| pressed | pressed fill; link drops to `opacity-pressed`; 120 ms (`duration-fast`) colour change, none with Reduce Motion |
+| pressed | pressed fill; link drops to `opacity-pressed`; 120 ms (`duration-fast`) colour change |
 | disabled | whole control at `opacity-disabled` 0.45; not interactive |
 | loading | spinner replaces the leading icon (or is added before the label); **not dimmed** (keeps label contrast); not interactive |
 | focused | 2 pt `focus` ring outside a 2 pt gap (`shadow-focus`), keyboard focus only. SwiftUI draws the TS ring; UIKit uses `UIFocusHaloEffect` |
 
 States are combined by `TSControlState.make(isPressed:isEnabled:isLoading:isFocused:)` (Kotlin `TSControlState.make(pressed, enabled, loading, focused)`): loading wins over disabled, disabled over pressed.
-
-## Accessibility
-
-- Role: button. Label: the title. Icons and the spinner are hidden.
-- Loading: value "Loading" (`TSStrings.loading`, overridable), not enabled (SwiftUI `.disabled`, UIKit `.notEnabled` trait), still focusable.
-- Height is a minimum: the label wraps and the button grows with Dynamic Type (up to AX5).
-- Link: the visual height is the text, but the hit area is at least 44 × 44 (SwiftUI `contentShape` expanded by `TSHitArea.outset`; UIKit `point(inside:with:)` via `TSHitArea.expandedRect`).
-- No haptics (C-13 reserves them for Switch, Checkbox, segments and Toast).
 
 ## Tests
 
@@ -96,12 +87,10 @@ States are combined by `TSControlState.make(isPressed:isEnabled:isLoading:isFocu
 | Spec | `ios/Tests/TSFoundationTests/TSControlStateMakeTests.swift` | state precedence, hit-area outset, weighted font |
 | SwiftUI | `ios/Tests/TSDesignSystemTests/Behavior/TSButtonBehaviorTests.swift` | tap fires; disabled and loading block; label; "Loading" value; spinner replaces the icon; icons hidden |
 | UIKit | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSButtonViewBehaviorTests.swift` | `.touchUpInside` fires; `isEnabled = false` and loading block; traits and value; min height; link hit area ≥ 44; pressed fill; Dynamic Type growth |
-| Snapshots | `…/Snapshots/TSButtonSnapshotTests.swift`, `TSButtonViewSnapshotTests.swift` | 5 variants × (md, lg × default/pressed/disabled/loading[/focused SwiftUI]) + icons + block, × the standard matrix |
 | Demo | `demos/ios-*/…UITests/ActionComponentsTests.swift` | playground fires; loading and disabled block; link expanded hit area |
 | Spec (Android) | `android/core/src/test/.../core/style/TSButtonStyleSpecTest.kt`, `TSControlStateMakeTest.kt` | the same 50 configurations against an independent table; precedence; raw loading + disabled reads as loading |
 | Compose | `android/compose/src/test/.../components/button/TSButtonTest.kt` (sdk 26, 36) | click fires; disabled and loading block (`assertIsNotEnabled`); stateDescription "Loading"; `Role.Button` + text; icons hidden; 44 dp visual inside a 48 dp touch target; lg 52 dp; link touch target 48 × 48 |
 | Views | `android/views/src/test/.../components/button/TSButtonViewTest.kt` (sdk 26, 36) | tap fires; disabled and loading block real touches; loading not dimmed, `ViewCompat` state description, node not enabled; node class `Button` + label text; spinner replaces the leading icon; 48 px target with a 44 px visual at mdpi; lg 52; link ≥ 48 and underlined; pressed fill; link pressed opacity; medium family; XML attributes |
-| Snapshots (Android) | `TSButtonSnapshotTest`, `TSButtonViewSnapshotTest`, plus `TSButtonSdkSnapshotTest` / `TSButtonViewSdkSnapshotTest` (sdk 26/36) | 5 variants × md/lg × default/pressed/disabled/loading/focused + icons + block, standard matrix; the sdk 26 subset shows the label weight |
 | Demo (Android) | `demos/android-*/app/src/androidTest/.../ActionComponentsTest.kt` | playground fires; loading and disabled block; link 48 dp target |
 | Consumer icons + line control (iOS) | `TSButtonBehaviorTests` `iconsUseResolvedSize`, `loadingReplacesLeadingConsumerIcon`, `lineLimit`; `TSButtonViewBehaviorTests` `consumerImage`, `loadingKeepsTrailingConsumerImage`, `lineLimit`; snapshots `TSButtonSnapshotTests.buttonCustomIcon`, `TSButtonViewSnapshotTests.buttonCustomIcon` (per variant; sample `ios/Tests/TSTestSupport/TSSampleIconImage.swift`) | TS icon vs consumer image per size; pressed / disabled / loading tint; a 48 pt image fitted to the slot; one line vs wrap |
 | Consumer icons + line control (Android) | `TSButtonTest` `consumerIconsTakeTheSameSpaceAsTSIcons`, `loadingReplacesOnlyTheLeadingConsumerIcon`, `maxLinesKeepsTheLabelOnOneLineWithAnEllipsis`; `TSButtonViewTest` `consumerDrawablesFillTheIconSlotsAndAreTinted`, `spinnerReplacesOnlyTheLeadingConsumerDrawable`, `maxLinesKeepsTheLabelOnOneLineWithAnEllipsis`, `inflatesLineControlFromXml`; snapshots `TSButtonSnapshotTest.<variant>CustomIcon`, `TSButtonViewSnapshotTest.<variant>CustomIcon` | same as iOS, with a multi-colour sample to prove the single-colour tint |
@@ -122,3 +111,6 @@ States are combined by `TSControlState.make(isPressed:isEnabled:isLoading:isFocu
 - **One-line label with a trailing icon (Compose, Views):** in a width-bounded button the label is measured first, so a one-line label can squeeze the trailing icon. UIKit reserves the trailing slot and is not affected. Give the button enough width or drop the trailing icon when you limit lines.
 - **Views:** consumer drawables are Kotlin properties / `set…Resource` only; there is no `app:` attribute for them. `android:maxLines` and `android:ellipsize` work in XML.
 - Snapshot hook: Compose components read an internal `LocalTSForcedControlState` (tests only) to draw pressed, focused and loading without input. The spinner is static under it, because an infinite animation never lets the Robolectric looper go idle.
+- Height is a minimum: the label wraps and the button grows with Dynamic Type (up to AX5).
+- Link: the visual height is the text, but the hit area is at least 44 × 44 (SwiftUI `contentShape` expanded by `TSHitArea.outset`; UIKit `point(inside:with:)` via `TSHitArea.expandedRect`).
+- No haptics (C-13 reserves them for Switch, Checkbox, segments and Toast).

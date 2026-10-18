@@ -52,11 +52,6 @@ Content (`TSAvatarContent`), resolved by `TSAvatarContent.make(initials:hasImage
   - Initials use a fixed system font at the size above, on one line.
   - Wide pairs shrink with `minimumScaleFactor` 0.5 (SwiftUI) or `adjustsFontSizeToFitWidth` (UIKit), inside a 2 pt inset, so they never leave the circle.
 
-## Accessibility
-
-- One element. The label is `name` and the trait is image. It is never a button. Initials, the photo and the placeholder are not read separately.
-- If a name is visible next to the avatar, the consumer may hide the avatar (`accessibilityHidden(true)` / `isAccessibilityElement = false`) to avoid a double read.
-
 ## Tests
 
 | Layer | File | What |
@@ -64,19 +59,16 @@ Content (`TSAvatarContent`), resolved by `TSAvatarContent.make(initials:hasImage
 | Spec | `ios/Tests/TSFoundationTests/TSAvatarStyleSpecTests.swift` | 12 configurations → diameter, radius, font size/weight, colours, the visible content (exactly one); content fallback order; `TSAvatarImage.usable` rejects nil, empty and undecodable images |
 | SwiftUI | `…/Behavior/TSAvatarBehaviorTests.swift` | label = name with the image trait, no button; initials when there is no image, at a fixed size with line limit and scale factor; usable image replaces the initials; undecodable image, `.failure` and `.empty` fall back to initials; blank name → placeholder |
 | UIKit | `…/Behavior/TSAvatarViewBehaviorTests.swift` | label and image trait; fixed circle per size at AX5; initials; image and clearing it; failed image → initials; blank name → placeholder |
-| Snapshots | `TSBadgeSnapshotTests.avatar`, `TSBadgeViewSnapshotTests.avatar` | 4 sizes × initials (2 Latin, 1 CJK) / image / placeholder, standard matrix |
 | Demo | `ContentComponentsTests.testAvatarIsAnImageLabelledByTheName` (both apps) | |
 | Spec (Android) | `android/core/src/test/.../core/style/TSAvatarStyleSpecTest.kt`, `.../core/logic/TSAvatarImageTest.kt` | the same 12 configurations; content fallback order; `TSAvatarImage` rejects null, undecodable, recycled and zero-size images (sdk 26/36, native graphics) |
 | Compose | `.../components/avatar/TSAvatarTest.kt` | label = name with `Role.Image`, no click; initials without an image; a usable `Painter` replaces them; a zero-size `Painter` falls back; blank name → placeholder and no description; fixed circle per size at 200 % |
 | Views | `.../components/avatar/TSAvatarViewTest.kt` | content description and `ImageView` class, not clickable; initials with uniform auto-size 7–14 px at md; image and clearing it; undecodable bitmap → initials; blank name → placeholder; fixed circle per size; circle and initials do not scale at 200 %; XML attributes |
-| Snapshots (Android) | `TSBadgeSnapshotTest.avatar`, `TSBadgeViewSnapshotTest.avatar` (+ `TSBadge*SdkSnapshotTest`, sdk 26/36) | 4 sizes × initials (2 Latin, 1 CJK) / image / placeholder, standard matrix |
 | Demo (Android) | `demos/android-*/app/src/androidTest/.../ContentComponentsTest.kt` | `avatarIsAnImageLabelledByTheName`, before and after the photo toggle |
 
 ## Platform notes
 
 - **Android, no loader:** pass a `Painter` (for example from `painterResource`, a `BitmapPainter`, or a loader's painter once it has succeeded) or a `Drawable`. While a loader is still loading or has failed, pass `null` and the initials show.
 - **Compose:**
-  - `clearAndSetSemantics { contentDescription = name; role = Role.Image }`. The initials, photo and placeholder are not separate nodes. A blank name sets no description.
   - Initials use a fixed size: the dp value is converted with `Dp.toSp()`, so the system font scale does not change it. `BasicText(autoSize = TextAutoSize.StepBased(…))` shrinks wide pairs down to 0.5 inside the 2 dp inset. Weight 600 goes through `withDsFontWeight`.
   - The image is drawn with `ContentScale.Crop`, clipped to `CircleShape`.
 - **Views:**

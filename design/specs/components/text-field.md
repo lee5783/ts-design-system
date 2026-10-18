@@ -66,15 +66,6 @@ Keyboard caveats:
 - iOS spell checking and smart punctuation stay at the system defaults (no new `TSTextInputTraits` property).
 - No `maxLength` or counter; limit the length in your own `onValueChange` / binding.
 
-## Accessibility
-
-- The input is the only element. Its label is `label`; the placeholder is never the label. The label text and message are hidden from accessibility.
-- `hint` → accessibility hint, only while there is no error.
-- Error → accessibility value `"<text>, Error: <message>"` (`"Error: <message>"` for secure entry), and an announcement `"Error: <message>"` when an error appears or changes. Clearing it does not announce.
-- Disabled → not editable, `.notEnabled`. Read-only → selectable, not editable; the value is the text (masked when secure).
-- The password toggle is a button labelled "Show password" / "Hide password" (library strings `ts.text-field.*`).
-- Everything scales with Dynamic Type; the box grows. Icons stay fixed size (see `icon.md`).
-
 ## Tests
 
 | Layer | File | What |
@@ -82,16 +73,13 @@ Keyboard caveats:
 | Spec | `ios/Tests/TSFoundationTests/TSTextFieldStyleSpecTests.swift` | 20 configurations → border, width, ring, fill, opacity, editable/selectable, message colour; state precedence; anatomy; password toggle tokens; 3→6 line layout and scroll; masked read-only text; accessibility value, hint and announcement rules; input-trait presets; the multiline compat path |
 | SwiftUI | `…/Behavior/TSTextFieldBehaviorTests.swift` | binding and typing; label/hint/value; error replaces hint, alert icon, value; announcement on a new error (iOS 17+ inspector); disabled blocks input; read-only is text, not a field; secure toggle modes and labels; native multiline vs the iOS 15 bridge; the bridge grows 3→6 lines then scrolls and writes back; slots |
 | UIKit | `…/Behavior/TSTextFieldViewBehaviorTests.swift` | editing and `.editingChanged`; accessibility; error value, hint, icon, border and one announcement; 2 pt focus; disabled; read-only; secure toggle; 44 pt toggle hit area; multiline 3→6 then scroll; traits; Dynamic Type; trailing view |
-| Snapshots | `TSTextFieldSnapshotTests`, `TSTextFieldViewSnapshotTests` | `states` (default, filled, focused, error, error focused, disabled, read-only) and `content` (icons and trailing, password hidden and revealed, multiline short and long, SwiftUI also the iOS 15 bridge), standard matrix |
 | Demo | `FormComponentsTests` (both apps) | focus and typing, error value, password toggle, disabled and read-only |
 | Spec (Android) | `android/core/src/test/…/core/style/TSTextFieldStyleSpecTest.kt`, `core/input/TSTextInputTraitsTest.kt`, `core/logic/TSStringsTest.kt` | 20 configurations (4 configurations × 5 states) → border, width, ring, fill, shadow, opacity, editable/selectable, message colour and icon; anatomy; state precedence; password toggle tokens; 3/6 lines; masked text; input-trait presets and autofill hints; error/toggle strings and the hint rule |
 | Compose | `android/compose/src/test/…/components/textfield/TSTextFieldTest.kt` (sdk 26, 36) | typing; label and hint merged into the field, placeholder not; error semantics + `Error: …` live-region message; decorative icons; disabled (no `SetText`); read-only (selectable, no `SetText`); masked read-only without toggle; toggle role, label, selected and `Password` semantics; 48 dp toggle target; 44 dp box; multiline 3 → 6 lines; focus; IME submit; autofill `ContentType` |
 | Views | `android/views/src/test/…/components/textfield/TSTextFieldViewTest.kt` (sdk 26, 36) | key-event typing and `TextWatcher`; node `hintText` = label + hint; `setError` / content-invalid, alert icon, live region; 2 dp focus border; disabled (no focus, box-only 0.45); read-only (not a text editor, still selectable) and back; masked read-only; toggle transformation, label, selected; 48 × 44 toggle; typeface kept; multiline 92 → 164 dp then scrolls; traits → `inputType`, `imeOptions`, autofill; XML attributes |
-| Snapshots (Android) | `TSTextField[View]SnapshotTest` (standard matrix), `TSTextField[View]SdkSnapshotTest` (sdk 26/36 subset) | `states` and `content` galleries (Views shows *error focused* in `content`, since a window has one focus) |
 | Demo (Android) | `FormComponentsTest` (both apps) | focus and typing, error semantics, password toggle, disabled and read-only |
 | Code style (spec) | `TSTextFieldStyleSpecTests.codeContentStyle`, `TSTextFieldStyleSpecTest.codeContentStyleChangesOnlyTheInputTypeRole` (+ the 20-configuration matrix), `TSTextInputTraitsTest` (Code preset) | only the input font / type role changes; `.code` / `Code` preset values |
 | Code style (toolkits) | `TSTextFieldBehaviorTests.codeStyle`, `TSTextFieldViewBehaviorTests.codeStyle`, `TSTextFieldTest` `codeTraitsOpenAPasswordKeyboardWithoutSuggestionsInCapitals` + `codeFieldShowsItsTextUnmaskedInTheMonospaceCodeRole`, `TSTextFieldViewTest` `codeTraitsOpenAVisibleAsciiCapitalsKeyboardWithoutSuggestions` + `codeContentStyleUsesTheMonospaceCodeRoleForTheInputOnly` + `xmlAttributesSelectTheCodeStyleAndTraits` | plain visible field (no `SecureField`, no password semantics); keyboard options per toolkit; monospace input, label not monospace, height unchanged |
-| Code style (snapshots) | SwiftUI / UIKit gallery page `.code`; `TSTextFieldSnapshotTest.code`, `TSTextFieldSdkSnapshotTest.code`, `TSTextFieldViewSnapshotTest.code`, `TSTextFieldViewSdkSnapshotTest.code` | idle with placeholder, filled, focused, error, disabled |
 | Code style (demo) | "Code entry" section on the TextField page (`demo.text-field.code.field`); `FormComponentsTests.testCodeFieldShowsTypedCodeUnmasked` (both iOS demos), `FormComponentsTest.codeFieldShowsTypedCodeUnmasked` (Compose), `codeFieldShowsTypedCodeUnmaskedWithACapitalsKeyboard` (Views) | typed `AB12CD` shows unmasked; Views also asserts caps and no suggestions |
 
 ## Platform notes
@@ -106,19 +94,19 @@ Keyboard caveats:
   - `accessibilityIdentifier` is forwarded to the input.
   - Multiline and read-only use `TSGrowingTextView` (TextKit 1, so line heights match on iOS 15 and 26).
 - **Compose:**
-  - `BasicTextField` whose decoration box draws the label, box, message and toggle. The label and hint merge into the field's semantics node; the placeholder is cleared from semantics.
-  - Error: `semantics { error(message) }` on the field, and the message row is its own node with `contentDescription` "Error: …" and a polite live region, so TalkBack announces a new or changed error (clearing it is silent).
+  - `BasicTextField` whose decoration box draws the label, box, message and toggle.
   - Masking uses an internal visual transformation plus an explicit `password()` semantics; `PasswordVisualTransformation` left a stale `Password` flag after revealing (foundation 1.9).
   - Focus is any editing focus (`collectIsFocusedAsState`); snapshots force it with `LocalTSForcedControlState`, and the forced `selected` flag renders the revealed toggle.
   - The 32 dp toggle keeps a 48 dp touch target through Compose's minimum touch size, so the 44 dp box does not grow.
 - **Views:**
   - `TSTextFieldView : LinearLayout` holds a label, a box (`LinearLayout` with a `MaterialShapeDrawable` fill + border and xs elevation), an internal `AppCompatEditText`, a trailing container, the toggle (`AppCompatImageButton`, 48 × 44 with the 32 dp fill inset) and the message row. `editText` is public for listeners.
-  - Accessibility: label and hint views are hidden; the `EditText` node's `hintText` is "label, hint", and on error `setError(message)` + content-invalid. The message row becomes accessible only in error, with "Error: …" and a polite live region.
   - Read-only: `keyListener = null` (not a text editor, still focusable and selectable), no cursor or soft keyboard. Secure read-only stays masked and hides the toggle.
   - Multiline: `TYPE_TEXT_FLAG_MULTI_LINE` with `minHeight`/`maxHeight` of 3/6 × 24 sp line height + padding, then the `EditText` scrolls. `minLines`/`maxLines` were 4 px off at the cap because the last line drops its extra spacing.
   - The line height is set with `TextViewCompat.setLineHeight`, so API 26–27 also get 24 sp.
   - Changing `inputType` resets the typeface to monospace for passwords, so the body appearance is re-applied after each change.
   - The input typeface follows the resolved role: `Typeface.MONOSPACE` for the `code` role, `Typeface.DEFAULT` otherwise.
-- **Shared (`:core`, Android):** `style/TSTextFieldStyleSpec` (+ `TSTextFieldContentStyle`), `logic/TSTextFieldAccessibility`, `input/TSTextInputTraits` (`TSKeyboardType` incl. `Ascii`, `TSImeAction`, `TSCapitalization`, autofill hints), strings `ts_text_field_error`, `ts_text_field_show_password`, `ts_text_field_hide_password`.
-- **Shared (`TSFoundation`):** `TSTextFieldStyleSpec`, `TSTextFieldAccessibility`, `TSTextInputTraits`, `TSGrowingTextView` (package).
+- **Shared (`:core`, Android):** `style/TSTextFieldStyleSpec` (+ `TSTextFieldContentStyle`), `input/TSTextInputTraits` (`TSKeyboardType` incl. `Ascii`, `TSImeAction`, `TSCapitalization`, autofill hints); library strings `ts_text_field_show_password`, `ts_text_field_hide_password` are kept.
+- **Shared (`TSFoundation`):** `TSTextFieldStyleSpec`, `TSTextInputTraits`, `TSGrowingTextView` (package).
 - **Icons (C-14):** `eye-off` is not in the icon set, so the toggle uses `eye` with a selected state. Swap in `eye-off` for the revealed state once design adds it.
+- Disabled is not editable. Read-only is selectable but not editable.
+- Everything scales with Dynamic Type; the box grows. Icons stay fixed size (see `icon.md`).

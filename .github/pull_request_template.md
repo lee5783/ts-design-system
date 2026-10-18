@@ -21,4 +21,4 @@ What changed and why, in one to three sentences.
 
 ## Evidence
 
-Screenshots for visual changes. Logs for tooling changes.
+Argent screenshots for visual changes, on the pinned iOS simulator (`.ios-simulator`) and one Android emulator (API 36) only; no oldest-runtime captures. Logs for tooling changes. List the targeted tests you ran (iOS: `make ios-build-for-testing` once, then `IOS_TESTS="<Target/Suite ...>" make ios-test-only`).
