@@ -67,20 +67,21 @@ Install with `mise install` (Node, JDK, git-cliff) and Xcode 26.6 from Apple.
 - The DS artifact copy in `design/source/` (DS version recorded in `design/manifest.json`).
 - Compose BOM: every Compose version comes from it. A BOM bump moves consumers' Compose versions too, because the BOM is an `api` dependency.
 
-**Infrastructure:** GitHub Actions, GitHub Packages, Renovate (see [integrations.md](integrations.md)).
+**Infrastructure:** GitHub Actions, JitPack (Android distribution, `jitpack.yml`), Renovate (see [integrations.md](integrations.md)).
 
 ## Configuration
 
-**Environment:** no `.env` files are used by the build. The only secrets are GitHub's own `GITHUB_TOKEN` in CI and a consumer's personal access token for GitHub Packages (see [integrations.md](integrations.md)).
+**Environment:** no `.env` files are used by the build. The only secret is GitHub's own `GITHUB_TOKEN` in CI; consumers need none (see [integrations.md](integrations.md)). On JitPack, the env `JITPACK`, `GROUP`, `ARTIFACT`, `VERSION` switch the Android group and version.
 
 **Build:**
 
-- `Package.swift` (root), `android/settings.gradle.kts`, `android/gradle.properties` (`org.gradle.jvmargs=-Xmx4g`, caching, parallel, `android.nonTransitiveRClass=true`, the `ds.pom.*` POM values), `android/gradle/libs.versions.toml`.
+- `Package.swift` (root), `android/settings.gradle.kts`, `android/gradle.properties` (`org.gradle.jvmargs=-Xmx4g`, caching, parallel, `android.nonTransitiveRClass=true`, the `ds.pom.*` POM values, including `ds.pom.repository`), `android/gradle/libs.versions.toml`.
 - Convention plugins: `ds.android.library` (SDK levels, `resourcePrefix "ts_"`, explicit API, lint), `ds.android.compose`, `ds.android.testing` (JDK 21 host tests, 2 GB heap, the shared test dependencies), `ds.publishing`, `ds.api-validation`.
-- `VERSION` feeds the Android `version` (`dsVersion()`), the Makefile banner and both demos' About screens.
+- `jitpack.yml` (root): JDK 21, `cd android && ./gradlew publishToMavenLocal -x test -x lint` with `-Xmx3g`.
+- `VERSION` feeds the Android `version` (`dsVersion()`; on JitPack the tag from env `VERSION` instead), the Makefile banner and both demos' About screens.
 
 ## Platform requirements
 
 **Development:** macOS with Xcode 26.6 and an iPhone 17 / iOS 26.5 simulator (the pinned one for local test runs and evidence screenshots), the Android SDK with an API 26 and an API 36 emulator image for demo tests, JDK 21, Node 22.
 
-**Distribution:** iOS through SPM only (git tag `X.Y.Z` on this repo); Android through GitHub Packages (`com.ts.ds:*`). CocoaPods, Maven Central, Kotlin Multiplatform and web are out of scope.
+**Distribution:** iOS through SPM only (git tag `X.Y.Z` on this repo); Android through JitPack (`com.github.lee5783.ts-design-system:*:<tag>`). The GitHub release carries notes and the debug demo APKs only. CocoaPods, Maven Central, Kotlin Multiplatform and web are out of scope.

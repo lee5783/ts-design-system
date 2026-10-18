@@ -46,7 +46,7 @@ Content (`TSAvatarContent`), resolved by `TSAvatarContent.make(initials:hasImage
 - **Failure:**
   - `TSAvatarImage.usable(_:)` rejects nil, zero-size and pixel-less images, for example an image whose data failed to decode. The avatar then shows the initials.
   - The `AsyncImagePhase` initializer shows the initials for `.empty` and `.failure`.
-  - Android (`com.ts.ds.core.logic.TSAvatarImage`): `usable(Drawable?)` rejects null, a `BitmapDrawable` whose bitmap is null (failed decode) or recycled, and a drawable with a zero intrinsic size. A drawable with no intrinsic size (-1, such as a `ColorDrawable`) is usable. Compose uses `usableSize(width, height)` on `Painter.intrinsicSize`: an unspecified size is usable, a zero width or height is not.
+  - Android (`com.tinysol.designsystem.core.logic.TSAvatarImage`): `usable(Drawable?)` rejects null, a `BitmapDrawable` whose bitmap is null (failed decode) or recycled, and a drawable with a zero intrinsic size. A drawable with no intrinsic size (-1, such as a `ColorDrawable`) is usable. Compose uses `usableSize(width, height)` on `Painter.intrinsicSize`: an unspecified size is usable, a zero width or height is not.
 - **Clamping:**
   - The circle is fixed chrome and does not scale with Dynamic Type.
   - Initials use a fixed system font at the size above, on one line.

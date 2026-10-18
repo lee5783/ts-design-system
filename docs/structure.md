@@ -44,14 +44,14 @@ ts-design-system/
 | `tools/ds-sync/` | Verify or refresh `design/source` against the manifest (see `tools/ds-sync/README.md`) | `ds-sync` |
 | `tools/codegen/src/{cli,generate,generators}.ts` | Codegen entry point and generator list | `codegen`, `codegen-check` |
 | `tools/codegen/src/model/` | Token model: `load-ts-tokens`, `merge-extensions` (extensions + renames), `drop-web-only`, `diff-report`, `radius` | — |
-| `tools/codegen/src/transforms/` | Naming, colour (`#RRGGBBAA` → `#AARRGGBB`), CSS value, contrast, per-platform transforms | — |
+| `tools/codegen/src/transforms/` | Naming, colour (`#RRGGBBAA` → `#AARRGGBB`), CSS value, per-platform transforms (`android.ts`, `css-values.ts`, `naming.ts`, `swift.ts`) | — |
 | `tools/codegen/src/formats/{swift,android-xml,compose,icons}/` | One writer per output format | — |
 | `tools/codegen/src/icons/` | SVG reading, outline and text-outline conversion (wordmark), vector assets | — |
 | `tools/codegen/fonts/` | Roboto placeholder font used to outline the wordmark | — |
 | `tools/codegen/test/{unit,golden}/`, `test/fixtures/` | Unit tests and golden-file tests against `fixtures/expected/**` | `tools-test` |
 | `tools/api-check/` | iOS public-API check through `swift-api-digester` | `ios-api-check`, `ios-api-check-record` |
 | `tools/ci/` | `changes.ts` (path areas), `required.ts` (aggregator), `actionlint.ts`, workflow and Renovate tests | `ci-changes`, `ci-required`, `actionlint` |
-| `tools/release/` | `release.ts` (bump, verify, notes), `publish-android.ts` (re-runnable publish) | `release-*`, `android-publish` |
+| `tools/release/` | `release.ts` (bump, verify, notes) | `release-bump`, `release-verify`, `release-notes` |
 | `tools/demos/` | `check-boundaries.ts`, `check-catalog.ts`, `render-app-icon.swift` | `demos-check-boundaries`, `demo-ios-app-icon` |
 | `tools/make/test/` | Vitest suites that run the Makefile recipes against stub tools | `tools-test` |
 
@@ -86,17 +86,19 @@ Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/T
 
 ### `android/` (Gradle project `ts-design-system-android`, `android/settings.gradle.kts`)
 
-| Module | Published as | Contents |
+| Module | Artifact (local group) | Contents |
 |---|---|---|
-| `:tokens` | `com.ts.ds:tokens` | `src/generated/kotlin/com/ts/ds/tokens/TSTokenValues.kt`, `src/generated/res/values{,-night}/ts_{colors,dimens,integers}.xml`, plus the controller palette `ts_controller_colors.xml` (light + night) and `ts_controller_dimens.xml` |
-| `:core` | `com.ts.ds:core` | `core/{style,logic,input,haptics,icon}`; generated `src/generated/kotlin/com/ts/ds/core/icon/TSIcon.kt` and `src/generated/res/drawable{,-night}/ts_ic_*`, `ts_logo_*` |
-| `:compose` | `com.ts.ds:compose` | `compose/{theme,foundation,components/<name>,components/shared}`; generated `src/generated/kotlin/com/ts/ds/compose/theme/TS{Colors,Typography,Spacing,Size,Shapes,Elevation,Motion,ControllerColors,ControllerSize}.kt` |
-| `:views` | `com.ts.ds:views` | `views/{theme,foundation,components/<name>,components/shared}`; `src/main/res/values/{ts_themes,ts_component_attrs,ts_component_styles,ts_views_dimens,ts_views_ids}.xml`; generated `src/generated/res/values{,-v28}/ts_{theme_attrs,theme_colors,text_appearances,shape_appearances}.xml` |
-| `:bom` | `com.ts.ds:bom` | `java-platform` constraining the four libraries at `VERSION` |
+| `:tokens` | `com.tinysol.designsystem:tokens` | `src/generated/kotlin/com/tinysol/designsystem/tokens/TSTokenValues.kt`, `src/generated/res/values{,-night}/ts_{colors,dimens,integers}.xml`, plus the controller palette `ts_controller_colors.xml` (light + night) and `ts_controller_dimens.xml` |
+| `:core` | `com.tinysol.designsystem:core` | `core/{style,logic,input,haptics,icon}`; generated `src/generated/kotlin/com/tinysol/designsystem/core/icon/TSIcon.kt` and `src/generated/res/drawable{,-night}/ts_ic_*`, `ts_logo_*` |
+| `:compose` | `com.tinysol.designsystem:compose` | `compose/{theme,foundation,components/<name>,components/shared}`; generated `src/generated/kotlin/com/tinysol/designsystem/compose/theme/TS{Colors,Typography,Spacing,Size,Shapes,Elevation,Motion,ControllerColors,ControllerSize}.kt` |
+| `:views` | `com.tinysol.designsystem:views` | `views/{theme,foundation,components/<name>,components/shared}`; `src/main/res/values/{ts_themes,ts_component_attrs,ts_component_styles,ts_views_dimens,ts_views_ids}.xml`; generated `src/generated/res/values{,-v28}/ts_{theme_attrs,theme_colors,text_appearances,shape_appearances}.xml` |
+| `:bom` | `com.tinysol.designsystem:bom` | `java-platform` constraining the four libraries at `VERSION` |
 | `:golden-check` | never | Compiles the Kotlin and Compose codegen golden fixtures (`tools/codegen/test/fixtures/expected/compose/**`), the Android twin of `make ios-golden-typecheck` |
 | `build-logic/convention` | never | Convention plugins `ds.android.library`, `ds.android.compose`, `ds.android.testing`, `ds.publishing`, `ds.api-validation`; constants in `ProjectExtensions.kt` (`DsBuildConstants`) |
 
-Each library module keeps its public API dump in `android/<module>/api/<module>.api`. Tests live in `src/test/kotlin/com/ts/ds/<module>/{components/<name>,…}`.
+The artifact ids are the same on JitPack, where the group is `com.github.lee5783.ts-design-system` (set only when `JITPACK=true`; see [integrations.md](integrations.md#authentication-and-identity)).
+
+Each library module keeps its public API dump in `android/<module>/api/<module>.api`. Tests live in `src/test/kotlin/com/tinysol/designsystem/<module>/{components/<name>,…}`.
 
 Android component folders use the lowercase name: `switch` is `switchcontrol` (a Kotlin keyword), `iconbutton`, `listitem`, `textfield`, `bottomnav`. The Views toolkit has no `icon` component; Views icons are `ImageView` plus `TSIcon.drawableRes` (see `design/specs/components/icon.md`).
 
@@ -105,17 +107,17 @@ Android component folders use the lowercase name: `switch` is `switchcontrol` (a
 | Path | What |
 |---|---|
 | `demos/ios-demo-support/` | Local SPM package `TSDemoSupport` (iOS 15): `Catalog/` (`DemoCatalog`, `DemoSection`, `DemoPageID`), `SampleData/`, `Settings/` (`DemoSettingsModel`, `DemoTheme`, `DemoTextSize`, `DemoLaunchOptions`, `DemoLaunchOverrides`, `DemoThemeStore`), `About/DemoBuildInfo`, `Localization/` + `Resources/DemoStrings.xcstrings`. No library dependency |
-| `demos/ios-swiftui/` | `TSDemoSwiftUI.xcodeproj` (bundle id `com.ts.ds.demo.swiftui`, scheme `tsds-swiftui`); `TSDemoSwiftUI/{App,Shell,Foundations,Components}`; UI tests in `TSDemoSwiftUIUITests/` |
-| `demos/ios-uikit/` | `TSDemoUIKit.xcodeproj` (`com.ts.ds.demo.uikit`, `tsds-uikit`); `TSDemoUIKit/{App,Shell,Foundations,Components}`; `TSDemoUIKitUITests/` |
-| `demos/android-demo-support/` | Included build `android-demo-support` (coordinate `com.ts.ds.demo:support`, package `com.ts.ds.demo.support`): `catalog/`, `sample/`, `settings/`. No library dependency, no toolkit |
-| `demos/android-compose/` | Standalone Gradle build, `applicationId` `com.ts.ds.demo.compose`, scheme `tsds-compose`; `app/src/main/kotlin/com/ts/ds/demo/compose/{shell,foundations,components}`; `app/src/androidTest/…` |
-| `demos/android-views/` | Standalone Gradle build, `com.ts.ds.demo.views`, scheme `tsds-views`; `…/demo/views/{shell,foundations,components}`; `res/{layout,navigation,menu,anim,…}` |
+| `demos/ios-swiftui/` | `TSDemoSwiftUI.xcodeproj` (bundle id `com.tinysol.design-system-swiftui.sample`, scheme `tsds-swiftui`); `TSDemoSwiftUI/{App,Shell,Foundations,Components}`; UI tests in `TSDemoSwiftUIUITests/` |
+| `demos/ios-uikit/` | `TSDemoUIKit.xcodeproj` (`com.tinysol.design-system.sample`, `tsds-uikit`); `TSDemoUIKit/{App,Shell,Foundations,Components}`; `TSDemoUIKitUITests/` |
+| `demos/android-demo-support/` | Included build `android-demo-support` (coordinate `com.tinysol.designsystem.sample:support`, package `com.tinysol.designsystem.sample.support`): `catalog/`, `sample/`, `settings/`. No library dependency, no toolkit |
+| `demos/android-compose/` | Standalone Gradle build, `applicationId` `com.tinysol.designsystem.compose.sample`, scheme `tsds-compose`; `app/src/main/kotlin/com/tinysol/designsystem/compose/sample/{shell,foundations,components}`; `app/src/androidTest/…` |
+| `demos/android-views/` | Standalone Gradle build, `com.tinysol.designsystem.views.sample`, scheme `tsds-views`; `app/src/main/kotlin/com/tinysol/designsystem/views/sample/{shell,foundations,components}`; `res/{layout,navigation,menu,anim,…}` |
 
 Both iOS projects use folder-synchronized groups: a new Swift file in a page folder needs no `project.pbxproj` edit.
 
 ## Key file locations
 
-- **Entry points:** `Makefile` (start with `make help`); `Package.swift`; `android/settings.gradle.kts`; `demos/*/settings.gradle.kts`; `demos/ios-swiftui/TSDemoSwiftUI/App/TSDemoSwiftUIApp.swift`; `demos/ios-uikit/TSDemoUIKit/App/SceneDelegate.swift`; `demos/android-*/app/src/main/kotlin/com/ts/ds/demo/*/MainActivity.kt`.
+- **Entry points:** `Makefile` (start with `make help`); `Package.swift`; `android/settings.gradle.kts`; `demos/*/settings.gradle.kts`; `demos/ios-swiftui/TSDemoSwiftUI/App/TSDemoSwiftUIApp.swift`; `demos/ios-uikit/TSDemoUIKit/App/SceneDelegate.swift`; `demos/android-*/app/src/main/kotlin/com/tinysol/designsystem/*/sample/MainActivity.kt`.
 - **Configuration:** `VERSION`, `.xcode-version`, `mise.toml`, `android/gradle/libs.versions.toml`, `android/gradle.properties`, `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt`, `.github/renovate.json`, `.gitattributes`.
 - **Pinned iOS simulator:** `.ios-simulator` (`device=`, `os=`); the Makefile reads it.
 - **API baselines:** `android/*/api/*.api`; iOS acknowledgements in `ios/api/breaking-changes.txt` (created by `make ios-api-check-record`).
@@ -132,7 +134,7 @@ Both iOS projects use folder-synchronized groups: a new Swift file in a page fol
 |---|---|
 | A token | Upstream DS first. Until it ships: `design/extensions/native-tokens.json`, then `make codegen` |
 | A component | Follow [guides/adding-a-component.md](guides/adding-a-component.md): spec, style spec in `TSFoundation/Styles` and `:core/style`, four toolkit folders, tests, four demo pages |
-| Shared logic | `ios/Sources/TSFoundation/Logic/` and `android/core/src/main/kotlin/com/ts/ds/core/logic/` |
+| Shared logic | `ios/Sources/TSFoundation/Logic/` and `android/core/src/main/kotlin/com/tinysol/designsystem/core/logic/` |
 | An `#available` / `SDK_INT` branch | iOS: a shim in `TSFoundation/Compat/` with a `TSCompat` path; Android: a resource qualifier (`values-v28`) or a `sdkInt` parameter on the helper |
 | A SwiftUI-only presentation bridge | `ios/Sources/TSDesignSystem/Presentation/` |
 | A tooling step | A new folder under `tools/` with `src/` and `test/`, an npm script in `tools/package.json`, and a Make target |

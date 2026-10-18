@@ -5,7 +5,7 @@ The public surface of both platforms is versioned together with one `VERSION` (s
 ## What is public
 
 - **iOS:** the products `TSDesignSystem`, `TSDesignSystemUIKit` and `TSTokens`, and everything they re-export from `TSFoundation` (style specs, logic, helpers are public by decision C-44 U-2). `package` declarations (the `Compat/` shims) are not public.
-- **Android:** every public declaration of `com.ts.ds:{tokens,core,compose,views}` (Kotlin explicit API mode), including the `:core` style specs (C-43), plus the XML attributes, styles and resources of `:views`.
+- **Android:** every public declaration of the `tokens`, `core`, `compose` and `views` artifacts (Kotlin packages `com.tinysol.designsystem.*`) (Kotlin explicit API mode), including the `:core` style specs (C-43), plus the XML attributes, styles and resources of `:views`.
 - **Not checked by any tool:** resource API on both platforms (string keys such as `ts.alert.info` / `ts_alert_info`, asset and drawable names, `app:ts*` attribute names, style names). Treat renaming one as breaking by hand.
 
 ## Version levels
@@ -33,7 +33,7 @@ Update the component spec (`design/specs/components/<name>.md`) in the same chan
 
 Unstable API is opt-in and excluded from the checks:
 
-- **Kotlin:** annotate with `@ExperimentalTSApi` (`android/core/src/main/kotlin/com/ts/ds/core/ExperimentalTSApi.kt`, `RequiresOptIn` level `ERROR`). Consumers opt in with `@OptIn(ExperimentalTSApi::class)`. The binary-compatibility validator lists the annotation as a non-public marker (`DsApiValidationPlugin.kt`), so declarations that carry it are left out of the dumps; code that merely opts in is still checked.
+- **Kotlin:** annotate with `@ExperimentalTSApi` (`android/core/src/main/kotlin/com/tinysol/designsystem/core/ExperimentalTSApi.kt`, `RequiresOptIn` level `ERROR`). Consumers opt in with `@OptIn(ExperimentalTSApi::class)`. The binary-compatibility validator lists the annotation as a non-public marker (`DsApiValidationPlugin.kt`), so declarations that carry it are left out of the dumps; code that merely opts in is still checked.
 - **Swift:** declare with `@_spi(Experimental) public`; consumers write `@_spi(Experimental) import TSDesignSystem`. The iOS check ignores the `Experimental` SPI group. The demos must not use `@_spi` (boundary check).
 
 Experimental API can change or disappear in any release without a deprecation cycle.

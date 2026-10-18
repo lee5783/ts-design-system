@@ -51,7 +51,7 @@ Cross-toolkit contract for the TS Dialog, center and sheet, and its presenter. S
 
 ## Presenter (one dialog on screen)
 
-`TSDialogPresenter.shared` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/ts/ds/core/logic/TSDialogPresenter.kt`) grants one dialog at a time, on both platforms and all four toolkits. Dialogs never stack. What happens to a second request depends on the API and on the presenter's `policy` (`TSDialogPolicy`):
+`TSDialogPresenter.shared` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/tinysol/designsystem/core/logic/TSDialogPresenter.kt`) grants one dialog at a time, on both platforms and all four toolkits. Dialogs never stack. What happens to a second request depends on the API and on the presenter's `policy` (`TSDialogPolicy`):
 
 | Second request while one dialog is open or still dismissing | `queue` (default) | `refuse` |
 |---|---|---|

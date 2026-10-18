@@ -1,6 +1,6 @@
 # TS Design System
 
-**Analysis Date:** 2026-10-17
+**Analysis Date:** 2026-10-18
 
 ## Project Summary
 
@@ -20,7 +20,7 @@ One version covers both platforms (`VERSION`, currently `0.1.0`; history in `CHA
   - One design source (`design/`) feeding generated tokens and assets for both platforms, so a DS update is a sync plus codegen, not hand edits.
   - Native components per toolkit with the same tokens, sizes, states and behaviour contract (`design/specs/components/<name>.md`).
   - A stable public API from the first tag, guarded by API checks on both platforms.
-- Non-goals (from `docs/stack.md`): CocoaPods, Maven Central, Kotlin Multiplatform and web distribution. iOS ships through SPM only, Android through GitHub Packages only.
+- Non-goals (from `docs/stack.md`): CocoaPods, Maven Central, Kotlin Multiplatform and web distribution. iOS ships through SPM only, Android through JitPack only.
 
 ## Requirements
 
@@ -33,12 +33,12 @@ One version covers both platforms (`VERSION`, currently `0.1.0`; history in `CHA
   - A Node/Vitest tools workspace (`tools/`) for sync, codegen, CI and release.
   - `make` as the single entry point for every task (`Makefile`).
 - External services:
-  - GitHub Packages, the Android Maven repository; reading needs a token with `read:packages`.
+  - JitPack (`https://jitpack.io`), which builds the Android artifacts from a release tag with the root `jitpack.yml`; no token needed.
   - GitHub Actions for CI and release (`.github/workflows/`).
   - Renovate for dependency PRs (`.github/renovate.json`).
 - Configuration notes:
-  - Android consumers put GitHub Packages credentials in Gradle properties (`gpr.user` / `gpr.key`). Never commit them.
-  - POM metadata is in `android/gradle.properties`.
+  - No credentials are needed to consume either platform.
+  - POM metadata, including the repository the POM URLs point at (`ds.pom.repository`), is in `android/gradle.properties`.
 
 ## Getting Started
 
@@ -60,35 +60,32 @@ One version covers both platforms (`VERSION`, currently `0.1.0`; history in `CHA
 .product(name: "TSDesignSystem", package: "ts-design-system")
 ```
 
-**Android (GitHub Packages):** add the repository to `settings.gradle.kts`. GitHub Packages needs a token with `read:packages`, even for public packages.
+**Android (JitPack):** add the repository to `settings.gradle.kts`. No token is needed.
 
 ```kotlin
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/lee5783/ts-design-system")
-            credentials {
-                username = providers.gradleProperty("gpr.user").get()
-                password = providers.gradleProperty("gpr.key").get()
-            }
-            content { includeGroup("com.ts.ds") }
+        maven("https://jitpack.io") {
+            content { includeGroup("com.github.lee5783.ts-design-system") }
         }
     }
 }
 ```
 
-Then the dependencies in the app's `build.gradle.kts`:
+Then the dependencies in the app's `build.gradle.kts`, with the release tag (`v` included) as the version:
 
 ```kotlin
-implementation(platform("com.ts.ds:bom:0.1.0"))
-implementation("com.ts.ds:compose")   // or "com.ts.ds:views"
+implementation(platform("com.github.lee5783.ts-design-system:bom:<tag>"))
+implementation("com.github.lee5783.ts-design-system:compose")   // or ":views"
 ```
+
+Kotlin packages are `com.tinysol.designsystem.*` (for example `com.tinysol.designsystem.compose.theme.TSTheme`). `v0.1.0` predates the JitPack setup; the first JitPack-consumable version is the next tag.
 
 ### Configure
 
-- **Android credentials:** set `gpr.user` and `gpr.key` in `~/.gradle/gradle.properties`, or in CI secrets. Full setup, including CI and local testing: `docs/consumers/android-getting-started.md`.
+- **Android:** full setup, first screen and local testing against `~/.m2`: `docs/consumers/android-getting-started.md`.
 - **iOS:** setup, including private-repository access: `docs/consumers/ios-getting-started.md`.
 - **Theming, Material interop and string overrides:** `docs/consumers/theming.md`.
 
@@ -115,7 +112,7 @@ Launch options, the in-app theme toggle and the theme deep links are in `docs/gu
 
 ### Run (Production)
 
-Not applicable: this repo ships libraries. Releases are cut from `master` by the `release` workflow (`.github/workflows/release.yml`). It creates the `X.Y.Z` tag that SPM resolves, and publishes the Android artifacts to GitHub Packages. Process: `docs/guides/release.md`.
+Not applicable: this repo ships libraries. A maintainer bumps `VERSION` on a branch, merges it, then pushes a `vX.Y.Z` tag on `master`. SPM resolves that tag directly and JitPack builds the Android artifacts from it on first request. The tag push starts the `release` workflow (`.github/workflows/release.yml`), which runs every gate and then creates the GitHub release with the changelog notes and the two debug demo APKs. Process: `docs/guides/release.md`.
 
 ### Test
 
@@ -151,7 +148,7 @@ ts-design-system/
   - `docs/architecture.md`: layers and data flow.
   - `docs/conventions.md`: naming and style.
   - `docs/testing.md`: test suites.
-  - `docs/integrations.md`: CI, publishing, credentials.
+  - `docs/integrations.md`: CI, JitPack distribution, release jobs.
   - `docs/stack.md`: versions.
   - `docs/concerns.md`: known risks.
 - **Maintainer guides (`docs/guides/`):**
