@@ -1,6 +1,6 @@
 # Codebase concerns
 
-**Analysis date:** 2026-10-16
+**Analysis date:** 2026-10-18
 
 Known gaps, visible fallbacks and fragile areas as of `VERSION` 0.1.0. Items carry their id in the session tracker, `.claude/working-sessions/20261015225536-mobile-ds-libraries/develop/output-deferred-tracker.md` (a local, agent-maintained file), so they can be followed up. The tracker also lists the open user decisions and the checks that need a first real CI run or release.
 
@@ -81,9 +81,9 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 
 ## Security considerations
 
-- **Credentials:** CI publishing reads `GITHUB_ACTOR` / `GITHUB_TOKEN` from the environment only; no secret is stored in the repo. `DsPublishingPlugin.kt` reads them with `.orNull` at configuration time, so the token can land in a configuration-cache entry (D-058); prefer `credentials(PasswordCredentials::class)` with `ORG_GRADLE_PROJECT_*` variables.
+- **Credentials:** no credential exists anywhere in distribution. The Gradle build reads no token, and consumers need none for SPM or JitPack. The only secret in CI is the built-in `GITHUB_TOKEN`, passed as `GH_TOKEN` to `make release-github` in the one `contents: write` job.
 - **Workflow inputs:** every workflow-fed Makefile variable is read by the shell, never expanded by make, and `release-verify` rejects non-semver tags (`tools/make/test/injection.test.ts`).
-- **Write-scoped jobs** install npm dependencies before the token step and check out without persisted credentials.
+- **Write-scoped job** (`github-release`) installs npm dependencies before the token step and check out without persisted credentials.
 - **SVG input:** `ds-sync` rejects unsafe SVG content, and codegen reads only allow-listed attributes.
 - **Action pins** are major tags, not SHAs (D-003, a user decision).
 
@@ -96,7 +96,11 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 ## Fragile areas
 
 - **No visual-regression testing (a user decision):** the repo has no snapshot or screenshot-comparison tests, and CI compares no pixels. CI catches crashes and behaviour regressions; a pixel change is caught only by the argent screenshots in the PR's Evidence section (pinned iOS simulator plus one Android emulator at API 36), so layout regressions on other OS versions and text sizes can merge unnoticed.
-- **Release edge cases:** a module upload that breaks halfway (files uploaded, no POM) gets HTTP 409 on re-run and needs that version deleted by hand (D-102); commits merged between `release-bump` and the dispatch are released but not listed in the changelog (D-098).
+- **Release edge cases:** commits merged between `release-bump` and the tag push are released but not listed in the changelog (D-098).
+- **JitPack is unproven on its own builder:** `jitpack.yml` and the JitPack group/version override (`ProjectExtensions.kt`, `dsGroup()` / `dsVersion()`) are verified only by a local simulation. The first real JitPack build of a tag must confirm the builder environment (Android SDK 36 and licences, the `-Xmx3g` heap, foojay toolchain resolution at settings time) and that the BOM and transitive `core` / `tokens` resolve under `com.github.lee5783.ts-design-system`. `v0.1.0` predates `jitpack.yml` and cannot be built there.
+- **Two Android groups:** local builds, `~/.m2` and the demos use `com.tinysol.designsystem`; JitPack output uses `com.github.lee5783.ts-design-system`. The switch is the `JITPACK=true` env alone, so a local `JITPACK=true` run publishes JitPack coordinates into `~/.m2`.
+- **Material `primary` is `accent-primary`:** both Material bridges (Compose `TSMaterialBridge.kt`, Views `ts_themes.xml`) map `primary` / `colorPrimary` to `accent-primary`, which is about 2.5:1 as text on dark surfaces. Plain M3 components that draw text in `primary` (`TextButton`, `OutlinedButton`) are therefore dim in dark mode inside `TSTheme` / `Theme.TS`; the documented rule is `accentText` or a TS component ([consumers/theming.md](consumers/theming.md#material-interop-android)). Remapping the bridge would recolour every plain M3 component.
+- **Contrast on state fills:** `surface-hover` / `surface-pressed` are outside the text-contrast guarantee; dark `accent-text` (4.31:1) and `text-muted` (3.87:1, ListItem trailing text) fall below 4.5:1 on `surface-pressed`. Clearing it needs a DS token change through `make ds-sync`, not a local edit ([consumers/theming.md](consumers/theming.md#text-contrast-per-surface)).
 
 ## Test coverage gaps
 

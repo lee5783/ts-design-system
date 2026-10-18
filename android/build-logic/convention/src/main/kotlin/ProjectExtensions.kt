@@ -6,7 +6,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
 internal object DsBuildConstants {
-    const val GROUP = "com.ts.ds"
+    const val GROUP = "com.tinysol.designsystem"
     const val INCEPTION_YEAR = "2026"
     const val MIN_SDK = 26
     const val COMPILE_SDK = 36
@@ -15,7 +15,7 @@ internal object DsBuildConstants {
     const val HOST_TEST_JVM = 21
     const val HOST_TEST_MAX_HEAP = "2g"
     const val RESOURCE_PREFIX = "ts_"
-    const val EXPERIMENTAL_API_MARKER = "com.ts.ds.core.ExperimentalTSApi"
+    const val EXPERIMENTAL_API_MARKER = "com.tinysol.designsystem.core.ExperimentalTSApi"
 }
 
 internal val Project.libs: VersionCatalog
@@ -24,8 +24,26 @@ internal val Project.libs: VersionCatalog
 internal fun VersionCatalog.library(alias: String): Provider<MinimalExternalModuleDependency> =
     findLibrary(alias).orElseThrow { IllegalStateException("Missing library '$alias' in libs.versions.toml") }
 
+internal fun Project.isJitPackBuild(): Boolean =
+    providers.environmentVariable("JITPACK").orNull == "true"
+
+internal fun Project.requiredEnvironmentVariable(name: String): String =
+    providers.environmentVariable(name).orNull?.takeIf { it.isNotBlank() }
+        ?: error("JITPACK=true but environment variable '$name' is not set")
+
+internal fun Project.dsGroup(): String =
+    if (isJitPackBuild()) {
+        "${requiredEnvironmentVariable("GROUP")}.${requiredEnvironmentVariable("ARTIFACT")}"
+    } else {
+        DsBuildConstants.GROUP
+    }
+
 internal fun Project.dsVersion(): String =
-    rootDir.resolve("../VERSION").readText().trim()
+    if (isJitPackBuild()) {
+        requiredEnvironmentVariable("VERSION")
+    } else {
+        rootDir.resolve("../VERSION").readText().trim()
+    }
 
 internal fun Project.dsLicenseName(): String =
     rootDir.resolve("../LICENSE").readLines().first { it.isNotBlank() }.trim()

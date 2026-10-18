@@ -74,6 +74,6 @@ describe("iOS UIKit demo targets", () => {
   it("installs and launches the UIKit demo with launch options", async () => {
     const output = await dryRun("demo-ios-uikit-run", "XCRUN=xcrun", "DEMO_ARGS=-TSDemoPage icons");
     expect(output).toContain("xcrun simctl install booted .build/xcode-demos/Build/Products/Debug-iphonesimulator/TSDemoUIKit.app");
-    expect(output).toContain("xcrun simctl launch booted com.ts.ds.demo.uikit -TSDemoPage icons");
+    expect(output).toContain("xcrun simctl launch booted com.tinysol.design-system.sample -TSDemoPage icons");
   });
 });

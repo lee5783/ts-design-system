@@ -4,7 +4,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.ts.ds.buildlogic"
+group = "com.tinysol.designsystem.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

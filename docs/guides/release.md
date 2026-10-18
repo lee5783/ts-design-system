@@ -1,15 +1,15 @@
 # Release
 
-One lockstep version (`VERSION`, plain `X.Y.Z`) ships both platforms: SPM consumers resolve the git tag `vX.Y.Z` (SPM strips the `v`), and Android consumers get `com.ts.ds:*:X.Y.Z` from GitHub Packages. Pushing a `vX.Y.Z` tag on a `master` commit starts the `release` workflow; the Android publish and the GitHub release happen only after every gate has passed. The GitHub release carries the changelog section, the Compose and Views demo APKs and the library AARs.
+One lockstep version (`VERSION`, plain `X.Y.Z`) ships both platforms: SPM consumers resolve the git tag `vX.Y.Z` (SPM strips the `v`), and Android consumers get `com.github.lee5783.ts-design-system:*:vX.Y.Z` from JitPack, which builds the same tag with the root `jitpack.yml` on first request. Those are the only two distribution channels. Pushing a `vX.Y.Z` tag on a `master` commit starts the `release` workflow, which publishes no packages: it runs every gate, then creates the GitHub release with the changelog section as notes and the Compose and Views debug demo APKs attached (no library AARs).
 
-Tooling: `tools/release/src/release.ts` (bump, verify, notes), `tools/release/src/publish-android.ts` (publish), `cliff.toml` (changelog), `.github/workflows/release.yml`.
+Tooling: `tools/release/src/release.ts` (bump, verify, notes), `cliff.toml` (changelog), `.github/workflows/release.yml`, `jitpack.yml` (the JitPack build; see [../integrations.md](../integrations.md#authentication-and-identity)).
 
 ## Before the first release
 
 These are one-time user actions (tracker D-001, D-002, D-007, D-008, D-026):
 
 1. Decide what of `.claude/` and `CLAUDE.md` is committed.
-2. Check the owner values: `.github/CODEOWNERS` and `ds.pom.developerId` / `ds.pom.developerName` / `ds.pom.organizationName` in `android/gradle.properties`.
+2. Check the owner values: `.github/CODEOWNERS` and `ds.pom.repository` / `ds.pom.developerId` / `ds.pom.developerName` / `ds.pom.organizationName` in `android/gradle.properties`.
 3. Commit the tree with conventional commit messages: the first changelog is generated from the whole history.
 4. In branch protection on `master`, require only `codegen-check-ok`, `ios-ok`, `android-ok` and `demos-ok`.
 5. Enable the Renovate GitHub app.
@@ -41,11 +41,11 @@ These are one-time user actions (tracker D-001, D-002, D-007, D-008, D-026):
    |---|---|---|
    | `verify` | `make release-verify TAG=vX.Y.Z RELEASE_REF=refs/tags/vX.Y.Z`: the tag is `v` + `VERSION`, `CHANGELOG.md` has a `## X.Y.Z` section, the run was started by that tag, and the tagged commit is on `origin/master` | read |
    | `codegen-check`, `ios`, `android`, `demos` | the four PR gate workflows, called as reusable workflows on the tagged commit (every area runs) | read |
-   | `publish-android` | `make android-publish`: probes each module's POM in GitHub Packages, skips the published ones, publishes the missing libraries in one Gradle run, then the BOM | `packages: write` |
-   | `android-packages` | `make release-android-packages`: builds the Compose and Views demo APKs (debug-signed, installable) and the library AARs into `.build/release/assets`, uploaded as the `release-assets` artifact | read |
-   | `github-release` | `make release-github`: `gh release create vX.Y.Z --verify-tag` with the `CHANGELOG.md` section as notes (`make release-notes`) and every file in `.build/release/assets` attached | `contents: write` |
+   | `android-packages` | needs all four gates. `make release-android-packages`: builds the Compose and Views demo APKs (debug-signed, installable) into `.build/release/assets` as `ts-ds-demo-{compose,views}-X.Y.Z.apk`, uploaded as the `release-assets` artifact | read |
+   | `github-release` | needs `android-packages`. `make release-github`: `gh release create vX.Y.Z --verify-tag` with the `CHANGELOG.md` section as notes (`make release-notes`) and the two APKs from `.build/release/assets` attached | `contents: write` |
 
-5. **After the release:** the tag becomes the iOS API baseline (`make ios-api-check-last-tag` on `master`). On the first release, do the one-time consumer smoke check: a real GitHub Packages download with a `read:packages` token and a real `github.com` SPM clone (D-055).
+5. **Trigger the JitPack build:** open `https://jitpack.io/#lee5783/ts-design-system`, pick the tag under *Releases* and press *Get it* (or request `https://jitpack.io/com/github/lee5783/ts-design-system/bom/vX.Y.Z/bom-vX.Y.Z.pom`). JitPack builds on the first request anyway, but triggering it yourself surfaces a failing build before a consumer hits it. Read the build log: it must end in `BUILD SUCCESSFUL` and list the five artifacts (`tokens`, `core`, `compose`, `views`, `bom`).
+6. **After the release:** the tag becomes the iOS API baseline (`make ios-api-check-last-tag` on `master`). On the first JitPack release, do the one-time consumer smoke check: a scratch app with `maven("https://jitpack.io")`, `platform("com.github.lee5783.ts-design-system:bom:vX.Y.Z")` and `:compose`, confirming `core` and `tokens` resolve transitively, plus a real `github.com` SPM clone (D-055). `v0.1.0` predates `jitpack.yml` and cannot be built by JitPack; the first consumable Android version is the next tag.
 
 ## Changelog groups
 
@@ -64,17 +64,17 @@ Commit `ios/api/breaking-changes.txt`. Each line is `<baseline VERSION> <breakag
 
 ## Recovery
 
-- **A gate fails:** nothing was published, but the tag exists. Fix on `master` (a new commit; `VERSION` stays), move the tag and push it again: `git tag -f vX.Y.Z && git push -f origin vX.Y.Z`. Only do this before any consumer could have resolved the tag.
-- **`publish-android` fails halfway:** re-run the failed jobs from the workflow run page. Modules whose POM is already in GitHub Packages (HTTP 200) are skipped; missing ones (404/410) are published; any other status stops with a token hint. The BOM is always published last.
-- **A module upload broke partway** (some files of the version uploaded, no POM): the re-run gets HTTP 409. Delete that package version in the GitHub Packages UI, then re-run (D-102).
-- **`android-packages` or `github-release` fails:** the Android artifacts exist and SPM already sees the tag, but there is no GitHub release page yet. Re-run the failed jobs.
-- **A version can never be re-published.** GitHub Packages refuses to overwrite a version, and a tag is final once published. To fix a bad release, release a new patch.
+- **A gate fails:** no GitHub release exists, but the tag does, and JitPack would build it if anyone requested it. Fix on `master` (a new commit; `VERSION` stays), move the tag and push it again: `git tag -f vX.Y.Z && git push -f origin vX.Y.Z`. Only do this before any consumer could have resolved the tag.
+- **`android-packages` or `github-release` fails:** SPM already sees the tag and JitPack can build it, but there is no GitHub release page yet. Re-run the failed jobs.
+- **The JitPack build fails:** read the log on `jitpack.io`. Fix on `master` and release a new patch; JitPack caches a tag's result, so a moved tag needs its build deleted on `jitpack.io` before it is rebuilt.
+- **A version is final once consumed.** To fix a bad release, release a new patch.
 
 ## Local dry runs
 
 - `make release-bump V=<next> DRY_RUN=1`: the changelog section only.
-- `make android-publish-local`: publishes all modules and the BOM to `~/.m2`; consume it with `-Pds.useLocal=false -Pds.mavenLocal=true -Pds.version=<v>` in the demos, or `mavenLocal()` in a scratch app.
+- `make android-publish-local`: publishes all modules and the BOM to `~/.m2` under `com.tinysol.designsystem`; consume it with `-Pds.useLocal=false -Pds.mavenLocal=true -Pds.version=<v>` in the demos, or `mavenLocal()` in a scratch app.
 - `make release-notes TAG=vX.Y.Z`: writes the section to `.build/release/notes.md`.
-- `make release-android-packages`: builds the demo APKs and AARs into `.build/release/assets`.
+- `make release-android-packages`: builds the two demo APKs into `.build/release/assets`.
+- JitPack, locally: run the `jitpack.yml` install line with `JITPACK=true GROUP=com.github.lee5783 ARTIFACT=ts-design-system VERSION=v0.0.0-test` (full command in [../integrations.md](../integrations.md#authentication-and-identity)).
 
-The first real run of the workflow is still owed (D-052): it proves `packages: write` publishing, the 200/404 probe, the tag-push flow and the reusable-workflow fan-out.
+The first real run of the workflow is still owed (D-052): it proves the tag-push flow, the reusable-workflow fan-out and the release with APKs. The first real JitPack build of a tag is owed too: it proves the builder environment (SDK 36, memory) and BOM/transitive resolution under the JitPack group.

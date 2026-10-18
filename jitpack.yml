@@ -1,0 +1,4 @@
+jdk:
+  - openjdk21
+install:
+  - cd android && ./gradlew publishToMavenLocal -x test -x lint --no-daemon --stacktrace -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8"

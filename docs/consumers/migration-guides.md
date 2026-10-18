@@ -8,6 +8,19 @@ One section per release that removes or renames public API, tokens, string keys 
 
 Pre-1.0 minor release with breaking changes (accepted under the deprecation policy's pre-1.0 rule). The API breaks are recorded in `android/core/api/core.api` and `ios/api/breaking-changes.txt`.
 
+### Changed: Android distribution, coordinates and packages
+
+Android ships through JitPack only; GitHub Packages is gone. Setup: [android-getting-started.md](android-getting-started.md).
+
+| Before | After |
+|---|---|
+| repository `https://maven.pkg.github.com/lee5783/ts-design-system` with a `read:packages` token (`gpr.user` / `gpr.key`) | `maven("https://jitpack.io")`, no credentials; delete the token properties |
+| `com.ts.ds:bom:X.Y.Z`, `com.ts.ds:{compose,views}` | `com.github.lee5783.ts-design-system:bom:vX.Y.Z` (the tag, `v` included), `com.github.lee5783.ts-design-system:{compose,views}` |
+| `includeGroup("com.ts.ds")` | `includeGroup("com.github.lee5783.ts-design-system")` |
+| Kotlin imports and XML view tags `com.ts.ds.<module>.…` | `com.tinysol.designsystem.<module>.…` (for example `com.tinysol.designsystem.compose.theme.TSTheme`, `<com.tinysol.designsystem.views.components.button.TSButtonView>`) |
+
+Class names, XML attributes, styles and resource names are unchanged, so a search-and-replace of the package prefix plus the dependency block is the whole migration. iOS is unaffected (SPM package, products and modules keep their names).
+
 ### Removed: the screen-reader accessibility layer
 
 The libraries no longer author screen-reader (TalkBack and VoiceOver) semantics, announcements or labels, and no longer read the OS reduce-motion setting. Everything below is a binary and source break. The API breaks are recorded in `android/{core,views,compose}/api/*.api` and `ios/api/breaking-changes.txt`.
@@ -18,9 +31,9 @@ The libraries no longer author screen-reader (TalkBack and VoiceOver) semantics,
 
 | Platform | Removed | What to do |
 |---|---|---|
-| Android Views | `TSAlertView.announcesWhenShown`, `TSCardView.accessibilityActions`, `TSButtonView.loadingDescription`, `TSTabsView.label`, `TSBottomNavView.label`, `setAccessibilityRole(View, ...)` (`com.ts.ds.views.foundation`) | Delete the calls. Cards expose their footer actions as ordinary buttons |
+| Android Views | `TSAlertView.announcesWhenShown`, `TSCardView.accessibilityActions`, `TSButtonView.loadingDescription`, `TSTabsView.label`, `TSBottomNavView.label`, `setAccessibilityRole(View, ...)` (`com.tinysol.designsystem.views.foundation`) | Delete the calls. Cards expose their footer actions as ordinary buttons |
 | Android Compose | `TSAlert(announcesWhenShown)`, `TSCard(accessibilityActions)` (all 4 overloads), `TSButton(loadingDescription)` (both overloads), `TSSpinner(contentDescription)`, `TSTabs(label)`, `TSBottomNav(label)`, `TSIcon(contentDescription)`, `TSIconButton(contentDescription)` (both overloads) | Remove the argument. `TSIcon(icon, modifier, size, tint)` is the new signature |
-| Android `:core` | `TSAlertAccessibility`, `TSBottomNavAccessibility`, `TSCardAccessibility`, `TSListItemAccessibility`, `TSTabsAccessibility`, `TSTextFieldAccessibility`, `TSToastAccessibility`, `TSToggleAccessibility`, `com.ts.ds.core.motion.TSReduceMotion`, `TSCardAccessory.customAction`, `TSIconStyleSpec.Configuration.hasLabel`, `TSIconStyleSpec.Resolved.importantForAccessibility` | Delete the calls. `TSListItemRole`, `TSCardAction` and `TSCardAccessory` stay. `TSIconStyleSpec.Configuration` is now one entry per size |
+| Android `:core` | `TSAlertAccessibility`, `TSBottomNavAccessibility`, `TSCardAccessibility`, `TSListItemAccessibility`, `TSTabsAccessibility`, `TSTextFieldAccessibility`, `TSToastAccessibility`, `TSToggleAccessibility`, `com.tinysol.designsystem.core.motion.TSReduceMotion`, `TSCardAccessory.customAction`, `TSIconStyleSpec.Configuration.hasLabel`, `TSIconStyleSpec.Resolved.importantForAccessibility` | Delete the calls. `TSListItemRole`, `TSCardAction` and `TSCardAccessory` stay. `TSIconStyleSpec.Configuration` is now one entry per size |
 | Android `:core` | `TSToastTimeouts.resolve(...)` (both overloads), `timeoutFor(Context)`, `SCREEN_READER_MILLIS`, `RECOMMENDED_TIMEOUT_MIN_SDK` | Use `TSToastTimeouts.default`, or the constants `DEFAULT_MILLIS` (4 s) and `EXTENDED_MILLIS` (10 s, new) |
 | iOS SwiftUI (`TSDesignSystem`) | `accessibilityActions:` parameter on every `TSCard` initializer, `announcesOnAppear:` on `TSAlert`, `label:` on `TSBottomNav`, `TSBottomNavShell`, `TSIcon` and `TSTabs` | Remove the argument |
 | iOS UIKit (`TSDesignSystemUIKit`) | `TSAlertView.announcesWhenShown` and the `announcesWhenShown:` initializer argument, `TSCardView.accessibilityActions` and the `accessibilityActions:` argument, `label` on `TSBottomNavView`, `TSIconView`, `TSTabsView` and `TSTabBarController` (properties and initializer arguments), the `accessibilityActivate()`, `accessibilityPerformEscape()` and `accessibilityTraits` overrides on the control views | Remove the argument or call |

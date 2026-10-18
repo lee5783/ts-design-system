@@ -19,12 +19,48 @@ The demo apps implement exactly this, plus a quick toggle and deep links ([../gu
 
 | Toolkit | Colour | Type | Spacing / radius |
 |---|---|---|---|
-| SwiftUI | `Color.tsAccentPrimary`, `TSColor.accentPrimary.color` | `Text("…").tsFont(.body)` (Dynamic Type, line height, tracking) | `TSSpacing.space4`, `TSRadius.radiusLg` |
-| UIKit | `UIColor.tsAccentPrimary`, `TSColor.accentPrimary.uiColor` | `TSFont.body.uiFont(compatibleWith: traitCollection)`, `TSFont.body.attributedString(…)` | `TSSpacing.space4`, `TSRadius.radiusLg` |
-| Compose | `TSTheme.colors.accentPrimary` | `TSTheme.typography.body` | `TSSpacing.space4`, `TSShapes.radiusLg` |
-| Views | `?attr/tsColorAccentPrimary`, `@color/ts_accent_primary` | `@style/TextAppearance.TS.Body` | `@dimen/ts_space_4`, `@dimen/ts_radius_lg` |
+| SwiftUI | `Color.tsAccentText`, `TSColor.accentText.color` | `Text("…").tsFont(.body)` (Dynamic Type, line height, tracking) | `TSSpacing.space4`, `TSRadius.radiusLg` |
+| UIKit | `UIColor.tsAccentText`, `TSColor.accentText.uiColor` | `TSFont.body.uiFont(compatibleWith: traitCollection)`, `TSFont.body.attributedString(…)` | `TSSpacing.space4`, `TSRadius.radiusLg` |
+| Compose | `TSTheme.colors.accentText` | `TSTheme.typography.body` | `TSSpacing.space4`, `TSShapes.radiusLg` |
+| Views | `?attr/tsColorAccentText`, `@color/ts_accent_text` | `@style/TextAppearance.TS.Body` | `@dimen/ts_space_4`, `@dimen/ts_radius_lg` |
 
-Token names follow the DS names (`accent-primary`, `space-4`, `radius-lg`); see [../conventions.md](../conventions.md#naming-patterns) for the mapping rules and the demo apps' Foundations pages for every value.
+The colour column shows `accent-text`, the role for accent-coloured **text** (links, active labels). `accent-primary` is a **fill** colour (primary button background, checkbox, switch, cursor): in dark mode it is only about 2.5:1 against the surfaces, so never draw text in it. Token names follow the DS names (`accent-text`, `space-4`, `radius-lg`); see [../conventions.md](../conventions.md#naming-patterns) for the mapping rules and the demo apps' Foundations pages for every value.
+
+## Text contrast per surface
+
+WCAG 2.x contrast ratios of each text role against each surface role, computed from the token hex values in `design/source/tokens.json` (relative-luminance formula, rounded to two decimals). **✓** = at least 4.5:1 (normal text, WCAG AA). There is no `surface-sunken` token: the recessed surface is `background-secondary`.
+
+**Dark theme**
+
+| Text role | `background-primary` `#1e1e1e` | `background-secondary` `#161616` | `surface-card` `#262626` | `surface-elevated` `#2c2c2c` | `accent-subtle` `#2a2140` | `surface-hover` `#313131` ¹ | `surface-pressed` `#383838` ¹ |
+|---|---|---|---|---|---|---|---|
+| `text-primary` `#dcddde` | 12.26 ✓ | 13.31 ✓ | 11.13 ✓ | 10.27 ✓ | 11.11 ✓ | 9.57 | 8.62 |
+| `text-secondary` `#b4b4b6` | 8.05 ✓ | 8.74 ✓ | 7.31 ✓ | 6.75 ✓ | 7.30 ✓ | 6.28 | 5.66 |
+| `text-muted` `#949494` | 5.50 ✓ | 5.97 ✓ | 4.99 ✓ | 4.60 ✓ | 4.98 ✓ | 4.29 | 3.87 |
+| `accent-text` `#a78bfa` | 6.13 ✓ | 6.65 ✓ | 5.56 ✓ | 5.13 ✓ | 5.55 ✓ | 4.78 | 4.31 |
+| `accent-primary` `#7c3aed` (not a text role) | 2.93 ✗ | 3.18 ✗ | 2.66 ✗ | 2.45 ✗ | 2.65 ✗ | 2.28 | 2.06 |
+
+**Light theme**
+
+| Text role | `background-primary` `#fcfcfc` | `background-secondary` `#f4f4f5` | `surface-card` `#ffffff` | `surface-elevated` `#ffffff` | `accent-subtle` `#f5f3ff` | `surface-hover` `#efeff1` ¹ | `surface-pressed` `#e4e4e7` ¹ |
+|---|---|---|---|---|---|---|---|
+| `text-primary` `#18181b` | 17.27 ✓ | 16.12 ✓ | 17.72 ✓ | 17.72 ✓ | 16.15 ✓ | 15.43 | 13.96 |
+| `text-secondary` `#3f3f46` | 10.18 ✓ | 9.50 ✓ | 10.44 ✓ | 10.44 ✓ | 9.52 ✓ | 9.09 | 8.23 |
+| `text-muted` `#71717a` | 4.71 ✓ | 4.40 ✗ | 4.83 ✓ | 4.83 ✓ | 4.41 ✗ | 4.21 | 3.81 |
+| `accent-text` `#7c3aed` | 5.55 ✓ | 5.18 ✓ | 5.70 ✓ | 5.70 ✓ | 5.20 ✓ | 4.96 | 4.49 |
+
+¹ **Outside the guarantee.** `surface-hover` and `surface-pressed` are transient state fills (highlight, press), not resting surfaces, so no text role is guaranteed on them. Several pairs drop below 4.5:1 there (dark `accent-text` 4.31 and `text-muted` 3.87 on pressed; light `accent-text` 4.49 and `text-muted` 3.81 on pressed).
+
+**Guarantees** (resting surfaces, at least 4.5:1):
+
+| Text role | Guaranteed on |
+|---|---|
+| `text-primary`, `text-secondary` | `background-primary`, `background-secondary`, `surface-card`, `surface-elevated`, `accent-subtle`, both themes (they also clear 4.5:1 on hover and pressed, but those stay outside the guarantee) |
+| `accent-text` | `background-primary`, `background-secondary`, `surface-card`, `surface-elevated`, `accent-subtle`, both themes |
+| `text-muted` | dark: the same five surfaces. Light: `background-primary`, `surface-card`, `surface-elevated` only. On light `background-secondary` and `accent-subtle` (4.40 / 4.41) keep it to large text (14 pt / 18.66 px bold or 18 pt / 24 px regular and up), or use `text-secondary` |
+| `accent-primary` | never as text. It is a fill; text on it uses `text-on-accent` (5.70:1) |
+
+Every TS component that draws accent-coloured text (link button, selected tab, selected bottom-nav item, list-item accent tile, accent badge, avatar initials, text-field reveal icon) uses `accent-text`, on both platforms. Dim violet text in an app almost always means app code drew text in `accent-primary` directly or through Material (next section).
 
 ## Controller and media-overlay colours
 
@@ -42,7 +78,7 @@ UI drawn **over live media or as a game controller** (a virtual gamepad over vid
 | `text-on-overlay-media` | `textOnOverlayMedia` | `#18181b` | `#ffffff` | Text on `overlay-scrim-media` |
 | `controller-outline-width` | `outlineWidth` | 1.5 dp / pt | | Stroke of `keyOutline` |
 
-Values are `#RRGGBBAA`. Contrast is checked by codegen tests (`tools/codegen/test/unit/merge-extensions.test.ts`), alpha-composited over both a black and a white video frame in each theme: every label pair (idle and pressed key label, media text) is at least 4.5:1 and the outline at least 3:1 against the backing.
+Values are `#RRGGBBAA`. The palette was designed so that, alpha-composited over both a black and a white video frame in each theme, every label pair (idle and pressed key label, media text) is at least 4.5:1 and the outline at least 3:1 against the backing. No test asserts this: the repo has no contrast tooling, so re-check the pairs by hand when these tokens change.
 
 | Toolkit | Colours | Outline width |
 |---|---|---|
@@ -67,6 +103,7 @@ Hard-code them in the app; do not map them to a TS role, and do not invert them 
 
 - **Compose:** `TSTheme` also provides a Material3 `MaterialTheme` colour scheme mapped from the TS colours (`TSMaterialBridge`), so plain M3 components inside it use the TS palette. TS components never read `MaterialTheme` directly.
 - **Views:** `Theme.TS` maps the Material3 and AppCompat attributes (`colorPrimary`, `colorSurface`, …) to `?attr/tsColor*`, turns the M3 elevation overlay off, and styles sheets, dialogs and menus with `surface-elevated`. To use TS components inside an app whose theme is not `Theme.TS`, apply `ThemeOverlay.TS` to the container (`android:theme="@style/ThemeOverlay.TS"`).
+- **Accent text is `accentText`, never Material `primary`.** In both bridges Material's primary colour resolves to `accent-primary`: Compose `MaterialTheme.colorScheme.primary` (also `secondary`, `tertiary`; `TSMaterialBridge.kt`) and Views `?attr/colorPrimary` / `colorSecondary` (`ts_themes.xml`). That is right for fills, but text drawn in it is 2.45:1 on dark `surface-elevated` (see [Text contrast per surface](#text-contrast-per-surface)). Material components that draw text in `primary` include M3 `TextButton`, `OutlinedButton` and links. For accent-coloured text use `TSTheme.colors.accentText` / `?attr/tsColorAccentText`, or a TS component (`TSButton` / `TSButtonView` with the `link`, `secondary` or `ghost` variant). The Views demo settings sheet (`demos/android-views/app/src/main/res/layout/sheet_demo_settings.xml`) is the worked example: its Reset action is a `TSButtonView` with `app:tsVariant="secondary"`, not a Material `OutlinedButton`, whose `colorPrimary` label was illegible on the dark sheet.
 
 ## Behaviour switches
 

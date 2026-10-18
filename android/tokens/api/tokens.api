@@ -1,22 +1,22 @@
-public final class com/ts/ds/tokens/TSCubicBezierValues {
+public final class com/tinysol/designsystem/tokens/TSCubicBezierValues {
 	public final fun getX1 ()F
 	public final fun getX2 ()F
 	public final fun getY1 ()F
 	public final fun getY2 ()F
 }
 
-public final class com/ts/ds/tokens/TSShadowValues {
+public final class com/tinysol/designsystem/tokens/TSShadowValues {
 	public final fun getDarkColor ()J
 	public final fun getElevation ()F
 	public final fun getLightColor ()J
 }
 
-public final class com/ts/ds/tokens/TSTokenValues {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues;
+public final class com/tinysol/designsystem/tokens/TSTokenValues {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues;
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Component {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Component;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Component {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Component;
 	public static final field alertTitleFontWeight I
 	public static final field avatarLgFontSize F
 	public static final field avatarMdFontSize F
@@ -56,13 +56,13 @@ public final class com/ts/ds/tokens/TSTokenValues$Component {
 	public static final field toastMaxWidth F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$ControllerSize {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$ControllerSize;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$ControllerSize {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$ControllerSize;
 	public static final field outlineWidth F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$DarkColors {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$DarkColors;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$DarkColors {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$DarkColors;
 	public static final field accentHover J
 	public static final field accentPressed J
 	public static final field accentPrimary J
@@ -102,8 +102,8 @@ public final class com/ts/ds/tokens/TSTokenValues$DarkColors {
 	public static final field warningSubtle J
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$DarkControllerColors {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$DarkControllerColors;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$DarkControllerColors {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$DarkControllerColors;
 	public static final field backdrop J
 	public static final field backing J
 	public static final field key J
@@ -114,20 +114,20 @@ public final class com/ts/ds/tokens/TSTokenValues$DarkControllerColors {
 	public static final field textOnOverlayMedia J
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Duration {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Duration;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Duration {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Duration;
 	public static final field durationBase I
 	public static final field durationFast I
 	public static final field durationSlow I
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Easing {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Easing;
-	public final fun getEasingStandard ()Lcom/ts/ds/tokens/TSCubicBezierValues;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Easing {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Easing;
+	public final fun getEasingStandard ()Lcom/tinysol/designsystem/tokens/TSCubicBezierValues;
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$LightColors {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$LightColors;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$LightColors {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$LightColors;
 	public static final field accentHover J
 	public static final field accentPressed J
 	public static final field accentPrimary J
@@ -167,8 +167,8 @@ public final class com/ts/ds/tokens/TSTokenValues$LightColors {
 	public static final field warningSubtle J
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$LightControllerColors {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$LightControllerColors;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$LightControllerColors {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$LightControllerColors;
 	public static final field backdrop J
 	public static final field backing J
 	public static final field key J
@@ -179,14 +179,14 @@ public final class com/ts/ds/tokens/TSTokenValues$LightControllerColors {
 	public static final field textOnOverlayMedia J
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Opacity {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Opacity;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Opacity {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Opacity;
 	public static final field opacityDisabled F
 	public static final field opacityPressed F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Radius {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Radius;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Radius {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Radius;
 	public static final field radiusFull F
 	public static final field radiusLg F
 	public static final field radiusMd F
@@ -195,16 +195,16 @@ public final class com/ts/ds/tokens/TSTokenValues$Radius {
 	public static final field radiusXs F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Shadow {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Shadow;
-	public final fun getShadowLg ()Lcom/ts/ds/tokens/TSShadowValues;
-	public final fun getShadowMd ()Lcom/ts/ds/tokens/TSShadowValues;
-	public final fun getShadowSm ()Lcom/ts/ds/tokens/TSShadowValues;
-	public final fun getShadowXs ()Lcom/ts/ds/tokens/TSShadowValues;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Shadow {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Shadow;
+	public final fun getShadowLg ()Lcom/tinysol/designsystem/tokens/TSShadowValues;
+	public final fun getShadowMd ()Lcom/tinysol/designsystem/tokens/TSShadowValues;
+	public final fun getShadowSm ()Lcom/tinysol/designsystem/tokens/TSShadowValues;
+	public final fun getShadowXs ()Lcom/tinysol/designsystem/tokens/TSShadowValues;
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Size {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Size;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Size {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Size;
 	public static final field contentMax F
 	public static final field controlLg F
 	public static final field controlMd F
@@ -216,8 +216,8 @@ public final class com/ts/ds/tokens/TSTokenValues$Size {
 	public static final field tabBar F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Spacing {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Spacing;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Spacing {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Spacing;
 	public static final field space0_5 F
 	public static final field space1 F
 	public static final field space10 F
@@ -231,22 +231,22 @@ public final class com/ts/ds/tokens/TSTokenValues$Spacing {
 	public static final field space8 F
 }
 
-public final class com/ts/ds/tokens/TSTokenValues$Typography {
-	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$Typography;
-	public final fun getBody ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getBodyLg ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getBodySm ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getCaption ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getCode ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getDisplay ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getLabel ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getOverline ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getTitle1 ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getTitle2 ()Lcom/ts/ds/tokens/TSTypeValues;
-	public final fun getTitle3 ()Lcom/ts/ds/tokens/TSTypeValues;
+public final class com/tinysol/designsystem/tokens/TSTokenValues$Typography {
+	public static final field INSTANCE Lcom/tinysol/designsystem/tokens/TSTokenValues$Typography;
+	public final fun getBody ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getBodyLg ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getBodySm ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getCaption ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getCode ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getDisplay ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getLabel ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getOverline ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getTitle1 ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getTitle2 ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
+	public final fun getTitle3 ()Lcom/tinysol/designsystem/tokens/TSTypeValues;
 }
 
-public final class com/ts/ds/tokens/TSTypeValues {
+public final class com/tinysol/designsystem/tokens/TSTypeValues {
 	public final fun getFontSize ()F
 	public final fun getFontWeight ()I
 	public final fun getLetterSpacingEm ()F

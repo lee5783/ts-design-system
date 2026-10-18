@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ts.ds.views"
+    namespace = "com.tinysol.designsystem.views"
 }
 
 dependencies {

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ts.ds.goldencheck"
+    namespace = "com.tinysol.designsystem.goldencheck"
 
     sourceSets.getByName("main") {
         kotlin.srcDir("../../tools/codegen/test/fixtures/expected/compose/tokens")

@@ -19,7 +19,6 @@ CI_XCODE_APP ?= $(firstword $(wildcard $(foreach sep,_ -,/Applications/Xcode$(se
 LAST_TAG_COMMAND := git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' --match '[0-9]*.[0-9]*.[0-9]*' HEAD^ 2>/dev/null
 RELEASE_NOTES ?= .build/release/notes.md
 RELEASE_ASSETS ?= .build/release/assets
-ANDROID_RELEASE_MODULES := tokens core compose views
 DEMO_IOS_DERIVED_DATA ?= .build/xcode-demos
 DEMO_IOS_SUPPORT_TESTS ?=
 DEMO_IOS_SWIFTUI_TESTS ?=
@@ -27,11 +26,11 @@ DEMO_IOS_UIKIT_TESTS ?=
 DEMO_IOS_SUPPORT_DIR := demos/ios-demo-support
 DEMO_IOS_SWIFTUI_PROJECT := demos/ios-swiftui/TSDemoSwiftUI.xcodeproj
 DEMO_IOS_SWIFTUI_SCHEME := TSDemoSwiftUI
-DEMO_IOS_SWIFTUI_BUNDLE_ID := com.ts.ds.demo.swiftui
+DEMO_IOS_SWIFTUI_BUNDLE_ID := com.tinysol.design-system-swiftui.sample
 DEMO_IOS_SWIFTUI_THEME_TESTS := TSDemoSwiftUIUITests/ThemeOverrideTests
 DEMO_IOS_UIKIT_PROJECT := demos/ios-uikit/TSDemoUIKit.xcodeproj
 DEMO_IOS_UIKIT_SCHEME := TSDemoUIKit
-DEMO_IOS_UIKIT_BUNDLE_ID := com.ts.ds.demo.uikit
+DEMO_IOS_UIKIT_BUNDLE_ID := com.tinysol.design-system.sample
 DEMO_IOS_UIKIT_THEME_TESTS := TSDemoUIKitUITests/ThemeOverrideTests
 DEMO_IOS_APP_ICON_SOURCE := design/assets/logos/normalized/ts-app-icon.svg
 SWIFT_GOLDENS_DIR := tools/codegen/test/fixtures/expected/swift
@@ -59,7 +58,7 @@ ios_no_older_runtime = $(if $(IOS_REQUIRE_OLDEST),printf '$(call ci_annotation,e
 .PHONY: help ds-sync codegen codegen-check test tools-deps tools-test \
 	ios-build ios-build-for-testing ios-golden-typecheck ios-test ios-test-only \
 	android-build android-test \
-	android-publish-local android-publish \
+	android-publish-local \
 	api-check android-api-check ios-api-check ios-api-check-record ios-api-check-last-tag \
 	release-bump release-verify release-notes release-android-packages release-github \
 	demo-ios-swiftui demo-ios-uikit demo-android-compose demo-android-views \
@@ -88,7 +87,6 @@ help:
 		'android-build' 'Assemble the Android library modules' \
 		'android-test' 'Run the Android unit and behaviour tests' \
 		'android-publish-local' 'Publish the Android artifacts and the BOM to ~/.m2 (mavenLocal)' \
-		'android-publish' 'CI only: publish the Android modules not yet in GitHub Packages, the BOM last (GITHUB_ACTOR, GITHUB_TOKEN)' \
 		'api-check' 'Check iOS and Android public API (BASELINE=<tag-or-ref> for iOS)' \
 		'android-api-check' 'Check the Android public API against the in-tree api/*.api dumps' \
 		'ios-api-check' 'Check the Swift library API against a git baseline (BASELINE=<tag-or-ref>)' \
@@ -97,7 +95,7 @@ help:
 		'release-bump' 'Bump VERSION and regenerate CHANGELOG.md with git-cliff (V=X.Y.Z, DRY_RUN=1)' \
 		'release-verify' 'Fail unless TAG=vX.Y.Z equals VERSION, has a changelog section, and HEAD is on master (RELEASE_REF=refs/tags/vX.Y.Z)' \
 		'release-notes' 'Write the CHANGELOG.md section of TAG=vX.Y.Z to RELEASE_NOTES' \
-		'release-android-packages' 'Build the Android demo APKs and library AARs into RELEASE_ASSETS, named with VERSION' \
+		'release-android-packages' 'Build the Android demo APKs into RELEASE_ASSETS, named with VERSION' \
 		'release-github' 'CI only: create the GitHub release for the pushed tag TAG=vX.Y.Z with the files in RELEASE_ASSETS' \
 		'demo-ios-swiftui' 'Build the SwiftUI demo app (demos/ios-swiftui)' \
 		'demo-ios-uikit' 'Build the UIKit demo app (demos/ios-uikit)' \
@@ -161,10 +159,6 @@ android-test:
 android-publish-local:
 	cd android && ./gradlew publishToMavenLocal$(gradle_flags)
 
-android-publish: $(TOOLS_DEPS)
-	@test -n "$$GITHUB_REPOSITORY" -a -n "$$GITHUB_ACTOR" -a -n "$$GITHUB_TOKEN" || { printf 'android-publish: GITHUB_REPOSITORY, GITHUB_ACTOR and GITHUB_TOKEN must be set; it runs from release.yml\n' >&2; exit 1; }
-	npm --prefix tools run --silent publish-android --$(if $(GRADLE_WORKERS), --workers '$(GRADLE_WORKERS)')
-
 api-check: ios-api-check android-api-check
 
 android-api-check:
@@ -191,11 +185,9 @@ release-notes: $(TOOLS_DEPS)
 release-android-packages:
 	cd demos/android-compose && ./gradlew :app:assembleDebug$(gradle_flags)
 	cd demos/android-views && ./gradlew :app:assembleDebug$(gradle_flags)
-	cd android && ./gradlew $(ANDROID_RELEASE_MODULES:%=:%:assembleRelease)$(gradle_flags)
 	mkdir -p '$(RELEASE_ASSETS)'
 	cp demos/android-compose/app/build/outputs/apk/debug/app-debug.apk '$(RELEASE_ASSETS)/ts-ds-demo-compose-$(VERSION).apk'
 	cp demos/android-views/app/build/outputs/apk/debug/app-debug.apk '$(RELEASE_ASSETS)/ts-ds-demo-views-$(VERSION).apk'
-	$(foreach module,$(ANDROID_RELEASE_MODULES),cp android/$(module)/build/outputs/aar/$(module)-release.aar '$(RELEASE_ASSETS)/ts-ds-$(module)-$(VERSION).aar' &&) true
 
 release-github: release-notes
 	gh release create "$$TAG" --verify-tag --title "$$TAG" --notes-file '$(RELEASE_NOTES)' $(wildcard $(RELEASE_ASSETS)/*)

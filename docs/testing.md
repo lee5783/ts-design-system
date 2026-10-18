@@ -13,8 +13,8 @@ Two kinds of tests guard every component on all four toolkits: **spec** (shared 
 | SwiftUI behaviour | Swift Testing + ViewInspector | `ios/Tests/TSDesignSystemTests/Behavior/` |
 | UIKit behaviour | Swift Testing + UIKit (`sendActions`, real windows) | `ios/Tests/TSDesignSystemUIKitTests/Behavior/` |
 | Android spec and logic | JUnit 4 (+ Robolectric where Android types are needed) | `android/core/src/test/` |
-| Compose behaviour | Compose UI test on Robolectric | `android/compose/src/test/kotlin/com/ts/ds/compose/components/<name>/` |
-| Views behaviour | Robolectric + Espresso on Robolectric | `android/views/src/test/kotlin/com/ts/ds/views/components/<name>/` |
+| Compose behaviour | Compose UI test on Robolectric | `android/compose/src/test/kotlin/com/tinysol/designsystem/compose/components/<name>/` |
+| Views behaviour | Robolectric + Espresso on Robolectric | `android/views/src/test/kotlin/com/tinysol/designsystem/views/components/<name>/` |
 | iOS demo UI | XCUITest | `demos/ios-*/…UITests/` |
 | Android demo UI | AndroidX instrumented tests | `demos/android-*/app/src/androidTest/` |
 | Demo support | Swift Testing / JUnit | `demos/ios-demo-support/Tests/`, `demos/android-demo-support/src/test/` |
@@ -44,9 +44,9 @@ Run only the tests for what you touched. Full suites (`make test`, a bare `make 
 | One Vitest file | `cd tools && npx vitest run codegen/test/unit/naming.test.ts` |
 | One or more iOS suites | `make ios-build-for-testing` once, then `IOS_TESTS="TSFoundationTests/TSToastQueueTests TSDesignSystemTests/TSToastBehaviorTests" make ios-test-only` (`<Target>/<Swift Testing suite type>`, space-separated; each becomes `-only-testing:`). Rebuild with `ios-build-for-testing` after changing sources or tests |
 | iOS suites on another runtime | `IOS_TESTS=… make ios-test-only IOS_SIM_OS=<os> IOS_SIM_DEVICE='<iPhone>'`, or `IOS_RUNTIMES=oldest` for the oldest installed runtime (CI runs both legs; locally use the pinned one) |
-| One Android class | `cd android && ./gradlew :compose:testDebugUnitTest --tests 'com.ts.ds.compose.components.card.TSCardTest'` (or `:views:`, `:core:`) |
+| One Android class | `cd android && ./gradlew :compose:testDebugUnitTest --tests 'com.tinysol.designsystem.compose.components.card.TSCardTest'` (or `:views:`, `:core:`) |
 | One iOS demo UI test class | `make demo-ios-swiftui-build-for-testing` once, then `DEMO_IOS_SWIFTUI_TESTS="TSDemoSwiftUIUITests/CatalogSmokeTests" make demo-ios-swiftui-test-only` (UIKit: `demo-ios-uikit-*` with `DEMO_IOS_UIKIT_TESTS`) |
-| One Android demo test class | `cd demos/android-compose && ANDROID_SERIAL=emulator-5554 ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.ts.ds.demo.compose.CatalogSmokeTest` |
+| One Android demo test class | `cd demos/android-compose && ANDROID_SERIAL=emulator-5554 ./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.tinysol.designsystem.compose.sample.CatalogSmokeTest` |
 | Theme override tests only | `make demo-ios-swiftui-theme-test` / `make demo-ios-uikit-theme-test` (pinned simulator) |
 
 ### Make variables
@@ -67,8 +67,8 @@ Run only the tests for what you touched. Full suites (`make test`, a bare `make 
 ## Test file organization
 
 - iOS: `ios/Tests/<Target>Tests/Behavior/TS<Name>BehaviorTests.swift`; UIKit files use `TS<Name>View…`. Shared helpers sit next to them (`TraitHost.swift`, `ManualToastScheduler.swift`, `RenderedInk.swift`, `RenderedPixels`). `ios/Tests/TSTestSupport` holds the cross-target helpers (`TSSampleIconImage`, `TSTestAppearance`).
-- Android: `android/<module>/src/test/kotlin/com/ts/ds/<module>/components/<name>/TS<Name>Test.kt` (Compose) / `TS<Name>ViewTest.kt` (Views).
-- Spec tests: `ios/Tests/TSFoundationTests/TS<Name>StyleSpecTests.swift`, `android/core/src/test/kotlin/com/ts/ds/core/style/TS<Name>StyleSpecTest.kt`.
+- Android: `android/<module>/src/test/kotlin/com/tinysol/designsystem/<module>/components/<name>/TS<Name>Test.kt` (Compose) / `TS<Name>ViewTest.kt` (Views).
+- Spec tests: `ios/Tests/TSFoundationTests/TS<Name>StyleSpecTests.swift`, `android/core/src/test/kotlin/com/tinysol/designsystem/core/style/TS<Name>StyleSpecTest.kt`.
 - Codegen: `tools/codegen/test/unit/*.test.ts`, `tools/codegen/test/golden/*.test.ts` against `tools/codegen/test/fixtures/expected/**`. `make ios-golden-typecheck` type-checks the Swift goldens at iOS 15; `android/golden-check` compiles the Compose goldens.
 
 ## Patterns

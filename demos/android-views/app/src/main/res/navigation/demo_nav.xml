@@ -6,119 +6,119 @@
 
     <fragment
         android:id="@+id/catalog"
-        android:name="com.ts.ds.demo.views.shell.CatalogFragment" />
+        android:name="com.tinysol.designsystem.views.sample.shell.CatalogFragment" />
 
     <fragment
         android:id="@+id/about"
-        android:name="com.ts.ds.demo.views.shell.AboutFragment" />
+        android:name="com.tinysol.designsystem.views.sample.shell.AboutFragment" />
 
     <dialog
         android:id="@+id/settings"
-        android:name="com.ts.ds.demo.views.shell.DemoSettingsBottomSheet" />
+        android:name="com.tinysol.designsystem.views.sample.shell.DemoSettingsBottomSheet" />
 
     <fragment
         android:id="@+id/page_colors"
-        android:name="com.ts.ds.demo.views.foundations.ColorsFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.ColorsFragment" />
 
     <fragment
         android:id="@+id/page_typography"
-        android:name="com.ts.ds.demo.views.foundations.TypographyFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.TypographyFragment" />
 
     <fragment
         android:id="@+id/page_spacing"
-        android:name="com.ts.ds.demo.views.foundations.SpacingFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.SpacingFragment" />
 
     <fragment
         android:id="@+id/page_radius"
-        android:name="com.ts.ds.demo.views.foundations.RadiusFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.RadiusFragment" />
 
     <fragment
         android:id="@+id/page_size"
-        android:name="com.ts.ds.demo.views.foundations.SizeFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.SizeFragment" />
 
     <fragment
         android:id="@+id/page_opacity"
-        android:name="com.ts.ds.demo.views.foundations.OpacityFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.OpacityFragment" />
 
     <fragment
         android:id="@+id/page_elevation"
-        android:name="com.ts.ds.demo.views.foundations.ElevationFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.ElevationFragment" />
 
     <fragment
         android:id="@+id/page_icons"
-        android:name="com.ts.ds.demo.views.foundations.IconsFragment" />
+        android:name="com.tinysol.designsystem.views.sample.foundations.IconsFragment" />
 
     <fragment
         android:id="@+id/page_button"
-        android:name="com.ts.ds.demo.views.components.ButtonFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.ButtonFragment" />
 
     <fragment
         android:id="@+id/page_icon_button"
-        android:name="com.ts.ds.demo.views.components.IconButtonFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.IconButtonFragment" />
 
     <fragment
         android:id="@+id/page_badge"
-        android:name="com.ts.ds.demo.views.components.BadgeFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.BadgeFragment" />
 
     <fragment
         android:id="@+id/page_avatar"
-        android:name="com.ts.ds.demo.views.components.AvatarFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.AvatarFragment" />
 
     <fragment
         android:id="@+id/page_text_field"
-        android:name="com.ts.ds.demo.views.components.TextFieldFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.TextFieldFragment" />
 
     <fragment
         android:id="@+id/page_checkbox"
-        android:name="com.ts.ds.demo.views.components.CheckboxFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.CheckboxFragment" />
 
     <fragment
         android:id="@+id/page_switch"
-        android:name="com.ts.ds.demo.views.components.SwitchFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.SwitchFragment" />
 
     <fragment
         android:id="@+id/page_tabs"
-        android:name="com.ts.ds.demo.views.components.TabsFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.TabsFragment" />
 
     <fragment
         android:id="@+id/page_list_item"
-        android:name="com.ts.ds.demo.views.components.ListItemFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.ListItemFragment" />
 
     <fragment
         android:id="@+id/page_card"
-        android:name="com.ts.ds.demo.views.components.CardFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.CardFragment" />
 
     <fragment
         android:id="@+id/page_alert"
-        android:name="com.ts.ds.demo.views.components.AlertFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.AlertFragment" />
 
     <fragment
         android:id="@+id/page_dialog"
-        android:name="com.ts.ds.demo.views.components.DialogPageFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.DialogPageFragment" />
 
     <fragment
         android:id="@+id/page_toast"
-        android:name="com.ts.ds.demo.views.components.ToastFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.ToastFragment" />
 
     <fragment
         android:id="@+id/page_bottom_nav"
-        android:name="com.ts.ds.demo.views.components.BottomNavFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.BottomNavFragment" />
 
     <fragment
         android:id="@+id/page_spinner"
-        android:name="com.ts.ds.demo.views.components.SpinnerFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.SpinnerFragment" />
 
     <fragment
         android:id="@+id/page_text"
-        android:name="com.ts.ds.demo.views.components.TextFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.TextFragment" />
 
     <fragment
         android:id="@+id/bottom_nav_shell"
-        android:name="com.ts.ds.demo.views.components.BottomNavShellFragment" />
+        android:name="com.tinysol.designsystem.views.sample.components.BottomNavShellFragment" />
 
     <fragment
         android:id="@+id/page_pending_component"
-        android:name="com.ts.ds.demo.views.components.PendingComponentFragment">
+        android:name="com.tinysol.designsystem.views.sample.components.PendingComponentFragment">
         <argument
             android:name="pageId"
             app:argType="string" />

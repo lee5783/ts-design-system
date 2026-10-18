@@ -24,7 +24,7 @@ TSTokens (generated)                         :tokens (generated values + res)
 TSFoundation (specs, logic, compat)          :core (style specs, logic, strings, icons, haptics)
    ▲                  ▲                         ▲                  ▲
 TSDesignSystem   TSDesignSystemUIKit         :compose (M3 impl)   :views (AppCompat + MDC)
-───────────────────── library boundary (public products / com.ts.ds coordinates) ─────────────────────
+───────────────────── library boundary (public products / Maven coordinates) ─────────────────────────
 demos/ios-swiftui   demos/ios-uikit          demos/android-compose   demos/android-views
    └──── TSDemoSupport ────┘                    └──── demo-support ────┘   (toolkit-agnostic, no library dependency)
 ```
@@ -67,7 +67,7 @@ Rules:
 
 ### Dialog presenter (one per process, both platforms)
 
-`TSDialogPresenter` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/ts/ds/core/logic/TSDialogPresenter.kt`) enforces the DS rule "never stack dialogs": one dialog on screen at a time, shared by all four toolkits. Its `policy` (`TSDialogPolicy`) is `queue` by default: a declarative request (`request(owner, onGranted)`, used by SwiftUI `.tsDialog` and Compose `TSDialog`) that conflicts is kept in a weakly held FIFO and granted once the current dialog has fully dismissed; under `refuse` it is refused and the caller's binding is reset. Imperative presentations (`begin`, used by UIKit `present(from:)` and Views `present(manager, tag)`) are refused under either policy. `end(owner)` releases the slot and grants the next pending owner, or withdraws a pending request; `pendingCount`, `isPending` and `refusedCount` observe it. The owner is held **weakly**: a deallocated owner frees the presenter or drops out of the queue. A dismissing action's handler runs **before** dismissal, while the dialog still holds the slot; a follow-up dialog requested from it is queued (Compose, SwiftUI) or handed the slot when the first finishes (UIKit deferred `present(from:)`, Views `handOver`), so actions still chain. iOS actions can add an `afterDismissal` step for presenting non-TS UI. Android dialog windows inherit the host Activity's hidden system bars (immersive mode). The full contract, including queue semantics and the per-toolkit action order, is `design/specs/components/dialog.md`.
+`TSDialogPresenter` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/tinysol/designsystem/core/logic/TSDialogPresenter.kt`) enforces the DS rule "never stack dialogs": one dialog on screen at a time, shared by all four toolkits. Its `policy` (`TSDialogPolicy`) is `queue` by default: a declarative request (`request(owner, onGranted)`, used by SwiftUI `.tsDialog` and Compose `TSDialog`) that conflicts is kept in a weakly held FIFO and granted once the current dialog has fully dismissed; under `refuse` it is refused and the caller's binding is reset. Imperative presentations (`begin`, used by UIKit `present(from:)` and Views `present(manager, tag)`) are refused under either policy. `end(owner)` releases the slot and grants the next pending owner, or withdraws a pending request; `pendingCount`, `isPending` and `refusedCount` observe it. The owner is held **weakly**: a deallocated owner frees the presenter or drops out of the queue. A dismissing action's handler runs **before** dismissal, while the dialog still holds the slot; a follow-up dialog requested from it is queued (Compose, SwiftUI) or handed the slot when the first finishes (UIKit deferred `present(from:)`, Views `handOver`), so actions still chain. iOS actions can add an `afterDismissal` step for presenting non-TS UI. Android dialog windows inherit the host Activity's hidden system bars (immersive mode). The full contract, including queue semantics and the per-toolkit action order, is `design/specs/components/dialog.md`.
 
 Routes per OS:
 
@@ -144,7 +144,7 @@ The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`
 
 ## Entry points
 
-- **Consumers:** the SPM products `TSDesignSystem`, `TSDesignSystemUIKit`, `TSTokens`; the Maven coordinates `com.ts.ds:{bom,compose,views,core,tokens}` (see [consumers/](consumers/ios-getting-started.md)).
+- **Consumers:** the SPM products `TSDesignSystem`, `TSDesignSystemUIKit`, `TSTokens`; the Maven artifacts `com.github.lee5783.ts-design-system:{bom,compose,views,core,tokens}` on JitPack (local group `com.tinysol.designsystem`); Kotlin packages `com.tinysol.designsystem.*` (see [consumers/](consumers/ios-getting-started.md)).
 - **Maintainers:** `make help`. Every CI step is one `make` call.
 
 ## Error handling

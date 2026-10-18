@@ -9,7 +9,7 @@ const COMPONENT_TYPES: Record<ComponentToken["type"], string> = {
   number: "number",
 };
 
-export const EXTENSION_KEY = "com.ts.ds";
+export const EXTENSION_KEY = "com.tinysol.designsystem";
 
 function designToken(token: AnyToken, type: string, value: unknown, extra: Record<string, unknown> = {}): DesignToken {
   return {

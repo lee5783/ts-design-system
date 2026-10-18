@@ -7,9 +7,9 @@ import { TOKENS_PACKAGE } from "./token-values.ts";
 
 export const COMPOSE_KOTLIN_DIR = "android/compose/src/generated/kotlin";
 
-export const COMPOSE_THEME_PACKAGE = "com.ts.ds.compose.theme";
+export const COMPOSE_THEME_PACKAGE = "com.tinysol.designsystem.compose.theme";
 
-const THEME_DIR = `${COMPOSE_KOTLIN_DIR}/com/ts/ds/compose/theme`;
+const THEME_DIR = `${COMPOSE_KOTLIN_DIR}/com/tinysol/designsystem/compose/theme`;
 
 const TOKEN_VALUES = `${TOKENS_PACKAGE}.TSTokenValues`;
 

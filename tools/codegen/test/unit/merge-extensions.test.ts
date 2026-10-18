@@ -56,8 +56,8 @@ describe("merge-extensions", () => {
     expect(model.color[5]?.extension).toEqual({ upstream: "pending", origin: "C-12" });
     expect(allTokens(source()).every((token) => token.extension === undefined)).toBe(true);
     const tokens = toDesignTokens(model, "light") as Record<string, Record<string, any>>;
-    expect(tokens["color"]?.["danger-pressed"]?.$extensions["com.ts.ds"]).toMatchObject({ upstream: "pending" });
-    expect(tokens["color"]?.["text-primary"]?.$extensions["com.ts.ds"].upstream).toBeUndefined();
+    expect(tokens["color"]?.["danger-pressed"]?.$extensions["com.tinysol.designsystem"]).toMatchObject({ upstream: "pending" });
+    expect(tokens["color"]?.["text-primary"]?.$extensions["com.tinysol.designsystem"].upstream).toBeUndefined();
   });
 
   it("rejects a missing or unknown upstream status", () => {
@@ -107,7 +107,7 @@ describe("merge-extensions", () => {
     const tokens = toDesignTokens(model, "dark") as Record<string, Record<string, any>>;
     expect(tokens["color"]?.["danger-active"]).toMatchObject({
       $value: "{color.danger-pressed}",
-      $extensions: { "com.ts.ds": { renamedTo: "danger-pressed", aliasOf: "danger-pressed" } },
+      $extensions: { "com.tinysol.designsystem": { renamedTo: "danger-pressed", aliasOf: "danger-pressed" } },
     });
   });
 

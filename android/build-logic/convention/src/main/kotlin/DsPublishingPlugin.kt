@@ -1,7 +1,6 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
 import org.gradle.kotlin.dsl.configure
 
 class DsPublishingPlugin : Plugin<Project> {
@@ -9,19 +8,16 @@ class DsPublishingPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply("com.vanniktech.maven.publish")
 
-            group = DsBuildConstants.GROUP
+            group = dsGroup()
             version = dsVersion()
 
-            val githubRepository = providers.environmentVariable("GITHUB_REPOSITORY")
-                .orElse(providers.gradleProperty("ds.githubRepository"))
-                .orElse("unconfigured/ts-design-system")
-                .get()
+            val githubRepository = providers.gradleProperty("ds.pom.repository").get()
             val repositoryUrl = "https://github.com/$githubRepository"
             val ownerUrl = "https://github.com/${githubRepository.substringBefore('/')}"
 
             extensions.configure<MavenPublishBaseExtension> {
                 configureBasedOnAppliedPlugins(sourcesJar = true, javadocJar = false)
-                coordinates(DsBuildConstants.GROUP, project.name, project.version.toString())
+                coordinates(project.group.toString(), project.name, project.version.toString())
                 pom {
                     name.set("TS Design System ${project.name}")
                     description.set("TinySolution design system for Android: ${project.name}")
@@ -53,19 +49,6 @@ class DsPublishingPlugin : Plugin<Project> {
                     issueManagement {
                         system.set("GitHub Issues")
                         url.set("$repositoryUrl/issues")
-                    }
-                }
-            }
-
-            extensions.configure<PublishingExtension> {
-                repositories {
-                    maven {
-                        name = "GitHubPackages"
-                        url = uri("https://maven.pkg.github.com/$githubRepository")
-                        credentials {
-                            username = providers.environmentVariable("GITHUB_ACTOR").orNull
-                            password = providers.environmentVariable("GITHUB_TOKEN").orNull
-                        }
                     }
                 }
             }

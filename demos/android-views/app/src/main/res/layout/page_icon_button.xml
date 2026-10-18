@@ -39,14 +39,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/demo_sample_add"
                     app:tsIcon="plus"
                     app:tsVariant="primary" />
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/ts_space_2"
@@ -55,7 +55,7 @@
                     app:tsRound="true"
                     app:tsVariant="primary" />
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/ts_space_2"
@@ -76,13 +76,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:id="@+id/icon_button_consumer_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/demo_sample_controller" />
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:id="@+id/icon_button_consumer_icon_secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                     android:contentDescription="@string/demo_sample_controller"
                     app:tsVariant="secondary" />
 
-                <com.ts.ds.views.components.iconbutton.TSIconButtonView
+                <com.tinysol.designsystem.views.components.iconbutton.TSIconButtonView
                     android:id="@+id/icon_button_consumer_icon_round"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

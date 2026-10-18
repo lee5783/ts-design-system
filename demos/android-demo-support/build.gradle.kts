@@ -3,10 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-group = "com.ts.ds.demo"
+group = "com.tinysol.designsystem.sample"
 
 android {
-    namespace = "com.ts.ds.demo.support"
+    namespace = "com.tinysol.designsystem.sample.support"
     compileSdk = 36
     resourcePrefix = "demo_"
 

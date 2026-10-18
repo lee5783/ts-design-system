@@ -22,10 +22,10 @@ Use DS tokens only. A value the DS hard-codes goes into `design/extensions/nativ
 
 | | iOS | Android |
 |---|---|---|
-| Style spec | `ios/Sources/TSFoundation/Styles/TSChipStyleSpec.swift` | `android/core/src/main/kotlin/com/ts/ds/core/style/TSChipStyleSpec.kt` |
-| Shared logic (if any) | `ios/Sources/TSFoundation/Logic/` | `android/core/src/main/kotlin/com/ts/ds/core/logic/` |
+| Style spec | `ios/Sources/TSFoundation/Styles/TSChipStyleSpec.swift` | `android/core/src/main/kotlin/com/tinysol/designsystem/core/style/TSChipStyleSpec.kt` |
+| Shared logic (if any) | `ios/Sources/TSFoundation/Logic/` | `android/core/src/main/kotlin/com/tinysol/designsystem/core/logic/` |
 | Library strings | `ios/Sources/TSFoundation/Resources/Localizable.xcstrings` + a `TSStringKey` case (`ts.chip.*`) | `android/core/src/main/res/values/ts_strings.xml` (`ts_chip_*`) |
-| Spec tests | `ios/Tests/TSFoundationTests/TSChipStyleSpecTests.swift` | `android/core/src/test/kotlin/com/ts/ds/core/style/TSChipStyleSpecTest.kt` |
+| Spec tests | `ios/Tests/TSFoundationTests/TSChipStyleSpecTests.swift` | `android/core/src/test/kotlin/com/tinysol/designsystem/core/style/TSChipStyleSpecTest.kt` |
 
 The spec takes a `Configuration` (including the `TSControlState`), returns a `Resolved` of roles, and lists `allConfigurations`. The spec tests iterate every configuration. Newer-OS behaviour goes through `TSFoundation/Compat/` with a `TSCompat` path ([../conventions.md](../conventions.md)).
 
@@ -35,8 +35,8 @@ The spec takes a `Configuration` (including the `TSControlState`), returns a `Re
 |---|---|---|
 | SwiftUI | `ios/Sources/TSDesignSystem/Components/Chip/TSChip.swift` (+ `TSChipStyle.swift` for a `ButtonStyle`) | `ios/Tests/TSDesignSystemTests/Behavior/TSChipBehaviorTests.swift` |
 | UIKit | `ios/Sources/TSDesignSystemUIKit/Components/Chip/TSChipView.swift` | `ios/Tests/TSDesignSystemUIKitTests/Behavior/TSChipViewBehaviorTests.swift` |
-| Compose | `android/compose/src/main/kotlin/com/ts/ds/compose/components/chip/TSChip.kt` | `android/compose/src/test/kotlin/com/ts/ds/compose/components/chip/TSChipTest.kt` |
-| Views | `android/views/src/main/kotlin/com/ts/ds/views/components/chip/TSChipView.kt`; `app:ts*` attrs in `android/views/src/main/res/values/ts_component_attrs.xml`; default styles in `ts_component_styles.xml` | `android/views/src/test/kotlin/com/ts/ds/views/components/chip/TSChipViewTest.kt` |
+| Compose | `android/compose/src/main/kotlin/com/tinysol/designsystem/compose/components/chip/TSChip.kt` | `android/compose/src/test/kotlin/com/tinysol/designsystem/compose/components/chip/TSChipTest.kt` |
+| Views | `android/views/src/main/kotlin/com/tinysol/designsystem/views/components/chip/TSChipView.kt`; `app:ts*` attrs in `android/views/src/main/res/values/ts_component_attrs.xml`; default styles in `ts_component_styles.xml` | `android/views/src/test/kotlin/com/tinysol/designsystem/views/components/chip/TSChipViewTest.kt` |
 
 Rules that every component meets (details in [../conventions.md](../conventions.md)): the C-29 names (`TSChip` / `TSChipView`); 44 pt / 48 dp hit areas; the TS focus ring; RTL; Dynamic Type and font scale; strings from the shared layer; an identifier / test tag; no screen-reader semantics (no labels, values, traits, announcements or custom actions); Android behaviour tests at `@Config(sdk = [26, 36])`; state forcing in tests through `forcingState` / `LocalTSForcedControlState`.
 
@@ -56,15 +56,15 @@ New public API is additive (minor). Mark unstable API `@ExperimentalTSApi` (Kotl
 
 1. **Catalog (both platforms):**
    - iOS: a case in `demos/ios-demo-support/Sources/TSDemoSupport/Catalog/DemoPageID.swift` (raw value `chip`; kebab-case for multi-word ids such as `icon-button`), the id in a section of `DemoCatalog.swift`, and a `demo.page.chip` title in `Resources/DemoStrings.xcstrings`.
-   - Android: an entry `Chip("chip", DemoPageKind.Component, R.string.demo_page_chip)` in `demos/android-demo-support/src/main/kotlin/com/ts/ds/demo/support/catalog/DemoPageId.kt`, the id in a section of `DemoCatalog.kt`, and `demo_page_chip` in `src/main/res/values/demo_strings.xml`.
+   - Android: an entry `Chip("chip", DemoPageKind.Component, R.string.demo_page_chip)` in `demos/android-demo-support/src/main/kotlin/com/tinysol/designsystem/sample/support/catalog/DemoPageId.kt`, the id in a section of `DemoCatalog.kt`, and `demo_page_chip` in `src/main/res/values/demo_strings.xml`.
 2. **Page files** (the catalog check accepts exactly these names, in `Components/` or `Foundations/`):
 
    | Demo | Page file | Route it in |
    |---|---|---|
    | SwiftUI | `demos/ios-swiftui/TSDemoSwiftUI/Components/ChipPage.swift` | `Shell/DemoPageView.swift` |
    | UIKit | `demos/ios-uikit/TSDemoUIKit/Components/ChipViewController.swift` | `Shell/DemoPageFactory.swift` |
-   | Compose | `demos/android-compose/app/src/main/kotlin/com/ts/ds/demo/compose/components/ChipPage.kt` | `shell/DemoPageScreen.kt` |
-   | Views | `demos/android-views/app/src/main/kotlin/com/ts/ds/demo/views/components/ChipFragment.kt` (or `ChipPageFragment.kt`) + `res/layout/page_chip.xml` | `shell/DemoNavigation.kt` and `res/navigation/demo_nav.xml` (`@+id/page_chip`) |
+   | Compose | `demos/android-compose/app/src/main/kotlin/com/tinysol/designsystem/compose/sample/components/ChipPage.kt` | `shell/DemoPageScreen.kt` |
+   | Views | `demos/android-views/app/src/main/kotlin/com/tinysol/designsystem/views/sample/components/ChipFragment.kt` (or `ChipPageFragment.kt`) + `res/layout/page_chip.xml` | `shell/DemoNavigation.kt` and `res/navigation/demo_nav.xml` (`@+id/page_chip`) |
 
    The iOS projects use folder-synchronized groups, so a new file needs no `project.pbxproj` edit.
 3. **Content:** every variant, size and state, using the shared sample data; follow the sibling page's sections (`DemoComponentSection` / `DemoPageViewController` / `DemoPageFragment` with `DemoPageState`). Interactive demos show a result caption that the UI tests can read.

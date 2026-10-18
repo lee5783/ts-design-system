@@ -28,29 +28,29 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_variants" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_save"
                 app:tsVariant="primary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_cancel"
                 app:tsVariant="secondary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_add_item"
                 app:tsLeadingIcon="plus"
                 app:tsVariant="ghost" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_delete"
                 app:tsLeadingIcon="trash"
                 app:tsVariant="danger" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 android:id="@+id/button_link"
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_learn_more"
@@ -62,18 +62,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_sizes" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_continue"
                 app:tsSize="md"
                 app:tsTrailingIcon="arrow-right" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_get_started"
                 app:tsSize="lg" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:layout_width="match_parent"
                 android:text="@string/demo_component_block"
@@ -91,19 +91,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_with_icons" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_component_leading_icon"
                 app:tsLeadingIcon="download"
                 app:tsVariant="secondary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_component_trailing_icon"
                 app:tsTrailingIcon="chevron-right"
                 app:tsVariant="secondary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_component_both_icons"
                 app:tsLeadingIcon="upload"
@@ -116,19 +116,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_consumer_icon" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 android:id="@+id/button_consumer_icon"
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_play_together"
                 app:tsVariant="primary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 android:id="@+id/button_consumer_icon_secondary"
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_play_together"
                 app:tsVariant="secondary" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 android:id="@+id/button_consumer_icon_loading"
                 style="@style/Widget.Demo.ComponentSample"
                 android:text="@string/demo_sample_play_together"
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/demo_component_line_limit" />
 
-            <com.ts.ds.views.components.button.TSButtonView
+            <com.tinysol.designsystem.views.components.button.TSButtonView
                 android:id="@+id/button_line_limit"
                 style="@style/Widget.Demo.ComponentSample"
                 android:layout_width="240dp"

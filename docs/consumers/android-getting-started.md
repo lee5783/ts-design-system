@@ -1,32 +1,16 @@
 # Android: getting started
 
-The TS design system ships as five Maven artifacts in group `com.ts.ds` on GitHub Packages: a BOM, the two toolkits (`compose`, `views`) and their shared dependencies (`core`, `tokens`). All five share one version.
+The TS design system ships through [JitPack](https://jitpack.io), built from this repository's `vX.Y.Z` tags. There are five Maven artifacts in group `com.github.lee5783.ts-design-system`: a BOM, the two toolkits (`compose`, `views`) and their shared dependencies (`core`, `tokens`). All five share one version, which is the git tag (with its `v`, for example `v0.2.0`). No credentials are needed.
 
-**Verified** (T50, with the `0.1.0` publication in `~/.m2` standing in for GitHub Packages): the BOM plus a toolkit artifact resolve and build in both demo apps, with `core` and `tokens` coming transitively, and the demos' smoke tests pass against the published artifacts. The repository block with the `content { includeGroup("com.ts.ds") }` filter was exercised. **Not executed yet:** a real download from `maven.pkg.github.com` with a personal access token, because nothing has been published; those steps are marked *(not executed)*.
+**Verified locally:** a JitPack-shaped build (`JITPACK=true GROUP=com.github.lee5783 ARTIFACT=ts-design-system VERSION=<tag>`, the exact `install` line from the root `jitpack.yml`) publishes all five artifacts under `com.github.lee5783.ts-design-system:<module>:<tag>`, and the BOM constraints and the `compose`/`views` → `core` → `tokens` POM dependencies carry that same group and version. Both demo apps build against the `~/.m2` publication. **Not executed yet:** a real download from `jitpack.io`, because no tag with `jitpack.yml` has been built there. `v0.1.0` predates `jitpack.yml` and cannot be built by JitPack; the first consumable version is the next tag.
 
 ## Requirements
 
 - `minSdk` 26 or higher; the libraries compile against SDK 36.
 - Java 17 bytecode target (the libraries are built with JDK 21 targeting 17).
-- Compose apps: the Compose BOM comes with `com.ts.ds:compose` as an `api` dependency (`2025.10.01` in `0.1.0`), so your Compose versions align with it.
+- Compose apps: the Compose BOM comes with `compose` as an `api` dependency (`2025.10.01` today), so your Compose versions align with it.
 
-## 1. Create a GitHub token *(not executed)*
-
-GitHub Packages needs a token even for public packages.
-
-- **Classic token:** scope `read:packages`, plus `repo` if the repository is private (the package inherits the repository's visibility).
-- **Fine-grained token:** Packages → read, on the account or organization that owns the repository.
-
-Store it outside the project, in `~/.gradle/gradle.properties`:
-
-```properties
-gpr.user=<github-username>
-gpr.key=<token>
-```
-
-In CI, use `GITHUB_ACTOR` / `GITHUB_TOKEN` instead (the snippet below falls back to them). Never commit a token.
-
-## 2. Add the repository
+## 1. Add the repository
 
 `settings.gradle.kts`:
 
@@ -36,65 +20,54 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            name = "TSDesignSystem"
-            url = uri("https://maven.pkg.github.com/lee5783/ts-design-system")
-            credentials {
-                username = providers.gradleProperty("gpr.user").orElse(providers.environmentVariable("GITHUB_ACTOR")).get()
-                password = providers.gradleProperty("gpr.key").orElse(providers.environmentVariable("GITHUB_TOKEN")).get()
-            }
-            content { includeGroup("com.ts.ds") }
+        maven("https://jitpack.io") {
+            content { includeGroup("com.github.lee5783.ts-design-system") }
         }
     }
 }
 ```
 
-`gpr.user` / `gpr.key` are names you choose; any property names work as long as the snippet reads them. This repository's own demo apps use a different, Gradle-derived pair, `GitHubPackagesUsername` / `GitHubPackagesPassword`, because they declare `credentials(PasswordCredentials::class)` on a repository named `GitHubPackages` (see [../integrations.md](../integrations.md#authentication-and-identity)). A consumer can use that form too:
+The `content` filter keeps Gradle from asking JitPack for anything else. No token, no `gradle.properties` entries.
 
-```kotlin
-maven {
-    name = "GitHubPackages"
-    url = uri("https://maven.pkg.github.com/lee5783/ts-design-system")
-    credentials(PasswordCredentials::class)   // reads GitHubPackagesUsername / GitHubPackagesPassword
-    content { includeGroup("com.ts.ds") }
-}
-```
-
-## 3. Add the dependencies
+## 2. Add the dependencies
 
 App module `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation(platform("com.ts.ds:bom:0.1.0"))
-    implementation("com.ts.ds:compose")   // Compose apps
-    // implementation("com.ts.ds:views")  // Views (XML) apps
+    implementation(platform("com.github.lee5783.ts-design-system:bom:<tag>"))
+    implementation("com.github.lee5783.ts-design-system:compose")   // Compose apps
+    // implementation("com.github.lee5783.ts-design-system:views")  // Views (XML) apps
 }
 ```
 
-Do not declare `com.ts.ds:core` or `com.ts.ds:tokens`: they come transitively at the BOM version.
+`<tag>` is the release tag, `v` included (for example `v0.2.0`). Do not declare `core` or `tokens`: they come transitively at the BOM version.
 
-## Try a release locally, without a token
+The first request for a new tag makes JitPack build it, which can take several minutes; a Gradle sync that times out on a fresh tag usually succeeds on retry. Build logs are at `https://jitpack.io/#lee5783/ts-design-system`.
 
-From a checkout of this repository: `make android-publish-local` publishes every artifact and the BOM to `~/.m2`. Replace the `maven { … }` block with:
+## Try a build locally, without JitPack
+
+From a checkout of this repository, `make android-publish-local` publishes every artifact and the BOM to `~/.m2` under the local group `com.tinysol.designsystem` and the version in `VERSION` (for example `com.tinysol.designsystem:bom:0.1.0`). In a scratch app, replace the JitPack block with:
 
 ```kotlin
-mavenLocal { content { includeGroup("com.ts.ds") } }
+mavenLocal { content { includeGroup("com.tinysol.designsystem") } }
 ```
 
-## 4. First screen
+and use `com.tinysol.designsystem:<module>` coordinates. This is a development aid only; consumers use JitPack.
+
+## 3. First screen
 
 **Compose:**
 
 ```kotlin
-import com.ts.ds.compose.components.button.TSButton
-import com.ts.ds.compose.components.dialog.TSDialog
-import com.ts.ds.compose.components.toast.LocalTSToastState
-import com.ts.ds.compose.components.toast.TSToastHost
-import com.ts.ds.compose.components.toast.rememberTSToastState
-import com.ts.ds.compose.theme.TSTheme
-import com.ts.ds.core.logic.TSDialogAction
-import com.ts.ds.core.style.TSButtonVariant
+import com.tinysol.designsystem.compose.components.button.TSButton
+import com.tinysol.designsystem.compose.components.dialog.TSDialog
+import com.tinysol.designsystem.compose.components.toast.LocalTSToastState
+import com.tinysol.designsystem.compose.components.toast.TSToastHost
+import com.tinysol.designsystem.compose.components.toast.rememberTSToastState
+import com.tinysol.designsystem.compose.theme.TSTheme
+import com.tinysol.designsystem.core.logic.TSDialogAction
+import com.tinysol.designsystem.core.style.TSButtonVariant
 
 setContent {
     TSTheme {
@@ -120,7 +93,7 @@ setContent {
 **Views:** use `Theme.TS` (or a theme whose parent is `Theme.TS`) for the activity, then:
 
 ```xml
-<com.ts.ds.views.components.button.TSButtonView
+<com.tinysol.designsystem.views.components.button.TSButtonView
     android:id="@+id/delete"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

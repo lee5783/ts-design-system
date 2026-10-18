@@ -46,10 +46,10 @@ export interface DemoReport {
 }
 
 const ANDROID_INTERNALS = [
-  { pattern: /com\.ts\.ds:(core|tokens|test-support)\b/, reason: "declares a library-internal artifact" },
+  { pattern: /com\.tinysol\.designsystem:(core|tokens|test-support)\b/, reason: "declares a library-internal artifact" },
   { pattern: /project\(\s*["']:(core|tokens|compose|views|bom|test-support)["']\s*\)/, reason: "uses a project-path dependency into android/" },
   { pattern: /includeBuild\(\s*["'][^"']*android\/(core|tokens|compose|views|test-support)/, reason: "includes a library module build directly" },
-  { pattern: /import\s+com\.ts\.ds\.testsupport\b/, reason: "imports the unpublished test support" },
+  { pattern: /import\s+com\.tinysol\.designsystem\.testsupport\b/, reason: "imports the unpublished test support" },
 ];
 
 export const DEMO_BOUNDARIES: readonly DemoBoundary[] = [
@@ -89,8 +89,8 @@ export const DEMO_BOUNDARIES: readonly DemoBoundary[] = [
     name: "android-demo-support",
     root: "demos/android-demo-support",
     forbidden: [
-      { pattern: /com\.ts\.ds:/, reason: "demo support must not depend on the library" },
-      { pattern: /import\s+com\.ts\.ds\.(?!demo\.)/, reason: "demo support must not import the library" },
+      { pattern: /com\.tinysol\.designsystem:/, reason: "demo support must not depend on the library" },
+      { pattern: /import\s+com\.tinysol\.designsystem\.(?!sample\.)/, reason: "demo support must not import the library" },
       { pattern: /includeBuild\(|project\(\s*["']:/, reason: "demo support must not include other builds or projects" },
       { pattern: /androidx\.compose|com\.google\.android\.material/, reason: "demo support must stay toolkit-agnostic" },
     ],
@@ -101,8 +101,8 @@ export const DEMO_BOUNDARIES: readonly DemoBoundary[] = [
     root: "demos/android-compose",
     forbidden: [
       ...ANDROID_INTERNALS,
-      { pattern: /com\.ts\.ds:views\b/, reason: "the Compose demo must not use the Views toolkit" },
-      { pattern: /import\s+com\.ts\.ds\.views\b/, reason: "the Compose demo must not import the Views toolkit" },
+      { pattern: /com\.tinysol\.designsystem:views\b/, reason: "the Compose demo must not use the Views toolkit" },
+      { pattern: /import\s+com\.tinysol\.designsystem\.views\b/, reason: "the Compose demo must not import the Views toolkit" },
     ],
   },
   {
@@ -111,8 +111,8 @@ export const DEMO_BOUNDARIES: readonly DemoBoundary[] = [
     root: "demos/android-views",
     forbidden: [
       ...ANDROID_INTERNALS,
-      { pattern: /com\.ts\.ds:compose\b/, reason: "the Views demo must not use the Compose toolkit" },
-      { pattern: /import\s+com\.ts\.ds\.compose\b/, reason: "the Views demo must not import the Compose toolkit" },
+      { pattern: /com\.tinysol\.designsystem:compose\b/, reason: "the Views demo must not use the Compose toolkit" },
+      { pattern: /import\s+com\.tinysol\.designsystem\.compose\b/, reason: "the Views demo must not import the Compose toolkit" },
       { pattern: /androidx\.compose/, reason: "the Views demo must not use Compose" },
     ],
   },

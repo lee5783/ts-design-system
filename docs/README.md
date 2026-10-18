@@ -28,7 +28,7 @@ This table matches the routing table in the root `CLAUDE.md`.
 |---|---|
 | Bring a new DS version in: sync, extensions, codegen, bump classification | [guides/ds-update-flow.md](guides/ds-update-flow.md) |
 | Add a component to all four toolkits and all four demos | [guides/adding-a-component.md](guides/adding-a-component.md) |
-| Cut a release, acknowledge API breaks, recover a failed publish | [guides/release.md](guides/release.md) |
+| Cut a release, trigger the JitPack build, acknowledge API breaks, recover a failed release | [guides/release.md](guides/release.md) |
 | What is breaking, how to deprecate, how the API checks work | [guides/deprecation-policy.md](guides/deprecation-policy.md) |
 | Renovate PRs, manual toolchain bumps, the yearly platform bump | [guides/toolchain-upgrades.md](guides/toolchain-upgrades.md) |
 | Build and run the demos, launch options, theme deep links, argent | [guides/running-demos.md](guides/running-demos.md) |
@@ -38,7 +38,7 @@ This table matches the routing table in the root `CLAUDE.md`.
 | Question | Read |
 |---|---|
 | Add the iOS library (SPM) to an app | [consumers/ios-getting-started.md](consumers/ios-getting-started.md) |
-| Add the Android library (GitHub Packages) to an app | [consumers/android-getting-started.md](consumers/android-getting-started.md) |
+| Add the Android library (JitPack) to an app | [consumers/android-getting-started.md](consumers/android-getting-started.md) |
 | Light/dark, tokens in app UI, Material interop, string overrides | [consumers/theming.md](consumers/theming.md) |
 | What to change when upgrading across a breaking release | [consumers/migration-guides.md](consumers/migration-guides.md) |
 
