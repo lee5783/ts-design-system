@@ -36,6 +36,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.logic.TSDialogAction
+import com.ts.ds.core.logic.TSDialogPolicy
 import com.ts.ds.core.logic.TSDialogPresenter
 import com.ts.ds.core.style.TSButtonVariant
 import com.ts.ds.core.style.TSDialogVariant
@@ -140,7 +141,7 @@ class TSDialogTest {
     }
 
     @Test
-    fun actionClosesThenRunsWithoutOnDismiss() {
+    fun actionRunsThenClosesWithoutOnDismiss() {
         setDialog()
         composeRule.onNodeWithText("Delete").performClick()
         composeRule.waitForIdle()
@@ -149,6 +150,19 @@ class TSDialogTest {
         assertEquals(0, dismissals)
         composeRule.onAllNodesWithText("Delete this project?").assertCountEquals(0)
         assertFalse(presenter.isPresenting)
+    }
+
+    @Test
+    fun aDoubleTapRunsADismissingActionOnce() {
+        setDialog()
+        val click = requireNotNull(composeRule.onNodeWithText("Delete").fetchSemanticsNode().config[SemanticsActions.OnClick].action)
+        composeRule.runOnUiThread {
+            click()
+            click()
+        }
+        composeRule.waitForIdle()
+        assertEquals(listOf("delete"), events)
+        assertFalse(presented)
     }
 
     @Test
@@ -239,7 +253,35 @@ class TSDialogTest {
     }
 
     @Test
-    fun secondDialogIsRefusedAndItsBindingReset() {
+    fun secondDialogIsQueuedAndShownAfterTheFirstCloses() {
+        var second by mutableStateOf(true)
+        var refusals = 0
+        setDialog {
+            TSDialog(
+                isPresented = second,
+                onPresentedChange = { second = it },
+                title = "Second",
+                presenter = presenter,
+                onRefused = { refusals++ },
+            ) { BasicText("Body") }
+        }
+        assertTrue(second)
+        assertEquals(1, presenter.pendingCount)
+        assertEquals(0, presenter.refusedCount)
+        composeRule.onAllNodesWithText("Second").assertCountEquals(0)
+        composeRule.onNodeWithText("Delete this project?").assertExists()
+        composeRule.onNodeWithText("Cancel").performClick()
+        composeRule.waitForIdle()
+        composeRule.onAllNodesWithText("Delete this project?").assertCountEquals(0)
+        composeRule.onNodeWithText("Second").assertExists()
+        assertEquals(0, presenter.pendingCount)
+        assertEquals(0, refusals)
+        assertTrue(second)
+    }
+
+    @Test
+    fun refusePolicyRefusesTheSecondDialogAndResetsItsBinding() {
+        presenter.policy = TSDialogPolicy.Refuse
         var second by mutableStateOf(true)
         setDialog {
             TSDialog(
@@ -251,8 +293,81 @@ class TSDialogTest {
         }
         assertFalse(second)
         assertEquals(1, presenter.refusedCount)
+        assertEquals(0, presenter.pendingCount)
         composeRule.onAllNodesWithText("Second").assertCountEquals(0)
         composeRule.onNodeWithText("Delete this project?").assertExists()
+    }
+
+    @Test
+    fun queuedDialogIsDroppedWhenItsBindingGoesFalse() {
+        var second by mutableStateOf(true)
+        setDialog {
+            TSDialog(
+                isPresented = second,
+                onPresentedChange = { second = it },
+                title = "Second",
+                presenter = presenter,
+            ) { BasicText("Body") }
+        }
+        assertEquals(1, presenter.pendingCount)
+        second = false
+        composeRule.waitForIdle()
+        assertEquals(0, presenter.pendingCount)
+        composeRule.onNodeWithText("Cancel").performClick()
+        composeRule.waitForIdle()
+        composeRule.onAllNodesWithText("Second").assertCountEquals(0)
+        assertFalse(presenter.isPresenting)
+    }
+
+    @Test
+    fun queuedDialogIsDroppedWhenItLeavesComposition() {
+        var included by mutableStateOf(true)
+        setDialog {
+            if (included) {
+                TSDialog(
+                    isPresented = true,
+                    onPresentedChange = {},
+                    title = "Second",
+                    presenter = presenter,
+                ) { BasicText("Body") }
+            }
+        }
+        assertEquals(1, presenter.pendingCount)
+        included = false
+        composeRule.waitForIdle()
+        assertEquals(0, presenter.pendingCount)
+        composeRule.onNodeWithText("Cancel").performClick()
+        composeRule.waitForIdle()
+        composeRule.onAllNodesWithText("Second").assertCountEquals(0)
+        assertFalse(presenter.isPresenting)
+    }
+
+    @Test
+    fun handlerRunsBeforeOnPresentedChangeClearsItsState() {
+        var selected: String? = "Row 3"
+        val removed = mutableListOf<String>()
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                TSDialog(
+                    isPresented = presented,
+                    onPresentedChange = {
+                        presented = it
+                        if (!it) selected = null
+                    },
+                    title = "Remove from list?",
+                    message = "Body",
+                    actions = listOf(TSDialogAction("Remove", TSButtonVariant.Danger) { selected?.let { removed += it } }),
+                    presenter = presenter,
+                )
+            }
+        }
+        composeRule.waitForIdle()
+        composeRule.onNodeWithText("Remove").performClick()
+        composeRule.waitForIdle()
+        assertEquals(listOf("Row 3"), removed)
+        assertEquals(null, selected)
+        assertFalse(presented)
+        assertFalse(presenter.isPresenting)
     }
 
     @Test
@@ -298,9 +413,15 @@ class TSDialogTest {
             }
         }
         composeRule.waitForIdle()
+        composeRule.mainClock.autoAdvance = false
         composeRule.onNodeWithText("Delete").performClick()
-        composeRule.waitForIdle()
+        repeat(3) { composeRule.mainClock.advanceTimeByFrame() }
         assertTrue(second)
+        assertEquals(1, presenter.pendingCount)
+        composeRule.onAllNodesWithText("Project deleted").assertCountEquals(0)
+        composeRule.mainClock.autoAdvance = true
+        composeRule.waitForIdle()
+        assertEquals(0, presenter.pendingCount)
         assertEquals(0, presenter.refusedCount)
         composeRule.onNodeWithText("Project deleted").assertExists()
         composeRule.onAllNodesWithText("Delete this project?").assertCountEquals(0)
@@ -361,6 +482,7 @@ class TSDialogTest {
 
     @Test
     fun refusedPresentationCallsOnRefused() {
+        presenter.policy = TSDialogPolicy.Refuse
         var second by mutableStateOf(true)
         var refusals = 0
         setDialog {

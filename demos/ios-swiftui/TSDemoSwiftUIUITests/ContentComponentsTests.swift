@@ -104,6 +104,47 @@ final class ContentComponentsTests: XCTestCase {
     }
 
     @MainActor
+    func testListItemDisclosureRowExpandsItsBody() {
+        let app = launch(page: "list-item")
+        let kotlin = app.buttons["demo.list-item.disclosure.kotlin"].firstMatch
+        let snapshot = app.buttons["demo.list-item.disclosure.snapshot"].firstMatch
+        let body = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Licensed under the Apache License")).firstMatch
+        scrollTo(snapshot, in: app)
+        XCTAssertEqual(kotlin.label, "Kotlin, Apache License 2.0")
+        XCTAssertEqual(kotlin.value as? String, "Collapsed")
+        XCTAssertFalse(body.exists)
+        kotlin.tap()
+        XCTAssertEqual(kotlin.value as? String, "Expanded")
+        XCTAssertTrue(body.waitForExistence(timeout: 2))
+        scrollTo(snapshot, in: app)
+        snapshot.tap()
+        XCTAssertEqual(snapshot.value as? String, "Expanded")
+        XCTAssertEqual(kotlin.value as? String, "Collapsed")
+        snapshot.tap()
+        XCTAssertEqual(snapshot.value as? String, "Collapsed")
+        XCTAssertFalse(body.exists)
+    }
+
+    @MainActor
+    func testTextPageShowsEveryTypeRoleAndTextColor() {
+        let app = launch(page: "text")
+        let roles = ["display", "title1", "title2", "title3", "bodyLg", "body", "bodySm", "label", "caption", "overline", "code"]
+        for role in roles {
+            let text = element(app, "demo.text.role.\(role)")
+            scrollTo(text, in: app)
+            XCTAssertEqual(text.label.lowercased(), "sphinx of black quartz, judge my vow")
+        }
+        for color in ["primary", "secondary", "muted", "disabled", "inverse", "onAccent"] {
+            let text = element(app, "demo.text.color.\(color)")
+            scrollTo(text, in: app)
+            XCTAssertEqual(text.label, color)
+        }
+        let truncated = element(app, "demo.text.truncated")
+        scrollTo(truncated, in: app)
+        XCTAssertLessThan(truncated.frame.height, 40)
+    }
+
+    @MainActor
     func testInteractiveCardIsOneElementAndPresses() {
         let app = launch(page: "card")
         let card = element(app, "demo.card.state.default")

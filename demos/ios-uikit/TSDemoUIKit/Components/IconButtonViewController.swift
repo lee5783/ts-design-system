@@ -24,7 +24,7 @@ final class IconButtonViewController: DemoPageViewController {
     }
 
     override func makeContentViews() -> [UIView] {
-        [variantsSection(), shapesSection(), statesSection(), playgroundSection()]
+        [variantsSection(), shapesSection(), consumerIconSection(), statesSection(), playgroundSection()]
     }
 
     private func variantsSection() -> UIView {
@@ -42,6 +42,20 @@ final class IconButtonViewController: DemoPageViewController {
                 TSIconButtonView(icon: .plus, label: DemoStrings.string(.sampleAdd), variant: .primary),
                 TSIconButtonView(icon: .plus, label: DemoStrings.string(.sampleAdd), variant: .primary, isRound: true),
                 TSIconButtonView(icon: .more, label: DemoStrings.string(.sampleMoreOptions), variant: .secondary, isRound: true)
+            ])
+        ])
+    }
+
+    private func consumerIconSection() -> UIView {
+        let controller = UIImage(named: "DemoController") ?? UIImage()
+        let label = DemoStrings.string(.sampleController)
+        let ghost = TSIconButtonView(iconImage: controller, label: label)
+        ghost.accessibilityIdentifier = "demo.icon-button.consumer-icon"
+        return DemoComponentSectionView(.consumerIcon, views: [
+            row([
+                ghost,
+                TSIconButtonView(iconImage: controller, label: label, variant: .secondary),
+                TSIconButtonView(iconImage: controller, label: label, variant: .primary, isRound: true)
             ])
         ])
     }

@@ -51,6 +51,7 @@ import com.ts.ds.core.R as CoreR
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSTextInputTraits
 import com.ts.ds.core.logic.TSTextFieldAccessibility
+import com.ts.ds.core.style.TSTextFieldContentStyle
 import com.ts.ds.core.style.TSTextFieldStyleSpec
 
 @Composable
@@ -72,12 +73,53 @@ public fun TSTextField(
     interactionSource: MutableInteractionSource? = null,
     trailing: (@Composable () -> Unit)? = null,
 ) {
+    TSTextField(
+        value = value,
+        label = label,
+        onValueChange = onValueChange,
+        contentStyle = TSTextFieldContentStyle.Default,
+        modifier = modifier,
+        placeholder = placeholder,
+        hint = hint,
+        error = error,
+        leadingIcon = leadingIcon,
+        secure = secure,
+        multiline = multiline,
+        readOnly = readOnly,
+        inputTraits = inputTraits,
+        onSubmit = onSubmit,
+        enabled = enabled,
+        interactionSource = interactionSource,
+        trailing = trailing,
+    )
+}
+
+@Composable
+public fun TSTextField(
+    value: String,
+    label: String,
+    onValueChange: (String) -> Unit,
+    contentStyle: TSTextFieldContentStyle,
+    modifier: Modifier = Modifier,
+    placeholder: String? = null,
+    hint: String? = null,
+    error: String? = null,
+    leadingIcon: TSIcon? = null,
+    secure: Boolean = false,
+    multiline: Boolean = false,
+    readOnly: Boolean = false,
+    inputTraits: TSTextInputTraits = TSTextInputTraits.Default,
+    onSubmit: (() -> Unit)? = null,
+    enabled: Boolean = true,
+    interactionSource: MutableInteractionSource? = null,
+    trailing: (@Composable () -> Unit)? = null,
+) {
     val source = interactionSource ?: remember { MutableInteractionSource() }
     val focused by source.collectIsFocusedAsState()
     val forced = LocalTSForcedControlState.current
     val hasError = TSTextFieldAccessibility.hasError(error)
     val state = TSTextFieldStyleSpec.state(enabled = enabled, focused = forced?.focused ?: focused, error = hasError)
-    val resolved = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(readOnly), state)
+    val resolved = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(readOnly, contentStyle), state)
     var revealed by rememberSaveable { mutableStateOf(forced?.selected ?: false) }
     val isSecure = secure && !multiline
     val masked = isSecure && (readOnly || !revealed)

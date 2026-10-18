@@ -20,6 +20,8 @@ Cross-toolkit contract for the TS TextField. Source: `design/source/components/T
 | `readOnly` (native addition) | `Configuration.isReadOnly` | `isReadOnly:` | `isReadOnly` | `readOnly` | `isReadOnly` / `app:tsReadOnly` |
 | `inputMode`, `autoComplete`, return key | `TSTextInputTraits`, `TSReturnKey` | `inputTraits:` | `inputTraits` | `inputTraits: TSTextInputTraits` (`:core` `input/`) → `KeyboardOptions` + `ContentType` | `inputTraits` / `app:tsInputTraits` → `inputType`, `imeOptions`, `autofillHints` |
 | submit | — | `.onSubmit` | `.primaryActionTriggered` | `onSubmit` (any IME action) | `editText.setOnEditorActionListener` |
+| content style (native, issue #4) | `TSTextFieldContentStyle` `default · code` (Android `Default · Code`) in `Configuration.contentStyle`; resolves `inputFont` / `inputTypeRole` | init overloads with `contentStyle:` (no default; the existing inits use `.default`) | `contentStyle` property (default `.default`; no init parameter) | overload `TSTextField(value, label, onValueChange, contentStyle, modifier, …)` (required `contentStyle`; the existing signature uses `Default`) | `contentStyle` / `app:tsContentStyle="plain\|code"` |
+| code keyboard (native, issue #4) | `TSTextInputTraits.code` (iOS) / `TSTextInputTraits.Code` (Android), `TSKeyboardType.Ascii` (Android) | `inputTraits: .code` | `inputTraits = .code` | `inputTraits = TSTextInputTraits.Code` | `inputTraits` / `app:tsInputTraits="code"` |
 
 ## Matrix
 
@@ -32,7 +34,7 @@ Cross-toolkit contract for the TS TextField. Source: `design/source/components/T
 | disabled | `border-strong` | 1 | `background-secondary` | 0.45 (box only) | hint |
 | read-only (any state) | `border-strong` or `danger` | 1, never a focus border | `background-secondary`, no shadow | 1 | hint or error |
 
-5 states × read-only = 10 configurations. The web draws focus as a 1 px border plus a 1 px outer ring; native draws one 2 pt inner border in the same colour.
+5 states × read-only × content style (default, code) = 20 configurations (Android `configurations`: read-only × content style = 4, × 5 states in the matrix tests). The web draws focus as a 1 px border plus a 1 px outer ring; native draws one 2 pt inner border in the same colour.
 
 Anatomy:
 - **Label:** `label` (14/20, 500), `text-primary`, 4 (`space-1`) above the box. Wraps; grows with Dynamic Type.
@@ -42,6 +44,27 @@ Anatomy:
 - **Message:** `caption` (12/16) 4 below the box; the error replaces the hint.
 - **Password toggle:** 32 (`control-sm`) with a 44 hit area, `radius-sm`. Hidden: `eye` in `text-muted`. Revealed: `eye` in `accent-text` on `accent-subtle` (selected).
 - **Multiline:** 3 lines minimum, grows to 6, then scrolls.
+
+## Code style and code keyboard
+
+For short codes the user types or reads back (a join code, a room token, `ABCDEF`). Two independent settings; pass both:
+
+- **`contentStyle = code`** changes only the input face: the input text **and the placeholder** use the DS `code` role (monospace 13/20/400), so `0/O` and `1/I` are distinct. Label, hint, error, border, fill, padding and the 44 minimum height are unchanged. There is no free `textStyle` parameter.
+- **Code traits** (`TSTextInputTraits.code` / `.Code`): ASCII keyboard, all capitals, autocorrect and suggestions off, no content type / autofill hint, default return key. The text stays **visible**; this is not `secure`.
+
+| Toolkit | What the code traits send to the keyboard |
+|---|---|
+| SwiftUI | `.keyboardType(.asciiCapable)`, `.textInputAutocapitalization(.characters)`, autocorrection disabled (`.disableAutocorrection`, for the iOS 15 target) |
+| UIKit | `keyboardType = .asciiCapable`, `autocapitalizationType = .allCharacters`, `autocorrectionType = .no` |
+| Compose | `KeyboardType.Password` with **no** visual transformation (text visible, no password semantics), `KeyboardCapitalization.Characters`, `autoCorrectEnabled = false` |
+| Views | `TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_CAP_CHARACTERS or TYPE_TEXT_FLAG_NO_SUGGESTIONS`, `IME_FLAG_FORCE_ASCII` |
+
+Keyboard caveats:
+
+- **Compose uses the Password keyboard type.** Compose has no way to send `NO_SUGGESTIONS`, and `KeyboardType.Ascii` with autocorrect off still shows Gboard's suggestion strip. `TSKeyboardType.Ascii` therefore maps to `KeyboardType.Password` whenever autocorrect is off (Ascii with autocorrect on stays `KeyboardType.Ascii`). The field still shows its text, but because the IME sees a password field, **a password manager may offer autofill** on it.
+- **Capitals are a hint on Android.** Gboard opens on the upper-case layout but treats `CAP_CHARACTERS` as a hint in a password-type field and can fall back to lower case after the first character. If the value must be upper case, convert it in `onValueChange` / a `TextWatcher`.
+- iOS spell checking and smart punctuation stay at the system defaults (no new `TSTextInputTraits` property).
+- No `maxLength` or counter; limit the length in your own `onValueChange` / binding.
 
 ## Accessibility
 
@@ -56,16 +79,20 @@ Anatomy:
 
 | Layer | File | What |
 |---|---|---|
-| Spec | `ios/Tests/TSFoundationTests/TSTextFieldStyleSpecTests.swift` | 10 configurations → border, width, ring, fill, opacity, editable/selectable, message colour; state precedence; anatomy; password toggle tokens; 3→6 line layout and scroll; masked read-only text; accessibility value, hint and announcement rules; input-trait presets; the multiline compat path |
+| Spec | `ios/Tests/TSFoundationTests/TSTextFieldStyleSpecTests.swift` | 20 configurations → border, width, ring, fill, opacity, editable/selectable, message colour; state precedence; anatomy; password toggle tokens; 3→6 line layout and scroll; masked read-only text; accessibility value, hint and announcement rules; input-trait presets; the multiline compat path |
 | SwiftUI | `…/Behavior/TSTextFieldBehaviorTests.swift` | binding and typing; label/hint/value; error replaces hint, alert icon, value; announcement on a new error (iOS 17+ inspector); disabled blocks input; read-only is text, not a field; secure toggle modes and labels; native multiline vs the iOS 15 bridge; the bridge grows 3→6 lines then scrolls and writes back; slots |
 | UIKit | `…/Behavior/TSTextFieldViewBehaviorTests.swift` | editing and `.editingChanged`; accessibility; error value, hint, icon, border and one announcement; 2 pt focus; disabled; read-only; secure toggle; 44 pt toggle hit area; multiline 3→6 then scroll; traits; Dynamic Type; trailing view |
 | Snapshots | `TSTextFieldSnapshotTests`, `TSTextFieldViewSnapshotTests` | `states` (default, filled, focused, error, error focused, disabled, read-only) and `content` (icons and trailing, password hidden and revealed, multiline short and long, SwiftUI also the iOS 15 bridge), standard matrix |
 | Demo | `FormComponentsTests` (both apps) | focus and typing, error value, password toggle, disabled and read-only |
-| Spec (Android) | `android/core/src/test/…/core/style/TSTextFieldStyleSpecTest.kt`, `core/input/TSTextInputTraitsTest.kt`, `core/logic/TSStringsTest.kt` | 10 configurations → border, width, ring, fill, shadow, opacity, editable/selectable, message colour and icon; anatomy; state precedence; password toggle tokens; 3/6 lines; masked text; input-trait presets and autofill hints; error/toggle strings and the hint rule |
+| Spec (Android) | `android/core/src/test/…/core/style/TSTextFieldStyleSpecTest.kt`, `core/input/TSTextInputTraitsTest.kt`, `core/logic/TSStringsTest.kt` | 20 configurations (4 configurations × 5 states) → border, width, ring, fill, shadow, opacity, editable/selectable, message colour and icon; anatomy; state precedence; password toggle tokens; 3/6 lines; masked text; input-trait presets and autofill hints; error/toggle strings and the hint rule |
 | Compose | `android/compose/src/test/…/components/textfield/TSTextFieldTest.kt` (sdk 26, 36) | typing; label and hint merged into the field, placeholder not; error semantics + `Error: …` live-region message; decorative icons; disabled (no `SetText`); read-only (selectable, no `SetText`); masked read-only without toggle; toggle role, label, selected and `Password` semantics; 48 dp toggle target; 44 dp box; multiline 3 → 6 lines; focus; IME submit; autofill `ContentType` |
 | Views | `android/views/src/test/…/components/textfield/TSTextFieldViewTest.kt` (sdk 26, 36) | key-event typing and `TextWatcher`; node `hintText` = label + hint; `setError` / content-invalid, alert icon, live region; 2 dp focus border; disabled (no focus, box-only 0.45); read-only (not a text editor, still selectable) and back; masked read-only; toggle transformation, label, selected; 48 × 44 toggle; typeface kept; multiline 92 → 164 dp then scrolls; traits → `inputType`, `imeOptions`, autofill; XML attributes |
 | Snapshots (Android) | `TSTextField[View]SnapshotTest` (standard matrix), `TSTextField[View]SdkSnapshotTest` (sdk 26/36 subset) | `states` and `content` galleries (Views shows *error focused* in `content`, since a window has one focus) |
 | Demo (Android) | `FormComponentsTest` (both apps) | focus and typing, error semantics, password toggle, disabled and read-only |
+| Code style (spec) | `TSTextFieldStyleSpecTests.codeContentStyle`, `TSTextFieldStyleSpecTest.codeContentStyleChangesOnlyTheInputTypeRole` (+ the 20-configuration matrix), `TSTextInputTraitsTest` (Code preset) | only the input font / type role changes; `.code` / `Code` preset values |
+| Code style (toolkits) | `TSTextFieldBehaviorTests.codeStyle`, `TSTextFieldViewBehaviorTests.codeStyle`, `TSTextFieldTest` `codeTraitsOpenAPasswordKeyboardWithoutSuggestionsInCapitals` + `codeFieldShowsItsTextUnmaskedInTheMonospaceCodeRole`, `TSTextFieldViewTest` `codeTraitsOpenAVisibleAsciiCapitalsKeyboardWithoutSuggestions` + `codeContentStyleUsesTheMonospaceCodeRoleForTheInputOnly` + `xmlAttributesSelectTheCodeStyleAndTraits` | plain visible field (no `SecureField`, no password semantics); keyboard options per toolkit; monospace input, label not monospace, height unchanged |
+| Code style (snapshots) | SwiftUI / UIKit gallery page `.code`; `TSTextFieldSnapshotTest.code`, `TSTextFieldSdkSnapshotTest.code`, `TSTextFieldViewSnapshotTest.code`, `TSTextFieldViewSdkSnapshotTest.code` | idle with placeholder, filled, focused, error, disabled |
+| Code style (demo) | "Code entry" section on the TextField page (`demo.text-field.code.field`); `FormComponentsTests.testCodeFieldShowsTypedCodeUnmasked` (both iOS demos), `FormComponentsTest.codeFieldShowsTypedCodeUnmasked` (Compose), `codeFieldShowsTypedCodeUnmaskedWithACapitalsKeyboard` (Views) | typed `AB12CD` shows unmasked; Views also asserts caps and no suggestions |
 
 ## Platform notes
 
@@ -91,6 +118,7 @@ Anatomy:
   - Multiline: `TYPE_TEXT_FLAG_MULTI_LINE` with `minHeight`/`maxHeight` of 3/6 × 24 sp line height + padding, then the `EditText` scrolls. `minLines`/`maxLines` were 4 px off at the cap because the last line drops its extra spacing.
   - The line height is set with `TextViewCompat.setLineHeight`, so API 26–27 also get 24 sp.
   - Changing `inputType` resets the typeface to monospace for passwords, so the body appearance is re-applied after each change.
-- **Shared (`:core`, Android):** `style/TSTextFieldStyleSpec`, `logic/TSTextFieldAccessibility`, `input/TSTextInputTraits` (`TSKeyboardType`, `TSImeAction`, `TSCapitalization`, autofill hints), strings `ts_text_field_error`, `ts_text_field_show_password`, `ts_text_field_hide_password`.
+  - The input typeface follows the resolved role: `Typeface.MONOSPACE` for the `code` role, `Typeface.DEFAULT` otherwise.
+- **Shared (`:core`, Android):** `style/TSTextFieldStyleSpec` (+ `TSTextFieldContentStyle`), `logic/TSTextFieldAccessibility`, `input/TSTextInputTraits` (`TSKeyboardType` incl. `Ascii`, `TSImeAction`, `TSCapitalization`, autofill hints), strings `ts_text_field_error`, `ts_text_field_show_password`, `ts_text_field_hide_password`.
 - **Shared (`TSFoundation`):** `TSTextFieldStyleSpec`, `TSTextFieldAccessibility`, `TSTextInputTraits`, `TSGrowingTextView` (package).
 - **Icons (C-14):** `eye-off` is not in the icon set, so the toggle uses `eye` with a selected state. Swap in `eye-off` for the revealed state once design adds it.

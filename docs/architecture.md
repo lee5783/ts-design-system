@@ -67,7 +67,7 @@ Rules:
 
 ### Dialog presenter (one per process, both platforms)
 
-`TSDialogPresenter` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/ts/ds/core/logic/TSDialogPresenter.kt`) enforces the DS rule "never stack dialogs". It grants one dialog at a time and **refuses** (never queues) a second one. The owner is held **weakly**: a deallocated owner frees the presenter. A dismissing action's handler runs **after** the presenter is released, so a handler can open the next dialog. All four toolkits use the same shared instance.
+`TSDialogPresenter` (`ios/Sources/TSFoundation/Logic/TSDialogPresenter.swift`, `android/core/src/main/kotlin/com/ts/ds/core/logic/TSDialogPresenter.kt`) enforces the DS rule "never stack dialogs": one dialog on screen at a time, shared by all four toolkits. Its `policy` (`TSDialogPolicy`) is `queue` by default: a declarative request (`request(owner, onGranted)`, used by SwiftUI `.tsDialog` and Compose `TSDialog`) that conflicts is kept in a weakly held FIFO and granted once the current dialog has fully dismissed; under `refuse` it is refused and the caller's binding is reset. Imperative presentations (`begin`, used by UIKit `present(from:)` and Views `present(manager, tag)`) are refused under either policy. `end(owner)` releases the slot and grants the next pending owner, or withdraws a pending request; `pendingCount`, `isPending` and `refusedCount` observe it. The owner is held **weakly**: a deallocated owner frees the presenter or drops out of the queue. A dismissing action's handler runs **before** dismissal, while the dialog still holds the slot; a follow-up dialog requested from it is queued (Compose, SwiftUI) or handed the slot when the first finishes (UIKit deferred `present(from:)`, Views `handOver`), so actions still chain. iOS actions can add an `afterDismissal` step for presenting non-TS UI. Android dialog windows inherit the host Activity's hidden system bars (immersive mode). The full contract, including queue semantics and the per-toolkit action order, is `design/specs/components/dialog.md`.
 
 Routes per OS:
 
@@ -153,7 +153,7 @@ The `TSCompat` paths live in `ios/Sources/TSFoundation/Compat/TSCompat.swift` (`
 ## Error handling
 
 - Generator and tooling errors stop with a message that names the file and the fix (for example the duplicate-key error in `merge-extensions.ts`, or `release-verify` refusals).
-- Library APIs do not throw for presentation conflicts: a refused dialog returns `false` (UIKit `present(from:)`, Views `present(manager, tag)`) or calls `onRefused` (SwiftUI, Compose).
+- Library APIs do not throw for presentation conflicts: a conflicting SwiftUI or Compose dialog is queued (default) or, under the `refuse` policy, calls `onRefused`; UIKit `present(from:)` and Views `present(manager, tag)` return `false`.
 
 ## Cross-cutting concerns
 

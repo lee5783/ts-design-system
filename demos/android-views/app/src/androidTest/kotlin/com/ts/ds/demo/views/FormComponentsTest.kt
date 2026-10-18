@@ -1,5 +1,6 @@
 package com.ts.ds.demo.views
 
+import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Checkable
@@ -85,6 +86,28 @@ class FormComponentsTest {
             toggle("Hide password").perform(scrollIntoView(), click())
             assertTrue(scenario.read { it.masked() })
             assertEquals("ada", scenario.read { it.text.toString() })
+        }
+    }
+
+    @Test
+    fun codeFieldShowsTypedCodeUnmaskedWithACapitalsKeyboard() {
+        launchDemo().use { scenario ->
+            openPage(DemoPageId.TextField)
+            onView(allOf(isDescendantOfA(withTag(TextFieldFragment.CODE_FIELD)), withClassName(endsWith("TSTextFieldInput"))))
+                .perform(closeSoftKeyboard(), scrollIntoView(), click(), typeText("AB12CD"), closeSoftKeyboard())
+            var text = ""
+            var masked = true
+            var inputType = 0
+            scenario.onActivity {
+                val code = it.window.decorView.findViewWithTag<TSTextFieldView>(TextFieldFragment.CODE_FIELD)
+                text = code.text.toString()
+                masked = code.masked()
+                inputType = code.editText.inputType
+            }
+            assertEquals("AB12CD", text)
+            assertFalse(masked)
+            assertTrue(inputType and InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS != 0)
+            assertTrue(inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0)
         }
     }
 

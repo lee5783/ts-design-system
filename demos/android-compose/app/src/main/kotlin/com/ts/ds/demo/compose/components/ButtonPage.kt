@@ -1,6 +1,7 @@
 package com.ts.ds.demo.compose.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,11 +11,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.button.TSButton
+import com.ts.ds.compose.components.icon.TSIconSource
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSButtonSize
 import com.ts.ds.core.style.TSButtonVariant
+import com.ts.ds.demo.compose.R
 import com.ts.ds.demo.compose.shell.OptionChip
 import com.ts.ds.demo.compose.shell.OptionGroup
 import com.ts.ds.demo.compose.shell.ToggleRow
@@ -26,6 +33,8 @@ object ButtonPageTags {
     const val PLAYGROUND_LOADING = "demo.button.playground.loading"
     const val PLAYGROUND_DISABLED = "demo.button.playground.disabled"
     const val LINK = "demo.button.variants.link"
+    const val CONSUMER_ICON = "demo.button.consumer-icon"
+    const val LINE_LIMIT = "demo.button.line-limit"
 
     fun variant(variant: TSButtonVariant): String = "demo.button.playground.variant.${variant.name.lowercase()}"
 }
@@ -71,8 +80,36 @@ fun LazyListScope.buttonPage() {
             trailingIcon = TSIcon.ArrowRight,
         )
     }
+    componentSection("button.consumer-icon", DemoR.string.demo_component_consumer_icon) {
+        val controller = TSIconSource.Vector(ImageVector.vectorResource(R.drawable.demo_ic_controller))
+        DemoComponentRow {
+            TSButton(
+                stringResource(DemoR.string.demo_sample_play_together),
+                onClick = {},
+                leadingIconSource = controller,
+                modifier = Modifier.testTag(ButtonPageTags.CONSUMER_ICON),
+            )
+            TSButton(stringResource(DemoR.string.demo_sample_play_together), onClick = {}, variant = TSButtonVariant.Secondary, leadingIconSource = controller)
+            TSButton(stringResource(DemoR.string.demo_sample_play_together), onClick = {}, leadingIconSource = controller, loading = true)
+        }
+    }
+    componentSection("button.line-limit", DemoR.string.demo_component_line_limit) {
+        TSButton(
+            stringResource(DemoR.string.demo_sample_join_tournament),
+            onClick = {},
+            variant = TSButtonVariant.Secondary,
+            leadingIconSource = TSIconSource.Vector(ImageVector.vectorResource(R.drawable.demo_ic_controller)),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .widthIn(max = LINE_LIMIT_WIDTH)
+                .testTag(ButtonPageTags.LINE_LIMIT),
+        )
+    }
     componentSection("button.playground", DemoR.string.demo_component_playground) { ButtonPlayground() }
 }
+
+private val LINE_LIMIT_WIDTH = 240.dp
 
 @Composable
 private fun ButtonPlayground() {

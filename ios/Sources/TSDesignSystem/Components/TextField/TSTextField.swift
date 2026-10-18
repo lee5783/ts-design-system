@@ -11,6 +11,7 @@ public struct TSTextField<Trailing: View>: View {
     let isReadOnly: Bool
     let isMultiline: Bool
     let inputTraits: TSTextInputTraits
+    let contentStyle: TSTextFieldContentStyle
     let trailing: Trailing
     var stateOverride: TSControlState?
     var multilinePath: TSCompatPath = TSCompat.multilineTextField
@@ -36,6 +37,36 @@ public struct TSTextField<Trailing: View>: View {
         inputTraits: TSTextInputTraits = .default,
         @ViewBuilder trailing: () -> Trailing
     ) {
+        self.init(
+            label,
+            text: text,
+            placeholder: placeholder,
+            hint: hint,
+            error: error,
+            leadingIcon: leadingIcon,
+            isSecure: isSecure,
+            isReadOnly: isReadOnly,
+            isMultiline: isMultiline,
+            inputTraits: inputTraits,
+            contentStyle: .default,
+            trailing: trailing
+        )
+    }
+
+    public init(
+        _ label: String,
+        text: Binding<String>,
+        placeholder: String = "",
+        hint: String? = nil,
+        error: String? = nil,
+        leadingIcon: TSIconName? = nil,
+        isSecure: Bool = false,
+        isReadOnly: Bool = false,
+        isMultiline: Bool = false,
+        inputTraits: TSTextInputTraits = .default,
+        contentStyle: TSTextFieldContentStyle,
+        @ViewBuilder trailing: () -> Trailing
+    ) {
         self.label = label
         _text = text
         self.placeholder = placeholder
@@ -46,6 +77,7 @@ public struct TSTextField<Trailing: View>: View {
         self.isReadOnly = isReadOnly
         self.isMultiline = isMultiline
         self.inputTraits = inputTraits
+        self.contentStyle = contentStyle
         self.trailing = trailing()
     }
 
@@ -55,7 +87,7 @@ public struct TSTextField<Trailing: View>: View {
             isFocused: isFocused || isEditingMultiline,
             hasError: error != nil
         )
-        let resolved = TSTextFieldStyleSpec.resolve(.init(state: state, isReadOnly: isReadOnly))
+        let resolved = TSTextFieldStyleSpec.resolve(.init(state: state, isReadOnly: isReadOnly, contentStyle: contentStyle))
         VStack(alignment: .leading, spacing: resolved.labelSpacing) {
             Text(label)
                 .foregroundColor(resolved.labelColor.color)
@@ -244,6 +276,36 @@ public extension TSTextField where Trailing == EmptyView {
             isReadOnly: isReadOnly,
             isMultiline: isMultiline,
             inputTraits: inputTraits
+        ) {
+            EmptyView()
+        }
+    }
+
+    init(
+        _ label: String,
+        text: Binding<String>,
+        placeholder: String = "",
+        hint: String? = nil,
+        error: String? = nil,
+        leadingIcon: TSIconName? = nil,
+        isSecure: Bool = false,
+        isReadOnly: Bool = false,
+        isMultiline: Bool = false,
+        inputTraits: TSTextInputTraits = .default,
+        contentStyle: TSTextFieldContentStyle
+    ) {
+        self.init(
+            label,
+            text: text,
+            placeholder: placeholder,
+            hint: hint,
+            error: error,
+            leadingIcon: leadingIcon,
+            isSecure: isSecure,
+            isReadOnly: isReadOnly,
+            isMultiline: isMultiline,
+            inputTraits: inputTraits,
+            contentStyle: contentStyle
         ) {
             EmptyView()
         }

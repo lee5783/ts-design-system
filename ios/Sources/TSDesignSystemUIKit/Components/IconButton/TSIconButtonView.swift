@@ -5,6 +5,10 @@ public final class TSIconButtonView: UIButton {
         didSet { setNeedsUpdateConfiguration() }
     }
 
+    public var iconImage: UIImage? {
+        didSet { setNeedsUpdateConfiguration() }
+    }
+
     public var label: String {
         didSet { setNeedsUpdateConfiguration() }
     }
@@ -48,6 +52,17 @@ public final class TSIconButtonView: UIButton {
         setNeedsUpdateConfiguration()
     }
 
+    public convenience init(
+        iconImage: UIImage,
+        label: String,
+        variant: TSIconButtonVariant = .ghost,
+        isRound: Bool = false,
+        primaryAction: UIAction? = nil
+    ) {
+        self.init(icon: .plus, label: label, variant: variant, isRound: isRound, primaryAction: primaryAction)
+        self.iconImage = iconImage
+    }
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) is not supported")
@@ -70,7 +85,7 @@ public final class TSIconButtonView: UIButton {
         let resolved = resolved
         let iconColor = resolved.icon.uiColor.resolvedColor(with: traitCollection)
         var configuration = UIButton.Configuration.plain()
-        configuration.image = icon.templateImage(pointSize: resolved.iconSize)
+        configuration.image = iconImage?.tsTemplateIcon(pointSize: resolved.iconSize) ?? icon.templateImage(pointSize: resolved.iconSize)
         configuration.baseForegroundColor = iconColor
         configuration.imageColorTransformer = UIConfigurationColorTransformer { _ in iconColor }
         configuration.contentInsets = .zero
@@ -81,7 +96,7 @@ public final class TSIconButtonView: UIButton {
         alpha = isDimmedByContainer ? 1 : resolved.opacity
         accessibilityLabel = label
         largeContentTitle = label
-        largeContentImage = icon.image()?.withRenderingMode(.alwaysTemplate)
+        largeContentImage = (iconImage ?? icon.image())?.withRenderingMode(.alwaysTemplate)
     }
 
     override public func layoutSubviews() {

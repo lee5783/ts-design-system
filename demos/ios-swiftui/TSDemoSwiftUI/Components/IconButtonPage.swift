@@ -25,6 +25,14 @@ struct IconButtonPage: View {
                     TSIconButton(.more, label: DemoStrings.string(.sampleMoreOptions), variant: .secondary, isRound: true) {}
                 }
             }
+            DemoComponentSection(.consumerIcon) {
+                HStack(spacing: TSSpacing.space3) {
+                    TSIconButton(.image(Image("DemoController")), label: DemoStrings.string(.sampleController)) {}
+                        .accessibilityIdentifier("demo.icon-button.consumer-icon")
+                    TSIconButton(.image(Image("DemoController")), label: DemoStrings.string(.sampleController), variant: .secondary) {}
+                    TSIconButton(.image(Image("DemoController")), label: DemoStrings.string(.sampleController), variant: .primary, isRound: true) {}
+                }
+            }
             DemoComponentSection(.states) {
                 ForEach(TSIconButtonVariant.allCases, id: \.self) { variant in
                     ForEach([false, true], id: \.self) { isRound in

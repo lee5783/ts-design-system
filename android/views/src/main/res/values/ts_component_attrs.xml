@@ -80,7 +80,23 @@
         <enum name="decimal" value="9" />
         <enum name="url" value="10" />
         <enum name="search" value="11" />
+        <enum name="code" value="12" />
     </attr>
+    <attr name="tsContentStyle" format="enum">
+        <enum name="plain" value="0" />
+        <enum name="code" value="1" />
+    </attr>
+    <attr name="tsSpinnerSize" format="enum">
+        <enum name="sm" value="0" />
+        <enum name="md" value="1" />
+        <enum name="lg" value="2" />
+    </attr>
+    <attr name="tsSpinnerTone" format="enum">
+        <enum name="primary" value="0" />
+        <enum name="secondary" value="1" />
+        <enum name="accent" value="2" />
+    </attr>
+    <attr name="tsExpanded" format="boolean" />
 
     <declare-styleable name="TSButtonView">
         <attr name="android:text" />
@@ -89,6 +105,8 @@
         <attr name="tsLeadingIcon" />
         <attr name="tsTrailingIcon" />
         <attr name="tsLoading" />
+        <attr name="android:maxLines" />
+        <attr name="android:ellipsize" />
     </declare-styleable>
 
     <declare-styleable name="TSIconButtonView">
@@ -123,6 +141,7 @@
         <attr name="tsMultiline" />
         <attr name="tsReadOnly" />
         <attr name="tsInputTraits" />
+        <attr name="tsContentStyle" />
     </declare-styleable>
 
     <declare-styleable name="TSCheckboxView">
@@ -157,6 +176,19 @@
         <attr name="tsName" />
         <attr name="tsTrailingText" />
         <attr name="tsShowsChevron" />
+    </declare-styleable>
+
+    <declare-styleable name="TSDisclosureListItemView">
+        <attr name="tsTitle" />
+        <attr name="tsSubtitle" />
+        <attr name="tsLeadingIcon" />
+        <attr name="tsName" />
+        <attr name="tsExpanded" />
+    </declare-styleable>
+
+    <declare-styleable name="TSSpinnerView">
+        <attr name="tsSpinnerSize" />
+        <attr name="tsSpinnerTone" />
     </declare-styleable>
 
     <declare-styleable name="TSCardView">

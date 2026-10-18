@@ -3,12 +3,18 @@ package com.ts.ds.views.components.button
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
@@ -82,6 +88,30 @@ public class TSButtonView @JvmOverloads constructor(
             applyConfiguration()
         }
 
+    public var leadingIconDrawable: Drawable? = null
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    public var trailingIconDrawable: Drawable? = null
+        set(value) {
+            field = value
+            applyConfiguration()
+        }
+
+    public var maxLines: Int
+        get() = labelView.maxLines
+        set(value) {
+            labelView.maxLines = value
+        }
+
+    public var ellipsize: TextUtils.TruncateAt?
+        get() = labelView.ellipsize
+        set(value) {
+            labelView.ellipsize = value
+        }
+
     public var isLoading: Boolean = false
         set(value) {
             field = value
@@ -133,10 +163,20 @@ public class TSButtonView @JvmOverloads constructor(
             trailingIcon = getString(R.styleable.TSButtonView_tsTrailingIcon)?.let(TSIcons::fromDsName)
             userEnabled = isEnabled
             isLoading = getBoolean(R.styleable.TSButtonView_tsLoading, false)
+            maxLines = getInt(R.styleable.TSButtonView_android_maxLines, Int.MAX_VALUE)
+            ellipsize = ELLIPSIZE.getOrNull(getInt(R.styleable.TSButtonView_android_ellipsize, -1) - 1)
             recycle()
         }
         ready = true
         applyConfiguration()
+    }
+
+    public fun setLeadingIconResource(@DrawableRes resId: Int) {
+        leadingIconDrawable = AppCompatResources.getDrawable(context, resId)
+    }
+
+    public fun setTrailingIconResource(@DrawableRes resId: Int) {
+        trailingIconDrawable = AppCompatResources.getDrawable(context, resId)
     }
 
     override fun setEnabled(enabled: Boolean) {
@@ -206,6 +246,11 @@ public class TSButtonView @JvmOverloads constructor(
                 leadingView.visibility = VISIBLE
                 if (isAttachedToWindow) spinner.start()
             }
+            leadingIconDrawable != null -> {
+                spinner.stop()
+                leadingView.setImageDrawable(leadingIconDrawable)
+                leadingView.visibility = VISIBLE
+            }
             leadingIcon != null -> {
                 spinner.stop()
                 leadingView.setImageResource(requireNotNull(leadingIcon).drawableRes)
@@ -217,9 +262,17 @@ public class TSButtonView @JvmOverloads constructor(
                 leadingView.visibility = GONE
             }
         }
-        trailingView.visibility = if (trailingIcon == null) GONE else VISIBLE
-        trailingIcon?.let { trailingView.setImageResource(it.drawableRes) }
+        val trailingDrawable = trailingIconDrawable
+        val trailing = trailingIcon
+        trailingView.visibility = if (trailingDrawable == null && trailing == null) GONE else VISIBLE
+        when {
+            trailingDrawable != null -> trailingView.setImageDrawable(trailingDrawable)
+            trailing != null -> trailingView.setImageResource(trailing.drawableRes)
+        }
         listOf(leadingView, trailingView).forEach { ImageViewCompat.setImageTintList(it, labelColor) }
+        val consumerTint = PorterDuffColorFilter(labelColor.defaultColor, PorterDuff.Mode.SRC_IN)
+        leadingView.colorFilter = consumerTint.takeIf { leadingIconDrawable != null && !resolved.showsSpinner }
+        trailingView.colorFilter = consumerTint.takeIf { trailingDrawable != null }
         applyState()
     }
 
@@ -240,5 +293,6 @@ public class TSButtonView @JvmOverloads constructor(
 
     private companion object {
         const val MEDIUM_FAMILY = "sans-serif-medium"
+        val ELLIPSIZE = listOf(TextUtils.TruncateAt.START, TextUtils.TruncateAt.MIDDLE, TextUtils.TruncateAt.END, TextUtils.TruncateAt.MARQUEE)
     }
 }

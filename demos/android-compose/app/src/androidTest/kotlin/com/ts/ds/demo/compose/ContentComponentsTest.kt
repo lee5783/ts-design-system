@@ -17,20 +17,26 @@ import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.ts.ds.core.style.TSTextColor
+import com.ts.ds.core.style.TSTypeRole
 import com.ts.ds.demo.compose.components.AvatarPageTags
 import com.ts.ds.demo.compose.components.BadgePageTags
 import com.ts.ds.demo.compose.components.CardPageTags
 import com.ts.ds.demo.compose.components.ListItemPageTags
 import com.ts.ds.demo.compose.components.ListItemTrailingOption
+import com.ts.ds.demo.compose.components.TextPageTags
 import com.ts.ds.demo.support.R as DemoR
 import com.ts.ds.demo.support.catalog.DemoPageId
 import com.ts.ds.demo.support.sample.SampleData
@@ -65,6 +71,67 @@ class ContentComponentsTest {
 
     private fun ComposeTestRule.width(tag: String): Float =
         onNodeWithTag(tag).getUnclippedBoundsInRoot().let { it.right - it.left }.value
+
+    @Test
+    fun listItemDisclosureRowExpandsItsBody() {
+        launchDemo().use {
+            composeRule.openPage(DemoPageId.ListItem)
+            val kotlin = ListItemPageTags.disclosure("kotlin")
+            val snapshot = ListItemPageTags.disclosure("snapshot")
+            val kotlinHeader = hasText(resources.getString(DemoR.string.demo_sample_licence_kotlin)) and hasClickAction()
+            val snapshotHeader = hasText(resources.getString(DemoR.string.demo_sample_licence_snapshot)) and hasClickAction()
+            composeRule.scrollTo(snapshot)
+            composeRule.onNode(kotlinHeader, useUnmergedTree = false)
+                .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Collapsed"))
+                .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
+            composeRule.onNodeWithTag(ListItemPageTags.DISCLOSURE_BODY).assertDoesNotExist()
+            composeRule.onNode(kotlinHeader).performClick()
+            composeRule.waitForIdle()
+            composeRule.onNode(kotlinHeader).assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Expanded"))
+            composeRule.onNodeWithTag(ListItemPageTags.DISCLOSURE_BODY)
+                .assertTextEquals(resources.getString(DemoR.string.demo_sample_licence_apache_body))
+            composeRule.scrollTo(snapshot)
+            composeRule.onNode(snapshotHeader).performClick()
+            composeRule.waitForIdle()
+            composeRule.onNode(snapshotHeader).assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Expanded"))
+            composeRule.onNode(kotlinHeader).assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Collapsed"))
+            composeRule.onNodeWithTag(ListItemPageTags.DISCLOSURE_BODY)
+                .assertTextEquals(resources.getString(DemoR.string.demo_sample_licence_mit_body))
+            composeRule.onNode(snapshotHeader).performSemanticsAction(SemanticsActions.Collapse)
+            composeRule.waitForIdle()
+            composeRule.onNodeWithTag(ListItemPageTags.DISCLOSURE_BODY).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun listItemLazyListRowsAreDividedOutsideAList() {
+        launchDemo().use {
+            composeRule.openPage(DemoPageId.ListItem)
+            composeRule.scrollTo(ListItemPageTags.LAZY_DIVIDER)
+            assertTrue(composeRule.onAllNodesWithTag(ListItemPageTags.LAZY_DIVIDER).fetchSemanticsNodes().isNotEmpty())
+        }
+    }
+
+    @Test
+    fun textPageShowsEveryTypeRoleAndTextColor() {
+        launchDemo().use {
+            composeRule.openPage(DemoPageId.Text)
+            val pangram = resources.getString(DemoR.string.demo_sample_pangram)
+            TSTypeRole.entries.forEach { role ->
+                val tag = TextPageTags.role(role)
+                composeRule.scrollTo(tag)
+                composeRule.onNodeWithTag(tag).assertTextEquals(if (role == TSTypeRole.Overline) pangram.uppercase() else pangram)
+            }
+            TSTextColor.entries.forEach { color ->
+                val tag = TextPageTags.color(color)
+                composeRule.scrollTo(tag)
+                composeRule.onNodeWithTag(tag).assertTextEquals(color.name.lowercase())
+            }
+            composeRule.scrollTo(TextPageTags.TRUNCATED)
+            composeRule.onNodeWithTag(TextPageTags.TRUNCATED)
+                .assertTextEquals(resources.getString(DemoR.string.demo_sample_long_setting))
+        }
+    }
 
     @Test
     fun badgeIsStaticTextLabelledByItsText() {

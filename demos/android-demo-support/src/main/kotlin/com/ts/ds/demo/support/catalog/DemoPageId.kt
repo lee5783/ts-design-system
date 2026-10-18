@@ -34,6 +34,8 @@ public enum class DemoPageId(
     Dialog("dialog", DemoPageKind.Component, R.string.demo_page_dialog),
     Toast("toast", DemoPageKind.Component, R.string.demo_page_toast),
     BottomNav("bottom-nav", DemoPageKind.Component, R.string.demo_page_bottom_nav),
+    Spinner("spinner", DemoPageKind.Component, R.string.demo_page_spinner),
+    Text("text", DemoPageKind.Component, R.string.demo_page_text),
     ;
 
     public val testTag: String

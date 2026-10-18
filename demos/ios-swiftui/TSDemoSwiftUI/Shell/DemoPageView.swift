@@ -50,6 +50,10 @@ struct DemoPageView: View {
             ToastPage()
         case .bottomNav:
             BottomNavPage()
+        case .spinner:
+            SpinnerPage()
+        case .text:
+            TextPage()
         }
     }
 }

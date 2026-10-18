@@ -25,6 +25,16 @@ class TSListItemViewSnapshotTest(private val variant: SnapshotVariant) {
         captureViewSnapshot(SnapshotEnvironment.file(javaClass, "states", variant), variant, R.style.Theme_TS, content = ::listItemStatesSample)
     }
 
+    @Test
+    fun disclosure() {
+        captureViewSnapshot(SnapshotEnvironment.file(javaClass, "disclosure", variant), variant, R.style.Theme_TS, content = ::listItemDisclosureSample)
+    }
+
+    @Test
+    fun divider() {
+        captureViewSnapshot(SnapshotEnvironment.file(javaClass, "divider", variant), variant, R.style.Theme_TS, content = ::listItemDividerSample)
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")

@@ -1,11 +1,16 @@
 package com.ts.ds.views.components.button
 
+import android.graphics.Color
 import android.graphics.Typeface
+import android.text.TextUtils
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.view.drawToBitmap
+import androidx.core.widget.ImageViewCompat
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSButtonSize
 import com.ts.ds.core.style.TSButtonVariant
@@ -14,6 +19,8 @@ import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
 import com.ts.ds.views.components.shared.TSSpinnerDrawable
 import com.ts.ds.views.components.tapCenter
+import com.ts.ds.views.snapshots.sampleController
+import com.ts.ds.views.theme.tsColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -166,5 +173,81 @@ class TSButtonViewTest {
         assertEquals(TSIcon.Trash, view.leadingIcon)
         assertEquals(TSIcon.ArrowRight, view.trailingIcon)
         assertTrue(view.isLoading)
+    }
+
+    @Test
+    fun consumerDrawablesFillTheIconSlotsAndAreTinted() {
+        val view = button {
+            leadingIconDrawable = context.sampleController(48f)
+            trailingIconDrawable = context.sampleController()
+        }
+        val reference = button { leadingIcon = TSIcon.Plus; trailingIcon = TSIcon.Plus }
+        val leading = view.getChildAt(0) as ImageView
+        val trailing = view.getChildAt(2) as ImageView
+
+        listOf(leading, trailing).forEach {
+            assertEquals(View.VISIBLE, it.visibility)
+            assertEquals(20, it.width)
+            assertEquals(20, it.height)
+            assertEquals(view.tsColor(view.resolved.label), ImageViewCompat.getImageTintList(it)?.defaultColor)
+            assertEquals(ImageView.IMPORTANT_FOR_ACCESSIBILITY_NO, it.importantForAccessibility)
+        }
+        assertEquals(reference.width, view.width)
+        assertEquals(reference.height, view.height)
+        val labelRgb = view.tsColor(view.resolved.label) and 0xFFFFFF
+        val inked = leading.drawToBitmap().let { bitmap ->
+            (0 until bitmap.width).flatMap { x -> (0 until bitmap.height).map { y -> bitmap.getPixel(x, y) } }
+        }.filter { Color.alpha(it) == 255 }
+        assertTrue(inked.isNotEmpty())
+        assertTrue(inked.all { it and 0xFFFFFF == labelRgb })
+    }
+
+    @Test
+    fun spinnerReplacesOnlyTheLeadingConsumerDrawable() {
+        val view = button {
+            leadingIconDrawable = context.sampleController()
+            trailingIconDrawable = context.sampleController()
+            isLoading = true
+        }
+
+        assertTrue((view.getChildAt(0) as ImageView).drawable is TSSpinnerDrawable)
+        assertEquals(View.VISIBLE, view.getChildAt(2).visibility)
+    }
+
+    @Test
+    fun maxLinesKeepsTheLabelOnOneLineWithAnEllipsis() {
+        val title = "Join the session with a very long label"
+        val limited = hostInActivity { context ->
+            android.widget.FrameLayout(context).apply {
+                addView(
+                    TSButtonView(context).apply {
+                        text = title
+                        maxLines = 1
+                        ellipsize = TextUtils.TruncateAt.END
+                    },
+                    android.widget.FrameLayout.LayoutParams(160, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT),
+                )
+            }
+        }.getChildAt(0) as TSButtonView
+        val label = limited.getChildAt(1) as TextView
+
+        assertEquals(1, label.lineCount)
+        assertTrue(label.layout.getEllipsisCount(0) > 0)
+        assertEquals(48, limited.height)
+    }
+
+    @Test
+    fun inflatesLineControlFromXml() {
+        val attrs = Robolectric.buildAttributeSet()
+            .addAttribute(android.R.attr.text, "Join")
+            .addAttribute(android.R.attr.maxLines, "1")
+            .addAttribute(android.R.attr.ellipsize, "end")
+            .build()
+        val view = hostInActivity { TSButtonView(it, attrs) }
+
+        assertEquals(1, view.maxLines)
+        assertEquals(TextUtils.TruncateAt.END, view.ellipsize)
+        assertEquals(Int.MAX_VALUE, button().maxLines)
+        assertNull(button().ellipsize)
     }
 }

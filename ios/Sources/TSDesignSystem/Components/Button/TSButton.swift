@@ -4,8 +4,8 @@ public struct TSButton: View {
     let title: String
     let variant: TSButtonVariant
     let size: TSButtonSize
-    let leadingIcon: TSIconName?
-    let trailingIcon: TSIconName?
+    let leadingIcon: TSIconSource?
+    let trailingIcon: TSIconSource?
     let isLoading: Bool
     let isBlock: Bool
     let action: () -> Void
@@ -24,11 +24,33 @@ public struct TSButton: View {
         isBlock: Bool = false,
         action: @escaping () -> Void
     ) {
+        self.init(
+            title,
+            variant: variant,
+            size: size,
+            leadingIconSource: leadingIcon.map(TSIconSource.ts),
+            trailingIconSource: trailingIcon.map(TSIconSource.ts),
+            isLoading: isLoading,
+            isBlock: isBlock,
+            action: action
+        )
+    }
+
+    public init(
+        _ title: String,
+        variant: TSButtonVariant = .primary,
+        size: TSButtonSize = .md,
+        leadingIconSource: TSIconSource?,
+        trailingIconSource: TSIconSource? = nil,
+        isLoading: Bool = false,
+        isBlock: Bool = false,
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.variant = variant
         self.size = size
-        self.leadingIcon = leadingIcon
-        self.trailingIcon = trailingIcon
+        self.leadingIcon = leadingIconSource
+        self.trailingIcon = trailingIconSource
         self.isLoading = isLoading
         self.isBlock = isBlock
         self.action = action
@@ -72,7 +94,7 @@ public struct TSButton: View {
                 TSSpinner(size: resolved.spinnerSize, lineWidth: resolved.spinnerStrokeWidth, color: resolved.label.color)
                     .frame(width: resolved.iconSize, height: resolved.iconSize)
             } else if let leadingIcon {
-                TSIcon(leadingIcon, size: .md)
+                TSIconSourceView(source: leadingIcon, pointSize: resolved.iconSize)
             }
             Text(title)
                 .underline(resolved.isUnderlined)
@@ -80,7 +102,7 @@ public struct TSButton: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .tsFont(resolved.font)
             if let trailingIcon {
-                TSIcon(trailingIcon, size: .md)
+                TSIconSourceView(source: trailingIcon, pointSize: resolved.iconSize)
             }
         }
     }

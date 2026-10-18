@@ -70,6 +70,19 @@ export function composeColors(model: TokenModel): string {
   );
 }
 
+export function composeControllerColors(model: TokenModel): string {
+  const tokens = model.controller.color;
+  return kotlinFile(
+    COMPOSE_THEME_PACKAGE,
+    ["androidx.compose.runtime.Immutable", "androidx.compose.ui.graphics.Color", TOKEN_VALUES],
+    [
+      themedClass("TSControllerColors", "Color", tokens),
+      factory("lightTSControllerColors", "TSControllerColors", tokens, (token) => `Color(TSTokenValues.LightControllerColors.${name(token)})`),
+      factory("darkTSControllerColors", "TSControllerColors", tokens, (token) => `Color(TSTokenValues.DarkControllerColors.${name(token)})`),
+    ],
+  );
+}
+
 export function composeTypography(model: TokenModel): string {
   const textStyle = [
     "private fun tsTextStyle(values: TSTypeValues, fontWeight: (Int) -> FontWeight): TextStyle =",
@@ -175,6 +188,8 @@ export function composeTheme(model: TokenModel): GeneratedFile[] {
     { path: `${THEME_DIR}/TSShapes.kt`, contents: composeShapes(model) },
     { path: `${THEME_DIR}/TSElevation.kt`, contents: composeElevation(model) },
     { path: `${THEME_DIR}/TSMotion.kt`, contents: composeMotion(model) },
+    { path: `${THEME_DIR}/TSControllerColors.kt`, contents: composeControllerColors(model) },
+    { path: `${THEME_DIR}/TSControllerSize.kt`, contents: dpObject("TSControllerSize", "ControllerSize", model.controller.size) },
   ];
 }
 

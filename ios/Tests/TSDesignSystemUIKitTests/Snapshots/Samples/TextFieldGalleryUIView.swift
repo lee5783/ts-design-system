@@ -4,6 +4,7 @@ import UIKit
 enum TextFieldGalleryPage: String, CaseIterable {
     case states
     case content
+    case code
 }
 
 enum TextFieldSample {
@@ -21,6 +22,8 @@ final class TextFieldGalleryUIView: GalleryStackView {
             addStates()
         case .content:
             addContent()
+        case .code:
+            addCode()
         }
     }
 
@@ -50,5 +53,20 @@ final class TextFieldGalleryUIView: GalleryStackView {
         stack.addArrangedSubview(revealed)
         stack.addArrangedSubview(TSTextFieldView(label: "Bio", text: TextFieldSample.shortText, placeholder: "Tell us about yourself", isMultiline: true))
         stack.addArrangedSubview(TSTextFieldView(label: "Notes", text: TextFieldSample.longText, isMultiline: true))
+    }
+
+    private func addCode() {
+        let hint = "6 characters, letters and digits"
+        let idle = TSTextFieldView(label: "Idle", placeholder: "ABCDEF", hint: hint, inputTraits: .code)
+        let filled = TSTextFieldView(label: "Filled", text: "0O1I5S", hint: hint, inputTraits: .code)
+        let focused = TSTextFieldView(label: "Focused", text: "0O1I5S", hint: hint, inputTraits: .code)
+        focused.forcedFocus = true
+        let error = TSTextFieldView(label: "Error", text: "0O1", hint: hint, errorMessage: "Enter all 6 characters", inputTraits: .code)
+        let disabled = TSTextFieldView(label: "Disabled", text: "0O1I5S", hint: hint, inputTraits: .code)
+        disabled.isEnabled = false
+        for field in [idle, filled, focused, error, disabled] {
+            field.contentStyle = .code
+            stack.addArrangedSubview(field)
+        }
     }
 }

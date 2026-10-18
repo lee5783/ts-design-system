@@ -36,6 +36,8 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case leadingIcon = "demo.component.leading-icon"
     case trailingIcon = "demo.component.trailing-icon"
     case bothIcons = "demo.component.both-icons"
+    case consumerIcon = "demo.component.consumer-icon"
+    case lineLimit = "demo.component.line-limit"
     case labelled = "demo.component.label"
     case sampleSave = "demo.sample.save"
     case sampleCancel = "demo.sample.cancel"
@@ -44,6 +46,9 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleLearnMore = "demo.sample.learn-more"
     case sampleContinue = "demo.sample.continue"
     case sampleGetStarted = "demo.sample.get-started"
+    case samplePlayTogether = "demo.sample.play-together"
+    case sampleJoinTournament = "demo.sample.join-tournament"
+    case sampleController = "demo.sample.controller"
     case sampleSearch = "demo.sample.search"
     case sampleMoreOptions = "demo.sample.more-options"
     case sampleClose = "demo.sample.close"
@@ -73,6 +78,7 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case password = "demo.component.password"
     case multiline = "demo.component.multiline"
     case keyboardTypes = "demo.component.keyboard-types"
+    case codeEntry = "demo.component.code-entry"
     case stateFilled = "demo.component.filled"
     case stateError = "demo.component.error"
     case stateReadOnly = "demo.component.read-only"
@@ -97,6 +103,9 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleAmount = "demo.sample.amount"
     case sampleWebsite = "demo.sample.website"
     case sampleCode = "demo.sample.code"
+    case sampleJoinCode = "demo.sample.join-code"
+    case sampleJoinCodeHint = "demo.sample.join-code-hint"
+    case sampleJoinCodePlaceholder = "demo.sample.join-code-placeholder"
     case stateOff = "demo.component.off"
     case stateOn = "demo.component.on"
     case stateUnchecked = "demo.component.unchecked"
@@ -181,6 +190,7 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleProjectNameValue = "demo.sample.project-name-value"
     case sampleStackingTitle = "demo.sample.stacking-title"
     case sampleStackingBody = "demo.sample.stacking-body"
+    case sampleStackingQueueBody = "demo.sample.stacking-queue-body"
     case sampleArchiveTitle = "demo.sample.archive-title"
     case sampleArchive = "demo.sample.archive"
     case sampleLongDialogBody = "demo.sample.long-dialog-body"
@@ -216,6 +226,18 @@ public enum DemoStringKey: String, CaseIterable, Sendable {
     case sampleAddHundred = "demo.sample.add-hundred"
     case sampleMarkAllRead = "demo.sample.mark-all-read"
     case sampleShellBody = "demo.sample.shell-body"
+    case typeRoles = "demo.component.type-roles"
+    case textColors = "demo.component.text-colors"
+    case inContext = "demo.component.in-context"
+    case lazyDivider = "demo.component.lazy-divider"
+    case disclosure = "demo.component.disclosure"
+    case sampleLoadingMessages = "demo.sample.loading-messages"
+    case sampleLicenceKotlin = "demo.sample.licence-kotlin"
+    case sampleLicenceSnapshot = "demo.sample.licence-snapshot"
+    case sampleLicenceApache = "demo.sample.licence-apache"
+    case sampleLicenceMIT = "demo.sample.licence-mit"
+    case sampleLicenceApacheBody = "demo.sample.licence-apache-body"
+    case sampleLicenceMITBody = "demo.sample.licence-mit-body"
 }
 
 public enum DemoStrings {
@@ -233,6 +255,10 @@ public enum DemoStrings {
 
     public static func refusedCount(_ count: Int) -> String {
         String(format: string(rawKey: "demo.component.refused-count"), locale: .current, count)
+    }
+
+    public static func queuedCount(_ count: Int) -> String {
+        String(format: string(rawKey: "demo.component.queued-count"), locale: .current, count)
     }
 
     public static func pageTitle(_ page: DemoPageID) -> String {

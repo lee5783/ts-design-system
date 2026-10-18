@@ -34,6 +34,8 @@ val DemoPageId.destinationId: Int
         DemoPageId.Dialog -> R.id.page_dialog
         DemoPageId.Toast -> R.id.page_toast
         DemoPageId.BottomNav -> R.id.page_bottom_nav
+        DemoPageId.Spinner -> R.id.page_spinner
+        DemoPageId.Text -> R.id.page_text
         else -> R.id.page_pending_component
     }
 

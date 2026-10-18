@@ -93,6 +93,19 @@ struct TSListItemStyleSpecTests {
         #expect(group.headerFont == .overline)
         #expect(group.headerColor == .textMuted)
     }
+
+    @Test("The disclosure chevron turns down over duration-base, mirrored in RTL")
+    func disclosure() {
+        let disclosure = TSListItemStyleSpec.disclosure
+        #expect(disclosure.rotationDegrees(isExpanded: false, isRightToLeft: false) == 0)
+        #expect(disclosure.rotationDegrees(isExpanded: false, isRightToLeft: true) == 0)
+        #expect(disclosure.rotationDegrees(isExpanded: true, isRightToLeft: false) == 90)
+        #expect(disclosure.rotationDegrees(isExpanded: true, isRightToLeft: true) == -90)
+        #expect(disclosure.animationDuration == TSMotion.durationBase)
+        #expect(disclosure.animationEasing == TSMotion.easingStandard)
+        #expect(disclosure.bodyHorizontalPadding == TSSpacing.space4)
+        #expect(disclosure.bodyBottomPadding == TSSpacing.space3)
+    }
 }
 
 @Suite("TSListItemAccessibility")
@@ -123,5 +136,11 @@ struct TSListItemAccessibilityTests {
         #expect(TSListItemAccessibility.hint(for: .action) == nil)
         #expect(TSListItemAccessibility.hint(for: .toggle) == nil)
         #expect(TSListItemAccessibility.hint(for: .plain) == nil)
+    }
+
+    @Test("A disclosure row reports Expanded or Collapsed")
+    func expansionValue() {
+        #expect(TSListItemAccessibility.expansionValue(isExpanded: true) == "Expanded")
+        #expect(TSListItemAccessibility.expansionValue(isExpanded: false) == "Collapsed")
     }
 }

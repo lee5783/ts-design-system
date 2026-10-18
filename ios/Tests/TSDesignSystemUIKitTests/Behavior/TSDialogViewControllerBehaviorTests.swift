@@ -8,6 +8,13 @@ struct TSDialogViewControllerBehaviorTests {
     private final class Owner {}
 
     @MainActor
+    private final class WeakBox {
+        weak var value: TSDialogViewController?
+    }
+
+    private let dialogOwner = WeakBox()
+
+    @MainActor
     private final class Host {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
         let root = UIViewController()
@@ -188,28 +195,124 @@ struct TSDialogViewControllerBehaviorTests {
         #expect(!presenter.isPresenting)
     }
 
-    @Test("A dismissing action's handler runs after the presenter is released, so it can present a follow-up dialog")
+    @Test("A dismissing action's handler runs while the dialog still holds the presenter; a follow-up it presents is shown once the dialog has dismissed")
     func chainedDialog() {
         let presenter = TSDialogPresenter()
         let host = Host()
         var followUpPresented = false
-        var wasFreeInHandler = false
+        var heldInHandler = false
         let followUp = makeDialog(presenter: presenter)
         let dialog = TSDialogViewController(
             title: "Delete this project?",
             actions: [
                 TSDialogAction("Delete", variant: .danger) {
-                    wasFreeInHandler = !presenter.isPresenting
+                    heldInHandler = presenter.isActive(dialogOwner.value!)
                     followUpPresented = followUp.present(from: host.root, animated: false)
                 }
+            ]
+        )
+        dialogOwner.value = dialog
+        dialog.presenter = presenter
+        presenter.begin(dialog)
+        dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
+        #expect(heldInHandler)
+        #expect(followUpPresented)
+        #expect(presenter.isActive(followUp))
+        #expect(followUp.presentingViewController === host.root)
+        #expect(presenter.refusedCount == 0)
+    }
+
+    @Test("A follow-up presented from the handler of an on-screen dialog waits for that dialog's dismissal instead of stacking or being refused")
+    func chainedDialogWaitsForTheDismissal() {
+        let presenter = TSDialogPresenter()
+        let host = Host()
+        var followUpPresented = false
+        let followUp = makeDialog(presenter: presenter)
+        let dialog = TSDialogViewController(
+            title: "Delete this project?",
+            actions: [TSDialogAction("Delete", variant: .danger) { followUpPresented = followUp.present(from: host.root, animated: false) }]
+        )
+        dialog.presenter = presenter
+        #expect(dialog.present(from: host.root, animated: false))
+        dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
+        #expect(followUpPresented)
+        #expect(followUp.presentingViewController == nil)
+        #expect(!presenter.isActive(followUp))
+        #expect(presenter.refusedCount == 0)
+    }
+
+    @Test("A chained dialog takes the slot ahead of a queued request; a deferred presentation that UIKit refuses still calls its completion and frees the presenter")
+    func chainedHandOverAndFailure() {
+        let presenter = TSDialogPresenter()
+        let host = Host()
+        let queued = Owner()
+        var granted = 0
+        var completed = false
+        let followUp = makeDialog(presenter: presenter)
+        let dialog = TSDialogViewController(
+            title: "Delete this project?",
+            actions: [TSDialogAction("Delete", variant: .danger) { _ = followUp.present(from: host.root, animated: false) { completed = true } }]
+        )
+        dialog.presenter = presenter
+        presenter.begin(dialog)
+        presenter.request(queued) { granted += 1 }
+        host.root.present(UIViewController(), animated: false)
+        dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
+        #expect(completed)
+        #expect(followUp.presentingViewController == nil)
+        #expect(presenter.isActive(queued))
+        #expect(granted == 1)
+    }
+
+    @Test("A dialog presented from another window inside a handler is not deferred and is refused")
+    func otherWindowIsNotChained() {
+        let presenter = TSDialogPresenter()
+        let host = Host()
+        let other = Host()
+        var presentedFromOtherWindow: Bool?
+        let followUp = makeDialog(presenter: presenter)
+        let dialog = TSDialogViewController(
+            title: "Delete this project?",
+            actions: [TSDialogAction("Delete", variant: .danger) { presentedFromOtherWindow = followUp.present(from: other.root, animated: false) }]
+        )
+        dialog.presenter = presenter
+        #expect(dialog.present(from: host.root, animated: false))
+        dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
+        #expect(presentedFromOtherWindow == false)
+        #expect(presenter.refusedCount == 1)
+    }
+
+    @Test("An action's after-dismissal step runs once the dialog has released the presenter, so it can present a system alert from the source")
+    func afterDismissalPresentsAnAlert() {
+        let presenter = TSDialogPresenter()
+        let host = Host()
+        var order: [String] = []
+        let dialog = TSDialogViewController(
+            title: "Share this project?",
+            actions: [
+                TSDialogAction("Share", variant: .primary, handler: { order.append(presenter.isPresenting ? "handler" : "handler-without-claim") }, afterDismissal: {
+                    order.append(presenter.isPresenting ? "after-while-held" : "after")
+                    host.root.present(UIAlertController(title: "Shared", message: nil, preferredStyle: .alert), animated: false)
+                })
             ]
         )
         dialog.presenter = presenter
         presenter.begin(dialog)
         dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
-        #expect(wasFreeInHandler)
-        #expect(followUpPresented)
-        #expect(presenter.isActive(followUp))
+        #expect(order == ["handler", "after"])
+        #expect(host.root.presentedViewController is UIAlertController)
+    }
+
+    @Test("Outside an action handler a second dialog is still refused while one is on screen")
+    func refusedOutsideAHandler() {
+        let presenter = TSDialogPresenter()
+        let host = Host()
+        let dialog = TSDialogViewController(title: "One", actions: [TSDialogAction("Stay", dismisses: false)])
+        dialog.presenter = presenter
+        #expect(dialog.present(from: host.root, animated: false))
+        dialog.panelView.actionButtons[0].sendActions(for: .primaryActionTriggered)
+        #expect(!makeDialog(presenter: presenter).present(from: host.root, animated: false))
+        #expect(presenter.refusedCount == 1)
     }
 
     @Test("Escape closes the dialog, calls onDismiss and frees the presenter for the next dialog")

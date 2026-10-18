@@ -74,20 +74,30 @@ public final class com/ts/ds/views/components/button/TSButtonView : android/widg
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getEllipsize ()Landroid/text/TextUtils$TruncateAt;
 	public final fun getLeadingIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getLeadingIconDrawable ()Landroid/graphics/drawable/Drawable;
 	public final fun getLoadingDescription ()Ljava/lang/CharSequence;
+	public final fun getMaxLines ()I
 	public final fun getSize ()Lcom/ts/ds/core/style/TSButtonSize;
 	public final fun getText ()Ljava/lang/CharSequence;
 	public final fun getTrailingIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getTrailingIconDrawable ()Landroid/graphics/drawable/Drawable;
 	public final fun getVariant ()Lcom/ts/ds/core/style/TSButtonVariant;
 	public final fun isLoading ()Z
+	public final fun setEllipsize (Landroid/text/TextUtils$TruncateAt;)V
 	public fun setEnabled (Z)V
 	public final fun setLeadingIcon (Lcom/ts/ds/core/icon/TSIcon;)V
+	public final fun setLeadingIconDrawable (Landroid/graphics/drawable/Drawable;)V
+	public final fun setLeadingIconResource (I)V
 	public final fun setLoading (Z)V
 	public final fun setLoadingDescription (Ljava/lang/CharSequence;)V
+	public final fun setMaxLines (I)V
 	public final fun setSize (Lcom/ts/ds/core/style/TSButtonSize;)V
 	public final fun setText (Ljava/lang/CharSequence;)V
 	public final fun setTrailingIcon (Lcom/ts/ds/core/icon/TSIcon;)V
+	public final fun setTrailingIconDrawable (Landroid/graphics/drawable/Drawable;)V
+	public final fun setTrailingIconResource (I)V
 	public final fun setVariant (Lcom/ts/ds/core/style/TSButtonVariant;)V
 }
 
@@ -215,14 +225,49 @@ public final class com/ts/ds/views/components/iconbutton/TSIconButtonView : andr
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun getIconDrawable ()Landroid/graphics/drawable/Drawable;
 	public final fun getLabel ()Ljava/lang/CharSequence;
 	public final fun getVariant ()Lcom/ts/ds/core/style/TSIconButtonVariant;
 	public final fun isRound ()Z
 	public fun setEnabled (Z)V
 	public final fun setIcon (Lcom/ts/ds/core/icon/TSIcon;)V
+	public final fun setIconDrawable (Landroid/graphics/drawable/Drawable;)V
+	public final fun setIconResource (I)V
 	public final fun setLabel (Ljava/lang/CharSequence;)V
 	public final fun setRound (Z)V
 	public final fun setVariant (Lcom/ts/ds/core/style/TSIconButtonVariant;)V
+}
+
+public final class com/ts/ds/views/components/listitem/TSDisclosureListItemView : android/widget/LinearLayout {
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun addView (Landroid/view/View;ILandroid/view/ViewGroup$LayoutParams;)V
+	public final fun getLeading ()Lcom/ts/ds/views/components/listitem/TSListItemLeading;
+	public final fun getSubtitle ()Ljava/lang/CharSequence;
+	public final fun getTitle ()Ljava/lang/CharSequence;
+	public final fun isExpanded ()Z
+	public fun onRtlPropertiesChanged (I)V
+	public fun removeAllViews ()V
+	public fun removeView (Landroid/view/View;)V
+	public fun setEnabled (Z)V
+	public final fun setExpanded (Z)V
+	public final fun setLeading (Lcom/ts/ds/views/components/listitem/TSListItemLeading;)V
+	public final fun setOnExpandedChangeListener (Lcom/ts/ds/views/components/listitem/TSDisclosureListItemView$OnExpandedChangeListener;)V
+	public final fun setSubtitle (Ljava/lang/CharSequence;)V
+	public final fun setTitle (Ljava/lang/CharSequence;)V
+}
+
+public abstract interface class com/ts/ds/views/components/listitem/TSDisclosureListItemView$OnExpandedChangeListener {
+	public abstract fun onExpandedChanged (Lcom/ts/ds/views/components/listitem/TSDisclosureListItemView;Z)V
+}
+
+public final class com/ts/ds/views/components/listitem/TSDividerView : android/view/View {
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/ts/ds/views/components/listitem/TSListDecoration : androidx/recyclerview/widget/RecyclerView$ItemDecoration {
@@ -343,6 +388,18 @@ public final class com/ts/ds/views/components/listitem/TSListView : android/widg
 	public fun setOrientation (I)V
 }
 
+public final class com/ts/ds/views/components/spinner/TSSpinnerView : android/view/View {
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getSize ()Lcom/ts/ds/core/style/TSSpinnerSize;
+	public final fun getTone ()Lcom/ts/ds/core/style/TSSpinnerTone;
+	public fun onInitializeAccessibilityNodeInfo (Landroid/view/accessibility/AccessibilityNodeInfo;)V
+	public final fun setSize (Lcom/ts/ds/core/style/TSSpinnerSize;)V
+	public final fun setTone (Lcom/ts/ds/core/style/TSSpinnerTone;)V
+}
+
 public final class com/ts/ds/views/components/switchcontrol/TSSwitchView : android/widget/LinearLayout, android/widget/Checkable {
 	public static final field CHECKED_KEY Ljava/lang/String;
 	public fun <init> (Landroid/content/Context;)V
@@ -406,6 +463,7 @@ public final class com/ts/ds/views/components/textfield/TSTextFieldView : androi
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContentStyle ()Lcom/ts/ds/core/style/TSTextFieldContentStyle;
 	public final fun getEditText ()Landroid/widget/EditText;
 	public final fun getErrorMessage ()Ljava/lang/CharSequence;
 	public final fun getHint ()Ljava/lang/CharSequence;
@@ -418,6 +476,7 @@ public final class com/ts/ds/views/components/textfield/TSTextFieldView : androi
 	public final fun isMultiline ()Z
 	public final fun isReadOnly ()Z
 	public final fun isSecure ()Z
+	public final fun setContentStyle (Lcom/ts/ds/core/style/TSTextFieldContentStyle;)V
 	public fun setEnabled (Z)V
 	public final fun setErrorMessage (Ljava/lang/CharSequence;)V
 	public final fun setHint (Ljava/lang/CharSequence;)V

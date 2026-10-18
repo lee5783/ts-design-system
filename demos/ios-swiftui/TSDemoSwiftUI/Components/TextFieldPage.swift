@@ -11,6 +11,7 @@ struct TextFieldPage: View {
     @State private var amount = ""
     @State private var website = ""
     @State private var code = ""
+    @State private var joinCode = ""
     @State private var playgroundText = ""
     @State private var hasError = false
     @State private var isDisabled = false
@@ -83,6 +84,17 @@ struct TextFieldPage: View {
                 TSTextField(DemoStrings.string(.sampleAmount), text: $amount, inputTraits: .decimal)
                 TSTextField(DemoStrings.string(.sampleWebsite), text: $website, inputTraits: .url)
                 TSTextField(DemoStrings.string(.sampleCode), text: $code, inputTraits: .oneTimeCode)
+            }
+            DemoComponentSection(.codeEntry) {
+                TSTextField(
+                    DemoStrings.string(.sampleJoinCode),
+                    text: $joinCode,
+                    placeholder: DemoStrings.string(.sampleJoinCodePlaceholder),
+                    hint: DemoStrings.string(.sampleJoinCodeHint),
+                    inputTraits: .code,
+                    contentStyle: .code
+                )
+                .accessibilityIdentifier("demo.text-field.code.field")
             }
             DemoComponentSection(.playground) {
                 Toggle(DemoStrings.string(.stateError), isOn: $hasError)

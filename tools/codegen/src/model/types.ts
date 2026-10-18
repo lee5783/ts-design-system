@@ -100,6 +100,11 @@ export interface ComponentToken extends TokenBase {
   value: number;
 }
 
+export interface ControllerTokens {
+  color: ColorToken[];
+  size: DimensionToken[];
+}
+
 export interface DroppedFamily {
   family: string;
   count: number;
@@ -119,6 +124,7 @@ export interface TokenModel {
   duration: DurationToken[];
   easing: EasingToken[];
   component: ComponentToken[];
+  controller: ControllerTokens;
   dropped: DroppedFamily[];
   extensions?: { name: string; version: number };
 }

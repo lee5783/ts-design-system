@@ -11,16 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.avatar.TSAvatar
 import com.ts.ds.compose.components.badge.TSBadge
+import com.ts.ds.compose.components.listitem.TSDisclosureListItem
+import com.ts.ds.compose.components.listitem.TSDivider
 import com.ts.ds.compose.components.listitem.TSList
 import com.ts.ds.compose.components.listitem.TSListItem
 import com.ts.ds.compose.components.listitem.TSListItemIcon
 import com.ts.ds.compose.components.listitem.TSListItemValue
 import com.ts.ds.compose.components.listitem.TSListSection
 import com.ts.ds.compose.components.shared.LocalTSForcedControlState
+import com.ts.ds.compose.components.text.TSText
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSBadgeTone
 import com.ts.ds.core.style.TSControlState
+import com.ts.ds.core.style.TSTextColor
+import com.ts.ds.core.style.TSTypeRole
 
 private const val SAMPLE_LONG_TITLE = "Automatically download updates over mobile data"
 private const val SAMPLE_LONG_SUBTITLE = "Only when Wi-Fi has not been available for more than a day"
@@ -75,5 +80,48 @@ internal fun ListItemStatesSample() {
             TSListItem("Switch disabled", checked = true, onCheckedChange = {}, enabled = false)
         }
         TSListItem("Standalone row", subtitle = "Outside a list", onClick = {})
+    }
+}
+
+@Composable
+internal fun ListItemDisclosureSample() {
+    ListSampleColumn {
+        TSList {
+            TSDisclosureListItem("Collapsed", expanded = false, onExpandedChange = {}) {
+                TSText("Hidden body", role = TSTypeRole.BodySm, color = TSTextColor.Secondary)
+            }
+            TSDisclosureListItem("Kotlin", expanded = true, onExpandedChange = {}, subtitle = "Apache License 2.0", leading = { TSListItemIcon(TSIcon.Info) }) {
+                TSText(SAMPLE_LONG_SUBTITLE, role = TSTypeRole.BodySm, color = TSTextColor.Secondary)
+            }
+            Forced(TSControlState.Pressed) {
+                TSDisclosureListItem("Pressed", expanded = false, onExpandedChange = {}) {
+                    TSText("Hidden body", role = TSTypeRole.BodySm)
+                }
+            }
+            TSDisclosureListItem("Disabled", expanded = true, onExpandedChange = {}, enabled = false) {
+                TSText("Dimmed body", role = TSTypeRole.BodySm, color = TSTextColor.Secondary)
+            }
+        }
+        TSDisclosureListItem("Standalone", expanded = true, onExpandedChange = {}) {
+            TSText("Outside a list", role = TSTypeRole.BodySm, color = TSTextColor.Secondary)
+        }
+    }
+}
+
+@Composable
+internal fun ListItemDividerSample() {
+    ListSampleColumn {
+        Column(modifier = Modifier.background(TSTheme.colors.surfaceCard)) {
+            TSListItem("First row")
+            TSDivider()
+            TSListItem("Second row", subtitle = "Divided with TSDivider")
+            TSDivider()
+            TSListItem("Third row")
+        }
+        TSList {
+            TSListItem("First row")
+            TSListItem("Second row", subtitle = "Divided inside TSList")
+            TSListItem("Third row")
+        }
     }
 }

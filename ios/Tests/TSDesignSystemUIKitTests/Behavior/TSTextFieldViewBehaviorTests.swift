@@ -212,6 +212,26 @@ struct TSTextFieldViewBehaviorTests {
         #expect(field.textField.autocorrectionType == .no)
     }
 
+    @Test("The code style uses the code font for the input only and keeps the text visible with code keyboard traits")
+    func codeStyle() {
+        let plain = makeField(TSTextFieldView(label: "Join code", text: "AB12CD", hint: "6 characters"))
+        let code = TSTextFieldView(label: "Join code", text: "AB12CD", hint: "6 characters", inputTraits: .code)
+        #expect(code.contentStyle == .default)
+        code.contentStyle = .code
+        _ = makeField(code)
+        #expect(code.resolved.inputFont == .code)
+        #expect(code.textField.font == TSFont.code.uiFont(for: code.traitCollection.preferredContentSizeCategory))
+        #expect(code.textField.font?.fontDescriptor.symbolicTraits.contains(.traitMonoSpace) == true)
+        #expect(code.labelView.font == plain.labelView.font)
+        #expect(code.messageLabel.font == plain.messageLabel.font)
+        #expect(!code.textField.isSecureTextEntry)
+        #expect(code.textField.text == "AB12CD")
+        #expect(code.textField.keyboardType == .asciiCapable)
+        #expect(code.textField.autocapitalizationType == .allCharacters)
+        #expect(code.textField.autocorrectionType == .no)
+        #expect(code.boxView.bounds.height == plain.boxView.bounds.height)
+    }
+
     @Test("The field grows with Dynamic Type")
     func dynamicType() {
         let regular = makeField(TSTextFieldView(label: "Name", hint: "As on your passport"))

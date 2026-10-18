@@ -45,6 +45,35 @@ class TSButtonSnapshotTest(private val variant: SnapshotVariant) {
         }
     }
 
+    private fun customIcon(buttonVariant: TSButtonVariant) {
+        val name = "button_custom_icon_${buttonVariant.name.lowercase()}"
+        captureComposeSnapshot(SnapshotEnvironment.file(javaClass, name, variant), variant) {
+            TSTheme(darkTheme = variant.dark) { ButtonCustomIconSample(buttonVariant) }
+        }
+    }
+
+    @Test
+    fun primaryCustomIcon() = customIcon(TSButtonVariant.Primary)
+
+    @Test
+    fun secondaryCustomIcon() = customIcon(TSButtonVariant.Secondary)
+
+    @Test
+    fun ghostCustomIcon() = customIcon(TSButtonVariant.Ghost)
+
+    @Test
+    fun dangerCustomIcon() = customIcon(TSButtonVariant.Danger)
+
+    @Test
+    fun linkCustomIcon() = customIcon(TSButtonVariant.Link)
+
+    @Test
+    fun iconButtonCustomIcon() {
+        captureComposeSnapshot(SnapshotEnvironment.file(javaClass, "icon_button_custom_icon", variant), variant) {
+            TSTheme(darkTheme = variant.dark) { IconButtonCustomIconSample() }
+        }
+    }
+
     @Test
     fun icon() {
         captureComposeSnapshot(SnapshotEnvironment.file(javaClass, "icon", variant), variant) {

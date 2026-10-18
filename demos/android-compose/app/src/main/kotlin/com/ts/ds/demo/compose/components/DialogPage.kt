@@ -33,6 +33,7 @@ object DialogPageTags {
     const val INPUT_FIELD = "demo.dialog.input.field"
     const val OPEN_STACKING = "demo.dialog.open.stacking"
     const val REFUSED = "demo.dialog.refused"
+    const val QUEUED = "demo.dialog.queued"
     const val OPEN_CHAIN = "demo.dialog.open.chain"
     const val CHAIN_RESULT = "demo.dialog.chain.result"
     const val PLAYGROUND_LONG = "demo.dialog.playground.long"
@@ -156,8 +157,12 @@ private fun DialogStacking() {
     var secondPresented by rememberSaveable { mutableStateOf(false) }
     val presenter = TSDialogPresenter.shared
     var refused by remember { mutableIntStateOf(presenter.refusedCount) }
+    var queued by remember { mutableIntStateOf(presenter.pendingCount) }
     DisposableEffect(presenter) {
-        val listener: (TSDialogPresenter) -> Unit = { refused = it.refusedCount }
+        val listener: (TSDialogPresenter) -> Unit = {
+            refused = it.refusedCount
+            queued = it.pendingCount
+        }
         presenter.addListener(listener)
         onDispose { presenter.removeListener(listener) }
     }
@@ -169,6 +174,10 @@ private fun DialogStacking() {
         modifier = Modifier.testTag(DialogPageTags.OPEN_STACKING),
     )
     DemoCaption(
+        text = stringResource(DemoR.string.demo_component_queued_count, queued),
+        modifier = Modifier.testTag(DialogPageTags.QUEUED),
+    )
+    DemoCaption(
         text = stringResource(DemoR.string.demo_component_refused_count, refused),
         modifier = Modifier.testTag(DialogPageTags.REFUSED),
     )
@@ -176,7 +185,7 @@ private fun DialogStacking() {
         isPresented = stackingPresented,
         onPresentedChange = { stackingPresented = it },
         title = stringResource(DemoR.string.demo_sample_stacking_title),
-        message = stringResource(DemoR.string.demo_sample_stacking_body),
+        message = stringResource(DemoR.string.demo_sample_stacking_queue_body),
         actions = listOf(
             TSDialogAction(stringResource(DemoR.string.demo_sample_close)),
             TSDialogAction(stringResource(DemoR.string.demo_component_open_another), TSButtonVariant.Primary, dismisses = false) {

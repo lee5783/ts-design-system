@@ -159,9 +159,9 @@ public final class TSListItemContentView: UIView, UIContentView {
         isAccessibilityElement = accessibilityHost == nil
         element.isAccessibilityElement = true
         element.accessibilityLabel = TSListItemAccessibility.label(title: configuration.title, subtitle: configuration.subtitle)
-        element.accessibilityHint = TSListItemAccessibility.hint(for: role)
+        element.accessibilityHint = configuration.expansionState == nil ? TSListItemAccessibility.hint(for: role) : nil
         element.accessibilityTraits = role.isPressable ? .button : []
-        element.accessibilityValue = trailingAccessibilityValue(configuration.trailing)
+        element.accessibilityValue = configuration.expansionState.map { TSListItemAccessibility.expansionValue(isExpanded: $0) } ?? trailingAccessibilityValue(configuration.trailing)
         if let isOn = configuration.trailing.isOn {
             TSAccessibilityTraitsCompat.apply(to: element, isOn: isOn, kind: .switch, path: togglePath)
         }

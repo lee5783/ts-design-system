@@ -25,6 +25,11 @@ class TSTextFieldViewSdkSnapshotTest(private val variant: SnapshotVariant) {
         captureViewSnapshot(SnapshotEnvironment.file(javaClass, "content", variant), variant, R.style.Theme_TS, content = ::textFieldContentSample)
     }
 
+    @Test
+    fun code() {
+        captureViewSnapshot(SnapshotEnvironment.file(javaClass, "code", variant), variant, R.style.Theme_TS, content = ::textFieldCodeSample)
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")

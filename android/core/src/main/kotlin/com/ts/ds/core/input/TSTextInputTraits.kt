@@ -9,6 +9,7 @@ public enum class TSKeyboardType {
     Number,
     Decimal,
     Uri,
+    Ascii,
 }
 
 public enum class TSImeAction {
@@ -90,6 +91,11 @@ public data class TSTextInputTraits(
         public val Url: TSTextInputTraits = TSTextInputTraits(
             keyboardType = TSKeyboardType.Uri,
             capitalization = TSCapitalization.None,
+            autoCorrect = false,
+        )
+        public val Code: TSTextInputTraits = TSTextInputTraits(
+            keyboardType = TSKeyboardType.Ascii,
+            capitalization = TSCapitalization.Characters,
             autoCorrect = false,
         )
         public val Search: TSTextInputTraits = TSTextInputTraits(

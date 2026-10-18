@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { parseCubicBezier, parseHexColor, parseMs, parseNumber, parsePx } from "../transforms/css-values.ts";
-import { tokenName, tokenSegments } from "../transforms/naming.ts";
+import { controllerMemberName, tokenName, tokenSegments } from "../transforms/naming.ts";
 import type { Renames } from "./diff-report.ts";
 import { TOKENS_PATH, readTsTokens, uniqueNames } from "./load-ts-tokens.ts";
 import {
@@ -14,6 +14,8 @@ import {
   type ColorValue,
   type ComponentConstantType,
   type ComponentToken,
+  type ControllerTokens,
+  type DimensionToken,
   type ExtensionInfo,
   type ThemeId,
   type Themed,
@@ -26,6 +28,10 @@ export const EXTENSIONS_PATH = "design/extensions/native-tokens.json";
 const EXTENSION_FAMILIES = ["color", "spacing", "radius", "size", "opacity", "duration", "easing", "component"] as const;
 
 type ExtensionFamily = (typeof EXTENSION_FAMILIES)[number];
+
+const CONTROLLER_FAMILIES = ["controller-color", "controller-size"] as const;
+
+type ControllerFamily = (typeof CONTROLLER_FAMILIES)[number];
 
 const META_KEYS = new Set(["name", "version", "renames"]);
 const ENTRY_KEYS = new Set(["name", "value", "usage", "upstream", "origin", "component", "type"]);
@@ -62,6 +68,10 @@ function isExtensionFamily(value: string): value is ExtensionFamily {
   return (EXTENSION_FAMILIES as readonly string[]).includes(value);
 }
 
+function isControllerFamily(value: string): value is ControllerFamily {
+  return (CONTROLLER_FAMILIES as readonly string[]).includes(value);
+}
+
 function parseFontWeight(input: string): number {
   const weight = parseNumber(input);
   if (!Number.isInteger(weight) || weight < 100 || weight > 900 || weight % 100 !== 0) {
@@ -74,7 +84,7 @@ function fail(label: string, error: unknown): never {
   throw new Error(`${label}: ${error instanceof Error ? error.message : String(error)}`);
 }
 
-function rawEntries(input: Record<string, unknown>, family: ExtensionFamily): RawEntry[] {
+function rawEntries(input: Record<string, unknown>, family: ExtensionFamily | ControllerFamily): RawEntry[] {
   const section = input[family];
   if (section === undefined) {
     return [];
@@ -204,6 +214,39 @@ function familyEntries(model: TokenModel, family: ExtensionFamily, entries: RawE
   });
 }
 
+function controllerTokens(model: TokenModel, input: Record<string, unknown>): ControllerTokens {
+  const colorRaw = rawEntries(input, "controller-color");
+  const sizeRaw = rawEntries(input, "controller-size");
+  const modelNames = new Set(TOKEN_FAMILIES.flatMap((family) => (model[family] as AnyToken[]).map((token) => token.name.token)));
+  for (const [family, entries] of [
+    ["controller-color", colorRaw],
+    ["controller-size", sizeRaw],
+  ] as const) {
+    for (const { name } of entries) {
+      if (modelNames.has(name)) {
+        throw new Error(`native-tokens ${family}/${name}: duplicate key, already a token of the main model; controller tokens need their own names`);
+      }
+    }
+  }
+  const color = colorEntries(colorRaw, model.color).map(({ aliasOf: _aliasOf, ...token }) => token);
+  const size = sizeRaw.map((entry): DimensionToken => {
+    const label = `native-tokens controller-size/${entry.name}`;
+    if (typeof entry.value !== "string" && typeof entry.value !== "number") {
+      throw new Error(`${label}: expected a single value`);
+    }
+    try {
+      return { ...base(entry), value: parsePx(String(entry.value)) };
+    } catch (error) {
+      return fail(label, error);
+    }
+  });
+  return { color: uniqueNames("native-tokens controller-color", asMembers(color)), size: uniqueNames("native-tokens controller-size", asMembers(size)) };
+}
+
+function asMembers<T extends AnyToken>(tokens: T[]): T[] {
+  return tokens.map((token) => ({ ...token, name: { ...token.name, camel: controllerMemberName(token.name.token) } }));
+}
+
 function checkDuplicates(model: TokenModel, family: ExtensionFamily, entries: RawEntry[]): void {
   const sourceNames = new Set(model[family].map((token) => token.name.token));
   const seen = new Set<string>();
@@ -275,9 +318,11 @@ export function mergeExtensions(model: TokenModel, input: unknown): TokenModel {
   if (!isRecord(input)) {
     throw new Error(`${EXTENSIONS_PATH}: expected a JSON object`);
   }
-  const unknown = Object.keys(input).filter((key) => !META_KEYS.has(key) && !isExtensionFamily(key));
+  const unknown = Object.keys(input).filter((key) => !META_KEYS.has(key) && !isExtensionFamily(key) && !isControllerFamily(key));
   if (unknown.length > 0) {
-    throw new Error(`${EXTENSIONS_PATH}: unsupported families ${unknown.join(", ")}; extensions take ${EXTENSION_FAMILIES.join(", ")}`);
+    throw new Error(
+      `${EXTENSIONS_PATH}: unsupported families ${unknown.join(", ")}; extensions take ${[...EXTENSION_FAMILIES, ...CONTROLLER_FAMILIES].join(", ")}`,
+    );
   }
   let merged: TokenModel = {
     ...model,
@@ -296,7 +341,7 @@ export function mergeExtensions(model: TokenModel, input: unknown): TokenModel {
   for (const family of TOKEN_FAMILIES) {
     uniqueNames(family, merged[family] as AnyToken[]);
   }
-  return merged;
+  return { ...merged, controller: controllerTokens(merged, input) };
 }
 
 async function readJsonIfExists(file: string): Promise<unknown> {

@@ -29,4 +29,7 @@ public object TSListItemAccessibility {
 
     public fun hint(context: Context, role: TSListItemRole): String? =
         if (role == TSListItemRole.Navigation) context.getString(R.string.ts_list_item_navigates) else null
+
+    public fun expansionState(context: Context, expanded: Boolean): String =
+        context.getString(if (expanded) R.string.ts_list_item_expanded else R.string.ts_list_item_collapsed)
 }

@@ -91,6 +91,18 @@ class FormComponentsTest {
     }
 
     @Test
+    fun codeFieldShowsTypedCodeUnmasked() {
+        launchDemo().use {
+            composeRule.openPage(DemoPageId.TextField)
+            composeRule.scrollTo(TextFieldPageTags.CODE_FIELD)
+            composeRule.onNodeWithTag(TextFieldPageTags.CODE_FIELD).performClick().assertIsFocused().performTextInput("AB12CD")
+            composeRule.onNodeWithTag(TextFieldPageTags.CODE_FIELD)
+                .assert(SemanticsMatcher.expectValue(SemanticsProperties.EditableText, AnnotatedString("AB12CD")))
+                .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.Password))
+        }
+    }
+
+    @Test
     fun disabledAndReadOnlyBlockEditing() {
         launchDemo().use {
             composeRule.openPage(DemoPageId.TextField)

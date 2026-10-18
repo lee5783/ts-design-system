@@ -17,3 +17,17 @@ public extension TSIconName {
         return flipsForRightToLeftLayoutDirection ? template.imageFlippedForRightToLeftLayoutDirection() : template
     }
 }
+
+package extension UIImage {
+    func tsTemplateIcon(pointSize: CGFloat) -> UIImage {
+        let side = CGSize(width: pointSize, height: pointSize)
+        let scale = min(pointSize / max(size.width, 1), pointSize / max(size.height, 1))
+        let fitted = CGSize(width: size.width * scale, height: size.height * scale)
+        let origin = CGPoint(x: (pointSize - fitted.width) / 2, y: (pointSize - fitted.height) / 2)
+        let rendered = UIGraphicsImageRenderer(size: side, format: UIGraphicsImageRendererFormat.preferred()).image { _ in
+            draw(in: CGRect(origin: origin, size: fitted))
+        }
+        let template = rendered.withRenderingMode(.alwaysTemplate)
+        return flipsForRightToLeftLayoutDirection ? template.imageFlippedForRightToLeftLayoutDirection() : template
+    }
+}

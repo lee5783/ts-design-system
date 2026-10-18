@@ -26,6 +26,9 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
 
     let panelView: TSDialogPanelView
     private var animatesDismissal = true
+    private var chainedPresentations: [() -> Void] = []
+    private weak var chainedDialog: TSDialogViewController?
+    private static weak var dialogRunningDismissingAction: TSDialogViewController?
     let scrollView = UIScrollView()
     let contentView = UIView()
 
@@ -60,6 +63,17 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
     @discardableResult
     public func present(from source: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Bool {
         guard presentingViewController == nil, !isBeingPresented else { return false }
+        if let current = Self.dialogRunningDismissingAction, current !== self, current.chains(from: source) {
+            if current.chainedDialog == nil {
+                current.chainedDialog = self
+            }
+            current.chainedPresentations.append { [self] in
+                if !present(from: source, animated: animated, completion: completion) {
+                    completion?()
+                }
+            }
+            return true
+        }
         guard presenter.begin(self) else { return false }
         inheritTraits(from: source)
         animatesDismissal = animated
@@ -168,7 +182,7 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if isBeingDismissed || presentingViewController == nil {
-            presenter.end(self)
+            releasePresenter()
         }
     }
 
@@ -196,11 +210,21 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
     }
 
     func perform(_ action: TSDialogAction) {
+        guard !isBeingDismissed else { return }
         guard action.dismisses else {
             action.handler()
             return
         }
-        dismissDialog(then: action.handler)
+        let enclosing = Self.dialogRunningDismissingAction
+        Self.dialogRunningDismissingAction = self
+        action.handler()
+        Self.dialogRunningDismissingAction = enclosing
+        let chained = chainedPresentations
+        chainedPresentations = []
+        dismissDialog {
+            chained.forEach { $0() }
+            action.afterDismissal?()
+        }
     }
 
     @objc func scrimTapped() {
@@ -213,16 +237,27 @@ public final class TSDialogViewController: UIViewController, UIAdaptivePresentat
 
     private func dismissDialog(then completion: (() -> Void)? = nil) {
         guard presentingViewController != nil else {
-            presenter.end(self)
+            releasePresenter()
             completion?()
             return
         }
-        dismiss(animated: animatesDismissal) { [weak self, presenter] in
-            if let self {
-                presenter.end(self)
-            }
+        dismiss(animated: animatesDismissal) { [weak self] in
+            self?.releasePresenter()
             completion?()
         }
+    }
+
+    private func chains(from source: UIViewController) -> Bool {
+        guard let presenting = presentingViewController else { return true }
+        return source.view.window != nil && source.view.window === presenting.view.window
+    }
+
+    private func releasePresenter() {
+        if let next = chainedDialog, presenter.handOver(from: self, to: next) {
+            chainedDialog = nil
+            return
+        }
+        presenter.end(self)
     }
 
     private func inheritTraits(from source: UIViewController) {

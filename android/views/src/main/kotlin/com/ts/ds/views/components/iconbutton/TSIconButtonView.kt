@@ -2,8 +2,13 @@ package com.ts.ds.views.components.iconbutton
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.widget.ImageViewCompat
@@ -15,6 +20,7 @@ import com.ts.ds.core.style.TSIconButtonStyleSpec
 import com.ts.ds.core.style.TSIconButtonVariant
 import com.ts.ds.views.R
 import com.ts.ds.views.components.shared.TSControlBackground
+import com.ts.ds.views.components.shared.TSIconSlotDrawable
 import com.ts.ds.views.components.shared.dpToPx
 import com.ts.ds.views.components.shared.expandToTouchTarget
 import com.ts.ds.views.theme.tsColor
@@ -32,7 +38,13 @@ public class TSIconButtonView @JvmOverloads constructor(
     public var icon: TSIcon? = null
         set(value) {
             field = value
-            if (value == null) setImageDrawable(null) else setImageResource(value.drawableRes)
+            applyIcon()
+        }
+
+    public var iconDrawable: Drawable? = null
+        set(value) {
+            field = value
+            applyIcon()
         }
 
     public var label: CharSequence?
@@ -75,6 +87,10 @@ public class TSIconButtonView @JvmOverloads constructor(
         }
         ready = true
         applyState()
+    }
+
+    public fun setIconResource(@DrawableRes resId: Int) {
+        iconDrawable = AppCompatResources.getDrawable(context, resId)
     }
 
     internal val currentState: TSControlState
@@ -121,7 +137,19 @@ public class TSIconButtonView @JvmOverloads constructor(
             showsRing = resolved.showsFocusRing,
         )
         ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(tsColor(resolved.icon)))
+        colorFilter = PorterDuffColorFilter(tsColor(resolved.icon), PorterDuff.Mode.SRC_IN).takeIf { iconDrawable != null }
         alpha = if (isDimmedByContainer) 1f else resolved.opacity
+    }
+
+    private fun applyIcon() {
+        val drawable = iconDrawable
+        val tsIcon = icon
+        when {
+            drawable != null -> setImageDrawable(TSIconSlotDrawable(drawable, dpToPx(resolved.iconSizeDp)))
+            tsIcon != null -> setImageResource(tsIcon.drawableRes)
+            else -> setImageDrawable(null)
+        }
+        applyState()
     }
 
     private fun variantFor(value: Int): TSIconButtonVariant = when (value) {

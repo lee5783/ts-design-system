@@ -59,7 +59,7 @@ ts-design-system/
 
 | Target | Path | Product | Contents |
 |---|---|---|---|
-| `TSTokens` | `ios/Sources/TSTokens/Generated/*.swift` | `TSTokens` | 100% generated: `TSColor`, `TSSpacing`, `TSRadius`, `TSSize`, `TSOpacity`, `TSShadowTokens`, `TSTypographyTokens`, `TSMotion`, `TSComponentTokens`, `TSDimensionToken`, `TSIconName`. `TSExperimentalProbe.swift` sits outside `Generated/` |
+| `TSTokens` | `ios/Sources/TSTokens/Generated/*.swift` | `TSTokens` | 100% generated: `TSColor`, `TSSpacing`, `TSRadius`, `TSSize`, `TSOpacity`, `TSShadowTokens`, `TSTypographyTokens`, `TSMotion`, `TSComponentTokens`, `TSDimensionToken`, `TSIconName`, and the separate controller palette `TSControllerColor` / `TSControllerSize`. `TSExperimentalProbe.swift` sits outside `Generated/` |
 | `TSFoundation` | `ios/Sources/TSFoundation/` | none (re-exported) | Shared, non-rendering layer, see the folder map below |
 | `TSDesignSystem` | `ios/Sources/TSDesignSystem/` | `TSDesignSystem` | SwiftUI: `Components/<Name>/`, `Components/Shared/`, `Presentation/` |
 | `TSDesignSystemUIKit` | `ios/Sources/TSDesignSystemUIKit/` | `TSDesignSystemUIKit` | UIKit: `Components/<Name>/`, `Components/Shared/` |
@@ -76,7 +76,7 @@ Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/T
 | `Logic/` | Accessibility text (`TS<Name>Accessibility`), `TSInitials`, `TSBadgeCountFormatter`, `TSAvatarImage`, `TSCardAction` (+ `TSCardAccessory`), `TSDialogAction`, `TSDialogPresenter`, `TSToastQueue`, `TSToastWindowing` |
 | `Interaction/` | `TSFocusRing`, `TSHaptics`, `TSHitArea`, `TSPressFeedback`, `TSReduceMotion`, `TSTextInputTraits` |
 | `Compat/` | Every `#available` branch: `TSCompat` (the paths), `TSAccessibilityTraitsCompat`, `TSSheetCompat`, `TSTabBarCompat`, `TSTrackingCompat`, `TSTraitOverridesCompat`, `TSGrowingTextView`, `View+OnChangeCompat`, `View+FocusEffectCompat`, `View+SheetPresentationCompat` |
-| `Typography/` | `TSFont`, `TSFont+SwiftUI` (`tsFont(_:)`) |
+| `Typography/` | `TSFont`, `TSFont+SwiftUI` (`tsFont(_:)`), `TSTypeRole` (`role.font`), `TSTextColor` |
 | `Shadow/` | `TSShadow` |
 | `Icons/` | `TSIconImage` |
 | `Localization/` | `TSStrings`, `TSStringKey` |
@@ -88,9 +88,9 @@ Both UI products `@_exported import TSFoundation` and `TSTokens` (`ios/Sources/T
 
 | Module | Published as | Contents |
 |---|---|---|
-| `:tokens` | `com.ts.ds:tokens` | `src/generated/kotlin/com/ts/ds/tokens/TSTokenValues.kt`, `src/generated/res/values{,-night}/ts_{colors,dimens,integers}.xml` |
+| `:tokens` | `com.ts.ds:tokens` | `src/generated/kotlin/com/ts/ds/tokens/TSTokenValues.kt`, `src/generated/res/values{,-night}/ts_{colors,dimens,integers}.xml`, plus the controller palette `ts_controller_colors.xml` (light + night) and `ts_controller_dimens.xml` |
 | `:core` | `com.ts.ds:core` | `core/{style,logic,input,motion,haptics,icon}`; generated `src/generated/kotlin/com/ts/ds/core/icon/TSIcon.kt` and `src/generated/res/drawable{,-night}/ts_ic_*`, `ts_logo_*` |
-| `:compose` | `com.ts.ds:compose` | `compose/{theme,foundation,components/<name>,components/shared}`; generated `src/generated/kotlin/com/ts/ds/compose/theme/TS{Colors,Typography,Spacing,Size,Shapes,Elevation,Motion}.kt` |
+| `:compose` | `com.ts.ds:compose` | `compose/{theme,foundation,components/<name>,components/shared}`; generated `src/generated/kotlin/com/ts/ds/compose/theme/TS{Colors,Typography,Spacing,Size,Shapes,Elevation,Motion,ControllerColors,ControllerSize}.kt` |
 | `:views` | `com.ts.ds:views` | `views/{theme,foundation,components/<name>,components/shared}`; `src/main/res/values/{ts_themes,ts_component_attrs,ts_component_styles,ts_views_dimens,ts_views_ids}.xml`; generated `src/generated/res/values{,-v28}/ts_{theme_attrs,theme_colors,text_appearances,shape_appearances}.xml` |
 | `:bom` | `com.ts.ds:bom` | `java-platform` constraining the four libraries at `VERSION` |
 | `:test-support` | never | Roborazzi matrix helpers (`SnapshotMatrix`, `SnapshotEnvironment`, `captureComposeSnapshot`, view snapshots) |

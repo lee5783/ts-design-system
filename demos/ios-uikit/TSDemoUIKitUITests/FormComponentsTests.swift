@@ -38,6 +38,19 @@ final class FormComponentsTests: XCTestCase {
     }
 
     @MainActor
+    func testCodeFieldShowsTypedCodeUnmasked() {
+        let app = launch(page: "text-field")
+        let codeID = "demo.text-field.code.field"
+        let field = app.textFields[codeID].firstMatch
+        scrollTo(field, in: app)
+        XCTAssertEqual(field.label, "Join code")
+        field.tap()
+        field.typeText("AB12CD\n")
+        XCTAssertEqual(field.value as? String, "AB12CD")
+        XCTAssertFalse(app.secureTextFields[codeID].exists)
+    }
+
+    @MainActor
     func testDisabledAndReadOnlyBlockEditing() {
         let app = launch(page: "text-field")
         flip(app, "demo.text-field.playground.disabled")

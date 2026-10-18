@@ -81,3 +81,13 @@ export function swiftColors(tokens: ColorToken[]): string {
     ],
   );
 }
+
+export function swiftControllerColors(tokens: ColorToken[]): string {
+  const constants = tokens.flatMap((token) =>
+    staticLet(token, undefined, () => [
+      `TSColor(name: ${swiftString(token.name.token)}, light: TSRGBA(hex: ${swiftRgbaHex(token.value.light.rgba)}), dark: TSRGBA(hex: ${swiftRgbaHex(token.value.dark.rgba)}))`,
+    ]),
+  );
+  const catalog = tokenList("TSColor", active(tokens).map((token) => swiftIdentifier(token.name.camel)));
+  return swiftFile(["SwiftUI", "UIKit"], [block("public enum TSControllerColor", [...constants, "", ...catalog])]);
+}

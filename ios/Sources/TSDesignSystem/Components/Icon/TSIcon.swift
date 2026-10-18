@@ -4,6 +4,7 @@ public struct TSIcon: View {
     let name: TSIconName
     let size: TSIconSize
     let label: String?
+    var pointSize: CGFloat?
 
     public init(_ name: TSIconName, size: TSIconSize = .md, label: String? = nil) {
         self.name = name
@@ -11,10 +12,16 @@ public struct TSIcon: View {
         self.label = label
     }
 
+    init(_ name: TSIconName, pointSize: CGFloat) {
+        self.init(name)
+        self.pointSize = pointSize
+    }
+
     public var body: some View {
         let resolved = TSIconStyleSpec.resolve(.init(size: size, hasLabel: label != nil))
+        let side = pointSize ?? resolved.pointSize
         image
-            .frame(width: resolved.pointSize, height: resolved.pointSize)
+            .frame(width: side, height: side)
             .flipsForRightToLeftLayoutDirection(name.flipsForRightToLeftLayoutDirection)
             .accessibilityHidden(!resolved.isAccessibilityElement)
             .accessibilityLabel(Text(label ?? ""))

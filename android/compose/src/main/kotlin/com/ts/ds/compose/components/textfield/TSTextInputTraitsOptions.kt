@@ -36,6 +36,7 @@ internal fun TSTextInputTraits.keyboardType(masked: Boolean): KeyboardType = whe
     TSKeyboardType.Text -> if (masked) KeyboardType.Password else KeyboardType.Text
     TSKeyboardType.Email -> if (masked) KeyboardType.Password else KeyboardType.Email
     TSKeyboardType.Uri -> if (masked) KeyboardType.Password else KeyboardType.Uri
+    TSKeyboardType.Ascii -> if (masked || !autoCorrect) KeyboardType.Password else KeyboardType.Ascii
     TSKeyboardType.Phone -> KeyboardType.Phone
     TSKeyboardType.Number -> if (masked) KeyboardType.NumberPassword else KeyboardType.Number
     TSKeyboardType.Decimal -> if (masked) KeyboardType.NumberPassword else KeyboardType.Decimal

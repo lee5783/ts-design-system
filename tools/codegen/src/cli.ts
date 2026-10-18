@@ -98,7 +98,10 @@ function extensionSummary(model: TokenModel): string[] {
   if (model.extensions === undefined) {
     return [];
   }
-  const tokens = TOKEN_FAMILIES.flatMap((family) => (model[family] as AnyToken[]).map((token) => ({ family, token })));
+  const tokens = [
+    ...TOKEN_FAMILIES.flatMap((family) => (model[family] as AnyToken[]).map((token) => ({ family, token }))),
+    ...[...model.controller.color, ...model.controller.size].map((token) => ({ family: "controller", token })),
+  ];
   const statuses = UPSTREAM_STATUSES.map(
     (status) => `${status} ${tokens.filter(({ token }) => token.extension?.upstream === status).length}`,
   );
@@ -116,6 +119,7 @@ export function summarizeModel(model: TokenModel): string {
     const count = model[family].length;
     return family === "color" ? `${family} ${count}x${model.themes.length}` : `${family} ${count}`;
   });
+  counts.push(`controller-color ${model.controller.color.length}x${model.themes.length}`, `controller-size ${model.controller.size.length}`);
   const aliases = model.color.filter((token) => token.aliasOf !== undefined).map((token) => `${token.name.token} -> {${token.aliasOf}}`);
   return [
     `model: ${model.source.name} v${model.source.version}, themes ${model.themes.join("/")}`,

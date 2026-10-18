@@ -1,14 +1,25 @@
 import CoreGraphics
 import TSTokens
 
+public enum TSTextFieldContentStyle: String, CaseIterable, Hashable, Sendable {
+    case `default`
+    case code
+}
+
 public enum TSTextFieldStyleSpec: TSStyleSpec {
     public struct Configuration: Hashable, Sendable {
         public let state: TSControlState
         public let isReadOnly: Bool
+        public let contentStyle: TSTextFieldContentStyle
 
         public init(state: TSControlState = .normal, isReadOnly: Bool = false) {
+            self.init(state: state, isReadOnly: isReadOnly, contentStyle: .default)
+        }
+
+        public init(state: TSControlState = .normal, isReadOnly: Bool = false, contentStyle: TSTextFieldContentStyle) {
             self.state = state
             self.isReadOnly = isReadOnly
+            self.contentStyle = contentStyle
         }
     }
 
@@ -58,8 +69,10 @@ public enum TSTextFieldStyleSpec: TSStyleSpec {
 
     public static let states: [TSControlState] = [.normal, .focused, .error, [.error, .focused], .disabled]
 
-    public static let allConfigurations: [Configuration] = states.flatMap { state in
-        [false, true].map { Configuration(state: state, isReadOnly: $0) }
+    public static let allConfigurations: [Configuration] = TSTextFieldContentStyle.allCases.flatMap { contentStyle in
+        states.flatMap { state in
+            [false, true].map { Configuration(state: state, isReadOnly: $0, contentStyle: contentStyle) }
+        }
     }
 
     public static let minimumLines = 3
@@ -88,7 +101,7 @@ public enum TSTextFieldStyleSpec: TSStyleSpec {
             shadow: isReadOnly ? nil : TSShadowTokens.shadowXs,
             labelFont: TSFont.label,
             labelColor: .textPrimary,
-            inputFont: TSFont.body,
+            inputFont: inputFont(configuration.contentStyle),
             inputColor: .textPrimary,
             placeholderColor: .textMuted,
             messageFont: TSFont.caption,
@@ -141,6 +154,13 @@ public enum TSTextFieldStyleSpec: TSStyleSpec {
 
     public static func readOnlyText(_ text: String, isSecure: Bool) -> String {
         isSecure ? String(repeating: "\u{2022}", count: text.count) : text
+    }
+
+    static func inputFont(_ contentStyle: TSTextFieldContentStyle) -> TSFont {
+        switch contentStyle {
+        case .default: TSFont.body
+        case .code: TSFont.code
+        }
     }
 
     static func border(hasError: Bool, showsFocusRing: Bool) -> TSColor {

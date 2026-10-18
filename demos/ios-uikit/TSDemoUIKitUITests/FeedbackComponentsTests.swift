@@ -169,6 +169,23 @@ final class FeedbackComponentsTests: XCTestCase {
     }
 
     @MainActor
+    func testSpinnerPageShowsSpinnersLabelledLoading() {
+        let app = launch(page: "spinner")
+        for size in ["sm", "md", "lg"] {
+            let spinner = element(app, "demo.spinner.size.\(size)")
+            XCTAssertTrue(spinner.waitForExistence(timeout: 5))
+            XCTAssertEqual(spinner.label, "Loading")
+        }
+        for tone in ["primary", "secondary", "accent"] {
+            XCTAssertEqual(element(app, "demo.spinner.tone.\(tone)").label, "Loading")
+        }
+        let labelled = element(app, "demo.spinner.labelled")
+        scrollTo(labelled, in: app)
+        XCTAssertEqual(labelled.label, "Loading messages")
+        XCTAssertEqual(element(app, "demo.spinner.in-context").label, "Loading messages")
+    }
+
+    @MainActor
     private func launch(page: String) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += ["-TSDemoPage", page, "-TSDemoTheme", "light"]

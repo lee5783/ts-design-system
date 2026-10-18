@@ -129,6 +129,12 @@ public class TSListItemView @JvmOverloads constructor(
             applyState()
         }
 
+    internal var expansionState: Boolean? = null
+        set(value) {
+            field = value
+            applyState()
+        }
+
     public var groupPosition: TSListGroupPosition? = null
         set(value) {
             if (field == value) return
@@ -242,7 +248,16 @@ public class TSListItemView @JvmOverloads constructor(
             TSListItemRole.Action, TSListItemRole.Navigation -> Button::class.java.name
             TSListItemRole.Plain -> View::class.java.name
         }
-        TSListItemAccessibility.hint(context, role)?.let(node::setHintText)
+        if (expansionState == null) TSListItemAccessibility.hint(context, role)?.let(node::setHintText)
+        expansionState?.takeIf { isEnabled }?.let { expanded ->
+            node.addAction(
+                if (expanded) {
+                    AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_COLLAPSE
+                } else {
+                    AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_EXPAND
+                },
+            )
+        }
         if (role == TSListItemRole.Toggle) {
             node.isCheckable = true
             node.isChecked = isChecked
@@ -252,6 +267,12 @@ public class TSListItemView @JvmOverloads constructor(
     }
 
     override fun performAccessibilityAction(action: Int, arguments: Bundle?): Boolean {
+        val expanded = expansionState
+        if (expanded != null && isEnabled) {
+            val toggles = (action == AccessibilityNodeInfoCompat.ACTION_EXPAND && !expanded) ||
+                (action == AccessibilityNodeInfoCompat.ACTION_COLLAPSE && expanded)
+            if (toggles) return performClick()
+        }
         if (role == TSListItemRole.Toggle && action == AccessibilityNodeInfoCompat.ACTION_CLICK) {
             if (!isEnabled) return false
             switchView.performClick()
@@ -426,7 +447,7 @@ public class TSListItemView @JvmOverloads constructor(
         dimmed.forEach { it.alpha = resolved.opacity }
         trailingContainer.alpha = if (trailing == TSListItemTrailing.Switch) 1f else resolved.opacity
         switchView.isEnabled = isEnabled
-        ViewCompat.setStateDescription(this, accessibilityValue)
+        ViewCompat.setStateDescription(this, expansionState?.let { TSListItemAccessibility.expansionState(context, it) } ?: accessibilityValue)
     }
 
     private fun updateSwitchTouchDelegate() {

@@ -214,4 +214,30 @@ public object TSTokenValues {
         public const val spinnerRotationDuration: Int = 700
         public const val cardSubtitleSpacing: Float = 2f
     }
+
+    public object LightControllerColors {
+        public const val backdrop: Long = 0xFFFCFCFC
+        public const val key: Long = 0x2918181B
+        public const val keyPressed: Long = 0x6B18181B
+        public const val keyOutline: Long = 0x9918181B
+        public const val keyLabel: Long = 0xFF18181B
+        public const val backing: Long = 0xE6FCFCFC
+        public const val overlayScrimMedia: Long = 0x99FCFCFC
+        public const val textOnOverlayMedia: Long = 0xFF18181B
+    }
+
+    public object DarkControllerColors {
+        public const val backdrop: Long = 0xFF121416
+        public const val key: Long = 0x29FFFFFF
+        public const val keyPressed: Long = 0x6BFFFFFF
+        public const val keyOutline: Long = 0x99FFFFFF
+        public const val keyLabel: Long = 0xFFFFFFFF
+        public const val backing: Long = 0xEC000000
+        public const val overlayScrimMedia: Long = 0x99000000
+        public const val textOnOverlayMedia: Long = 0xFFFFFFFF
+    }
+
+    public object ControllerSize {
+        public const val outlineWidth: Float = 1.5f
+    }
 }

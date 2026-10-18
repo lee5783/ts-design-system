@@ -21,6 +21,22 @@ public final class TSButtonView: UIButton {
         didSet { invalidateContent() }
     }
 
+    public var leadingIconImage: UIImage? {
+        didSet { invalidateContent() }
+    }
+
+    public var trailingIconImage: UIImage? {
+        didSet { invalidateContent() }
+    }
+
+    public var numberOfLines = 0 {
+        didSet { invalidateContent() }
+    }
+
+    public var lineBreakMode: NSLineBreakMode = .byWordWrapping {
+        didSet { invalidateContent() }
+    }
+
     public var isLoading = false {
         didSet {
             guard isLoading != oldValue else { return }
@@ -37,7 +53,7 @@ public final class TSButtonView: UIButton {
         didSet { setNeedsUpdateConfiguration() }
     }
 
-    private let spinner = TSSpinnerView()
+    private let spinner = TSSpinnerView(frame: .zero)
     private let trailingIconView = TSIconView(.chevronRight, size: .md)
 
     public init(
@@ -82,10 +98,11 @@ public final class TSButtonView: UIButton {
         let resolved = resolved
         let traits = traitCollection
         let labelColor = resolved.label.uiColor.resolvedColor(with: traits)
-        let reservedTrailing = trailingIcon == nil ? 0 : resolved.iconSize + resolved.iconSpacing
+        let reservedTrailing = hasTrailingIcon ? resolved.iconSize + resolved.iconSpacing : 0
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = title(resolved: resolved, color: labelColor)
         configuration.titleAlignment = .center
+        configuration.titleLineBreakMode = lineBreakMode
         configuration.baseForegroundColor = labelColor
         configuration.image = leadingImage(resolved: resolved)
         configuration.imageColorTransformer = UIConfigurationColorTransformer { _ in labelColor }
@@ -105,8 +122,11 @@ public final class TSButtonView: UIButton {
         spinner.isHidden = !resolved.showsSpinner
         spinner.tintColor = labelColor
         spinner.lineWidth = resolved.spinnerStrokeWidth
-        trailingIconView.isHidden = trailingIcon == nil
-        if let trailingIcon {
+        titleLabel?.numberOfLines = numberOfLines
+        trailingIconView.isHidden = !hasTrailingIcon
+        if let trailingIconImage {
+            trailingIconView.image = trailingIconImage.tsTemplateIcon(pointSize: resolved.iconSize)
+        } else if let trailingIcon {
             trailingIconView.name = trailingIcon
         }
         trailingIconView.tintColor = labelColor
@@ -170,6 +190,10 @@ public final class TSButtonView: UIButton {
         super.sendAction(action, to: target, for: event)
     }
 
+    private var hasTrailingIcon: Bool {
+        trailingIcon != nil || trailingIconImage != nil
+    }
+
     private func invalidateContent() {
         setNeedsUpdateConfiguration()
         invalidateIntrinsicContentSize()
@@ -184,12 +208,19 @@ public final class TSButtonView: UIButton {
         if resolved.isUnderlined {
             attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
         }
+        if lineBreakMode != .byWordWrapping, let paragraph = (attributes[.paragraphStyle] as? NSParagraphStyle)?.mutableCopy() as? NSMutableParagraphStyle {
+            paragraph.lineBreakMode = lineBreakMode
+            attributes[.paragraphStyle] = paragraph
+        }
         return AttributedString(NSAttributedString(string: resolved.font.text(title), attributes: attributes))
     }
 
     private func leadingImage(resolved: TSButtonStyleSpec.Resolved) -> UIImage? {
         if resolved.showsSpinner {
             return UIGraphicsImageRenderer(size: CGSize(width: resolved.iconSize, height: resolved.iconSize)).image { _ in }
+        }
+        if let leadingIconImage {
+            return leadingIconImage.tsTemplateIcon(pointSize: resolved.iconSize)
         }
         return leadingIcon?.templateImage(pointSize: resolved.iconSize)
     }

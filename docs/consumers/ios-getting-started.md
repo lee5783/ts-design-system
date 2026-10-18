@@ -133,7 +133,24 @@ final class ViewController: UIViewController {
 Rules that matter from day one:
 
 - Install **one toast host per scene**: `.tsToastHost()` at the SwiftUI root, `TSToastWindow(windowScene:)` in the scene delegate. If your app overrides traits on a container, forward them with `toastWindow.applyTraits(from:)`.
-- Present UIKit dialogs with `present(from:)`, not `present(_:animated:)`; it returns `false` when another TS dialog is open (dialogs never stack). SwiftUI calls `onRefused:` instead.
+- Dialogs never stack. A second SwiftUI `.tsDialog` is **queued** and shown when the first closes (its binding stays `true`); set `TSDialogPresenter.shared.policy = .refuse` to refuse instead (then `onRefused:` is called). Present UIKit dialogs with `present(from:)`, not `present(_:animated:)`; it returns `false` when another TS dialog is open.
+- An action's handler runs **before** the dialog dismisses. To present a share sheet, an alert or a SwiftUI sheet from an action, do it in `afterDismissal`: `TSDialogAction("Share", handler: { … }, afterDismissal: { … })` (`design/specs/components/dialog.md`).
 - Colours follow the system light/dark appearance. Theming, fonts and string overrides: [theming.md](theming.md).
+
+## TS building blocks instead of plain SwiftUI / UIKit
+
+Use these inside TS screens so stroke, size, colour and type stay on the spec:
+
+| Need | SwiftUI | UIKit | Instead of |
+|---|---|---|---|
+| Stand-alone loading indicator | `TSSpinner(size: .md, tone: .primary)` | `TSSpinnerView(size: .md, tone: .primary)` | `ProgressView`, `UIActivityIndicatorView` |
+| Divider between rows outside a `TSList` (a `LazyVStack`, a plain stack) | `TSDivider()` | `TSDividerView()` | `Divider`, a hairline `UIView` |
+| Row that expands into body text (licences, FAQs) | `TSDisclosureListItem("Title", isExpanded: $open) { … }` | `TSDisclosureListItemView` (`bodyView`, `isExpanded`) | a hand-built `DisclosureGroup` / button |
+| Text in a TS type role and colour | `TSText("…", role: .body, color: .primary)` | `UILabel` with `TSTypeRole.body.font` / `TSFont` attributes and `TSTextColor.primary.uiColor` | `Text` with system fonts |
+| A product icon in a button | `TSButton("Play", leadingIconSource: .image(Image("Controller"))) { … }`, `TSIconButton(.image(…), label: …)` | `leadingIconImage`, `trailingIconImage`, `TSIconButtonView(iconImage:label:)` | a plain `Button` |
+| A join-code / room-token field | `TSTextField("Join code", text: $code, inputTraits: .code, contentStyle: .code)` | `contentStyle = .code`, `inputTraits = .code` | a plain `TextField` |
+| UI over live media or a game controller | `TSControllerColor.<role>.color` ([theming.md](theming.md#controller-and-media-overlay-colours)) | `TSControllerColor.<role>.uiColor` | app-local copies of the palette |
+
+Contracts: `design/specs/components/{spinner,list-item,text,button,icon-button,text-field}.md`.
 
 Each component's full API (props, states, accessibility) is in `design/specs/components/<name>.md`; the SwiftUI and UIKit demo apps show every variant ([../guides/running-demos.md](../guides/running-demos.md)).

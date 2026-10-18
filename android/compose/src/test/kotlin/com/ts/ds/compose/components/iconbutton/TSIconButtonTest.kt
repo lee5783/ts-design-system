@@ -2,6 +2,8 @@ package com.ts.ds.compose.components.iconbutton
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -19,6 +21,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.ts.ds.compose.components.icon.TSIconSource
 import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSIconButtonVariant
@@ -89,5 +92,29 @@ class TSIconButtonTest {
         setIconButton()
 
         composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun consumerIconKeepsTheLabelAndTheSize() {
+        composeRule.setContent {
+            TSTheme(darkTheme = false) {
+                Box(Modifier.testTag("container")) {
+                    TSIconButton(
+                        icon = TSIconSource.Painter(ColorPainter(Color.Red)),
+                        contentDescription = "Controller",
+                        onClick = { taps++ },
+                        variant = TSIconButtonVariant.Secondary,
+                        modifier = Modifier.testTag("button"),
+                    )
+                }
+            }
+        }
+
+        composeRule.onNodeWithTag("container").assertWidthIsEqualTo(48.dp).assertHeightIsEqualTo(48.dp)
+        composeRule.onNodeWithContentDescription("Controller")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
+            .performClick()
+        composeRule.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Image), useUnmergedTree = true).assertCountEquals(0)
+        assertEquals(1, taps)
     }
 }

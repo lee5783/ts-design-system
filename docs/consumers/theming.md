@@ -26,6 +26,43 @@ The demo apps implement exactly this, plus a quick toggle and deep links ([../gu
 
 Token names follow the DS names (`accent-primary`, `space-4`, `radius-lg`); see [../conventions.md](../conventions.md#naming-patterns) for the mapping rules and the demo apps' Foundations pages for every value.
 
+## Controller and media-overlay colours
+
+UI drawn **over live media or as a game controller** (a virtual gamepad over video, a translucent "Menu" chip over a video frame, a full-screen remote-controller canvas) uses a separate palette. It is kept out of `TSColors` / `TSColor` / `ts_colors.xml` and the `?attr/tsColor*` theme attributes, so apps without a controller keep the small main palette. The tokens live in `design/extensions/native-tokens.json` (family `controller-color`, `upstream: "pending"`).
+
+| Token | Member | Light | Dark | Use |
+|---|---|---|---|---|
+| `controller-backdrop` | `backdrop` | `#fcfcfc` | `#121416` | Canvas behind a full-screen controller |
+| `controller-key` | `key` | `#18181b29` | `#ffffff29` | Idle fill of a control |
+| `controller-key-pressed` | `keyPressed` | `#18181b6b` | `#ffffff6b` | Fill of a held control |
+| `controller-key-outline` | `keyOutline` | `#18181b99` | `#ffffff99` | Control boundary; carries the 3:1 non-text contrast |
+| `controller-key-label` | `keyLabel` | `#18181b` | `#ffffff` | Text on a control (A, B, START) |
+| `controller-backing` | `backing` | `#fcfcfce6` | `#000000ec` | Plate under each control so it reads over any video frame |
+| `overlay-scrim-media` | `overlayScrimMedia` | `#fcfcfc99` | `#00000099` | Translucent chip or backdrop over live media. Not `overlay`, which is the modal scrim (dark in both themes) |
+| `text-on-overlay-media` | `textOnOverlayMedia` | `#18181b` | `#ffffff` | Text on `overlay-scrim-media` |
+| `controller-outline-width` | `outlineWidth` | 1.5 dp / pt | | Stroke of `keyOutline` |
+
+Values are `#RRGGBBAA`. Contrast is checked by codegen tests (`tools/codegen/test/unit/merge-extensions.test.ts`), alpha-composited over both a black and a white video frame in each theme: every label pair (idle and pressed key label, media text) is at least 4.5:1 and the outline at least 3:1 against the backing.
+
+| Toolkit | Colours | Outline width |
+|---|---|---|
+| Compose | `TSTheme.controllerColors.keyPressed` (`TSControllerColors`, follows `TSTheme(darkTheme)` like `TSTheme.colors`; `lightTSControllerColors()` / `darkTSControllerColors()` for a fixed theme) | `TSControllerSize.outlineWidth` (`Dp`) |
+| SwiftUI | `TSControllerColor.keyPressed.color` (dynamic light/dark). iOS has no `TSTheme`, so this enum is the twin of `TSTheme.controllerColors` | `TSControllerSize.outlineWidth` (`CGFloat`, pt) |
+| UIKit | `TSControllerColor.keyPressed.uiColor` (dynamic) | `TSControllerSize.outlineWidth` |
+| Views | `@color/ts_controller_key_pressed` (resource names keep the full token: `ts_controller_*`, `ts_overlay_scrim_media`, `ts_text_on_overlay_media`; light in `values/`, dark in `values-night/`). No theme attributes | `@dimen/ts_controller_outline_width` |
+
+There is no media-overlay variant of `TSButton`; every TS button variant stays opaque.
+
+### Content colours, not chrome
+
+These colours are part of the picture, not UI chrome, so they are **deliberately not tokens** and stay fixed in both themes:
+
+- **Video letterbox:** always `#000000`.
+- **Camera-preview scrim:** opaque `#000000` behind a scanner preview.
+- **QR codes:** black modules on a white background in both themes, for scanner reliability.
+
+Hard-code them in the app; do not map them to a TS role, and do not invert them in dark mode.
+
 ## Material interop (Android)
 
 - **Compose:** `TSTheme` also provides a Material3 `MaterialTheme` colour scheme mapped from the TS colours (`TSMaterialBridge`), so plain M3 components inside it use the TS palette. TS components never read `MaterialTheme` directly.

@@ -16,6 +16,8 @@ public enum TSStringKey: String, CaseIterable, Sendable {
     case tabPosition = "ts.tab.position"
     case bottomNavBadge = "ts.bottom-nav.badge"
     case listItemNavigates = "ts.list-item.navigates"
+    case listItemExpanded = "ts.list-item.expanded"
+    case listItemCollapsed = "ts.list-item.collapsed"
     case alertInfo = "ts.alert.info"
     case alertSuccess = "ts.alert.success"
     case alertWarning = "ts.alert.warning"
@@ -35,6 +37,8 @@ public enum TSStrings {
     public static var showPassword: String { string(.showPassword) }
     public static var hidePassword: String { string(.hidePassword) }
     public static var listItemNavigates: String { string(.listItemNavigates) }
+    public static var listItemExpanded: String { string(.listItemExpanded) }
+    public static var listItemCollapsed: String { string(.listItemCollapsed) }
 
     public static func alertTone(_ tone: TSAlertTone) -> String {
         switch tone {

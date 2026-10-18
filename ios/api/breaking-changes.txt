@@ -1,0 +1,2 @@
+0.1.0 TSFoundation: EnumElement TSStringKey.listItemCollapsed has been added as a new enum case
+0.1.0 TSFoundation: EnumElement TSStringKey.listItemExpanded has been added as a new enum case

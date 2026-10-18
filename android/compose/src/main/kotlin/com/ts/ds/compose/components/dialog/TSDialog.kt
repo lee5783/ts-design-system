@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
@@ -46,6 +47,7 @@ import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.compose.theme.color
 import com.ts.ds.core.logic.TSDialogAction
 import com.ts.ds.core.logic.TSDialogPresenter
+import com.ts.ds.core.logic.TSDialogRequestResult
 import com.ts.ds.core.style.TSDialogStyleSpec
 import com.ts.ds.core.style.TSDialogVariant
 import kotlin.coroutines.cancellation.CancellationException
@@ -95,26 +97,30 @@ public fun TSDialog(
 ) {
     val owner = remember { Any() }
     var shown by remember(presenter) { mutableStateOf(false) }
-    val pendingAction = remember(presenter) { TSDialogPendingAction() }
+    val actionGuard = remember { TSDialogActionGuard() }
+    val currentIsPresented by rememberUpdatedState(isPresented)
     val currentOnPresentedChange by rememberUpdatedState(onPresentedChange)
     val currentOnDismiss by rememberUpdatedState(onDismiss)
     val currentOnRefused by rememberUpdatedState(onRefused)
 
     LaunchedEffect(isPresented, presenter) {
-        if (isPresented && !shown) {
-            if (presenter.begin(owner)) {
-                shown = true
-            } else {
+        if (isPresented) actionGuard.dismissing = false
+        if (shown) return@LaunchedEffect
+        if (!isPresented) {
+            presenter.end(owner)
+            return@LaunchedEffect
+        }
+        when (presenter.request(owner) { shown = true }) {
+            TSDialogRequestResult.Granted -> shown = true
+            TSDialogRequestResult.Queued -> Unit
+            TSDialogRequestResult.Refused -> {
                 currentOnPresentedChange(false)
                 currentOnRefused?.invoke()
             }
         }
     }
     DisposableEffect(presenter) {
-        onDispose {
-            presenter.end(owner)
-            pendingAction.run()
-        }
+        onDispose { presenter.end(owner) }
     }
     if (!shown) return
 
@@ -125,14 +131,12 @@ public fun TSDialog(
     val onExited: () -> Unit = {
         shown = false
         presenter.end(owner)
-        pendingAction.run()
     }
     val onAction = { action: TSDialogAction ->
-        if (action.dismisses) {
-            pendingAction.handler = action.onClick
-            currentOnPresentedChange(false)
-        } else {
+        if (currentIsPresented && !actionGuard.dismissing) {
+            actionGuard.dismissing = action.dismisses
             action.onClick()
+            if (action.dismisses) currentOnPresentedChange(false)
         }
     }
     val resolved = resolveDialogStyle(variant)
@@ -173,6 +177,8 @@ private fun TSCenterDialogHost(
         if (visibility.isIdle && !visibility.currentState && !visibility.targetState && !visible) currentOnExited()
     }
     var backScale by remember { mutableFloatStateOf(1f) }
+    val hostWindow = LocalContext.current.hostWindow()
+    val hostBars = remember(hostWindow) { hostWindow?.systemBarsState() }
 
     Dialog(
         onDismissRequest = onUserDismiss,
@@ -182,6 +188,7 @@ private fun TSCenterDialogHost(
         SideEffect {
             window?.setDimAmount(0f)
             window?.setWindowAnimations(0)
+            if (hostBars != null) window?.applySystemBars(hostBars)
         }
         PredictiveBackHandler(enabled = visible) { progress ->
             try {
@@ -218,6 +225,9 @@ private fun TSCenterDialogHost(
             if (toastState != null) TSToastLayer(toastState, Modifier.matchParentSize())
         }
     }
+    DisposableEffect(hostWindow, hostBars) {
+        onDispose { if (hostWindow != null && hostBars != null) hostWindow.applySystemBars(hostBars) }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -243,6 +253,8 @@ private fun TSSheetDialogHost(
         }
     }
     val colors = TSTheme.colors
+    val hostWindow = LocalContext.current.hostWindow()
+    val hostBars = remember(hostWindow) { hostWindow?.systemBarsState() }
     ModalBottomSheet(
         onDismissRequest = onUserDismiss,
         sheetState = sheetState,
@@ -255,20 +267,21 @@ private fun TSSheetDialogHost(
         dragHandle = null,
         contentWindowInsets = { BottomSheetDefaults.windowInsets },
     ) {
+        val window = LocalView.current.dialogWindow()
+        SideEffect {
+            if (hostBars != null) window?.applySystemBars(hostBars)
+        }
         val toastState = LocalTSToastState.current
         Box {
             panel(Modifier, true)
             if (toastState != null) TSToastLayer(toastState, Modifier.matchParentSize())
         }
     }
+    DisposableEffect(hostWindow, hostBars) {
+        onDispose { if (hostWindow != null && hostBars != null) hostWindow.applySystemBars(hostBars) }
+    }
 }
 
-private class TSDialogPendingAction {
-    var handler: (() -> Unit)? = null
-
-    fun run() {
-        val pending = handler ?: return
-        handler = null
-        pending()
-    }
+private class TSDialogActionGuard {
+    var dismissing = false
 }

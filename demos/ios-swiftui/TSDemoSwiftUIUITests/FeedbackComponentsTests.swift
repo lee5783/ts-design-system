@@ -76,7 +76,7 @@ final class FeedbackComponentsTests: XCTestCase {
     }
 
     @MainActor
-    func testSecondDialogIsRefusedWhileOneIsOpen() {
+    func testSecondDialogIsQueuedWhileOneIsOpenAndShownAfterItCloses() {
         let app = launch(page: "dialog")
         let stackingTitle = app.staticTexts["One dialog at a time"].firstMatch
         let secondTitle = app.staticTexts["Delete this project?"].firstMatch
@@ -89,8 +89,12 @@ final class FeedbackComponentsTests: XCTestCase {
         XCTAssertTrue(stackingTitle.exists)
         app.buttons["Close"].firstMatch.tap()
         XCTAssertTrue(stackingTitle.waitForNonExistence(timeout: 5))
-        XCTAssertEqual(element(app, "demo.dialog.refused").label, "Refused presentations: 1")
-        XCTAssertEqual(element(app, "demo.dialog.result").label, "Result: Refused")
+        XCTAssertTrue(secondTitle.waitForExistence(timeout: 5))
+        app.buttons["Cancel"].firstMatch.tap()
+        XCTAssertTrue(secondTitle.waitForNonExistence(timeout: 5))
+        XCTAssertEqual(element(app, "demo.dialog.queued").label, "Queued presentations: 0")
+        XCTAssertEqual(element(app, "demo.dialog.refused").label, "Refused presentations: 0")
+        XCTAssertEqual(element(app, "demo.dialog.result").label, "Result: Cancel")
     }
 
     @MainActor
@@ -166,6 +170,23 @@ final class FeedbackComponentsTests: XCTestCase {
         XCTAssertTrue(toast.isHittable)
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.12)).tap()
         XCTAssertTrue(title.waitForNonExistence(timeout: 5))
+    }
+
+    @MainActor
+    func testSpinnerPageShowsSpinnersLabelledLoading() {
+        let app = launch(page: "spinner")
+        for size in ["sm", "md", "lg"] {
+            let spinner = element(app, "demo.spinner.size.\(size)")
+            XCTAssertTrue(spinner.waitForExistence(timeout: 5))
+            XCTAssertEqual(spinner.label, "Loading")
+        }
+        for tone in ["primary", "secondary", "accent"] {
+            XCTAssertEqual(element(app, "demo.spinner.tone.\(tone)").label, "Loading")
+        }
+        let labelled = element(app, "demo.spinner.labelled")
+        scrollTo(labelled, in: app)
+        XCTAssertEqual(labelled.label, "Loading messages")
+        XCTAssertEqual(element(app, "demo.spinner.in-context").label, "Loading messages")
     }
 
     @MainActor

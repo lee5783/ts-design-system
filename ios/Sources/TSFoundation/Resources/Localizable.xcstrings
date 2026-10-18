@@ -121,6 +121,30 @@
         }
       }
     },
+    "ts.list-item.collapsed" : {
+      "comment" : "Accessibility value of a disclosure list row whose body is hidden.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collapsed"
+          }
+        }
+      }
+    },
+    "ts.list-item.expanded" : {
+      "comment" : "Accessibility value of a disclosure list row whose body is shown.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expanded"
+          }
+        }
+      }
+    },
     "ts.list-item.navigates" : {
       "comment" : "Accessibility hint of a list row with a chevron: activating the row opens another screen.",
       "extractionState" : "manual",

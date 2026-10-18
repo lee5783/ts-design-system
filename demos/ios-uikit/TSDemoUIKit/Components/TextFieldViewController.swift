@@ -24,7 +24,7 @@ final class TextFieldViewController: DemoPageViewController {
     }
 
     override func makeContentViews() -> [UIView] {
-        [statesSection(), iconsSection(), passwordSection(), multilineSection(), keyboardTypesSection(), playgroundSection()]
+        [statesSection(), iconsSection(), passwordSection(), multilineSection(), keyboardTypesSection(), codeSection(), playgroundSection()]
     }
 
     private func statesSection() -> UIView {
@@ -101,6 +101,19 @@ final class TextFieldViewController: DemoPageViewController {
             TSTextFieldView(label: DemoStrings.string(.sampleWebsite), inputTraits: .url),
             TSTextFieldView(label: DemoStrings.string(.sampleCode), inputTraits: .oneTimeCode)
         ])
+    }
+
+    private func codeSection() -> UIView {
+        let field = TSTextFieldView(
+            label: DemoStrings.string(.sampleJoinCode),
+            placeholder: DemoStrings.string(.sampleJoinCodePlaceholder),
+            hint: DemoStrings.string(.sampleJoinCodeHint),
+            inputTraits: .code
+        )
+        field.contentStyle = .code
+        field.accessibilityIdentifier = "demo.text-field.code.field"
+        field.addAction(UIAction { [unowned field] _ in field.resignFirstResponder() }, for: .primaryActionTriggered)
+        return fieldsSection(.codeEntry, fields: [field])
     }
 
     private func playgroundSection() -> UIView {

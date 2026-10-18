@@ -29,6 +29,13 @@ class TSTextFieldSdkSnapshotTest(private val variant: SnapshotVariant) {
         }
     }
 
+    @Test
+    fun code() {
+        captureComposeSnapshot(SnapshotEnvironment.file(javaClass, "code", variant), variant) {
+            TSTheme(darkTheme = variant.dark) { TextFieldCodeSample() }
+        }
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")

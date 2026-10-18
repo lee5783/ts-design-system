@@ -55,7 +55,11 @@ class TSTextFieldStyleSpecTest(
         assertEquals(TSTypeRole.Label, resolved.labelTypeRole)
         assertEquals(500, resolved.labelFontWeight)
         assertEquals(TSColorRole.TextPrimary, resolved.labelColor)
-        assertEquals(TSTypeRole.Body, resolved.inputTypeRole)
+        val inputTypeRole = when (configuration.contentStyle) {
+            TSTextFieldContentStyle.Default -> TSTypeRole.Body
+            TSTextFieldContentStyle.Code -> TSTypeRole.Code
+        }
+        assertEquals(inputTypeRole, resolved.inputTypeRole)
         assertEquals(TSColorRole.TextPrimary, resolved.inputColor)
         assertEquals(TSColorRole.TextMuted, resolved.placeholderColor)
         assertEquals(TSTypeRole.Caption, resolved.messageTypeRole)
@@ -82,10 +86,25 @@ class TSTextFieldStyleSpecTest(
 
 class TSTextFieldStyleSpecMatrixTest {
     @Test
-    fun matrixHas10Configurations() {
+    fun matrixHas20Configurations() {
         val matrix = TSTextFieldStyleSpec.configurations.flatMap { configuration -> TSTextFieldStyleSpec.states.map { configuration to it } }
-        assertEquals(10, matrix.size)
-        assertEquals(10, matrix.toSet().size)
+        assertEquals(20, matrix.size)
+        assertEquals(20, matrix.toSet().size)
+    }
+
+    @Test
+    fun codeContentStyleChangesOnlyTheInputTypeRole() {
+        TSTextFieldStyleSpec.states.forEach { state ->
+            listOf(false, true).forEach { readOnly ->
+                val default = TSTextFieldStyleSpec.resolve(TSTextFieldStyleSpec.Configuration(readOnly = readOnly), state)
+                val code = TSTextFieldStyleSpec.resolve(
+                    TSTextFieldStyleSpec.Configuration(readOnly = readOnly, contentStyle = TSTextFieldContentStyle.Code),
+                    state,
+                )
+                assertEquals(TSTypeRole.Code, code.inputTypeRole)
+                assertEquals(default.copy(inputTypeRole = TSTypeRole.Code), code)
+            }
+        }
     }
 
     @Test

@@ -58,3 +58,68 @@ final class ListItemGalleryUIView: GalleryStackView {
         ]
     }
 }
+
+enum ListItemExtrasGalleryUIKind: String, CaseIterable {
+    case disclosure
+    case divider
+}
+
+final class ListItemExtrasGalleryUIView: GalleryStackView {
+    init(kind: ListItemExtrasGalleryUIKind) {
+        super.init(frame: .zero)
+        stack.alignment = .fill
+        stack.spacing = TSSpacing.space6
+        switch kind {
+        case .disclosure:
+            stack.addArrangedSubview(TSListView(items: Self.disclosures()))
+            stack.addArrangedSubview(TSDisclosureListItemView(title: "Standalone", bodyView: Self.body("Outside a list"), isExpanded: true))
+        case .divider:
+            let plain = UIStackView(arrangedSubviews: [
+                TSListItemView(configuration: TSListItemConfiguration(title: "First row")),
+                TSDividerView(),
+                TSListItemView(configuration: TSListItemConfiguration(title: "Second row", subtitle: "Divided with TSDividerView")),
+                TSDividerView(),
+                TSListItemView(configuration: TSListItemConfiguration(title: "Third row"))
+            ])
+            plain.axis = .vertical
+            plain.backgroundColor = TSColor.surfaceCard.uiColor
+            stack.addArrangedSubview(plain)
+            stack.addArrangedSubview(TSListView(items: [
+                TSListItemView(configuration: TSListItemConfiguration(title: "First row")),
+                TSListItemView(configuration: TSListItemConfiguration(title: "Second row", subtitle: "Divided inside TSListView")),
+                TSListItemView(configuration: TSListItemConfiguration(title: "Third row"))
+            ]))
+        }
+    }
+
+    static func body(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.attributedText = TSTypeRole.bodySm.font.attributedString(
+            text,
+            sizeCategory: .large,
+            color: TSTextColor.secondary.color.uiColor
+        )
+        label.adjustsFontForContentSizeCategory = false
+        return label
+    }
+
+    private static func disclosures() -> [UIView] {
+        let pressed = TSDisclosureListItemView(title: "Pressed", bodyView: body("Hidden body"))
+        pressed.isHighlighted = true
+        let disabled = TSDisclosureListItemView(title: "Disabled", bodyView: body("Dimmed body"), isExpanded: true)
+        disabled.isEnabled = false
+        return [
+            TSDisclosureListItemView(title: "Collapsed", bodyView: body("Hidden body")),
+            TSDisclosureListItemView(
+                title: "Kotlin",
+                subtitle: "Apache License 2.0",
+                leading: .icon(.info),
+                bodyView: body("A very long subtitle that wraps onto a second line at larger text sizes"),
+                isExpanded: true
+            ),
+            pressed,
+            disabled
+        ]
+    }
+}

@@ -214,31 +214,143 @@ struct TSDialogBehaviorTests {
         _ = window
     }
 
-    @Test("A dismissing action's handler runs only after the dismissal, when the presenter is free for a follow-up dialog")
-    func handlerRunsAfterDismissal() {
+    @Test("A dismissing action's handler runs while the dialog is still granted and before the binding resets; then the dialog withdraws")
+    func handlerRunsBeforeDismissal() {
+        let presenter = TSDialogPresenter()
+        let session = TSDialogSession()
+        var selection: String? = "Row 3"
+        var removed: [String] = []
+        var grantedInHandler: Bool?
+        #expect(session.request(true, presenter: presenter))
+        let remove = TSDialogAction("Remove", variant: .danger) {
+            grantedInHandler = session.isGranted
+            if let selection { removed.append(selection) }
+        }
+        session.perform(remove) { selection = nil }
+        #expect(grantedInHandler == true)
+        #expect(removed == ["Row 3"])
+        #expect(selection == nil)
+        #expect(!session.isGranted)
+        #expect(presenter.isActive(session))
+        session.didDismiss(presenter: presenter)
+        #expect(!presenter.isPresenting)
+    }
+
+    @Test("A non-dismissing action runs its handler and keeps the dialog; actions after the withdrawal are ignored")
+    func nonDismissingAndLateActions() {
+        let presenter = TSDialogPresenter()
+        let session = TSDialogSession()
+        var runs = 0
+        var dismissals = 0
+        #expect(session.request(true, presenter: presenter))
+        session.perform(TSDialogAction("Keep", dismisses: false) { runs += 1 }) { dismissals += 1 }
+        #expect(runs == 1)
+        #expect(dismissals == 0)
+        #expect(session.isGranted)
+        session.perform(TSDialogAction("Delete") { runs += 1 }) { dismissals += 1 }
+        session.perform(TSDialogAction("Delete") { runs += 1 }) { dismissals += 1 }
+        #expect(runs == 2)
+        #expect(dismissals == 1)
+    }
+
+    @Test("An action's after-dismissal step runs after the presenter is released, never before")
+    func afterDismissalRunsOnceDismissed() {
+        let presenter = TSDialogPresenter()
+        let session = TSDialogSession()
+        var order: [String] = []
+        #expect(session.request(true, presenter: presenter))
+        session.didAppear()
+        session.perform(TSDialogAction("Share", handler: { order.append("handler") }, afterDismissal: {
+            order.append(presenter.isPresenting ? "after-while-held" : "after")
+        })) {}
+        #expect(order == ["handler"])
+        session.didDismiss(presenter: presenter)
+        #expect(order == ["handler", "after"])
+        session.didDismiss(presenter: presenter)
+        #expect(order == ["handler", "after"])
+    }
+
+    @Test("An after-dismissal step can present a UIKit alert once the dialog has dismissed")
+    func afterDismissalPresentsAnAlert() {
+        let presenter = TSDialogPresenter()
+        let session = TSDialogSession()
+        let (window, root, _) = anchoredWindow()
+        #expect(session.request(true, presenter: presenter))
+        session.perform(TSDialogAction("Share", handler: {}, afterDismissal: {
+            root.present(UIAlertController(title: "Shared", message: nil, preferredStyle: .alert), animated: false)
+        })) {}
+        session.didDismiss(presenter: presenter)
+        #expect(root.presentedViewController is UIAlertController)
+        _ = window
+    }
+
+    @Test("A session granted from the queue whose binding goes false before it appears releases the presenter")
+    func grantedButNeverShownReleases() {
+        let presenter = TSDialogPresenter()
+        let first = TSDialogSession()
+        let second = TSDialogSession()
+        #expect(first.request(true, presenter: presenter))
+        #expect(second.request(true, presenter: presenter))
+        first.withdraw()
+        first.didDismiss(presenter: presenter)
+        #expect(second.isGranted)
+        #expect(second.request(false, presenter: presenter))
+        #expect(!presenter.isPresenting)
+        let shown = TSDialogSession()
+        #expect(shown.request(true, presenter: presenter))
+        shown.didAppear()
+        #expect(shown.request(false, presenter: presenter))
+        #expect(presenter.isActive(shown))
+    }
+
+    @Test("A follow-up requested from a handler is queued and granted once the first dialog has dismissed")
+    func chainedFollowUpIsQueued() {
         let presenter = TSDialogPresenter()
         let first = TSDialogSession()
         let followUp = TSDialogSession()
-        var followUpGranted: Bool?
         #expect(first.request(true, presenter: presenter))
-        first.withdraw(then: { followUpGranted = followUp.request(true, presenter: presenter) })
-        #expect(followUpGranted == nil)
+        first.perform(TSDialogAction("Delete") { #expect(followUp.request(true, presenter: presenter)) }) {}
+        #expect(!followUp.isGranted)
+        #expect(presenter.pendingCount == 1)
         first.didDismiss(presenter: presenter)
-        #expect(followUpGranted == true)
+        #expect(followUp.isGranted)
+        #expect(presenter.isActive(followUp))
         #expect(presenter.refusedCount == 0)
         first.didDismiss(presenter: presenter)
-        #expect(presenter.refusedCount == 0)
+        #expect(presenter.isActive(followUp))
     }
 
-    @Test("A session refused because another dialog is open reports the refusal and stays ungranted")
+    @Test("Under the refuse policy a session requested while another dialog is open reports the refusal and stays ungranted")
     func refusedSessionStaysClosed() {
-        let presenter = TSDialogPresenter()
+        let presenter = TSDialogPresenter(policy: .refuse)
         let other = TSDialogSession()
         let session = TSDialogSession()
         #expect(other.request(true, presenter: presenter))
         #expect(!session.request(true, presenter: presenter))
         #expect(!session.isGranted)
         #expect(presenter.refusedCount == 1)
+        #expect(presenter.pendingCount == 0)
+    }
+
+    @Test("A queued session that is no longer wanted, or disappears, is withdrawn and never granted")
+    func queuedSessionWithdrawn() {
+        let presenter = TSDialogPresenter()
+        let first = TSDialogSession()
+        let unwanted = TSDialogSession()
+        let gone = TSDialogSession()
+        #expect(first.request(true, presenter: presenter))
+        #expect(unwanted.request(true, presenter: presenter))
+        #expect(gone.request(true, presenter: presenter))
+        #expect(presenter.pendingCount == 2)
+        #expect(unwanted.request(false, presenter: presenter))
+        gone.invalidate(presenter: presenter)
+        #expect(presenter.pendingCount == 0)
+        #expect(presenter.isActive(first))
+        first.withdraw()
+        first.didDismiss(presenter: presenter)
+        #expect(!unwanted.isGranted)
+        #expect(!gone.isGranted)
+        #expect(!presenter.isPresenting)
     }
 
     @Test("A drag-to-dismiss tells the owner and releases the presenter")
@@ -255,13 +367,34 @@ struct TSDialogBehaviorTests {
         #expect(dismissals == 1)
     }
 
-    @Test("A session is refused while another dialog is open, and is granted once it has dismissed")
-    func sessionRefusal() {
+    @Test("A session requested while another dialog is open is queued, not refused, and is granted once that one has dismissed")
+    func sessionQueued() {
         let presenter = TSDialogPresenter()
         let first = TSDialogSession()
         let second = TSDialogSession()
         #expect(first.request(true, presenter: presenter))
         #expect(first.isGranted)
+        #expect(second.request(true, presenter: presenter))
+        #expect(!second.isGranted)
+        #expect(presenter.refusedCount == 0)
+        #expect(presenter.pendingCount == 1)
+        first.withdraw()
+        #expect(second.request(true, presenter: presenter))
+        #expect(!second.isGranted)
+        #expect(presenter.pendingCount == 1)
+        first.didDismiss(presenter: presenter)
+        #expect(second.isGranted)
+        #expect(presenter.isActive(second))
+        second.invalidate(presenter: presenter)
+        #expect(!presenter.isPresenting)
+    }
+
+    @Test("Under the refuse policy a session is refused while another dialog is open, and is granted once it has dismissed")
+    func sessionRefusal() {
+        let presenter = TSDialogPresenter(policy: .refuse)
+        let first = TSDialogSession()
+        let second = TSDialogSession()
+        #expect(first.request(true, presenter: presenter))
         #expect(!second.request(true, presenter: presenter))
         #expect(!second.isGranted)
         #expect(presenter.refusedCount == 1)

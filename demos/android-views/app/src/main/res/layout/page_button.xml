@@ -113,6 +113,48 @@
                 app:tsTrailingIcon="arrow-right"
                 app:tsVariant="secondary" />
 
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_consumer_icon" />
+
+            <com.ts.ds.views.components.button.TSButtonView
+                android:id="@+id/button_consumer_icon"
+                style="@style/Widget.Demo.ComponentSample"
+                android:text="@string/demo_sample_play_together"
+                app:tsVariant="primary" />
+
+            <com.ts.ds.views.components.button.TSButtonView
+                android:id="@+id/button_consumer_icon_secondary"
+                style="@style/Widget.Demo.ComponentSample"
+                android:text="@string/demo_sample_play_together"
+                app:tsVariant="secondary" />
+
+            <com.ts.ds.views.components.button.TSButtonView
+                android:id="@+id/button_consumer_icon_loading"
+                style="@style/Widget.Demo.ComponentSample"
+                android:text="@string/demo_sample_play_together"
+                app:tsLoading="true"
+                app:tsVariant="primary" />
+
+            <TextView
+                style="@style/Widget.Demo.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="@string/demo_heading_tag"
+                android:text="@string/demo_component_line_limit" />
+
+            <com.ts.ds.views.components.button.TSButtonView
+                android:id="@+id/button_line_limit"
+                style="@style/Widget.Demo.ComponentSample"
+                android:layout_width="240dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/demo_sample_join_tournament"
+                app:tsVariant="secondary" />
+
             <LinearLayout
                 android:id="@+id/button_playground"
                 android:layout_width="match_parent"

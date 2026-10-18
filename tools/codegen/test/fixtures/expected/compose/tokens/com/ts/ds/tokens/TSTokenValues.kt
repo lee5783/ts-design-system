@@ -98,4 +98,20 @@ public object TSTokenValues {
         public const val alertTitleFontWeight: Int = 600
         public const val spinnerRotationDuration: Int = 700
     }
+
+    public object LightControllerColors {
+        public const val key: Long = 0x2918181B
+        public const val keyLabel: Long = 0xFF18181B
+        public const val overlayScrimMedia: Long = 0x99FCFCFC
+    }
+
+    public object DarkControllerColors {
+        public const val key: Long = 0x29FFFFFF
+        public const val keyLabel: Long = 0xFFFFFFFF
+        public const val overlayScrimMedia: Long = 0x99000000
+    }
+
+    public object ControllerSize {
+        public const val outlineWidth: Float = 1.5f
+    }
 }

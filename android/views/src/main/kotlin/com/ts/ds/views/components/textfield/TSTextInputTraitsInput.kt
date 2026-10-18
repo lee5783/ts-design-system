@@ -13,12 +13,14 @@ internal fun TSTextInputTraits.inputType(secure: Boolean, revealed: Boolean, mul
         TSKeyboardType.Phone -> InputType.TYPE_CLASS_PHONE
         TSKeyboardType.Number -> InputType.TYPE_CLASS_NUMBER or numberVariation(masked)
         TSKeyboardType.Decimal -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or numberVariation(masked)
-        TSKeyboardType.Text, TSKeyboardType.Email, TSKeyboardType.Uri ->
+        TSKeyboardType.Text, TSKeyboardType.Email, TSKeyboardType.Uri, TSKeyboardType.Ascii ->
             InputType.TYPE_CLASS_TEXT or textVariation(secure, revealed) or textFlags(secure, multiline)
     }
 }
 
-internal fun TSTextInputTraits.imeOptions(): Int = when (imeAction) {
+internal fun TSTextInputTraits.imeOptions(): Int = imeActionOption() or asciiOption()
+
+private fun TSTextInputTraits.imeActionOption(): Int = when (imeAction) {
     TSImeAction.Default -> EditorInfo.IME_ACTION_UNSPECIFIED
     TSImeAction.Done -> EditorInfo.IME_ACTION_DONE
     TSImeAction.Go -> EditorInfo.IME_ACTION_GO
@@ -26,6 +28,8 @@ internal fun TSTextInputTraits.imeOptions(): Int = when (imeAction) {
     TSImeAction.Search -> EditorInfo.IME_ACTION_SEARCH
     TSImeAction.Send -> EditorInfo.IME_ACTION_SEND
 }
+
+private fun TSTextInputTraits.asciiOption(): Int = if (keyboardType == TSKeyboardType.Ascii) EditorInfo.IME_FLAG_FORCE_ASCII else 0
 
 private fun numberVariation(masked: Boolean): Int = if (masked) InputType.TYPE_NUMBER_VARIATION_PASSWORD else 0
 

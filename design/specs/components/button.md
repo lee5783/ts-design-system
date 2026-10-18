@@ -11,6 +11,8 @@ Cross-toolkit contract for the TS Button. Source: `design/source/components/Butt
 | `variant` | `TSButtonVariant` `primary · secondary · ghost · danger · link` (Kotlin `Primary` …) | `variant:` | `variant` | `variant =` | `variant` / `app:tsVariant` |
 | `size` | `TSButtonSize` `md · lg` (`sm` dropped, C-22) | `size:` | `size` | `size =` | `size` / `app:tsSize` |
 | `iconLeft` / `iconRight` | `TSIconName` / `TSIcon` | `leadingIcon:` / `trailingIcon:` | `leadingIcon` / `trailingIcon` | `leadingIcon =` / `trailingIcon =` | `leadingIcon` / `trailingIcon`, `app:tsLeadingIcon="arrow-left"` (DS name) |
+| consumer icon (native, issue #2) | — (drawn at `Resolved.iconSize`, tinted with `Resolved.label`) | `TSIconSource` `.ts(TSIconName)` · `.image(Image)`; init `TSButton(_:variant:size:leadingIconSource:trailingIconSource:isLoading:isBlock:action:)` (`leadingIconSource:` has no default) | `leadingIconImage: UIImage?` / `trailingIconImage: UIImage?` (wins over `leadingIcon` / `trailingIcon` in the same slot) | `TSIconSource` (`com.ts.ds.compose.components.icon`) `Ts(TSIcon)` · `Vector(ImageVector)` · `Painter(Painter)`; overload with `leadingIconSource =` / `trailingIconSource =` | `leadingIconDrawable` / `trailingIconDrawable: Drawable?`, `setLeadingIconResource(@DrawableRes)` / `setTrailingIconResource(@DrawableRes)` (win over `leadingIcon` / `trailingIcon`); no XML attribute |
+| label line control (native, issue #2) | — (type role stays `Resolved.typeRole`) | environment `.lineLimit(_:)` / `.truncationMode(_:)` | `numberOfLines` (default 0), `lineBreakMode` (default `.byWordWrapping`) | `maxLines =` (default `Int.MAX_VALUE`), `overflow =` (default `TextOverflow.Clip`) on the `TSIconSource` overload | `maxLines`, `ellipsize` / `android:maxLines`, `android:ellipsize` |
 | `loading` | `TSControlState.loading` | `isLoading:` | `isLoading` | `loading =`, `loadingDescription =` | `isLoading` / `app:tsLoading`, `loadingDescription` |
 | `block` | — | `isBlock:` (fills the proposed width) | `isBlock` (low horizontal hugging; the container sets the width) | `Modifier.fillMaxWidth()` (content stays centred) | `layout_width="match_parent"` |
 | `disabled` | `TSControlState.disabled` | `.disabled(_:)` | `isEnabled` | `enabled =` | `isEnabled` / `android:enabled` |
@@ -18,6 +20,35 @@ Cross-toolkit contract for the TS Button. Source: `design/source/components/Butt
 | `as`, `href`, `className` | dropped | | | | |
 
 Icons are leading/trailing, never left/right, so they follow the layout direction. Directional icons mirror in RTL.
+
+The existing `TSIcon` / `TSIconName` signatures are unchanged and delegate to the consumer-icon overloads, so both paths render through one code path. No overload takes a colour, a size or padding.
+
+## Consumer icons
+
+A consumer can pass its own icon (a product mark, a game controller, a QR glyph) instead of a `TSIcon`. TS still draws it: the spec decides how it looks, the consumer only supplies the shape.
+
+- **Size:** `Resolved.iconSize` (`icon-md` 20), aspect-fitted into the square slot (Compose `ContentScale.Fit`, SwiftUI `resizable().scaledToFit()`, UIKit `UIImage.tsTemplateIcon(pointSize:)`, Views `FIT_CENTER`). A larger or non-square source is scaled down to the slot.
+- **Tint:** one colour, the resolved label colour, in every state (pressed, disabled, loading). Compose `ColorFilter.tint` (SrcIn), SwiftUI `.renderingMode(.template)`, UIKit `.alwaysTemplate`, Views a `SRC_IN` colour filter (works for any `Drawable`). A multi-colour source therefore renders as a single-colour silhouette.
+- **Spacing:** the same slot and gap (`space-2` 8) as a `TSIcon`; a custom icon in a Primary md button takes exactly the space a `TSIcon` takes.
+- **Loading:** the spinner still replaces only the leading slot; a trailing consumer icon stays.
+- **Accessibility:** the image is decorative and hidden (SwiftUI pairs `.accessibilityHidden(true)` with an empty label, as `TSIcon` does, because `Image("name")` otherwise exposes its asset name).
+
+### Icon contract
+
+Draw consumer icons like the TS set so they sit next to TS icons without standing out:
+
+- 24 px grid (the slot scales it to 20).
+- Outline only, 1.75 px stroke, round caps and joins.
+- No fills.
+- Single colour: TS replaces the colour with the label colour, so do not rely on a second colour for meaning.
+- **RTL is the consumer's job.** A consumer source carries no TS mirroring metadata: set `ImageVector.autoMirror` (Compose, honoured by `rememberVectorPainter`; a `Painter` is drawn as given), the asset catalog "Direction" / `flipsForRightToLeftLayoutDirection` (iOS; `TSIconSource.image` cannot read it from a SwiftUI `Image`, so set it on the asset), or `android:autoMirrored="true"` on the drawable (Views).
+- **Contribute upstream** an icon that more than one app needs, so it becomes a `TSIcon` with DS metadata instead of being shipped per app.
+
+Worked example: the demo controller icon follows this contract (`demos/android-compose/app/src/main/res/drawable/demo_ic_controller.xml`, `demos/android-views/app/src/main/res/drawable/demo_ic_controller.xml`, `demos/ios-*/…/App/Assets.xcassets/DemoController.imageset/demo-controller.svg`).
+
+## Label line control
+
+The label wraps by default and the button grows (unchanged). A consumer can keep it on fewer lines with the toolkit's line controls (table above); the type role and colour still come from the spec. Use it for a count or a long label on a narrow screen, together with a width limit from the container.
 
 ## Matrix
 
@@ -37,7 +68,7 @@ Resolved once per platform in `TSButtonStyleSpec.resolve` (`TSFoundation/Styles`
 | lg | `control-lg` 52 | `space-5` 20 | `space-2` 8 | `radius-md` | `body` 16/24 at weight 500 |
 | link (any size) | none | 0 | 0 | 0 | as the size |
 
-Icons: `icon-md` 20, gap `space-2` 8. Spinner: 16 pt, 2 pt ring, 0.7 s per turn, drawn in the label colour inside the 20 pt leading slot so the width does not change.
+Icons: `icon-md` 20 (`Resolved.iconSize`, for TS icons and consumer icons alike on every toolkit), gap `space-2` 8. Spinner: 16 pt, 2 pt ring, 0.7 s per turn, drawn in the label colour inside the 20 pt leading slot so the width does not change.
 
 | State | Rule |
 |---|---|
@@ -72,6 +103,9 @@ States are combined by `TSControlState.make(isPressed:isEnabled:isLoading:isFocu
 | Views | `android/views/src/test/.../components/button/TSButtonViewTest.kt` (sdk 26, 36) | tap fires; disabled and loading block real touches; loading not dimmed, `ViewCompat` state description, node not enabled; node class `Button` + label text; spinner replaces the leading icon; 48 px target with a 44 px visual at mdpi; lg 52; link ≥ 48 and underlined; pressed fill; link pressed opacity; medium family; XML attributes |
 | Snapshots (Android) | `TSButtonSnapshotTest`, `TSButtonViewSnapshotTest`, plus `TSButtonSdkSnapshotTest` / `TSButtonViewSdkSnapshotTest` (sdk 26/36) | 5 variants × md/lg × default/pressed/disabled/loading/focused + icons + block, standard matrix; the sdk 26 subset shows the label weight |
 | Demo (Android) | `demos/android-*/app/src/androidTest/.../ActionComponentsTest.kt` | playground fires; loading and disabled block; link 48 dp target |
+| Consumer icons + line control (iOS) | `TSButtonBehaviorTests` `iconsUseResolvedSize`, `loadingReplacesLeadingConsumerIcon`, `lineLimit`; `TSButtonViewBehaviorTests` `consumerImage`, `loadingKeepsTrailingConsumerImage`, `lineLimit`; snapshots `TSButtonSnapshotTests.buttonCustomIcon`, `TSButtonViewSnapshotTests.buttonCustomIcon` (per variant; sample `ios/Tests/TSTestSupport/TSSampleIconImage.swift`) | TS icon vs consumer image per size; pressed / disabled / loading tint; a 48 pt image fitted to the slot; one line vs wrap |
+| Consumer icons + line control (Android) | `TSButtonTest` `consumerIconsTakeTheSameSpaceAsTSIcons`, `loadingReplacesOnlyTheLeadingConsumerIcon`, `maxLinesKeepsTheLabelOnOneLineWithAnEllipsis`; `TSButtonViewTest` `consumerDrawablesFillTheIconSlotsAndAreTinted`, `spinnerReplacesOnlyTheLeadingConsumerDrawable`, `maxLinesKeepsTheLabelOnOneLineWithAnEllipsis`, `inflatesLineControlFromXml`; snapshots `TSButtonSnapshotTest.<variant>CustomIcon`, `TSButtonViewSnapshotTest.<variant>CustomIcon` | same as iOS, with a multi-colour sample to prove the single-colour tint |
+| Demo | Button page, "Consumer icon" and "One-line label" sections in all four demos (`demo.button.consumer-icon`, `demo.button.line-limit`) | shown, not asserted by a UI test |
 
 ## Platform notes
 
@@ -83,4 +117,8 @@ States are combined by `TSControlState.make(isPressed:isEnabled:isLoading:isFocu
 - Android focus ring: Compose draws the TS ring outside a 2 dp gap, keyboard focus only (`tsFocusRing`). Views (`TSControlBackground`) draws the ring outside a 2 dp gap when the view's bounds leave room around the visual shape (the 48 dp touch box around a 44 dp button, for example); when the shape fills the bounds (full-bleed), it draws a 2 dp `focus` stroke on the shape edge plus a 2 dp `background-primary` gap stroke inside it, so the ring stays visible on primary, where `focus` equals the fill. The parent clips children, so a ring can never extend past the view's own bounds.
 - Android shadow (secondary): Compose uses `Modifier.shadow` with the token colour (the platform ignores the tint below API 28). Views uses `elevation` with the default shadow colour on every level.
 - Views XML: `<com.ts.ds.views.components.button.TSButtonView android:text="…" app:tsVariant="secondary" app:tsSize="lg" app:tsLeadingIcon="download" />`. Icon attributes take the DS kebab name (`TSIcons.fromDsName`).
+- **SwiftUI consumer-icon init:** `leadingIconSource:` is a required argument (pass `nil` for a trailing-only icon). With a default it would make `TSButton("Save") { }` ambiguous between the two inits.
+- **Compose overload choice:** `TSButton(text, onClick)` and every existing call resolve to the `TSIcon` overload; naming `leadingIconSource` / `trailingIconSource` / `maxLines` / `overflow` selects the new one. Its JVM name is mangled (`TSButton-pDkBHBI`) because `TextOverflow` is a value class; Kotlin callers are unaffected.
+- **One-line label with a trailing icon (Compose, Views):** in a width-bounded button the label is measured first, so a one-line label can squeeze the trailing icon. UIKit reserves the trailing slot and is not affected. Give the button enough width or drop the trailing icon when you limit lines.
+- **Views:** consumer drawables are Kotlin properties / `set…Resource` only; there is no `app:` attribute for them. `android:maxLines` and `android:ellipsize` work in XML.
 - Snapshot hook: Compose components read an internal `LocalTSForcedControlState` (tests only) to draw pressed, focused and loading without input. The spinner is static under it, because an infinite animation never lets the Robolectric looper go idle.

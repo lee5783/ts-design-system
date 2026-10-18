@@ -5,6 +5,7 @@ public struct TSDialogAction {
     public let variant: TSButtonVariant
     public let dismisses: Bool
     public let handler: @MainActor () -> Void
+    public let afterDismissal: (@MainActor () -> Void)?
 
     public init(
         _ label: String,
@@ -16,6 +17,20 @@ public struct TSDialogAction {
         self.variant = variant
         self.dismisses = dismisses
         self.handler = handler
+        self.afterDismissal = nil
+    }
+
+    public init(
+        _ label: String,
+        variant: TSButtonVariant = .secondary,
+        handler: @escaping @MainActor () -> Void,
+        afterDismissal: @escaping @MainActor () -> Void
+    ) {
+        self.label = label
+        self.variant = variant
+        self.dismisses = true
+        self.handler = handler
+        self.afterDismissal = afterDismissal
     }
 }
 

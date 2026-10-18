@@ -1,11 +1,37 @@
 import UIKit
 
-final class TSSpinnerView: UIView {
+public final class TSSpinnerView: UIView {
     private let arcLayer = CAShapeLayer()
     private let animationKey = "ts.spinner.rotation"
+    private var usesStyleSpec = false
+
+    public var size: TSSpinnerSize = .md {
+        didSet { applyStyle() }
+    }
+
+    public var tone: TSSpinnerTone = .primary {
+        didSet { applyStyle() }
+    }
 
     var lineWidth: CGFloat = TSComponentTokens.spinnerStrokeWidth {
         didSet { setNeedsLayout() }
+    }
+
+    public convenience init(size: TSSpinnerSize = .md, tone: TSSpinnerTone = .primary) {
+        self.init(frame: .zero)
+        usesStyleSpec = true
+        isAccessibilityElement = true
+        accessibilityLabel = TSStrings.loading
+        accessibilityTraits = .updatesFrequently
+        setContentHuggingPriority(.required, for: .horizontal)
+        setContentHuggingPriority(.required, for: .vertical)
+        self.size = size
+        self.tone = tone
+        applyStyle()
+    }
+
+    public convenience init() {
+        self.init(size: .md, tone: .primary)
     }
 
     override init(frame: CGRect) {
@@ -22,7 +48,17 @@ final class TSSpinnerView: UIView {
         fatalError("init(coder:) is not supported")
     }
 
-    override func layoutSubviews() {
+    var resolved: TSSpinnerStyleSpec.Resolved {
+        TSSpinnerStyleSpec.resolve(.init(size: size, tone: tone))
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        guard usesStyleSpec else { return super.intrinsicContentSize }
+        let side = resolved.size
+        return CGSize(width: side, height: side)
+    }
+
+    override public func layoutSubviews() {
         super.layoutSubviews()
         arcLayer.frame = bounds
         arcLayer.lineWidth = lineWidth
@@ -33,23 +69,31 @@ final class TSSpinnerView: UIView {
         updateColor()
     }
 
-    override func tintColorDidChange() {
+    override public func tintColorDidChange() {
         super.tintColorDidChange()
         updateColor()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateColor()
     }
 
-    override func didMoveToWindow() {
+    override public func didMoveToWindow() {
         super.didMoveToWindow()
         updateAnimation()
     }
 
-    override var isHidden: Bool {
+    override public var isHidden: Bool {
         didSet { updateAnimation() }
+    }
+
+    private func applyStyle() {
+        guard usesStyleSpec else { return }
+        let resolved = resolved
+        lineWidth = resolved.strokeWidth
+        tintColor = resolved.color.uiColor
+        invalidateIntrinsicContentSize()
     }
 
     private func updateColor() {

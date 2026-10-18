@@ -36,6 +36,8 @@ struct DialogPage: View {
             DemoComponentSection(.stacking) {
                 TSButton(DemoStrings.string(.stacking), variant: .secondary) { isStackingPresented = true }
                     .accessibilityIdentifier("demo.dialog.open.stacking")
+                DemoCaption(text: DemoStrings.queuedCount(presenter.pendingCount))
+                    .accessibilityIdentifier("demo.dialog.queued")
                 DemoCaption(text: DemoStrings.refusedCount(presenter.refusedCount))
                     .accessibilityIdentifier("demo.dialog.refused")
                 TSButton(DemoStrings.string(.chain), variant: .secondary) { isChainPresented = true }
@@ -86,7 +88,7 @@ struct DialogPage: View {
         .tsDialog(
             isPresented: $isStackingPresented,
             title: DemoStrings.string(.sampleStackingTitle),
-            message: DemoStrings.string(.sampleStackingBody),
+            message: DemoStrings.string(.sampleStackingQueueBody),
             actions: [
                 TSDialogAction(DemoStrings.string(.sampleClose)),
                 TSDialogAction(DemoStrings.string(.openAnother), variant: .primary, dismisses: false) { isSecondPresented = true },

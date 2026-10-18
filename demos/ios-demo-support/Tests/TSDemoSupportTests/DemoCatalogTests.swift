@@ -6,7 +6,7 @@ struct DemoCatalogTests {
     static let foundations: [DemoPageID] = [.colors, .typography, .spacing, .radius, .size, .opacity, .elevation, .icons]
     static let components: [DemoPageID] = [
         .button, .iconButton, .badge, .avatar, .textField, .checkbox, .switch,
-        .tabs, .listItem, .card, .alert, .dialog, .toast, .bottomNav
+        .tabs, .listItem, .card, .alert, .dialog, .toast, .bottomNav, .spinner, .text
     ]
 
     @Test("Every page id appears in the catalog exactly once")

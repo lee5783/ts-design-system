@@ -10,6 +10,10 @@ final class DemoLabel: UILabel {
         didSet { render() }
     }
 
+    var truncatesTail = false {
+        didSet { render() }
+    }
+
     init(_ string: String, font: TSFont, color: TSColor, alignment: NSTextAlignment = .natural) {
         self.string = string
         self.style = font
@@ -34,12 +38,13 @@ final class DemoLabel: UILabel {
     }
 
     private func render() {
-        attributedText = style.attributedString(
-            string,
-            sizeCategory: traitCollection.preferredContentSizeCategory,
-            color: color.resolvedColor(with: traitCollection),
-            alignment: resolvedAlignment
-        )
+        let sizeCategory = traitCollection.preferredContentSizeCategory
+        var attributes = style.attributes(for: sizeCategory, color: color.resolvedColor(with: traitCollection), alignment: resolvedAlignment)
+        if truncatesTail, let paragraph = style.paragraphStyle(for: sizeCategory, alignment: resolvedAlignment).mutableCopy() as? NSMutableParagraphStyle {
+            paragraph.lineBreakMode = .byTruncatingTail
+            attributes[.paragraphStyle] = paragraph
+        }
+        attributedText = NSAttributedString(string: style.text(string), attributes: attributes)
     }
 
     private var resolvedAlignment: NSTextAlignment {

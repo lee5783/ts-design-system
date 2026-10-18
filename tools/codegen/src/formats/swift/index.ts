@@ -2,7 +2,7 @@ import type { GeneratedFile, Generator } from "../../generate.ts";
 import { cachedVectorAssets } from "../../icons/vector-assets.ts";
 import type { TokenModel } from "../../model/types.ts";
 import { swiftIconNameFile } from "../icons/icon-enums.ts";
-import { swiftColors } from "./colors.ts";
+import { swiftColors, swiftControllerColors } from "./colors.ts";
 import { swiftComponents } from "./components.ts";
 import { swiftDimensionToken, swiftDimensions, swiftOpacity, swiftRadius } from "./dimensions.ts";
 import { swiftMotion } from "./motion.ts";
@@ -24,6 +24,8 @@ export function swiftTokenFiles(model: TokenModel, outputDir: string = SWIFT_TOK
     file("TSTypographyTokens.swift", swiftTypography(model.typography)),
     file("TSMotion.swift", swiftMotion(model.duration, model.easing)),
     file("TSComponentTokens.swift", swiftComponents(model.component)),
+    file("TSControllerColor.swift", swiftControllerColors(model.controller.color)),
+    file("TSControllerSize.swift", swiftDimensions("TSControllerSize", model.controller.size)),
   ];
 }
 

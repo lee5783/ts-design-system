@@ -27,8 +27,11 @@ A SwiftUI `TSButton` and a UIKit `TSButtonView` never clash in one app. Android 
 | `radius-xs` | `TSRadius.radiusXs` | `TSShapes.radiusXs` | `@dimen/ts_radius_xs` |
 | icon `arrow-left` | `TSIconName.arrowLeft` | `TSIcon.ArrowLeft` (`:core`) | `@drawable/ts_ic_arrow_left` |
 | logo | `Logos.xcassets` | — | `@drawable/ts_logo_*` |
+| controller `controller-key-pressed`, `overlay-scrim-media` (family `controller-color`) | `TSControllerColor.keyPressed`, `TSControllerColor.overlayScrimMedia` (`.color` / `.uiColor`) | `TSTheme.controllerColors.keyPressed` (`TSControllerColors`) | `@color/ts_controller_key_pressed`, `@color/ts_overlay_scrim_media` (no theme attr) |
+| `controller-outline-width` (family `controller-size`) | `TSControllerSize.outlineWidth` | `TSControllerSize.outlineWidth` | `@dimen/ts_controller_outline_width` |
 
 - Every token family has an `allTokens` catalog (iOS) for demos and tests.
+- **Controller tokens are a separate family.** Members drop the `controller-` prefix (`controller-key-pressed` → `keyPressed`, `overlay-scrim-media` → `overlayScrimMedia`); Android resource names keep the full token. They never enter `TSColors`, `TSColor`, `TSColorRole`, `ts_colors.xml` or the `?attr/tsColor*` attributes ([consumers/theming.md](consumers/theming.md#controller-and-media-overlay-colours)).
 - Colours are `#AARRGGBB` in Android XML (the DS ships `#RRGGBBAA`).
 - **Family-name repetition is intended (C-43):** `TSRadius.radiusXs` and `TSSpacing.space4` repeat the family name because they mirror the DS token names (`radius-xs`, `space-4`). Keep it; do not shorten to `TSRadius.xs`.
 - Renamed tokens keep a generated deprecated alias (see [guides/deprecation-policy.md](guides/deprecation-policy.md)).
@@ -95,7 +98,7 @@ Toolkit details that recur:
 
 ## Presentation rules
 
-- **Dialogs:** present UIKit dialogs through `TSDialogViewController.present(from:)` and Views dialogs through `present(manager, tag)` (`show` routes there). Both return `false` when refused; SwiftUI and Compose call `onRefused`. Handlers run after dismissal, so an action may open the next dialog. Escape closes a dialog (UIKit key command, SwiftUI `.keyboardShortcut(.cancelAction)`). Views and Compose dialog windows must re-provide `LocalDensity`; the Views dismissal callback is `onUserDismiss` because `DialogFragment.onDismiss` is taken.
+- **Dialogs:** present UIKit dialogs through `TSDialogViewController.present(from:)` and Views dialogs through `present(manager, tag)` (`show` routes there). Both return `false` on a conflict. SwiftUI and Compose dialogs are queued by the shared `TSDialogPresenter` (policy `queue`), or refused with `onRefused` under `refuse`. A dismissing action runs its handler before the dialog closes; a follow-up dialog from the handler is queued or handed the slot, so actions chain. On iOS, present non-TS UI from an action in `afterDismissal`. Android dialog windows inherit the host's hidden system bars. Escape closes a dialog (UIKit key command, SwiftUI `.keyboardShortcut(.cancelAction)`). Views and Compose dialog windows must re-provide `LocalDensity`; the Views dismissal callback is `onUserDismiss` because `DialogFragment.onDismiss` is taken.
 - **Toasts:** install one host per scene (SwiftUI `.tsToastHost()` at the root, UIKit `TSToastWindow` in the scene delegate) or per Activity (Compose `TSToastHost { }` at the root, Views `TSToastHost.install(activity)`). Show through `TSToastQueue`, `LocalTSToastState` or `TSToastHost.from(context)`. UIKit consumers forward trait overrides with `applyTraits(from:)`. Inside a `TSDialogFragment().apply { }` block, resolve strings before the block (the fragment's own `getString` shadows the outer one).
 - **Views list rows** need stable view ids so switch state survives a recreate.
 

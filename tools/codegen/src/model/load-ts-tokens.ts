@@ -252,6 +252,7 @@ export function loadTsTokens(input: unknown): TokenModel {
     duration: [],
     easing: [],
     component: [],
+    controller: { color: [], size: [] },
     dropped,
   };
 }

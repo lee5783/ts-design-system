@@ -1,6 +1,11 @@
 package com.ts.ds.demo.compose.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -10,15 +15,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.ts.ds.compose.components.avatar.TSAvatar
 import com.ts.ds.compose.components.badge.TSBadge
+import com.ts.ds.compose.components.listitem.TSDisclosureListItem
+import com.ts.ds.compose.components.listitem.TSDivider
 import com.ts.ds.compose.components.listitem.TSList
 import com.ts.ds.compose.components.listitem.TSListItem
 import com.ts.ds.compose.components.listitem.TSListItemIcon
 import com.ts.ds.compose.components.listitem.TSListItemValue
+import com.ts.ds.compose.components.text.TSText
+import com.ts.ds.compose.theme.TSTheme
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.icon.TSIcons
 import com.ts.ds.core.style.TSBadgeTone
+import com.ts.ds.core.style.TSTextColor
+import com.ts.ds.core.style.TSTypeRole
 import com.ts.ds.demo.compose.shell.OptionChip
 import com.ts.ds.demo.compose.shell.OptionGroup
 import com.ts.ds.demo.compose.shell.ToggleRow
@@ -40,6 +52,10 @@ object ListItemPageTags {
     const val PLAYGROUND_ROW = "demo.list-item.playground.row"
     const val PLAYGROUND_VALUE = "demo.list-item.playground.value"
     const val PLAYGROUND_COUNT = "demo.list-item.playground.count"
+    const val LAZY_DIVIDER = "demo.list-item.lazy-divider"
+    const val DISCLOSURE_BODY = "demo.list-item.disclosure.body"
+
+    fun disclosure(id: String): String = "demo.list-item.disclosure.$id"
 
     fun leading(option: ListItemLeadingOption): String = "demo.list-item.playground.leading.${option.name.lowercase()}"
 
@@ -74,6 +90,8 @@ private fun stateText(on: Boolean): String = stringResource(if (on) DemoR.string
 fun LazyListScope.listItemPage() {
     componentSection("list-item.contents", DemoR.string.demo_component_contents) { ListItemContents() }
     componentSection("list-item.states", DemoR.string.demo_component_states) { ListItemStates() }
+    componentSection("list-item.lazy-divider", DemoR.string.demo_component_lazy_divider) { ListItemLazyDivider() }
+    componentSection("list-item.disclosure", DemoR.string.demo_component_disclosure) { ListItemDisclosure() }
     componentSection("list-item.truncation", DemoR.string.demo_component_truncation) { ListItemTruncation() }
     componentSection("list-item.playground", DemoR.string.demo_component_playground) { ListItemPlayground() }
 }
@@ -141,6 +159,55 @@ private fun ListItemStates() {
         TSListItem(stringResource(DemoR.string.demo_sample_dark_mode), checked = darkMode, onCheckedChange = { darkMode = it }, enabled = false)
     }
     DemoTapCounter(count = taps, tag = ListItemPageTags.STATE_COUNT)
+}
+
+@Composable
+private fun ListItemLazyDivider() {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = LAZY_DIVIDER_MAX_HEIGHT)
+            .background(TSTheme.colors.surfaceCard)
+            .testTag(ListItemPageTags.LAZY_DIVIDER),
+        userScrollEnabled = false,
+    ) {
+        itemsIndexed(SampleData.listRows, key = { _, row -> row.id }) { index, row ->
+            if (index > 0) TSDivider()
+            TSListItem(row.title(), subtitle = row.subtitle())
+        }
+    }
+}
+
+private val LAZY_DIVIDER_MAX_HEIGHT = 480.dp
+
+private class LicenceSample(val id: String, val titleRes: Int, val licenceRes: Int, val bodyRes: Int)
+
+private val licenceSamples = listOf(
+    LicenceSample("kotlin", DemoR.string.demo_sample_licence_kotlin, DemoR.string.demo_sample_licence_apache, DemoR.string.demo_sample_licence_apache_body),
+    LicenceSample("snapshot", DemoR.string.demo_sample_licence_snapshot, DemoR.string.demo_sample_licence_mit, DemoR.string.demo_sample_licence_mit_body),
+)
+
+@Composable
+private fun ListItemDisclosure() {
+    var expanded by rememberSaveable { mutableStateOf<String?>(null) }
+    TSList {
+        licenceSamples.forEach { licence ->
+            TSDisclosureListItem(
+                title = stringResource(licence.titleRes),
+                expanded = expanded == licence.id,
+                onExpandedChange = { expanded = if (it) licence.id else null },
+                subtitle = stringResource(licence.licenceRes),
+                modifier = Modifier.testTag(ListItemPageTags.disclosure(licence.id)),
+            ) {
+                TSText(
+                    stringResource(licence.bodyRes),
+                    Modifier.testTag(ListItemPageTags.DISCLOSURE_BODY),
+                    role = TSTypeRole.BodySm,
+                    color = TSTextColor.Secondary,
+                )
+            }
+        }
+    }
 }
 
 @Composable

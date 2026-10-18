@@ -135,6 +135,21 @@ class TSListItemStyleSpecMatrixTest {
     }
 
     @Test
+    fun disclosureRotatesTheChevronDownOverDurationBase() {
+        val disclosure = TSListItemStyleSpec.disclosure
+        assertEquals(0f, disclosure.rotationDegrees(expanded = false, rightToLeft = false), 0f)
+        assertEquals(0f, disclosure.rotationDegrees(expanded = false, rightToLeft = true), 0f)
+        assertEquals(90f, disclosure.rotationDegrees(expanded = true, rightToLeft = false), 0f)
+        assertEquals(-90f, disclosure.rotationDegrees(expanded = true, rightToLeft = true), 0f)
+        assertEquals(TSTokenValues.Duration.durationBase, disclosure.animationDurationMillis)
+        assertEquals(150, disclosure.animationDurationMillis(reduceMotion = false))
+        assertEquals(0, disclosure.animationDurationMillis(reduceMotion = true))
+        assertEquals(TSTokenValues.Easing.easingStandard, disclosure.animationEasing)
+        assertEquals(16f, disclosure.bodyHorizontalPaddingDp, 0f)
+        assertEquals(12f, disclosure.bodyBottomPaddingDp, 0f)
+    }
+
+    @Test
     fun groupPositionsFollowTheIndex() {
         assertEquals(TSListGroupPosition.Single, TSListGroupPosition.make(0, 1))
         assertEquals(TSListGroupPosition.First, TSListGroupPosition.make(0, 3))

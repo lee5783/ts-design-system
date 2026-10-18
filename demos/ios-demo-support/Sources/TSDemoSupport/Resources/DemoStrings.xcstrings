@@ -193,6 +193,30 @@
         }
       }
     },
+    "demo.component.code-entry" : {
+      "comment" : "Component page section: code style with code-entry keyboard traits.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code entry"
+          }
+        }
+      }
+    },
+    "demo.component.consumer-icon" : {
+      "comment" : "Component page section: a button or icon button with an icon supplied by the app.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consumer icon"
+          }
+        }
+      }
+    },
     "demo.component.contents" : {
       "comment" : "Component page section: avatar content kinds.",
       "extractionState" : "manual",
@@ -225,6 +249,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Disabled"
+          }
+        }
+      }
+    },
+    "demo.component.disclosure" : {
+      "comment" : "Demo section title: rows that expand to show more text.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disclosure rows"
           }
         }
       }
@@ -337,6 +373,18 @@
         }
       }
     },
+    "demo.component.in-context" : {
+      "comment" : "Demo section title: the component inside a typical screen element.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In context"
+          }
+        }
+      }
+    },
     "demo.component.initials" : {
       "comment" : "Avatar caption: initials content.",
       "extractionState" : "manual",
@@ -409,6 +457,18 @@
         }
       }
     },
+    "demo.component.lazy-divider" : {
+      "comment" : "Demo section title: rows in a lazy list separated by dividers.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Divider outside a list"
+          }
+        }
+      }
+    },
     "demo.component.leading" : {
       "comment" : "Playground picker title for the leading content of a list row.",
       "extractionState" : "manual",
@@ -429,6 +489,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leading icon"
+          }
+        }
+      }
+    },
+    "demo.component.line-limit" : {
+      "comment" : "Component page section: a button label limited to one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-line label"
           }
         }
       }
@@ -697,6 +769,18 @@
         }
       }
     },
+    "demo.component.queued-count" : {
+      "comment" : "How many dialog presentations are waiting for the open dialog to close.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Queued presentations: %lld"
+          }
+        }
+      }
+    },
     "demo.component.refused-count" : {
       "comment" : "How many dialog presentations the presenter refused.",
       "extractionState" : "manual",
@@ -949,6 +1033,18 @@
         }
       }
     },
+    "demo.component.text-colors" : {
+      "comment" : "Demo section title: every text colour.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text colours"
+          }
+        }
+      }
+    },
     "demo.component.three-items" : {
       "comment" : "Bottom navigation section caption.",
       "extractionState" : "manual",
@@ -1029,6 +1125,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Long text"
+          }
+        }
+      }
+    },
+    "demo.component.type-roles" : {
+      "comment" : "Demo section title: every type role.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type roles"
           }
         }
       }
@@ -1369,6 +1477,18 @@
         }
       }
     },
+    "demo.page.spinner" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spinner"
+          }
+        }
+      }
+    },
     "demo.page.switch" : {
       "comment" : "Catalog page title.",
       "extractionState" : "manual",
@@ -1389,6 +1509,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tabs"
+          }
+        }
+      }
+    },
+    "demo.page.text" : {
+      "comment" : "Catalog page title.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text"
           }
         }
       }
@@ -1717,6 +1849,18 @@
         }
       }
     },
+    "demo.sample.controller" : {
+      "comment" : "Sample accessibility label for an icon button with the app-supplied controller icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game controller"
+          }
+        }
+      }
+    },
     "demo.sample.copy-hint" : {
       "comment" : "Sample field hint for a read-only field.",
       "extractionState" : "manual",
@@ -1993,6 +2137,54 @@
         }
       }
     },
+    "demo.sample.join-code" : {
+      "comment" : "Sample field label: a short join code typed in a monospace face.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Join code"
+          }
+        }
+      }
+    },
+    "demo.sample.join-code-hint" : {
+      "comment" : "Sample field hint for the join code.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 letters or digits"
+          }
+        }
+      }
+    },
+    "demo.sample.join-code-placeholder" : {
+      "comment" : "Sample placeholder for the join code.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ABCDEF"
+          }
+        }
+      }
+    },
+    "demo.sample.join-tournament" : {
+      "comment" : "Sample long button label that is truncated to one line.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Join the weekend tournament with your friends"
+          }
+        }
+      }
+    },
     "demo.sample.learn-more" : {
       "comment" : "Button sample label.",
       "extractionState" : "manual",
@@ -2001,6 +2193,78 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Learn more"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-apache" : {
+      "comment" : "Sample licence name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apache License 2.0"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-apache-body" : {
+      "comment" : "Sample licence text shown when a notices row expands.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Licensed under the Apache License, Version 2.0. You may not use this file except in compliance with the License. Distributed on an AS IS basis, without warranties or conditions of any kind."
+          }
+        }
+      }
+    },
+    "demo.sample.licence-kotlin" : {
+      "comment" : "Sample library name in an open-source notices list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kotlin"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-mit" : {
+      "comment" : "Sample licence name.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MIT License"
+          }
+        }
+      }
+    },
+    "demo.sample.licence-mit-body" : {
+      "comment" : "Sample licence text shown when a notices row expands.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permission is hereby granted, free of charge, to any person obtaining a copy of this software, to deal in the software without restriction, subject to the conditions of the MIT License."
+          }
+        }
+      }
+    },
+    "demo.sample.licence-snapshot" : {
+      "comment" : "Sample library name in an open-source notices list.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SnapshotTesting"
           }
         }
       }
@@ -2025,6 +2289,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "List"
+          }
+        }
+      }
+    },
+    "demo.sample.loading-messages" : {
+      "comment" : "Sample accessibility label of a spinner while messages load.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading messages"
           }
         }
       }
@@ -2353,6 +2629,18 @@
         }
       }
     },
+    "demo.sample.play-together" : {
+      "comment" : "Sample button label next to the app-supplied controller icon.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play together"
+          }
+        }
+      }
+    },
     "demo.sample.profile" : {
       "comment" : "Sample bottom navigation destination.",
       "extractionState" : "manual",
@@ -2601,6 +2889,18 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opening a second dialog from here is refused, so dialogs never stack."
+          }
+        }
+      }
+    },
+    "demo.sample.stacking-queue-body" : {
+      "comment" : "Sample dialog body for the stacking demo when the second dialog is queued.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A second dialog opened from here waits until this one closes, so dialogs never stack."
           }
         }
       }

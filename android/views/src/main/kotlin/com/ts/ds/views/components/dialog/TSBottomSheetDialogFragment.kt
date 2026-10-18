@@ -69,6 +69,7 @@ public open class TSBottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
 
     override fun onStart() {
+        session.inheritSystemBars(this)
         super.onStart()
         val scrim = requireContext().tsColor(TSColorRole.Overlay)
         dialog?.window?.setDimAmount(Color.alpha(scrim) / 255f)
@@ -87,6 +88,7 @@ public open class TSBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        session.restoreHostSystemBars(this)
         presenter.end(this)
     }
 
@@ -96,11 +98,11 @@ public open class TSBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun perform(action: TSDialogAction) {
-        if (action.dismisses) dismiss()
-        action.onClick()
+        session.perform(this, action)
     }
 
     private fun cancelByUser() {
+        session.restoreHostSystemBars(this)
         dialog?.cancel()
     }
 }

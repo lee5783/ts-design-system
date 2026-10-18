@@ -18,6 +18,7 @@ import com.ts.ds.compose.foundation.TSPressIndication
 @Immutable
 internal class TSThemeValues(
     val colors: TSColors,
+    val controllerColors: TSControllerColors,
     val typography: TSTypography,
     val elevation: TSElevation,
     val isDark: Boolean,
@@ -29,6 +30,7 @@ internal class TSThemeValues(
 internal val LocalTSTheme = staticCompositionLocalOf {
     TSThemeValues(
         colors = lightTSColors(),
+        controllerColors = lightTSControllerColors(),
         typography = tsTypography(DsFontWeights::resolve).withDsFontFamilies(),
         elevation = lightTSElevation(),
         isDark = false,
@@ -47,6 +49,7 @@ public fun TSTheme(
     val values = remember(darkTheme, rippleEnabled, hapticsEnabled) {
         TSThemeValues(
             colors = if (darkTheme) darkTSColors() else lightTSColors(),
+            controllerColors = if (darkTheme) darkTSControllerColors() else lightTSControllerColors(),
             typography = tsTypography(DsFontWeights::resolve).withDsFontFamilies(),
             elevation = if (darkTheme) darkTSElevation() else lightTSElevation(),
             isDark = darkTheme,
@@ -74,6 +77,11 @@ public object TSTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalTSTheme.current.colors
+
+    public val controllerColors: TSControllerColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTSTheme.current.controllerColors
 
     public val typography: TSTypography
         @Composable

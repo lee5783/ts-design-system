@@ -29,6 +29,20 @@ class TSListItemSnapshotTest(private val variant: SnapshotVariant) {
         }
     }
 
+    @Test
+    fun disclosure() {
+        captureComposeSnapshot(SnapshotEnvironment.file(javaClass, "disclosure", variant), variant) {
+            TSTheme(darkTheme = variant.dark) { ListItemDisclosureSample() }
+        }
+    }
+
+    @Test
+    fun divider() {
+        captureComposeSnapshot(SnapshotEnvironment.file(javaClass, "divider", variant), variant) {
+            TSTheme(darkTheme = variant.dark) { ListItemDividerSample() }
+        }
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")

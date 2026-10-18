@@ -31,6 +31,8 @@
     <string name="demo_page_dialog">Dialog</string>
     <string name="demo_page_toast">Toast</string>
     <string name="demo_page_bottom_nav">Bottom Navigation</string>
+    <string name="demo_page_spinner">Spinner</string>
+    <string name="demo_page_text">Text</string>
 
     <string name="demo_page_pending">This component page arrives with the component.</string>
 
@@ -66,6 +68,8 @@
     <string name="demo_component_sizes">Sizes</string>
     <string name="demo_component_states">States</string>
     <string name="demo_component_with_icons">With icons</string>
+    <string name="demo_component_consumer_icon">Consumer icon</string>
+    <string name="demo_component_line_limit">One-line label</string>
     <string name="demo_component_shapes">Shapes</string>
     <string name="demo_component_playground">Playground</string>
     <string name="demo_component_variant">Variant</string>
@@ -97,6 +101,7 @@
     <string name="demo_component_password">Password</string>
     <string name="demo_component_multiline">Multiline</string>
     <string name="demo_component_keyboard_types">Keyboard types</string>
+    <string name="demo_component_code_entry">Code entry</string>
     <string name="demo_component_secure">Secure entry</string>
     <string name="demo_component_checked">Checked</string>
     <string name="demo_component_unchecked">Unchecked</string>
@@ -127,6 +132,9 @@
     <string name="demo_sample_delete">Delete</string>
     <string name="demo_sample_learn_more">Learn more</string>
     <string name="demo_sample_continue">Continue</string>
+    <string name="demo_sample_play_together">Play together</string>
+    <string name="demo_sample_join_tournament">Join the weekend tournament with your friends</string>
+    <string name="demo_sample_controller">Game controller</string>
     <string name="demo_sample_get_started">Get started</string>
     <string name="demo_sample_search">Search</string>
     <string name="demo_sample_more_options">More options</string>
@@ -161,6 +169,9 @@
     <string name="demo_sample_amount">Amount</string>
     <string name="demo_sample_website">Website</string>
     <string name="demo_sample_code">Verification code</string>
+    <string name="demo_sample_join_code">Join code</string>
+    <string name="demo_sample_join_code_hint">6 letters or digits</string>
+    <string name="demo_sample_join_code_placeholder">ABCDEF</string>
     <string name="demo_sample_remember_me">Remember me</string>
     <string name="demo_sample_email_updates">Email me about updates</string>
     <string name="demo_sample_accept_terms">I accept the terms</string>
@@ -234,6 +245,7 @@
     <string name="demo_component_with_input">With input</string>
     <string name="demo_component_stacking">Stacking</string>
     <string name="demo_component_refused_count">Refused presentations: %1$d</string>
+    <string name="demo_component_queued_count">Queued presentations: %1$d</string>
     <string name="demo_component_center">Center</string>
     <string name="demo_component_sheet">Sheet</string>
     <string name="demo_component_long_content">Long content</string>
@@ -249,6 +261,7 @@
     <string name="demo_sample_project_name_value">Q3 launch</string>
     <string name="demo_sample_stacking_title">One dialog at a time</string>
     <string name="demo_sample_stacking_body">Opening a second dialog from here is refused, so dialogs never stack.</string>
+    <string name="demo_sample_stacking_queue_body">A second dialog opened from here waits until this one closes, so dialogs never stack.</string>
     <string name="demo_sample_archive_title">Archive this project?</string>
     <string name="demo_sample_archive">Archive</string>
     <string name="demo_sample_long_dialog_body">Archiving moves the project out of everyone\'s sidebar. Its files, comments and history are kept, and an owner can restore it at any time from Settings. Members keep read-only access until the project is deleted, and shared links stop working right away.</string>
@@ -283,4 +296,16 @@
     <string name="demo_sample_mark_all_read">Mark all as read</string>
     <string name="demo_sample_shell_body">Switch tabs with the bar below. Each tab keeps its own state.</string>
     <string name="demo_sample_message_sent">Message sent</string>
+    <string name="demo_component_type_roles">Type roles</string>
+    <string name="demo_component_text_colors">Text colours</string>
+    <string name="demo_component_in_context">In context</string>
+    <string name="demo_component_lazy_divider">Divider outside a list</string>
+    <string name="demo_component_disclosure">Disclosure rows</string>
+    <string name="demo_sample_loading_messages">Loading messages</string>
+    <string name="demo_sample_licence_kotlin">Kotlin</string>
+    <string name="demo_sample_licence_snapshot">SnapshotTesting</string>
+    <string name="demo_sample_licence_apache">Apache License 2.0</string>
+    <string name="demo_sample_licence_mit">MIT License</string>
+    <string name="demo_sample_licence_apache_body">Licensed under the Apache License, Version 2.0. You may not use this file except in compliance with the License. Distributed on an AS IS basis, without warranties or conditions of any kind.</string>
+    <string name="demo_sample_licence_mit_body">Permission is hereby granted, free of charge, to any person obtaining a copy of this software, to deal in the software without restriction, subject to the conditions of the MIT License.</string>
 </resources>

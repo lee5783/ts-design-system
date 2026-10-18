@@ -54,6 +54,7 @@ public struct TSTextInputTraits: Hashable, Sendable {
     public static let number = TSTextInputTraits(keyboardType: .numberPad, autocapitalization: .none, isAutocorrectionEnabled: false)
     public static let decimal = TSTextInputTraits(keyboardType: .decimalPad, autocapitalization: .none, isAutocorrectionEnabled: false)
     public static let url = TSTextInputTraits(keyboardType: .URL, textContentType: .URL, autocapitalization: .none, isAutocorrectionEnabled: false)
+    public static let code = TSTextInputTraits(keyboardType: .asciiCapable, autocapitalization: .allCharacters, isAutocorrectionEnabled: false)
     public static let search = TSTextInputTraits(keyboardType: .webSearch, autocapitalization: .none, isAutocorrectionEnabled: false, returnKey: .search)
 
     @MainActor

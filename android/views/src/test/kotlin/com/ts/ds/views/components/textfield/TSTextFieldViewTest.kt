@@ -1,5 +1,6 @@
 package com.ts.ds.views.components.textfield
 
+import android.graphics.Typeface
 import android.os.Looper
 import android.os.SystemClock
 import android.text.Editable
@@ -18,6 +19,8 @@ import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.input.TSImeAction
 import com.ts.ds.core.input.TSTextInputTraits
 import com.ts.ds.core.style.TSColorRole
+import com.ts.ds.core.style.TSTextFieldContentStyle
+import com.ts.ds.core.style.TSTypeRole
 import com.ts.ds.views.R
 import com.ts.ds.views.components.hostInActivity
 import com.ts.ds.views.components.tapCenter
@@ -307,6 +310,38 @@ class TSTextFieldViewTest {
     }
 
     @Test
+    fun codeTraitsOpenAVisibleAsciiCapitalsKeyboardWithoutSuggestions() {
+        val view = field { text = "AB12CD"; inputTraits = TSTextInputTraits.Code }
+        val inputType = view.editText.inputType
+
+        assertEquals(InputType.TYPE_CLASS_TEXT, inputType and InputType.TYPE_MASK_CLASS)
+        assertEquals(InputType.TYPE_TEXT_VARIATION_NORMAL, inputType and InputType.TYPE_MASK_VARIATION)
+        assertTrue(inputType and InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS != 0)
+        assertTrue(inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0)
+        assertEquals(0, inputType and InputType.TYPE_TEXT_FLAG_AUTO_CORRECT)
+        assertTrue(view.editText.imeOptions and EditorInfo.IME_FLAG_FORCE_ASCII != 0)
+        assertFalse(view.editText.transformationMethod is PasswordTransformationMethod)
+        assertEquals("AB12CD", view.editText.layout.text.toString())
+    }
+
+    @Test
+    fun codeContentStyleUsesTheMonospaceCodeRoleForTheInputOnly() {
+        val plain = field()
+        val view = field { contentStyle = TSTextFieldContentStyle.Code }
+
+        assertEquals(TSTypeRole.Code, view.resolved.inputTypeRole)
+        assertEquals(Typeface.MONOSPACE, view.editText.typeface)
+        assertEquals(13f, view.editText.textSize, 0f)
+        assertEquals(plain.label, view.label)
+        plain.layOut()
+        view.layOut()
+        assertEquals(plain.fieldBox.height, view.fieldBox.height)
+
+        view.contentStyle = TSTextFieldContentStyle.Default
+        assertEquals(Typeface.DEFAULT, view.editText.typeface)
+    }
+
+    @Test
     fun leadingIconAndTrailingViewAreShown() {
         val trailing = View(RuntimeEnvironment.getApplication())
         val view = field { leadingIcon = TSIcon.Search; trailingView = trailing }
@@ -333,6 +368,20 @@ class TSTextFieldViewTest {
         assertTrue(view.isSecure)
         assertEquals(TSTextInputTraits.NewPassword, view.inputTraits)
         assertNotEquals(View.GONE, view.passwordToggle.visibility)
+    }
+
+    @Test
+    fun xmlAttributesSelectTheCodeStyleAndTraits() {
+        val attrs = Robolectric.buildAttributeSet()
+            .addAttribute(R.attr.tsLabel, "Join code")
+            .addAttribute(R.attr.tsContentStyle, "code")
+            .addAttribute(R.attr.tsInputTraits, "code")
+            .build()
+        val view = hostInActivity { TSTextFieldView(it, attrs) }
+
+        assertEquals(TSTextFieldContentStyle.Code, view.contentStyle)
+        assertEquals(TSTextInputTraits.Code, view.inputTraits)
+        assertEquals(Typeface.MONOSPACE, view.editText.typeface)
     }
 
     @Test

@@ -5,8 +5,15 @@ import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import com.google.android.material.textview.MaterialTextView
+import com.ts.ds.core.style.TSColorRole
+import com.ts.ds.core.style.TSTypeRole
+import com.ts.ds.views.theme.textAppearance
+import com.ts.ds.views.theme.tsColor
 import com.ts.ds.core.icon.TSIcon
 import com.ts.ds.core.style.TSBadgeTone
+import com.ts.ds.views.components.listitem.TSDisclosureListItemView
+import com.ts.ds.views.components.listitem.TSDividerView
 import com.ts.ds.views.components.listitem.TSListItemLeading
 import com.ts.ds.views.components.listitem.TSListItemTrailing
 import com.ts.ds.views.components.listitem.TSListItemView
@@ -122,6 +129,62 @@ internal fun listItemStatesSample(context: Context): View = context.listColumn()
             subtitle = "Outside a list"
             setOnClickListener(action)
         },
+        fillWidth,
+    )
+}
+
+private fun Context.body(text: String): MaterialTextView = MaterialTextView(this).apply {
+    setTextAppearance(TSTypeRole.BodySm.textAppearance)
+    setTextColor(tsColor(TSColorRole.TextSecondary))
+    this.text = text
+}
+
+private fun Context.disclosure(title: String, body: String, configure: TSDisclosureListItemView.() -> Unit = {}): TSDisclosureListItemView =
+    TSDisclosureListItemView(this).apply {
+        this.title = title
+        addView(body(body))
+        configure()
+    }
+
+internal fun listItemDisclosureSample(context: Context): View = context.listColumn().apply {
+    addView(
+        context.list(
+            context.disclosure("Collapsed", "Hidden body"),
+            context.disclosure("Kotlin", SAMPLE_LONG_SUBTITLE) {
+                subtitle = "Apache License 2.0"
+                leading = TSListItemLeading.Icon(TSIcon.Info)
+                isExpanded = true
+            },
+            context.disclosure("Pressed", "Hidden body") { headerView.isPressed = true },
+            context.disclosure("Disabled", "Dimmed body") {
+                isExpanded = true
+                isEnabled = false
+            },
+        ),
+        fillWidth,
+    )
+    addView(context.disclosure("Standalone", "Outside a list") { isExpanded = true }, fillWidth)
+}
+
+internal fun listItemDividerSample(context: Context): View = context.listColumn().apply {
+    addView(
+        LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundColor(context.tsColor(TSColorRole.SurfaceCard))
+            addView(context.listItem("First row"), fillWidth)
+            addView(TSDividerView(context), fillWidth)
+            addView(context.listItem("Second row") { subtitle = "Divided with TSDividerView" }, fillWidth)
+            addView(TSDividerView(context), fillWidth)
+            addView(context.listItem("Third row"), fillWidth)
+        },
+        fillWidth,
+    )
+    addView(
+        context.list(
+            context.listItem("First row"),
+            context.listItem("Second row") { subtitle = "Divided inside TSListView" },
+            context.listItem("Third row"),
+        ),
         fillWidth,
     )
 }

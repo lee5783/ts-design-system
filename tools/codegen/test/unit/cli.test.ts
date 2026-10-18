@@ -206,8 +206,10 @@ describe("codegen model and diff-report", () => {
   it("merges design/extensions into the model for the summary and the generators", async () => {
     await addExtensions();
     expect(await run({ command: "model", root, json: false }, log, [])).toBe(0);
-    expect(lines[0]).toContain("color 8x2, typography 3, spacing 2, radius 2, shadow 1, size 2, opacity 1, duration 2, easing 1, component 4");
-    expect(lines[0]).toContain("extensions: Fixture extensions v1, upstream pending 9, accepted 1, rejected 1");
+    expect(lines[0]).toContain(
+      "color 8x2, typography 3, spacing 2, radius 2, shadow 1, size 2, opacity 1, duration 2, easing 1, component 4, controller-color 3x2, controller-size 1",
+    );
+    expect(lines[0]).toContain("extensions: Fixture extensions v1, upstream pending 13, accepted 1, rejected 1");
     expect(lines[0]).toContain("deprecated aliases: none");
     lines = [];
     expect(await run({ command: "tokens", root, check: false }, log, [tokensGenerator])).toBe(0);

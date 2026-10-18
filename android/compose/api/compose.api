@@ -16,6 +16,7 @@ public final class com/ts/ds/compose/components/bottomnav/TSBottomNavKt {
 
 public final class com/ts/ds/compose/components/button/TSButtonKt {
 	public static final fun TSButton (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/core/icon/TSIcon;Lcom/ts/ds/core/icon/TSIcon;ZZLjava/lang/String;Landroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TSButton-pDkBHBI (Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSButtonVariant;Lcom/ts/ds/core/style/TSButtonSize;Lcom/ts/ds/compose/components/icon/TSIconSource;Lcom/ts/ds/compose/components/icon/TSIconSource;ZZLjava/lang/String;IILandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class com/ts/ds/compose/components/card/TSCardKt {
@@ -39,8 +40,56 @@ public final class com/ts/ds/compose/components/icon/TSIconKt {
 	public static final fun TSIcon-yrwZFoE (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconSize;JLandroidx/compose/runtime/Composer;II)V
 }
 
+public abstract interface class com/ts/ds/compose/components/icon/TSIconSource {
+}
+
+public final class com/ts/ds/compose/components/icon/TSIconSource$Painter : com/ts/ds/compose/components/icon/TSIconSource {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/ui/graphics/painter/Painter;)V
+	public final fun component1 ()Landroidx/compose/ui/graphics/painter/Painter;
+	public final fun copy (Landroidx/compose/ui/graphics/painter/Painter;)Lcom/ts/ds/compose/components/icon/TSIconSource$Painter;
+	public static synthetic fun copy$default (Lcom/ts/ds/compose/components/icon/TSIconSource$Painter;Landroidx/compose/ui/graphics/painter/Painter;ILjava/lang/Object;)Lcom/ts/ds/compose/components/icon/TSIconSource$Painter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPainter ()Landroidx/compose/ui/graphics/painter/Painter;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/compose/components/icon/TSIconSource$Ts : com/ts/ds/compose/components/icon/TSIconSource {
+	public static final field $stable I
+	public fun <init> (Lcom/ts/ds/core/icon/TSIcon;)V
+	public final fun component1 ()Lcom/ts/ds/core/icon/TSIcon;
+	public final fun copy (Lcom/ts/ds/core/icon/TSIcon;)Lcom/ts/ds/compose/components/icon/TSIconSource$Ts;
+	public static synthetic fun copy$default (Lcom/ts/ds/compose/components/icon/TSIconSource$Ts;Lcom/ts/ds/core/icon/TSIcon;ILjava/lang/Object;)Lcom/ts/ds/compose/components/icon/TSIconSource$Ts;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIcon ()Lcom/ts/ds/core/icon/TSIcon;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/ts/ds/compose/components/icon/TSIconSource$Vector : com/ts/ds/compose/components/icon/TSIconSource {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/ui/graphics/vector/ImageVector;)V
+	public final fun component1 ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public final fun copy (Landroidx/compose/ui/graphics/vector/ImageVector;)Lcom/ts/ds/compose/components/icon/TSIconSource$Vector;
+	public static synthetic fun copy$default (Lcom/ts/ds/compose/components/icon/TSIconSource$Vector;Landroidx/compose/ui/graphics/vector/ImageVector;ILjava/lang/Object;)Lcom/ts/ds/compose/components/icon/TSIconSource$Vector;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImageVector ()Landroidx/compose/ui/graphics/vector/ImageVector;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/ts/ds/compose/components/iconbutton/TSIconButtonKt {
+	public static final fun TSIconButton (Lcom/ts/ds/compose/components/icon/TSIconSource;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 	public static final fun TSIconButton (Lcom/ts/ds/core/icon/TSIcon;Ljava/lang/String;Lkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSIconButtonVariant;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/ts/ds/compose/components/listitem/TSDisclosureListItemKt {
+	public static final fun TSDisclosureListItem (Ljava/lang/String;ZLkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class com/ts/ds/compose/components/listitem/TSDividerKt {
+	public static final fun TSDivider (Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 }
 
 public final class com/ts/ds/compose/components/listitem/TSListItemKt {
@@ -55,6 +104,10 @@ public final class com/ts/ds/compose/components/listitem/TSListKt {
 	public static final fun TSListSection (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function3;Landroidx/compose/runtime/Composer;II)V
 }
 
+public final class com/ts/ds/compose/components/spinner/TSSpinnerKt {
+	public static final fun TSSpinner (Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSSpinnerSize;Lcom/ts/ds/core/style/TSSpinnerTone;Ljava/lang/String;Landroidx/compose/runtime/Composer;II)V
+}
+
 public final class com/ts/ds/compose/components/switchcontrol/TSSwitchKt {
 	public static final fun TSSwitch (ZLjava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;ZZLandroidx/compose/foundation/interaction/MutableInteractionSource;Landroidx/compose/runtime/Composer;II)V
 }
@@ -63,8 +116,13 @@ public final class com/ts/ds/compose/components/tabs/TSTabsKt {
 	public static final fun TSTabs (Ljava/util/List;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSTabsVariant;ZLjava/lang/String;ZLandroidx/compose/runtime/Composer;II)V
 }
 
+public final class com/ts/ds/compose/components/text/TSTextKt {
+	public static final fun TSText-A_F9gWI (Ljava/lang/String;Landroidx/compose/ui/Modifier;Lcom/ts/ds/core/style/TSTypeRole;Lcom/ts/ds/core/style/TSTextColor;Landroidx/compose/ui/text/style/TextAlign;IILandroidx/compose/runtime/Composer;II)V
+}
+
 public final class com/ts/ds/compose/components/textfield/TSTextFieldKt {
 	public static final fun TSTextField (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;ZZZLcom/ts/ds/core/input/TSTextInputTraits;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TSTextField (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lcom/ts/ds/core/style/TSTextFieldContentStyle;Landroidx/compose/ui/Modifier;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/ts/ds/core/icon/TSIcon;ZZZLcom/ts/ds/core/input/TSTextInputTraits;Lkotlin/jvm/functions/Function0;ZLandroidx/compose/foundation/interaction/MutableInteractionSource;Lkotlin/jvm/functions/Function2;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class com/ts/ds/compose/components/toast/TSToastHostKt {
@@ -195,6 +253,29 @@ public final class com/ts/ds/compose/theme/TSColorsKt {
 	public static final fun lightTSColors ()Lcom/ts/ds/compose/theme/TSColors;
 }
 
+public final class com/ts/ds/compose/theme/TSControllerColors {
+	public static final field $stable I
+	public final fun getBackdrop-0d7_KjU ()J
+	public final fun getBacking-0d7_KjU ()J
+	public final fun getKey-0d7_KjU ()J
+	public final fun getKeyLabel-0d7_KjU ()J
+	public final fun getKeyOutline-0d7_KjU ()J
+	public final fun getKeyPressed-0d7_KjU ()J
+	public final fun getOverlayScrimMedia-0d7_KjU ()J
+	public final fun getTextOnOverlayMedia-0d7_KjU ()J
+}
+
+public final class com/ts/ds/compose/theme/TSControllerColorsKt {
+	public static final fun darkTSControllerColors ()Lcom/ts/ds/compose/theme/TSControllerColors;
+	public static final fun lightTSControllerColors ()Lcom/ts/ds/compose/theme/TSControllerColors;
+}
+
+public final class com/ts/ds/compose/theme/TSControllerSize {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/ts/ds/compose/theme/TSControllerSize;
+	public final fun getOutlineWidth-D9Ej5fM ()F
+}
+
 public final class com/ts/ds/compose/theme/TSElevation {
 	public static final field $stable I
 	public final fun getShadowLg ()Lcom/ts/ds/compose/theme/TSShadow;
@@ -268,6 +349,7 @@ public final class com/ts/ds/compose/theme/TSTheme {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/ts/ds/compose/theme/TSTheme;
 	public final fun getColors (Landroidx/compose/runtime/Composer;I)Lcom/ts/ds/compose/theme/TSColors;
+	public final fun getControllerColors (Landroidx/compose/runtime/Composer;I)Lcom/ts/ds/compose/theme/TSControllerColors;
 	public final fun getElevation (Landroidx/compose/runtime/Composer;I)Lcom/ts/ds/compose/theme/TSElevation;
 	public final fun getHapticsEnabled (Landroidx/compose/runtime/Composer;I)Z
 	public final fun getRippleEnabled (Landroidx/compose/runtime/Composer;I)Z

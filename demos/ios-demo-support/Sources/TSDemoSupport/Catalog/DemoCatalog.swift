@@ -6,8 +6,8 @@ public enum DemoCatalog {
         DemoSection(id: .actions, pages: [.button, .iconButton]),
         DemoSection(id: .forms, pages: [.textField, .checkbox, .switch]),
         DemoSection(id: .navigation, pages: [.tabs, .bottomNav]),
-        DemoSection(id: .content, pages: [.badge, .avatar, .listItem, .card]),
-        DemoSection(id: .feedback, pages: [.alert, .dialog, .toast])
+        DemoSection(id: .content, pages: [.text, .badge, .avatar, .listItem, .card]),
+        DemoSection(id: .feedback, pages: [.alert, .dialog, .toast, .spinner])
     ]
 
     public static var allPages: [DemoPageID] {

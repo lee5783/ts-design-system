@@ -82,7 +82,7 @@ make android-snapshot-verify      # ./gradlew test -Proborazzi.test.verify=true
 cd android && ./gradlew :compose:verifyRoborazziDebug --tests '*TSCardSnapshotTest'
 ```
 
-A missing reference fails; nothing is written silently. `ios-snapshot-verify` runs every test in `TSDesignSystemTests` and `TSDesignSystemUIKitTests` (narrow it with `IOS_SNAPSHOT_TEST_TARGETS=TSDesignSystemTests/TSButtonSnapshotTests`). From Xcode, set `TS_SNAPSHOT_VERIFY=1` in the scheme or test plan environment.
+A missing reference fails; nothing is written silently. `ios-snapshot-verify` runs every test in `TSDesignSystemTests` and `TSDesignSystemUIKitTests` (narrow it with a make argument, `make ios-snapshot-verify IOS_SNAPSHOT_TEST_TARGETS=TSDesignSystemTests/TSButtonSnapshotTests`; as an environment variable it is ignored, because the Makefile assigns it with `:=`). From Xcode, set `TS_SNAPSHOT_VERIFY=1` in the scheme or test plan environment.
 
 The iOS pin is one source of truth: `TSSnapshotDevice.pinnedSimulator` / `pinnedOSVersion` (iPhone 17 / iOS 26.5), which the Makefile reads for `IOS_SIM_DEVICE` / `IOS_SIM_OS`. `ios-snapshot-verify` sets `TS_SNAPSHOT_REQUIRE_PINNED`, so a runtime mismatch stops the run instead of skipping green; the message is in the test runner's crash log ("crashed while preparing to run tests"). Without the verify or record key, the snapshot suites skip on every runtime.
 

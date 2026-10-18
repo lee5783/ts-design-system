@@ -6,15 +6,16 @@ Known gaps, visible fallbacks and fragile areas as of `VERSION` 0.1.0. Items car
 
 ## DS gaps (filled locally, pending upstream)
 
-Every local addition lives in `design/extensions/native-tokens.json` with an `upstream` status (`pending`, `accepted`, `rejected`). All 47 are **`pending`** today:
+Every local addition lives in `design/extensions/native-tokens.json` with an `upstream` status (`pending`, `accepted`, `rejected`). All 56 are **`pending`** today:
 
 | Family | Tokens | Why |
 |---|---|---|
 | color (6) | `danger-pressed`, `switch-thumb`, `success/warning/danger/info-on-inverse` | Pressed danger fill (C-12); the hard-coded switch thumb; icon colours on `surface-inverse` for the Toast (C-26) |
 | duration (3), easing (1) | `duration-fast/base/slow`, `easing-standard` | The DS defines no motion (C-13) |
 | component (37) | button, avatar, bottom-nav, alert, toast, switch, checkbox, badge, tabs, list-item, dialog, sheet grabber, text-field, spinner and card constants | Values the DS hard-codes in `bundle.css` |
+| controller-color (8), controller-size (1) | `controller-backdrop`, `controller-key`, `controller-key-pressed`, `controller-key-outline`, `controller-key-label`, `controller-backing`, `overlay-scrim-media`, `text-on-overlay-media`; `controller-outline-width` | UI over live media and game controllers (issue #3); a separate palette outside `TSColors` ([consumers/theming.md](consumers/theming.md#controller-and-media-overlay-colours)). The DS should adopt them upstream |
 
-Open design questions on these values (tracker D-017, D-020): dark `danger-pressed` `#cd2323` reaches only 2.78:1 on `surface-card`; the pressed, motion and icon-only `*-on-inverse` tokens; the [est] ListItem focused and disabled states; the 1.5 font-scale stacking threshold for list items and card footers; `segmentedHeight` 46; native multiline line height on iOS 16+; vertically centred leading icons in multiline fields; truncating badge rows; card pressed as a fill only.
+Open design questions on these values (tracker D-017, D-020): the controller light values are hex literals equal to `background-primary` / `text-primary` rather than aliases, so they will not follow an upstream change of those tokens; the Spinner md / lg strokes (2.5 / 3) are [est] until the DS defines spinner sizes; dark `danger-pressed` `#cd2323` reaches only 2.78:1 on `surface-card`; the pressed, motion and icon-only `*-on-inverse` tokens; the [est] ListItem focused and disabled states; the 1.5 font-scale stacking threshold for list items and card footers; `segmentedHeight` 46; native multiline line height on iOS 16+; vertically centred leading icons in multiline fields; truncating badge rows; card pressed as a fill only.
 
 Missing DS assets (D-018, D-019): no `eye-off` icon (the password toggle uses `eye` with a selected fill) and no `minus` icon (the indeterminate checkbox); the wordmark is outlined from a Roboto placeholder font (`tools/codegen/fonts/`) until brand artwork exists.
 
@@ -47,6 +48,23 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 **Inline Alert Escape (D-016):** hardware-keyboard Escape is not handled for the inline Alert; the accessibility escape works.
 
 **Toast host lifecycle (Android):** `TSToastHost` never detaches itself. An app that keeps its queue across an Activity recreate must call `detach()` in `onDestroy`; on any recreate (rotation included) the current toast restarts its full timeout and is announced again (C-43, `design/specs/components/toast.md`).
+
+**Dialog queue and action order (issue #5, `design/specs/components/dialog.md`):**
+- Under the `refuse` policy a follow-up dialog requested from a dismissing handler is refused (the first dialog still owns the presenter), so `refuse` and chaining do not mix.
+- Compose: a consumer that ignores `onPresentedChange(false)` (to veto a close) or a handler that throws leaves the dialog on screen with every action ignored until `isPresented` becomes `true` again.
+- iOS `afterDismissal` runs after a chained UIKit dialog is presented and after SwiftUI grants the next queued dialog, so system UI presented from it can still be dropped while a TS dialog is presenting.
+- SwiftUI: if a granted session's binding goes `false` after the presentation started but before the content appeared, the slot is freed early and the next queued dialog can be refused by UIKit ("already presenting"), which resets its binding. The window is a fraction of the transition.
+- UIKit: if a chained (handed-over) presentation fails inside UIKit while the app keeps a strong reference to the follow-up dialog, the slot stays held until that dialog is deallocated.
+- `handOver(from:to:)` is public on both presenters but is library-internal in intent; it is not hidden behind `@RestrictTo` / `@_spi`.
+- Mixed-toolkit apps share one presenter: imperative (UIKit, Views) and declarative (SwiftUI, Compose) dialogs refuse and queue against each other.
+
+**Android immersive dialogs:** the host's system-bar state is copied once per dialog and re-applied to the host on close; a host that changes its bars while a dialog is open is not followed.
+
+**Text-field code keyboard (Compose):** `TSTextInputTraits.Code` opens a `KeyboardType.Password` keyboard (visible text) because Compose cannot send `NO_SUGGESTIONS`; a password manager may offer autofill on the field, and Gboard treats capitals as a hint there. Views sends `NO_SUGGESTIONS` and is not affected (`design/specs/components/text-field.md`).
+
+**Consumer icons and line control (issue #2):** consumer icons carry no RTL metadata (mirroring is set on the asset); a one-line Compose / Views button label can squeeze a trailing icon in a width-bounded button; UIKit `TSIconButtonView(iconImage:…)` stores `.plus` in `icon` as a placeholder, which shows if `iconImage` is cleared (`design/specs/components/button.md`, `icon-button.md`).
+
+**New primitives (issue #6):** the disclosure row body appears without a height animation [est]; UIKit `TSDisclosureListItemView` has no collection-view cell variant; an `.accessibilityIdentifier` on a SwiftUI `TSDisclosureListItem` also lands on its body; `TSText` (SwiftUI) takes a `String` only, with no `LocalizedStringKey` overload; UIKit and Views have no `TSText` (they use `UILabel` + `TSFont` and `TextAppearance.TS.*`); there is no `TSSurface` (`design/specs/components/text.md`, `list-item.md`).
 
 **Views dialogs after recreation:** handlers cannot be saved, so a restored `TSDialogFragment` removes itself and emits `TSDialogFragmentResults.DROPPED`; the app re-presents from its own state (`design/specs/components/dialog.md`).
 
@@ -91,4 +109,4 @@ When the DS ships one of these tokens, codegen stops with a duplicate-key error;
 
 ## Test coverage gaps
 
-From the final review audit (D-103 to D-112): no end-to-end test from `tokens.json` to every platform's generated colour; no app-icon or wordmark-switch test; no Views page with a plain `EditText` and MDC `Snackbar`; no 200-row smooth-scroll check; no focus-order or keyboard-vs-touch ring test; no reduce-motion test for the Compose toast, dialog and sheet or the iOS toast; no pseudo-locale or long-string test; parity rests on contact sheets; no live settings test in the SwiftUI demo; the four demos were never installed side by side. Instrumented Android runs on API 26 and 36 happen in CI only (D-054).
+From the final review audit (D-103 to D-112): no end-to-end test from `tokens.json` to every platform's generated colour; no app-icon or wordmark-switch test; no Views page with a plain `EditText` and MDC `Snackbar`; no 200-row smooth-scroll check; no focus-order or keyboard-vs-touch ring test; no reduce-motion test for the Compose toast, dialog and sheet or the iOS toast; no pseudo-locale or long-string test; parity rests on contact sheets; no live settings test in the SwiftUI demo; the four demos were never installed side by side. Instrumented Android runs on API 26 and 36 happen in CI only (D-054). From issues #2–#6: no test covers the Compose dialog order after a recreate with a queued request (TC-026); the UIKit `afterDismissal` unit test uses the not-presented path because the SPM test host never completes a dismissal (real presentation is covered by the demo chain UI tests); no demo page hides the system bars, so immersive dialogs are covered by Robolectric (`TSDialogSystemBarsTest`, `TSDialogFragmentTest`) plus a one-off device check; the Button / IconButton demo sections for consumer icons and one-line labels have no UI test; the Compose disclosure chevron rotation is covered by spec tests and snapshots only.

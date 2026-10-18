@@ -23,6 +23,8 @@ public enum DemoPageID: String, CaseIterable, Hashable, Sendable, Identifiable {
     case dialog
     case toast
     case bottomNav = "bottom-nav"
+    case spinner
+    case text
 
     public var id: String { rawValue }
 

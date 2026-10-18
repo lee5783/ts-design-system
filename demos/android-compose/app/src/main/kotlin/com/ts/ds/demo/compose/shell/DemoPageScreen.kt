@@ -14,13 +14,15 @@ import com.ts.ds.demo.compose.components.buttonPage
 import com.ts.ds.demo.compose.components.cardPage
 import com.ts.ds.demo.compose.components.checkboxPage
 import com.ts.ds.demo.compose.components.dialogPage
-import com.ts.ds.demo.compose.components.toastPage
 import com.ts.ds.demo.compose.components.iconButtonPage
 import com.ts.ds.demo.compose.components.listItemPage
 import com.ts.ds.demo.compose.components.pendingComponentPage
+import com.ts.ds.demo.compose.components.spinnerPage
 import com.ts.ds.demo.compose.components.switchPage
 import com.ts.ds.demo.compose.components.tabsPage
 import com.ts.ds.demo.compose.components.textFieldPage
+import com.ts.ds.demo.compose.components.textPage
+import com.ts.ds.demo.compose.components.toastPage
 import com.ts.ds.demo.compose.foundations.colorsPage
 import com.ts.ds.demo.compose.foundations.elevationPage
 import com.ts.ds.demo.compose.foundations.iconsPage
@@ -82,6 +84,8 @@ private fun LazyListScope.pageContent(page: DemoPageId, onOpenBottomNavShell: ()
         DemoPageId.Dialog -> dialogPage()
         DemoPageId.Toast -> toastPage()
         DemoPageId.BottomNav -> bottomNavPage(onOpenBottomNavShell)
+        DemoPageId.Spinner -> spinnerPage()
+        DemoPageId.Text -> textPage()
         else -> {
             check(page.kind == DemoPageKind.Component)
             pendingComponentPage(page)

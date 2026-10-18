@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -68,12 +69,13 @@ internal object TSListItemTestTags {
     const val CHEVRON = "ts.list-item.chevron"
     const val SWITCH = "ts.list-item.switch"
     const val LEADING = "ts.list-item.leading"
+    const val DISCLOSURE_BODY = "ts.list-item.disclosure-body"
 }
 
 @Suppress("ComposeCompositionLocalUsage")
 internal val LocalTSListGroup = staticCompositionLocalOf { false }
 
-private var SemanticsPropertyReceiver.tsListItemDivider by TSListItemDividerKey
+internal var SemanticsPropertyReceiver.tsListItemDivider by TSListItemDividerKey
 
 @Composable
 public fun TSListItem(
@@ -228,14 +230,14 @@ public fun TSListItemValue(
 }
 
 @Composable
-private fun MutableInteractionSource.collectTSListItemState(enabled: Boolean): TSControlState {
+internal fun MutableInteractionSource.collectTSListItemState(enabled: Boolean): TSControlState {
     val base = collectTSControlState(enabled = enabled)
     val focused by collectIsFocusedAsState()
     return TSControlState.make(pressed = base.pressed, enabled = enabled, focused = base.focused || focused)
 }
 
 @Composable
-private fun TSListItemRow(
+internal fun TSListItemRow(
     resolved: TSListItemStyleSpec.Resolved,
     inGroup: Boolean,
     title: String,
@@ -244,6 +246,7 @@ private fun TSListItemRow(
     leading: (@Composable () -> Unit)?,
     trailing: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
+    chevronRotation: Float = 0f,
 ) {
     val colors = TSTheme.colors
     val dividerColor = colors.color(TSListItemStyleSpec.group.divider)
@@ -286,7 +289,10 @@ private fun TSListItemRow(
                 contentDescription = null,
                 size = resolved.chevronSize.dp.dp,
                 tint = colors.color(resolved.chevronColor),
-                modifier = Modifier.testTag(TSListItemTestTags.CHEVRON).alpha(resolved.opacity),
+                modifier = Modifier
+                    .testTag(TSListItemTestTags.CHEVRON)
+                    .alpha(resolved.opacity)
+                    .then(if (chevronRotation != 0f) Modifier.rotate(chevronRotation) else Modifier),
             )
         }
     }

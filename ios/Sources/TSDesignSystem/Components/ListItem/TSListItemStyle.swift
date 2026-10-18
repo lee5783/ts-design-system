@@ -57,6 +57,7 @@ struct TSListItemContent<Leading: View, Trailing: View>: View {
     let showsChevron: Bool
     let leading: Leading
     let trailing: Trailing
+    var chevronRotation: Double?
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -137,9 +138,18 @@ struct TSListItemContent<Leading: View, Trailing: View>: View {
             .lineLimit(resolved.isStacked ? nil : 1)
     }
 
+    @ViewBuilder
     private func chevron(_ resolved: TSListItemStyleSpec.Resolved) -> some View {
-        TSIcon(resolved.chevron, size: resolved.chevronSize)
+        let icon = TSIcon(resolved.chevron, size: resolved.chevronSize)
             .foregroundColor(resolved.chevronColor.color)
             .accessibilityHidden(true)
+        if let chevronRotation {
+            let disclosure = TSListItemStyleSpec.disclosure
+            icon
+                .rotationEffect(.degrees(chevronRotation))
+                .tsAnimation(chevronRotation, duration: disclosure.animationDuration, easing: disclosure.animationEasing)
+        } else {
+            icon
+        }
     }
 }
