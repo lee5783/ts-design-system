@@ -37,3 +37,8 @@ export function toSnakeName(token: string): string {
 export function tokenName(token: string): TokenName {
   return { token, camel: toCamelName(token), snake: toSnakeName(token) };
 }
+
+export function controllerMemberName(token: string): string {
+  const [first, ...rest] = tokenSegments(token);
+  return toCamelName(first === "controller" && rest.length > 0 ? rest.join("-") : token);
+}

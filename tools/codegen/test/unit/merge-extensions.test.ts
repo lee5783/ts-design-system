@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { loadTsTokens } from "../../src/model/load-ts-tokens.ts";
 import { mergeExtensions, readNativeModel } from "../../src/model/merge-extensions.ts";
 import { toDesignTokens } from "../../src/model/to-style-dictionary.ts";
-import { TOKEN_FAMILIES, type AnyToken, type ColorToken, type ThemeId, type TokenModel } from "../../src/model/types.ts";
-import { contrastRatio } from "../../src/transforms/contrast.ts";
-import { parseCubicBezier, parseMs } from "../../src/transforms/css-values.ts";
+import { THEMES, TOKEN_FAMILIES, type AnyToken, type ColorToken, type ThemeId, type TokenModel } from "../../src/model/types.ts";
+import { compositedContrastRatio, contrastRatio } from "../../src/transforms/contrast.ts";
+import { parseCubicBezier, parseHexColor, parseMs } from "../../src/transforms/css-values.ts";
 import { rawFixture, rawFixtureExtensions, rawRealExtensions, rawRealTokens, repoRoot } from "../support.ts";
 
 const source = () => loadTsTokens(rawFixture());
@@ -149,6 +149,36 @@ describe("merge-extensions", () => {
     expect(() => merged(noComponent)).toThrow('native-tokens component/switch-track-width: missing "component"');
   });
 
+  it("keeps controller tokens in their own bucket, out of the main palette and sizes", () => {
+    const model = merged();
+    expect(names(model.color)).not.toContain("controller-key");
+    expect(names(model.size)).toEqual(["control-md", "icon-xl"]);
+    expect(model.controller.color.map((token) => [token.name.token, token.name.camel, token.name.snake])).toEqual([
+      ["controller-key", "key", "controller_key"],
+      ["controller-key-label", "keyLabel", "controller_key_label"],
+      ["overlay-scrim-media", "overlayScrimMedia", "overlay_scrim_media"],
+    ]);
+    expect(model.controller.color[1]?.value.light.hex).toBe(model.color[0]?.value.light.hex);
+    expect(model.controller.color.every((token) => token.aliasOf === undefined)).toBe(true);
+    expect(model.controller.size.map((token) => [token.name.camel, token.value, token.extension?.upstream])).toEqual([["outlineWidth", 1.5, "pending"]]);
+    expect(source().controller).toEqual({ color: [], size: [] });
+  });
+
+  it("rejects controller tokens that clash with the main model, with each other or carry themed sizes", () => {
+    const withController = (family: string, tokens: unknown[]) => () => merged({ ...rawFixtureExtensions(), [family]: { tokens } });
+    expect(withController("controller-color", [{ name: "overlay", value: "#000", upstream: "pending" }])).toThrow(/controller-color\/overlay: duplicate key, already a token of the main model/);
+    expect(
+      withController("controller-color", [
+        { name: "controller-key", value: "#000", upstream: "pending" },
+        { name: "key", value: "#fff", upstream: "pending" },
+      ]),
+    ).toThrow(/"controller-key" and "key" both map to "key"/);
+    expect(withController("controller-size", [{ name: "controller-outline-width", value: { light: "1px", dark: "2px" }, upstream: "pending" }])).toThrow(
+      /controller-size\/controller-outline-width: expected a single value/,
+    );
+    expect(withController("controller-color", [{ name: "controller-key", value: "#000" }])).toThrow(/"upstream" must be one of/);
+  });
+
   it("parses durations and cubic-bezier easings", () => {
     expect(parseMs("150ms")).toBe(150);
     expect(parseMs("0.7s")).toBe(700);
@@ -169,8 +199,9 @@ describe("design/extensions/native-tokens.json", () => {
     const model = await readNativeModel(repoRoot);
     expect(model).toEqual(real());
     expect([model.color.length, model.duration.length, model.easing.length, model.component.length]).toEqual([37, 3, 1, 37]);
-    const tagged = allTokens(model).filter((token) => token.extension !== undefined);
-    expect(tagged).toHaveLength(47);
+    expect([model.controller.color.length, model.controller.size.length]).toEqual([8, 1]);
+    const tagged = [...allTokens(model), ...model.controller.color, ...model.controller.size].filter((token) => token.extension !== undefined);
+    expect(tagged).toHaveLength(56);
     expect(tagged.every((token) => token.extension?.upstream === "pending")).toBe(true);
     expect(model.duration.map((token) => token.value)).toEqual([120, 150, 200]);
     expect(model.easing[0]?.value).toEqual([0.25, 0.1, 0.25, 1]);
@@ -205,6 +236,52 @@ describe("design/extensions/native-tokens.json", () => {
         expect(ratio(model, `${tone}-on-inverse`, "surface-inverse", theme)).toBeGreaterThanOrEqual(3);
       }
     }
+  });
+
+  it("carries the issue #3 controller palette with the raised dark backing", () => {
+    const model = real();
+    expect(model.controller.color.map((token) => [token.name.token, token.value.light.hex, token.value.dark.hex])).toEqual([
+      ["controller-backdrop", "#fcfcfc", "#121416"],
+      ["controller-key", "#18181b29", "#ffffff29"],
+      ["controller-key-pressed", "#18181b6b", "#ffffff6b"],
+      ["controller-key-outline", "#18181b99", "#ffffff99"],
+      ["controller-key-label", "#18181b", "#ffffff"],
+      ["controller-backing", "#fcfcfce6", "#000000ec"],
+      ["overlay-scrim-media", "#fcfcfc99", "#00000099"],
+      ["text-on-overlay-media", "#18181b", "#ffffff"],
+    ]);
+    expect(model.controller.size.map((token) => [token.name.token, token.value])).toEqual([["controller-outline-width", 1.5]]);
+  });
+
+  describe("controller contrast, alpha composited over black and white frames", () => {
+    const controller = (model: TokenModel, name: string, theme: ThemeId) =>
+      (model.controller.color.find((token) => token.name.token === name) as ColorToken).value[theme].rgba;
+    const frames = { black: parseHexColor("#000000").rgba, white: parseHexColor("#ffffff").rgba };
+    const cases = THEMES.flatMap((theme) => (["black", "white"] as const).map((frame) => [theme, frame] as const));
+
+    it.each(cases)("%s theme over a %s frame: outline >= 3:1 against the backing", (theme, frame) => {
+      const model = real();
+      const backdrop = [frames[frame], controller(model, "controller-backing", theme)];
+      expect(compositedContrastRatio(controller(model, "controller-key-outline", theme), backdrop)).toBeGreaterThanOrEqual(3);
+    });
+
+    it.each(cases)("%s theme over a %s frame: idle label >= 4.5:1 on the key", (theme, frame) => {
+      const model = real();
+      const backdrop = [frames[frame], controller(model, "controller-backing", theme), controller(model, "controller-key", theme)];
+      expect(compositedContrastRatio(controller(model, "controller-key-label", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(cases)("%s theme over a %s frame: media text >= 4.5:1 on the media scrim", (theme, frame) => {
+      const model = real();
+      const backdrop = [frames[frame], controller(model, "overlay-scrim-media", theme)];
+      expect(compositedContrastRatio(controller(model, "text-on-overlay-media", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it.each(cases)("%s theme over a %s frame: pressed label >= 4.5:1 on the pressed key", (theme, frame) => {
+      const model = real();
+      const backdrop = [frames[frame], controller(model, "controller-backing", theme), controller(model, "controller-key-pressed", theme)];
+      expect(compositedContrastRatio(controller(model, "controller-key-label", theme), backdrop)).toBeGreaterThanOrEqual(4.5);
+    });
   });
 
   it("uses the opposite theme status value for every on-inverse token", () => {

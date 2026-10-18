@@ -438,5 +438,100 @@
       }
     ]
   },
+  "controller-color": {
+    "tokens": [
+      {
+        "name": "controller-backdrop",
+        "value": {
+          "light": "#fcfcfc",
+          "dark": "#121416"
+        },
+        "usage": "Canvas behind a full-screen controller.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "controller-key",
+        "value": {
+          "light": "#18181b29",
+          "dark": "#ffffff29"
+        },
+        "usage": "Idle fill of a control.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "controller-key-pressed",
+        "value": {
+          "light": "#18181b6b",
+          "dark": "#ffffff6b"
+        },
+        "usage": "Fill of a held control.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "controller-key-outline",
+        "value": {
+          "light": "#18181b99",
+          "dark": "#ffffff99"
+        },
+        "usage": "Control boundary; carries the 3:1 non-text contrast against controller-backing over any frame.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "controller-key-label",
+        "value": {
+          "light": "#18181b",
+          "dark": "#ffffff"
+        },
+        "usage": "Text on a control (A, B, START).",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "controller-backing",
+        "value": {
+          "light": "#fcfcfce6",
+          "dark": "#000000ec"
+        },
+        "usage": "Plate under each control so it reads over any video frame. Dark raised from #000000bf so a pressed label keeps 4.5:1 over a white frame.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "overlay-scrim-media",
+        "value": {
+          "light": "#fcfcfc99",
+          "dark": "#00000099"
+        },
+        "usage": "Translucent chip or backdrop over live media; differs from overlay (modal scrim, dark in both themes).",
+        "upstream": "pending",
+        "origin": "issue #3"
+      },
+      {
+        "name": "text-on-overlay-media",
+        "value": {
+          "light": "#18181b",
+          "dark": "#ffffff"
+        },
+        "usage": "Text on overlay-scrim-media.",
+        "upstream": "pending",
+        "origin": "issue #3"
+      }
+    ]
+  },
+  "controller-size": {
+    "tokens": [
+      {
+        "name": "controller-outline-width",
+        "value": "1.5px",
+        "usage": "Stroke of controller-key-outline: 1.5 dp on Android, 1.5 pt on iOS.",
+        "upstream": "pending",
+        "origin": "issue #3; C-013"
+      }
+    ]
+  },
   "renames": {}
 }

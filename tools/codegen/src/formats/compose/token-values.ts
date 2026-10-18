@@ -93,6 +93,9 @@ export function tokenValuesKotlin(model: TokenModel): string {
       model.easing.flatMap((token) => value(token, "TSCubicBezierValues", `TSCubicBezierValues(${token.value.map(kotlinFloat).join(", ")})`)),
     ),
     group("Component", component),
+    group("LightControllerColors", model.controller.color.flatMap((token) => constant(token, "Long", kotlinArgb(token.value.light.rgba)))),
+    group("DarkControllerColors", model.controller.color.flatMap((token) => constant(token, "Long", kotlinArgb(token.value.dark.rgba)))),
+    group("ControllerSize", model.controller.size.flatMap((token) => constant(token, "Float", kotlinFloat(token.value)))),
   ];
   const body = groups.flatMap((lines, index) => (index === 0 ? lines : ["", ...lines]));
   return kotlinFile(TOKENS_PACKAGE, [], [...VALUE_TYPES, block("public object TSTokenValues", body).join("\n")]);

@@ -25,6 +25,7 @@ class TSThemeTest {
 
     private class Captured {
         lateinit var colors: TSColors
+        lateinit var controllerColors: TSControllerColors
         lateinit var typography: TSTypography
         lateinit var elevation: TSElevation
         lateinit var scheme: ColorScheme
@@ -37,6 +38,7 @@ class TSThemeTest {
         composeRule.setContent {
             TSTheme(darkTheme = darkTheme, rippleEnabled = rippleEnabled) {
                 captured.colors = TSTheme.colors
+                captured.controllerColors = TSTheme.controllerColors
                 captured.typography = TSTheme.typography
                 captured.elevation = TSTheme.elevation
                 captured.scheme = MaterialTheme.colorScheme
@@ -46,6 +48,19 @@ class TSThemeTest {
         }
         composeRule.waitForIdle()
         return captured
+    }
+
+    private fun assertControllerColors(expected: TSControllerColors, actual: TSControllerColors) {
+        listOf(
+            TSControllerColors::backdrop,
+            TSControllerColors::key,
+            TSControllerColors::keyPressed,
+            TSControllerColors::keyOutline,
+            TSControllerColors::keyLabel,
+            TSControllerColors::backing,
+            TSControllerColors::overlayScrimMedia,
+            TSControllerColors::textOnOverlayMedia,
+        ).forEach { role -> assertEquals(role.name, role.get(expected), role.get(actual)) }
     }
 
     @Test
@@ -71,6 +86,21 @@ class TSThemeTest {
         assertTrue(captured.isDark)
         assertEquals(darkTSElevation().shadowMd.color, captured.elevation.shadowMd.color)
         assertNotEquals(lightTSColors().backgroundPrimary, captured.colors.backgroundPrimary)
+    }
+
+    @Test
+    fun lightThemeProvidesLightControllerColors() {
+        val captured = capture(darkTheme = false)
+
+        assertControllerColors(lightTSControllerColors(), captured.controllerColors)
+    }
+
+    @Test
+    fun darkThemeProvidesDarkControllerColors() {
+        val captured = capture(darkTheme = true)
+
+        assertControllerColors(darkTSControllerColors(), captured.controllerColors)
+        assertNotEquals(lightTSControllerColors().backing, captured.controllerColors.backing)
     }
 
     @Test

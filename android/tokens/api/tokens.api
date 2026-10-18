@@ -56,6 +56,11 @@ public final class com/ts/ds/tokens/TSTokenValues$Component {
 	public static final field toastMaxWidth F
 }
 
+public final class com/ts/ds/tokens/TSTokenValues$ControllerSize {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$ControllerSize;
+	public static final field outlineWidth F
+}
+
 public final class com/ts/ds/tokens/TSTokenValues$DarkColors {
 	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$DarkColors;
 	public static final field accentHover J
@@ -95,6 +100,18 @@ public final class com/ts/ds/tokens/TSTokenValues$DarkColors {
 	public static final field warning J
 	public static final field warningOnInverse J
 	public static final field warningSubtle J
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$DarkControllerColors {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$DarkControllerColors;
+	public static final field backdrop J
+	public static final field backing J
+	public static final field key J
+	public static final field keyLabel J
+	public static final field keyOutline J
+	public static final field keyPressed J
+	public static final field overlayScrimMedia J
+	public static final field textOnOverlayMedia J
 }
 
 public final class com/ts/ds/tokens/TSTokenValues$Duration {
@@ -148,6 +165,18 @@ public final class com/ts/ds/tokens/TSTokenValues$LightColors {
 	public static final field warning J
 	public static final field warningOnInverse J
 	public static final field warningSubtle J
+}
+
+public final class com/ts/ds/tokens/TSTokenValues$LightControllerColors {
+	public static final field INSTANCE Lcom/ts/ds/tokens/TSTokenValues$LightControllerColors;
+	public static final field backdrop J
+	public static final field backing J
+	public static final field key J
+	public static final field keyLabel J
+	public static final field keyOutline J
+	public static final field keyPressed J
+	public static final field overlayScrimMedia J
+	public static final field textOnOverlayMedia J
 }
 
 public final class com/ts/ds/tokens/TSTokenValues$Opacity {

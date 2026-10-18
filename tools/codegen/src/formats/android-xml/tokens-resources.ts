@@ -33,6 +33,16 @@ export function androidColors(model: TokenModel, theme: ThemeId): string {
   return resourcesFile(entries);
 }
 
+export function androidControllerColors(model: TokenModel, theme: ThemeId): string {
+  return resourcesFile(model.controller.color.map((token) => element("color", androidResourceName(token.name.snake), androidArgb(token.value[theme].rgba))));
+}
+
+export function androidControllerDimens(model: TokenModel): string {
+  return resourcesFile(
+    model.controller.size.map((token) => element("dimen", androidResourceName(token.name.snake), `${formatNumber(token.value)}dp`)),
+  );
+}
+
 function valueOrReference(token: TokenBase, type: string, value: string): string {
   return token.deprecated === undefined ? value : `@${type}/${androidResourceName(toSnakeName(token.deprecated.renamedTo))}`;
 }
@@ -77,6 +87,9 @@ export function androidTokenResources(model: TokenModel): GeneratedFile[] {
     { path: `${TOKENS_RES_DIR}/values-night/ts_colors.xml`, contents: androidColors(model, "dark") },
     { path: `${TOKENS_RES_DIR}/values/ts_dimens.xml`, contents: androidDimens(model) },
     { path: `${TOKENS_RES_DIR}/values/ts_integers.xml`, contents: androidIntegers(model) },
+    { path: `${TOKENS_RES_DIR}/values/ts_controller_colors.xml`, contents: androidControllerColors(model, "light") },
+    { path: `${TOKENS_RES_DIR}/values-night/ts_controller_colors.xml`, contents: androidControllerColors(model, "dark") },
+    { path: `${TOKENS_RES_DIR}/values/ts_controller_dimens.xml`, contents: androidControllerDimens(model) },
   ];
 }
 

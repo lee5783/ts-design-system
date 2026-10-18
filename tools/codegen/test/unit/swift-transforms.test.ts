@@ -122,6 +122,8 @@ describe("Swift generators", () => {
     expect(Object.keys(files).sort()).toEqual([
       "TSColor.swift",
       "TSComponentTokens.swift",
+      "TSControllerColor.swift",
+      "TSControllerSize.swift",
       "TSDimensionToken.swift",
       "TSMotion.swift",
       "TSOpacity.swift",
@@ -138,6 +140,11 @@ describe("Swift generators", () => {
     expect(count("TSTypographyTokens.swift", /public static let \w+ = TSTypographyToken\(/g)).toBe(11);
     expect(count("TSShadowTokens.swift", /public static let \w+ = TSShadowToken\(/g)).toBe(5);
     expect(count("TSComponentTokens.swift", /public static let /g)).toBe(model.component.length);
+    expect(count("TSControllerColor.swift", /public static let \w+ = TSColor\(/g)).toBe(8);
+    expect(files["TSControllerColor.swift"]).toContain(
+      'public static let backing = TSColor(name: "controller-backing", light: TSRGBA(hex: 0xFCFCFCE6), dark: TSRGBA(hex: 0x000000EC))',
+    );
+    expect(files["TSControllerSize.swift"]).toContain("public static let outlineWidth: CGFloat = 1.5");
     expect(files["TSColor.swift"]).toContain('public static let focus = TSColor(name: "focus", light: TSRGBA(hex: 0x7C3AEDFF), dark: TSRGBA(hex: 0xA78BFAFF))');
     expect(files["TSComponentTokens.swift"]).toContain("public static let spinnerRotationDuration: TimeInterval = 0.7");
   });
