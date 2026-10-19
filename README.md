@@ -1,5 +1,7 @@
 # TS Design System
 
+[![JitPack](https://jitpack.io/v/lee5783/ts-design-system.svg)](https://jitpack.io/#lee5783/ts-design-system)
+
 **Analysis Date:** 2026-10-18
 
 ## Project Summary
