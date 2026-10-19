@@ -81,7 +81,7 @@ Not applicable at runtime. CI failure artifacts (14-day retention):
 | `codegen-check.yml` | PR, push to `master`, dispatch, `workflow_call` | `tools`: `tools-test`, `actionlint`, `codegen-check`, `ds-sync` | `codegen-check-ok` |
 | `ios.yml` | same | `changes`; `test` (matrix `pinned`, `oldest`, as `IOS_RUNTIMES`); `api-check` (`ios-api-check` against the PR base, `ios-api-check-last-tag`) | `ios-ok` |
 | `android.yml` | same | `changes`; `build` (`assemble lint apiCheck`, Ubuntu); `test` (`android-test`, macOS) | `android-ok` |
-| `demos.yml` | same | `changes`; `boundaries`; `ios-demo-support`; `ios-demo` (per demo × runtime, light, then the dark `ThemeOverrideTests` on the pinned leg); `android-demo` (per demo × API 26, 36 on emulators) | `demos-ok` |
+| `demos.yml` | same | `changes`; `boundaries`; `ios-demo-support`; `ios-demo` (per demo on the pinned runtime, light, then the dark `ThemeOverrideTests`); `android-demo` (per demo on an API 36 emulator) | `demos-ok` |
 | `release.yml` | push of a `vX.Y.Z` tag | `verify` → the 4 gate workflows (reusable) → `android-packages` (the two debug demo APKs) → `github-release` (notes + those APKs) | none |
 
 - **Path areas** (`tools/ci/src/changes.ts`, `make ci-changes BASE=<sha>`): `ios`, `android`, `boundaries` and one area per demo. `Makefile`, `.gitattributes`, `tools/package*.json` and `tools/ci/**` touch every area; `design/**` and `tools/codegen/**` touch both libraries and all demos; `design/specs/components/**` touches `boundaries`. To route a new path, add it to `AREA_PATTERNS` and extend `tools/ci/test/changes.test.ts`. Without a base commit (a tag push, a new branch), every area runs. A Compose BOM bump therefore runs the Android library and Android demo jobs, not the iOS ones.

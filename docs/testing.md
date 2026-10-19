@@ -144,6 +144,6 @@ None enforced. Completeness comes from the spec matrices (`allConfigurations`), 
 | `codegen-check.yml` | `tools-test`, `actionlint`, `codegen-check`, `ds-sync` |
 | `ios.yml` | `ios-test` per runtime leg (`IOS_RUNTIMES=pinned`, `oldest`); `ios-api-check` and `ios-api-check-last-tag` |
 | `android.yml` | `android-build` (Ubuntu); `android-test` (macOS) |
-| `demos.yml` | boundaries, iOS demo support, each iOS demo × runtime (plus the dark theme test on the pinned leg), each Android demo × API 26 / 36 |
+| `demos.yml` | boundaries, iOS demo support, each iOS demo on the pinned runtime (plus the dark theme test), each Android demo on API 36 |
 
 Details on triggers, path areas and required checks: [integrations.md](integrations.md).

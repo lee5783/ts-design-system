@@ -247,9 +247,9 @@ describe("required jobs", () => {
     expect(makeTargets(job("demos.yml", "android-demo"))).toEqual(["ci-android-kvm", "demo-android-$DEMO", "demo-android-$DEMO-test"]);
     const source = sources.get("demos.yml") ?? "";
     expect(source).toContain("demo: ${{ fromJSON(needs.changes.outputs.ios_demos) }}");
-    expect(source).toContain("runtime: [pinned, oldest]");
     expect(source).toContain("demo: ${{ fromJSON(needs.changes.outputs.android_demos) }}");
-    expect(source).toContain("api: [26, 36]");
+    expect(job("demos.yml", "ios-demo").env?.IOS_RUNTIMES).toBe("pinned");
+    expect(job("demos.yml", "android-demo").steps.find((step) => step.uses?.startsWith("reactivecircus/android-emulator-runner"))?.with?.["api-level"]).toBe(36);
   });
 });
 
@@ -289,8 +289,8 @@ describe("theme override cross case", () => {
     expect(flip).toBeGreaterThan(suite);
     expect(theme).toBeGreaterThan(flip);
     expect(demo.steps[flip]?.env).toEqual({ IOS_SIM_APPEARANCE: "dark" });
-    expect(demo.steps[flip]?.if).toBe("matrix.runtime == 'pinned'");
-    expect(demo.steps[theme]?.if).toBe("matrix.runtime == 'pinned'");
+    expect(demo.steps[flip]?.if).toBeUndefined();
+    expect(demo.steps[theme]?.if).toBeUndefined();
   });
 });
 
