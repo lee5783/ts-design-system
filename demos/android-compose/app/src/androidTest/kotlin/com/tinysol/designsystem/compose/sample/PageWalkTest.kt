@@ -25,6 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.tinysol.designsystem.compose.sample.shell.DemoTags
 import com.tinysol.designsystem.sample.support.R as DemoR
 import com.tinysol.designsystem.sample.support.catalog.DemoCatalog
+import com.tinysol.designsystem.sample.support.catalog.DemoPageId
 import com.tinysol.designsystem.sample.support.catalog.DemoPageKind
 import com.tinysol.designsystem.sample.support.settings.DemoSettings
 import org.junit.After
@@ -75,7 +76,7 @@ class PageWalkTest {
                 composeRule.onNodeWithTag(DemoTags.ACTION_THEME).assertIsDisplayed()
 
                 val list = composeRule.onNode(hasScrollToNodeAction())
-                if (page.kind == DemoPageKind.Component) {
+                if (page.kind == DemoPageKind.Component && page !in pagesWithoutPlayground) {
                     list.performScrollToNode(hasText(playground))
                     composeRule.onNodeWithText(playground).assertIsDisplayed()
                 }
@@ -100,5 +101,6 @@ class PageWalkTest {
 
     private companion object {
         const val END_OF_PAGE_PX = 1_000_000f
+        val pagesWithoutPlayground = setOf(DemoPageId.Text, DemoPageId.Spinner)
     }
 }

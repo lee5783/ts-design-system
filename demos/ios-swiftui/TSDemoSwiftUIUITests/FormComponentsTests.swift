@@ -15,7 +15,7 @@ final class FormComponentsTests: XCTestCase {
         XCTAssertEqual(app.staticTexts[fieldID].firstMatch.label, "Email")
         field.tap()
         field.typeText("ada@example.com\n")
-        XCTAssertEqual(field.value as? String, "ada@example.com")
+        wait(for: [expectation(for: NSPredicate(format: "value == %@", "ada@example.com"), evaluatedWith: field)], timeout: 5)
 
         flip(app, "demo.text-field.playground.error")
         scrollTo(field, in: app)

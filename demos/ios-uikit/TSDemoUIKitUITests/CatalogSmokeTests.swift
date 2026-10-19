@@ -3,8 +3,8 @@ import XCTest
 final class CatalogSmokeTests: XCTestCase {
     private static let foundationPages = ["colors", "typography", "spacing", "radius", "size", "opacity", "elevation", "icons"]
     private static let componentPages = [
-        "button", "icon-button", "badge", "avatar", "text-field", "checkbox", "switch",
-        "tabs", "list-item", "card", "alert", "dialog", "toast", "bottom-nav"
+        "button", "icon-button", "text-field", "checkbox", "switch", "tabs", "bottom-nav",
+        "badge", "avatar", "list-item", "card", "alert", "dialog", "toast"
     ]
 
     private var app: XCUIApplication!

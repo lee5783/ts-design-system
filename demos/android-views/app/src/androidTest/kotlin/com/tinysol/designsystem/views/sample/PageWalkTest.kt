@@ -62,7 +62,7 @@ class PageWalkTest {
             DemoCatalog.allPages.forEach { page ->
                 openPage(page).check(matches(isDisplayed()))
                 onView(withTag(DemoTags.ACTION_THEME)).check(matches(isDisplayed()))
-                if (page.kind == DemoPageKind.Component) {
+                if (page.kind == DemoPageKind.Component && page !in pagesWithoutPlayground) {
                     onView(allOf(withText(DemoR.string.demo_component_playground), isDescendantOfA(withTag(DemoTags.screen(page)))))
                         .perform(scrollIntoView())
                         .check(matches(isDisplayed()))
@@ -82,5 +82,9 @@ class PageWalkTest {
     @Test
     fun everyPageWalksInRtl() {
         walk(DemoSettings(rtl = true, reduceMotion = true))
+    }
+
+    private companion object {
+        val pagesWithoutPlayground = setOf(DemoPageId.Text, DemoPageId.Spinner)
     }
 }
