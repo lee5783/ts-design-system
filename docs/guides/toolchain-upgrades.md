@@ -39,7 +39,7 @@ Not grouped (one PR each): `compose-lints`, the vanniktech publish plugin, the b
 |---|---|---|
 | **Xcode** | `.xcode-version` | the `macos-*` runner image in the workflows; the simulator runtime; usually the pinned iOS simulator (below) |
 | **Pinned iOS simulator** | `device=` and `os=` in `.ios-simulator` (the Makefile reads them into `IOS_SIM_DEVICE` / `IOS_SIM_OS`; never set them in the Makefile) | local test runs and evidence screenshots move to the new simulator; CI's `ci-ios-simulator` fails if the runner image lacks it |
-| **Android SDK levels** | `COMPILE_SDK`, `TARGET_SDK`, `MIN_SDK` in `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt`; `compileSdk` / `targetSdk` / `minSdk` in both `demos/android-*/app/build.gradle.kts` | the emulator matrix `api: [26, 36]` in `.github/workflows/demos.yml`; `@Config(sdk = …)` values in tests; raising `MIN_SDK` is a major release |
+| **Android SDK levels** | `COMPILE_SDK`, `TARGET_SDK`, `MIN_SDK` in `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt`; `compileSdk` / `targetSdk` / `minSdk` in both `demos/android-*/app/build.gradle.kts` | the emulator `api-level: 36` in `.github/workflows/demos.yml`; `@Config(sdk = …)` values in tests; raising `MIN_SDK` is a major release |
 | **`swift-tools-version` and `.iOS(.v15)`** | `Package.swift`, `demos/ios-demo-support/Package.swift`, `IPHONEOS_DEPLOYMENT_TARGET` in both demo `project.pbxproj` files | raising either is a major release |
 | **`engines.node`** | `tools/package.json` (`>=22`) | a Node major (Renovate detects the range but opens no PR while it is satisfied) |
 | **actionlint** | `ACTIONLINT_VERSION` and the four SHA-256 checksums in `tools/ci/src/actionlint.ts` | copy the hashes from that release's checksums file |

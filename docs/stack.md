@@ -82,6 +82,6 @@ Install with `mise install` (Node, JDK, git-cliff) and Xcode 26.6 from Apple.
 
 ## Platform requirements
 
-**Development:** macOS with Xcode 26.6 and an iPhone 17 / iOS 26.5 simulator (the pinned one for local test runs and evidence screenshots), the Android SDK with an API 26 and an API 36 emulator image for demo tests, JDK 21, Node 22.
+**Development:** macOS with Xcode 26.6 and an iPhone 17 / iOS 26.5 simulator (the pinned one for local test runs and evidence screenshots), the Android SDK with an API 36 emulator image for demo tests, JDK 21, Node 22.
 
 **Distribution:** iOS through SPM only (git tag `X.Y.Z` on this repo); Android through JitPack (`com.github.lee5783.ts-design-system:*:<tag>`). The GitHub release carries notes and the debug demo APKs only. CocoaPods, Maven Central, Kotlin Multiplatform and web are out of scope.

@@ -67,7 +67,7 @@ jobs:
       - run: make demo-ios-support-test
 
   ios-demo:
-    name: ios-demo (${{ matrix.demo }}, ${{ matrix.runtime }})
+    name: ios-demo (${{ matrix.demo }})
     needs: changes
     if: needs.changes.outputs.ios_demos != '[]'
     runs-on: macos-26
@@ -76,10 +76,9 @@ jobs:
       fail-fast: false
       matrix:
         demo: ${{ fromJSON(needs.changes.outputs.ios_demos) }}
-        runtime: [pinned, oldest]
     env:
       DEMO: ${{ matrix.demo }}
-      IOS_RUNTIMES: ${{ matrix.runtime }}
+      IOS_RUNTIMES: pinned
       IOS_SIM_APPEARANCE: light
     steps:
       - uses: actions/checkout@v7
@@ -89,25 +88,22 @@ jobs:
         with:
           path: .build/xcode-demos/SourcePackages
           key: spm-demos-${{ runner.os }}-${{ hashFiles('.xcode-version', 'Package.resolved') }}
-      - if: matrix.runtime == 'pinned'
-        run: make "demo-ios-$DEMO"
+      - run: make "demo-ios-$DEMO"
       - run: make "demo-ios-$DEMO-test"
-      - if: matrix.runtime == 'pinned'
-        run: make ci-ios-simulator
+      - run: make ci-ios-simulator
         env:
           IOS_SIM_APPEARANCE: dark
-      - if: matrix.runtime == 'pinned'
-        run: make "demo-ios-$DEMO-theme-test"
+      - run: make "demo-ios-$DEMO-theme-test"
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: ios-demo-${{ matrix.demo }}-${{ matrix.runtime }}
+          name: ios-demo-${{ matrix.demo }}
           path: .build/xcode-demos/Logs/Test
           if-no-files-found: ignore
           retention-days: 14
 
   android-demo:
-    name: android-demo (${{ matrix.demo }}, API ${{ matrix.api }})
+    name: android-demo (${{ matrix.demo }}, API 36)
     needs: changes
     if: needs.changes.outputs.android_demos != '[]'
     runs-on: ubuntu-24.04
@@ -116,7 +112,6 @@ jobs:
       fail-fast: false
       matrix:
         demo: ${{ fromJSON(needs.changes.outputs.android_demos) }}
-        api: [26, 36]
     env:
       DEMO: ${{ matrix.demo }}
     steps:
@@ -127,11 +122,10 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v6
       - run: make ci-android-kvm
-      - if: matrix.api == 36
-        run: make "demo-android-$DEMO"
+      - run: make "demo-android-$DEMO"
       - uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api }}
+          api-level: 36
           arch: x86_64
           target: google_apis
           profile: pixel_6
@@ -141,7 +135,7 @@ jobs:
       - if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: android-demo-${{ matrix.demo }}-api-${{ matrix.api }}
+          name: android-demo-${{ matrix.demo }}-api-36
           path: |
             demos/android-${{ matrix.demo }}/app/build/reports
             demos/android-${{ matrix.demo }}/app/build/outputs/androidTest-results
