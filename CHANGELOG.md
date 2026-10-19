@@ -2,29 +2,50 @@
 
 All notable changes to the TS Design System libraries (iOS and Android, released in lockstep) are listed here.
 
-## Unreleased
+## 0.2.0 - 2026-10-19
 
-### Breaking
+### Features
 
-- **distribution:** Ship through two channels only: Swift Package Manager (iOS) and JitPack (Android). GitHub Packages publishing is removed.
-- **android:** New consumer coordinates `com.github.lee5783.ts-design-system:<module>:<tag>` (`bom`, `compose`, `views`, `core`, `tokens`) from `https://jitpack.io`, built from the release tag by the new root `jitpack.yml`. No credentials are needed. `v0.1.0` cannot be built by JitPack; the next tag is the first JitPack release.
-- **android:** Rename Kotlin packages and namespaces from `com.ts.ds.*` to `com.tinysol.designsystem.*` (`tokens`, `core`, `views`, `compose`); the local Maven group is `com.tinysol.designsystem`.
+- **tokens:** Add controller and media-overlay colour roles
+- **text-field:** [**breaking**] Add code content style and code-entry input traits
+- **button:** Accept consumer icons and label line control
+- **components:** [**breaking**] Make spinner, divider, disclosure row and text public
+- **android:** [**breaking**] Distribute through JitPack only
 
 ### Fixes
 
-- **android:** Published POMs point at `https://github.com/lee5783/ts-design-system` (project, SCM, issues, licence `blob/master/LICENSE`) from the new `ds.pom.repository` property, instead of `github.com/unconfigured` (#7).
-- **demos:** The Views demo settings sheet Reset action is a TS secondary button, so its label is legible on the dark sheet (#8).
+- **demos:** Make the demo UI tests pass on API 26 and stop the iOS toast race
+- **dialog:** [**breaking**] Queue a second dialog, run actions before dismissal, keep immersive mode
+- Keep UIKit text reachable and restore 10 s action toasts
+
+### Refactoring
+
+- **android:** [**breaking**] Remove the screen-reader accessibility layer
+- **ios:** [**breaking**] Remove the screen-reader accessibility layer
+- [**breaking**] Move identifiers to com.tinysol
 
 ### Documentation
 
-- Per-surface text contrast table and guarantees for every text role, `accentText` in the colour example, and a Material-interop rule: accent text uses `accentText`, never Material `primary` (#8).
-- JitPack consumer setup, release steps and the first-JitPack-build step.
+- Document consumer icons, code fields, dialog queue and new primitives
+- Document the accessibility removal and trim component specs
+- Drop snapshot and screen-reader docs, document targeted iOS runs
+- Document accent-text contrast per surface
+- Describe SPM and JitPack distribution and new identifiers
+
+### Tests
+
+- **demos:** Dismiss a lingering soft keyboard before tapping the text field
+- **demos:** Wait for the device night-mode flip in systemFollowsTheDeviceAgain
+- **demos:** Wait for every theme pixel check in the Compose ThemeOverrideTest
+- **demos:** Drive demo UI tests by identifiers and visible state
 
 ### Maintenance
 
-- **demos:** New app ids: Android `com.tinysol.designsystem.compose.sample` and `com.tinysol.designsystem.views.sample`; iOS `com.tinysol.design-system.sample` (UIKit) and `com.tinysol.design-system-swiftui.sample` (SwiftUI). Uninstall the old `com.ts.ds.demo.*` apps; they register the same `tsds-*` URL schemes.
-- **ios:** `TSDialogPresenter` logs under the subsystem `com.tinysol.design-system`. SPM package, product and module names are unchanged.
-- **release:** The GitHub release carries the changelog notes and the two debug demo APKs; library AARs are no longer attached. The `android-publish` Make target and the `publish-android` job are removed; `android-publish-local` stays for development.
+- **release:** Release on a pushed vX.Y.Z tag and attach Android packages
+- **test:** Remove snapshot capture and run iOS tests without rebuilding
+- **test:** Remove accessibility audits and contrast tooling
+- **android:** Drop unused semantics imports
+- **demos:** Drop demo strings left unused by the accessibility removal
 
 ## 0.1.0 - 2026-10-17
 
@@ -38,6 +59,7 @@ All notable changes to the TS Design System libraries (iOS and Android, released
 ### Documentation
 
 - Add README, docs corpus, guides and consumer docs
+- Restructure README with overview, requirements, layout and contributing
 
 ### Maintenance
 
