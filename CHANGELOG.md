@@ -2,6 +2,21 @@
 
 All notable changes to the TS Design System libraries (iOS and Android, released in lockstep) are listed here.
 
+## 0.2.1 - 2026-10-20
+
+### Documentation
+
+- Add JitPack badge to README
+
+### Tests
+
+- **demos:** Fix page walks, UIKit toast theme flip and catalog order
+- **ci:** Expect the demos workflow on one OS version per platform
+
+### Maintenance
+
+- **demos:** Run demo UI tests on one OS version per platform
+
 ## 0.2.0 - 2026-10-19
 
 ### Features
