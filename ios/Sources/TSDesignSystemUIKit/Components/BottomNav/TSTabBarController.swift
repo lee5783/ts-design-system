@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSTabBarController: UITabBarController {
@@ -87,3 +88,4 @@ public final class TSTabBarController: UITabBarController {
         }
     }
 }
+#endif

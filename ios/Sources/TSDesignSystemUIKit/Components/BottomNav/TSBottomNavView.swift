@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSBottomNavView: UIControl {
@@ -118,3 +119,4 @@ public final class TSBottomNavView: UIControl {
         }
     }
 }
+#endif

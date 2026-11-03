@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -234,3 +235,4 @@ struct TSCardViewBehaviorTests {
         #expect(regular.footerStack.axis == .horizontal)
     }
 }
+#endif

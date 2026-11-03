@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import TSTokens
@@ -95,3 +96,4 @@ struct TSFontTests {
         #expect(UIContentSizeCategory(dynamicTypeSize) == sizeCategory)
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSListItemContentView: UIView, UIContentView {
@@ -275,3 +276,4 @@ final class TSListItemSwitchSlot: UIView {
         bounds.union(switchView.frame).contains(point)
     }
 }
+#endif

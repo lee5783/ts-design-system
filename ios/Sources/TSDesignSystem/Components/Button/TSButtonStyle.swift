@@ -25,7 +25,7 @@ struct TSButtonStyleBody<Label: View>: View {
     var body: some View {
         let state = style.stateOverride ?? .make(isPressed: isPressed, isEnabled: isEnabled, isLoading: style.isLoading, isFocused: style.isFocused)
         let resolved = TSButtonStyleSpec.resolve(.init(variant: style.variant, size: style.size, state: state))
-        let lineHeight = resolved.font.lineHeight(for: UIContentSizeCategory(dynamicTypeSize))
+        let lineHeight = resolved.font.lineHeight(dynamicTypeSize: dynamicTypeSize)
         label
             .foregroundColor(resolved.label.color)
             .padding(.horizontal, resolved.horizontalPadding)

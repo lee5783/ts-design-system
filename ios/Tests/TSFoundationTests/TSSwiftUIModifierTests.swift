@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import TSTokens
@@ -41,3 +42,4 @@ struct TSSwiftUIModifierTests {
         #expect(fittingSize(view).height > 0)
     }
 }
+#endif

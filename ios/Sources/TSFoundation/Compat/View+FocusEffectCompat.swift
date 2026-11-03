@@ -8,7 +8,7 @@ package extension View {
 
 struct TSFocusEffectDisabledModifier: ViewModifier {
     func body(content: Content) -> some View {
-        if #available(iOS 17, *) {
+        if #available(iOS 17, macOS 14, *) {
             content.focusEffectDisabled()
         } else {
             content

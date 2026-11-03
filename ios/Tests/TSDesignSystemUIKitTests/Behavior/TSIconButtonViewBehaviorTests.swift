@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -86,3 +87,4 @@ struct TSIconButtonViewBehaviorTests {
         #expect(button.intrinsicContentSize == CGSize(width: 44, height: 44))
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -176,3 +177,4 @@ struct TSButtonViewBehaviorTests {
         #expect(wrapping.titleLabel?.numberOfLines == 0)
     }
 }
+#endif

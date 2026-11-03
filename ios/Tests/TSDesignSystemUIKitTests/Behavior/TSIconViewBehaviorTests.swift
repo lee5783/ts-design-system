@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSDesignSystemUIKit
 import UIKit
@@ -21,3 +22,4 @@ struct TSIconViewBehaviorTests {
         #expect(home?.imageOrientation == .up)
     }
 }
+#endif

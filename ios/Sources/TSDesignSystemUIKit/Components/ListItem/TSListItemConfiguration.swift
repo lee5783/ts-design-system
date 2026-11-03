@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public enum TSListItemLeading: Equatable {
@@ -76,3 +77,4 @@ public struct TSListItemConfiguration: UIContentConfiguration {
         return configuration
     }
 }
+#endif

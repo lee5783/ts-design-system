@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class TSPasswordToggleButton: UIButton {
@@ -49,3 +50,4 @@ final class TSPasswordToggleButton: UIButton {
         TSHitArea.expandedRect(bounds, minimum: resolved.minimumHitSize).contains(point)
     }
 }
+#endif

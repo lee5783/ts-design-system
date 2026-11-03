@@ -1,5 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public extension View {
     func tsDialog<Content: View>(
@@ -180,6 +182,7 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
 
     @ViewBuilder
     private func presenting(_ host: Content) -> some View {
+        #if canImport(UIKit)
         switch route {
         case .overFullScreen:
             host.background(
@@ -206,16 +209,23 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
                 )
             )
         case .nativeSheet:
-            host.sheet(isPresented: grantedBinding, onDismiss: didDismiss) {
-                sheetRoot
-                    .tsPresentationEnvironment(environment)
-                    .tsSheetPresentation(
-                        fitHeight: sheetHeight,
-                        cornerRadius: resolved.cornerRadius,
-                        background: resolved.fill.color,
-                        path: sheetPath
-                    )
-            }
+            nativeSheet(host)
+        }
+        #else
+        nativeSheet(host)
+        #endif
+    }
+
+    private func nativeSheet(_ host: Content) -> some View {
+        host.sheet(isPresented: grantedBinding, onDismiss: didDismiss) {
+            sheetRoot
+                .tsPresentationEnvironment(environment)
+                .tsSheetPresentation(
+                    fitHeight: sheetHeight,
+                    cornerRadius: resolved.cornerRadius,
+                    background: resolved.fill.color,
+                    path: sheetPath
+                )
         }
     }
 
@@ -236,10 +246,12 @@ struct TSDialogModifier<DialogContent: View>: ViewModifier {
         )
     }
 
+    #if canImport(UIKit)
     private func measure(width: CGFloat) -> CGFloat {
         let host = UIHostingController(rootView: panel().tsPresentationEnvironment(environment))
         return host.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
     }
+    #endif
 
     func requestPresentation(_ newValue: Bool) {
         if !session.request(newValue, presenter: presenter) {

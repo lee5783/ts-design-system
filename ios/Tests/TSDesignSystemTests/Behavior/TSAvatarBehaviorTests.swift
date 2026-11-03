@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import UIKit
@@ -62,3 +63,4 @@ struct TSAvatarBehaviorTests {
         #expect(try icon.actualView().body.inspect().fixedFrame().width == 24)
     }
 }
+#endif

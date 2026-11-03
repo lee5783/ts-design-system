@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSCardView: UIControl {
@@ -314,3 +315,4 @@ public final class TSCardView: UIControl {
         setNeedsLayout()
     }
 }
+#endif

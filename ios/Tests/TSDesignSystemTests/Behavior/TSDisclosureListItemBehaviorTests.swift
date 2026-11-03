@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -68,3 +69,4 @@ struct TSDisclosureListItemBehaviorTests {
         #expect(try TSDivider().body.inspect().accessibilityHidden())
     }
 }
+#endif

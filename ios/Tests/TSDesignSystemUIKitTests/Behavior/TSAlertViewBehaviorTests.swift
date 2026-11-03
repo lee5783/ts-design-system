@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -86,3 +87,4 @@ struct TSAlertViewBehaviorTests {
         #expect(alert.dismissButton.iconView.tintColor == resolved.dismissColor.uiColor.resolvedColor(with: traits))
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSFoundation
 import TSTokens
@@ -61,3 +62,4 @@ struct TSAvatarStyleSpecTests {
         #expect(TSAvatarImage.usable(UIImage(data: Data("not an image".utf8))) == nil)
     }
 }
+#endif

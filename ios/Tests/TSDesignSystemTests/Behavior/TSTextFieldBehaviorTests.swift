@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -169,3 +170,4 @@ struct TSTextFieldBehaviorTests {
         #expect(TSTextField("Email", text: .constant("")).contentStyle == .default)
     }
 }
+#endif

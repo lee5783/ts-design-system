@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Combine
 import UIKit
 
@@ -110,3 +111,4 @@ final class TSToastHostViewController: UIViewController {
         view.subviews.forEach(applySemanticContentAttribute(to:))
     }
 }
+#endif

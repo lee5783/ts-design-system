@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -29,3 +30,4 @@ struct TSTextBehaviorTests {
         #expect(sut.color == .primary)
     }
 }
+#endif

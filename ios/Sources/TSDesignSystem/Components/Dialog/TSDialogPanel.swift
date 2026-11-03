@@ -1,5 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct TSDialogPanel<Content: View>: View {
     let title: String
@@ -119,9 +121,20 @@ struct TSDialogPanelShape: Shape {
     let roundsBottomCorners: Bool
 
     func path(in rect: CGRect) -> Path {
+        #if canImport(UIKit)
         let corners: UIRectCorner = roundsBottomCorners ? .allCorners : [.topLeft, .topRight]
         let radii = CGSize(width: cornerRadius, height: cornerRadius)
         return Path(UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: radii).cgPath)
+        #else
+        let bottomRadius = roundsBottomCorners ? cornerRadius : 0
+        return UnevenRoundedRectangle(
+            topLeadingRadius: cornerRadius,
+            bottomLeadingRadius: bottomRadius,
+            bottomTrailingRadius: bottomRadius,
+            topTrailingRadius: cornerRadius
+        )
+        .path(in: rect)
+        #endif
     }
 }
 

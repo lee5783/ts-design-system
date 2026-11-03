@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSSwitchView: UIControl {
@@ -170,3 +171,4 @@ public final class TSSwitchView: UIControl {
         alpha = resolved.opacity
     }
 }
+#endif

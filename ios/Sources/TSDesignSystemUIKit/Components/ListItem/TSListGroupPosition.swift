@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public enum TSListGroupPosition: String, CaseIterable, Hashable, Sendable {
@@ -36,3 +37,4 @@ public enum TSListGroupPosition: String, CaseIterable, Hashable, Sendable {
         self == .single || self == .last
     }
 }
+#endif

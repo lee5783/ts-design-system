@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -236,3 +237,4 @@ struct TSTextFieldViewBehaviorTests {
         #expect(clear.superview == nil)
     }
 }
+#endif

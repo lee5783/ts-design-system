@@ -1,7 +1,12 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public extension TSFont {
+    #if canImport(UIKit)
     func font(for sizeCategory: UIContentSizeCategory) -> Font {
         Font(uiFont(for: sizeCategory) as CTFont)
     }
@@ -9,6 +14,43 @@ public extension TSFont {
     func attributedText(_ string: String, sizeCategory: UIContentSizeCategory) -> AttributedString {
         TSTrackingCompat.attributedString(text(string), tracking: tracking(for: sizeCategory))
     }
+
+    func font(dynamicTypeSize: DynamicTypeSize) -> Font {
+        font(for: UIContentSizeCategory(dynamicTypeSize))
+    }
+
+    func lineHeight(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        lineHeight(for: UIContentSizeCategory(dynamicTypeSize))
+    }
+
+    func lineSpacing(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        lineSpacing(for: UIContentSizeCategory(dynamicTypeSize))
+    }
+
+    func tracking(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        tracking(for: UIContentSizeCategory(dynamicTypeSize))
+    }
+    #elseif canImport(AppKit)
+    func attributedText(_ string: String) -> AttributedString {
+        TSTrackingCompat.attributedString(text(string), tracking: tracking)
+    }
+
+    func font(dynamicTypeSize: DynamicTypeSize) -> Font {
+        Font(baseFont as CTFont)
+    }
+
+    func lineHeight(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        lineHeight
+    }
+
+    func lineSpacing(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        lineSpacing
+    }
+
+    func tracking(dynamicTypeSize: DynamicTypeSize) -> CGFloat {
+        tracking
+    }
+    #endif
 }
 
 public extension View {
@@ -29,10 +71,9 @@ struct TSFontModifier: ViewModifier {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     func body(content: Content) -> some View {
-        let sizeCategory = UIContentSizeCategory(dynamicTypeSize)
-        let lineSpacing = font.lineSpacing(for: sizeCategory)
+        let lineSpacing = font.lineSpacing(dynamicTypeSize: dynamicTypeSize)
         content
-            .font(font.font(for: sizeCategory))
+            .font(font.font(dynamicTypeSize: dynamicTypeSize))
             .lineSpacing(lineSpacing)
             .padding(.vertical, lineSpacing / 2)
             .textCase(font.isUppercased ? .uppercase : nil)
@@ -46,9 +87,8 @@ struct TSStyledText: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        let sizeCategory = UIContentSizeCategory(dynamicTypeSize)
         text
-            .tsTracking(font.tracking(for: sizeCategory))
+            .tsTracking(font.tracking(dynamicTypeSize: dynamicTypeSize))
             .modifier(TSFontModifier(font: font))
     }
 }

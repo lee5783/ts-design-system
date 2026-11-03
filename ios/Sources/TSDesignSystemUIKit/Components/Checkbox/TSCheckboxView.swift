@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSCheckboxView: UIControl {
@@ -137,3 +138,4 @@ public final class TSCheckboxView: UIControl {
         alpha = resolved.opacity
     }
 }
+#endif

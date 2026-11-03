@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSAlertView: UIView {
@@ -185,3 +186,4 @@ final class TSAlertDismissButton: UIControl {
         TSHitArea.expandedRect(bounds).contains(point)
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 @MainActor
 final class TapCounter {
     private(set) var count = 0
@@ -6,3 +7,4 @@ final class TapCounter {
         count += 1
     }
 }
+#endif

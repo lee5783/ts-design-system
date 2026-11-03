@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Foundation
 import TSFoundation
 
@@ -37,3 +38,4 @@ final class ManualToastScheduler: TSToastScheduling {
         }
     }
 }
+#endif

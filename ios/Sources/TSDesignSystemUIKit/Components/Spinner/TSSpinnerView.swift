@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSSpinnerView: UIView {
@@ -113,3 +114,4 @@ public final class TSSpinnerView: UIView {
         layer.add(rotation, forKey: animationKey)
     }
 }
+#endif

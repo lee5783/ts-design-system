@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 package enum TSTrackingCompat {
     package static func attributedString(_ string: String, tracking: CGFloat) -> AttributedString {

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -163,3 +164,4 @@ struct TSListItemCellBehaviorTests {
         _ = dataSource
     }
 }
+#endif

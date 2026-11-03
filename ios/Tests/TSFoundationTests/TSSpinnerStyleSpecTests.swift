@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSFoundation
 import TSTokens
@@ -44,3 +45,4 @@ struct TSSpinnerStyleSpecTests {
         #expect(TSSpinnerStyleSpec.Configuration() == .init(size: .md, tone: .primary))
     }
 }
+#endif

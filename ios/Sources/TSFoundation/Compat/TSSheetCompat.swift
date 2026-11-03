@@ -1,4 +1,6 @@
+#if canImport(UIKit)
 import UIKit
+#endif
 
 package enum TSSheetDetent: String, Hashable, Sendable {
     case fit
@@ -13,6 +15,7 @@ package enum TSSheetCompat {
         path == .native ? [.fit, .large] : [.medium, .large]
     }
 
+    #if canImport(UIKit)
     @MainActor
     package static func configure(
         _ sheet: UISheetPresentationController,
@@ -65,4 +68,5 @@ package enum TSSheetCompat {
             return .medium()
         }
     }
+    #endif
 }
