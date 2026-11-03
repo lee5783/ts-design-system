@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSDisclosureListItemView: UIControl {
@@ -174,3 +175,4 @@ public final class TSDisclosureListItemView: UIControl {
         headerView.chevronView.transform = CGAffineTransform(rotationAngle: chevronRotationDegrees * .pi / 180)
     }
 }
+#endif

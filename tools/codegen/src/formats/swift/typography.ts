@@ -1,6 +1,6 @@
 import type { TypographyToken } from "../../model/types.ts";
 import { IOS_BASE_TEXT_STYLES, iosBaseTextStyle, swiftIdentifier, swiftNumber, swiftString, trackingPoints } from "../../transforms/swift.ts";
-import { active, block, staticLet, swiftFile, tokenList } from "./swift-file.ts";
+import { active, block, platformSplit, staticLet, swiftFile, tokenList } from "./swift-file.ts";
 
 const SWIFTUI_TEXT_STYLES: Record<keyof typeof IOS_BASE_TEXT_STYLES, string> = {
   largeTitle: "largeTitle",
@@ -38,11 +38,22 @@ const BASE_TEXT_STYLE = block("public enum TSBaseTextStyle: String, CaseIterable
   "    }",
   "}",
   "",
-  "public var uiTextStyle: UIFont.TextStyle {",
-  "    switch self {",
-  ...Object.keys(IOS_BASE_TEXT_STYLES).map((style) => `    case .${style}: .${style}`),
-  "    }",
-  "}",
+  ...platformSplit(
+    [
+      "public var uiTextStyle: UIFont.TextStyle {",
+      "    switch self {",
+      ...Object.keys(IOS_BASE_TEXT_STYLES).map((style) => `    case .${style}: .${style}`),
+      "    }",
+      "}",
+    ],
+    [
+      "public var nsTextStyle: NSFont.TextStyle {",
+      "    switch self {",
+      ...Object.keys(IOS_BASE_TEXT_STYLES).map((style) => `    case .${style}: .${style}`),
+      "    }",
+      "}",
+    ],
+  ),
   "",
   "public var textStyle: Font.TextStyle {",
   "    switch self {",
@@ -51,20 +62,24 @@ const BASE_TEXT_STYLE = block("public enum TSBaseTextStyle: String, CaseIterable
   "}",
 ]);
 
+function weightSwitch(signature: string): string[] {
+  return [
+    `${signature} {`,
+    "    switch weight {",
+    ...FONT_WEIGHTS.slice(0, -1).map(([weight, name]) => `    case ..<${weight + 50}: .${name}`),
+    `    default: .${FONT_WEIGHTS.at(-1)?.[1]}`,
+    "    }",
+    "}",
+  ];
+}
+
 const FONT_WEIGHT = block("public enum TSFontWeight", [
-  "public static func uiFontWeight(_ weight: Int) -> UIFont.Weight {",
-  "    switch weight {",
-  ...FONT_WEIGHTS.slice(0, -1).map(([weight, name]) => `    case ..<${weight + 50}: .${name}`),
-  `    default: .${FONT_WEIGHTS.at(-1)?.[1]}`,
-  "    }",
-  "}",
+  ...platformSplit(
+    weightSwitch("public static func uiFontWeight(_ weight: Int) -> UIFont.Weight"),
+    weightSwitch("public static func nsFontWeight(_ weight: Int) -> NSFont.Weight"),
+  ),
   "",
-  "public static func fontWeight(_ weight: Int) -> Font.Weight {",
-  "    switch weight {",
-  ...FONT_WEIGHTS.slice(0, -1).map(([weight, name]) => `    case ..<${weight + 50}: .${name}`),
-  `    default: .${FONT_WEIGHTS.at(-1)?.[1]}`,
-  "    }",
-  "}",
+  ...weightSwitch("public static func fontWeight(_ weight: Int) -> Font.Weight"),
 ]);
 
 const TOKEN_TYPE = block("public struct TSTypographyToken: Hashable, Sendable", [
@@ -77,9 +92,10 @@ const TOKEN_TYPE = block("public struct TSTypographyToken: Hashable, Sendable", 
   "public let tracking: CGFloat",
   "public let baseTextStyle: TSBaseTextStyle",
   "",
-  "public var uiFontWeight: UIFont.Weight {",
-  "    TSFontWeight.uiFontWeight(fontWeight)",
-  "}",
+  ...platformSplit(
+    ["public var uiFontWeight: UIFont.Weight {", "    TSFontWeight.uiFontWeight(fontWeight)", "}"],
+    ["public var nsFontWeight: NSFont.Weight {", "    TSFontWeight.nsFontWeight(fontWeight)", "}"],
+  ),
   "",
   "public var swiftUIFontWeight: Font.Weight {",
   "    TSFontWeight.fontWeight(fontWeight)",

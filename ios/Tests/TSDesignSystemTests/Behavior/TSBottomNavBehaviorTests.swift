@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -95,3 +96,4 @@ struct TSBottomNavBehaviorTests {
         #expect(box.value == "profile")
     }
 }
+#endif

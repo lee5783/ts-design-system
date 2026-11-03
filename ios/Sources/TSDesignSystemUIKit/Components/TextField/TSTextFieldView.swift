@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSTextFieldView: UIControl {
@@ -359,3 +360,4 @@ extension TSTextFieldView: UITextViewDelegate {
         sendActions(for: .editingDidEnd)
     }
 }
+#endif

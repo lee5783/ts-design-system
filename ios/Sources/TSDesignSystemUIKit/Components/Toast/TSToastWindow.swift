@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSToastWindow: UIWindow {
@@ -133,3 +134,4 @@ final class TSToastRootViewController: UIViewController {
         }
     }
 }
+#endif

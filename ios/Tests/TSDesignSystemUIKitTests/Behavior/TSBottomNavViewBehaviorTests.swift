@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -257,3 +258,4 @@ final class TabBarDelegateSpy: NSObject, UITabBarControllerDelegate {
         selected.append(tabBarController.viewControllers?.firstIndex(of: viewController) ?? -1)
     }
 }
+#endif

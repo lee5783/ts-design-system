@@ -38,6 +38,7 @@ This table matches the routing table in the root `CLAUDE.md`.
 | Question | Read |
 |---|---|
 | Add the iOS library (SPM) to an app | [consumers/ios-getting-started.md](consumers/ios-getting-started.md) |
+| Use the Swift package in a macOS app | [consumers/macos-getting-started.md](consumers/macos-getting-started.md) |
 | Add the Android library (JitPack) to an app | [consumers/android-getting-started.md](consumers/android-getting-started.md) |
 | Light/dark, tokens in app UI, Material interop, string overrides | [consumers/theming.md](consumers/theming.md) |
 | What to change when upgrading across a breaking release | [consumers/migration-guides.md](consumers/migration-guides.md) |

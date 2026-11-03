@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public enum TSTestAppearance: String, CaseIterable, Sendable {
@@ -15,3 +16,4 @@ public enum TSTestAppearance: String, CaseIterable, Sendable {
         UITraitCollection(userInterfaceStyle: userInterfaceStyle)
     }
 }
+#endif

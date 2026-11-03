@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 @MainActor
@@ -19,3 +20,4 @@ final class TraitHost {
         window.isHidden = false
     }
 }
+#endif

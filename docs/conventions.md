@@ -22,7 +22,7 @@ A SwiftUI `TSButton` and a UIKit `TSButtonView` never clash in one app. Android 
 
 | DS token | iOS | Compose | Views / XML |
 |---|---|---|---|
-| `accent-primary` | `TSColor.accentPrimary`, `UIColor.tsAccentPrimary`, `Color.tsAccentPrimary` (`.tsAccentPrimary` in a `ShapeStyle` position) | `TSTheme.colors.accentPrimary` | `?attr/tsColorAccentPrimary`, `@color/ts_accent_primary` |
+| `accent-primary` | `TSColor.accentPrimary`, `UIColor.tsAccentPrimary` (macOS: `NSColor.tsAccentPrimary`, `.nsColor`), `Color.tsAccentPrimary` (`.tsAccentPrimary` in a `ShapeStyle` position) | `TSTheme.colors.accentPrimary` | `?attr/tsColorAccentPrimary`, `@color/ts_accent_primary` |
 | `space-0-5` | `TSSpacing.space0_5` | `TSSpacing.space0_5` | `@dimen/ts_space_0_5` |
 | `radius-xs` | `TSRadius.radiusXs` | `TSShapes.radiusXs` | `@dimen/ts_radius_xs` |
 | icon `arrow-left` | `TSIconName.arrowLeft` | `TSIcon.ArrowLeft` (`:core`) | `@drawable/ts_ic_arrow_left` |
@@ -105,7 +105,9 @@ Toolkit details that recur:
 
 ## Compat code
 
-- Every `#available` check lives in `ios/Sources/TSFoundation/Compat/`, as `package` API, behind a `TSCompat` path that tests can inject (`path:` parameters). Component code never branches on the OS itself.
+- Every `#available` check lives in `ios/Sources/TSFoundation/Compat/`, as `package` API, behind a `TSCompat` path that tests can inject (`path:` parameters). Component code never branches on the OS version itself.
+- Each `#available` names the macOS version that matches the iOS one: iOS 16 → macOS 13, iOS 16.4 → macOS 13.3, iOS 17 → macOS 14, iOS 18 → macOS 15. With only `*`, macOS 13 would take a path that needs a newer macOS.
+- **Platform blocks.** A component may use compile-time `#if canImport(UIKit)` / `#elseif canImport(AppKit)` blocks, but only for platform availability. Use them to pick the UIKit or AppKit type (`UIImage` / `NSImage`, a `UIViewRepresentable` / `NSViewRepresentable` bridge), or to leave out an API that one platform lacks. Both branches keep the same behaviour contract: the same public names, the same states and the same spec values. Code that is iOS-only (for example `TSBottomNav` or the UIKit sheet bridges) sits inside `#if canImport(UIKit)`. List it in `docs/consumers/macos-getting-started.md`. Write `canImport(UIKit)` first, so Mac Catalyst takes the UIKit branch.
 - Android newer-API calls go through `ViewCompat` / AndroidX helpers or a helper with an `sdkInt` parameter (`DsHaptics.constantFor`, `DsFontWeights.resolve`). `NewApi` lint is an error.
 
 ## Assets

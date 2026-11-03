@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSIconButtonView: UIButton {
@@ -118,3 +119,4 @@ public final class TSIconButtonView: UIButton {
         super.sendAction(action, to: target, for: event)
     }
 }
+#endif

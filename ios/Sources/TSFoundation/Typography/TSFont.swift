@@ -1,5 +1,9 @@
 import TSTokens
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public struct TSFont: Hashable, Sendable {
     public let token: TSTypographyToken
@@ -42,6 +46,7 @@ public struct TSFont: Hashable, Sendable {
         TSFont(token, isUppercased: isUppercased, fontWeight: fontWeight)
     }
 
+    #if canImport(UIKit)
     public var uiFontWeight: UIFont.Weight {
         TSFontWeight.uiFontWeight(fontWeight)
     }
@@ -93,11 +98,52 @@ public struct TSFont: Hashable, Sendable {
     public func baselineOffset(for sizeCategory: UIContentSizeCategory) -> CGFloat {
         (lineHeight(for: sizeCategory) - uiFont(for: sizeCategory).lineHeight) / 4
     }
+    #elseif canImport(AppKit)
+    public var nsFontWeight: NSFont.Weight {
+        TSFontWeight.nsFontWeight(fontWeight)
+    }
+
+    public var baseFont: NSFont {
+        switch token.family {
+        case .sans: NSFont.systemFont(ofSize: token.fontSize, weight: nsFontWeight)
+        case .mono: NSFont.monospacedSystemFont(ofSize: token.fontSize, weight: nsFontWeight)
+        }
+    }
+
+    public var lineHeight: CGFloat {
+        token.lineHeight
+    }
+
+    public var tracking: CGFloat {
+        token.letterSpacingEm * token.fontSize
+    }
+
+    public var lineSpacing: CGFloat {
+        max(0, lineHeight - TSFont.lineHeight(of: baseFont))
+    }
+
+    public func paragraphStyle(alignment: NSTextAlignment = .natural) -> NSParagraphStyle {
+        let style = NSMutableParagraphStyle()
+        style.minimumLineHeight = lineHeight
+        style.maximumLineHeight = lineHeight
+        style.alignment = alignment
+        return style
+    }
+
+    public var baselineOffset: CGFloat {
+        (lineHeight - TSFont.lineHeight(of: baseFont)) / 4
+    }
+
+    static func lineHeight(of font: NSFont) -> CGFloat {
+        font.ascender - font.descender + font.leading
+    }
+    #endif
 
     public func text(_ string: String) -> String {
         isUppercased ? string.uppercased() : string
     }
 
+    #if canImport(UIKit)
     public func attributes(
         for sizeCategory: UIContentSizeCategory,
         color: UIColor? = nil,
@@ -126,4 +172,24 @@ public struct TSFont: Hashable, Sendable {
     ) -> NSAttributedString {
         NSAttributedString(string: text(string), attributes: attributes(for: sizeCategory, color: color, alignment: alignment))
     }
+    #elseif canImport(AppKit)
+    public func attributes(color: NSColor? = nil, alignment: NSTextAlignment = .natural) -> [NSAttributedString.Key: Any] {
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: baseFont,
+            .paragraphStyle: paragraphStyle(alignment: alignment),
+            .baselineOffset: baselineOffset,
+        ]
+        if tracking != 0 {
+            attributes[.kern] = tracking
+        }
+        if let color {
+            attributes[.foregroundColor] = color
+        }
+        return attributes
+    }
+
+    public func attributedString(_ string: String, color: NSColor? = nil, alignment: NSTextAlignment = .natural) -> NSAttributedString {
+        NSAttributedString(string: text(string), attributes: attributes(color: color, alignment: alignment))
+    }
+    #endif
 }

@@ -1,6 +1,11 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
+#if canImport(UIKit)
 final class TSToastOverlayWindow: UIWindow {
     var toastFrame: CGRect = .null
 
@@ -60,3 +65,77 @@ final class TSToastHostingController: UIHostingController<AnyView> {
         avoidKeyboard(endFrame: endFrame, duration: duration)
     }
 }
+#elseif canImport(AppKit)
+final class TSToastOverlayPanel: NSPanel {
+    var onShow: (() -> Void)?
+    private var wantsVisible = false
+    weak var sourceWindow: NSWindow? {
+        didSet {
+            NotificationCenter.default.removeObserver(self, name: NSWindow.didResizeNotification, object: oldValue)
+            NotificationCenter.default.removeObserver(self, name: NSWindow.didChangeOcclusionStateNotification, object: oldValue)
+            if let sourceWindow {
+                NotificationCenter.default.addObserver(self, selector: #selector(sourceWindowDidResize(_:)), name: NSWindow.didResizeNotification, object: sourceWindow)
+                NotificationCenter.default.addObserver(self, selector: #selector(sourceWindowDidChangeOcclusionState(_:)), name: NSWindow.didChangeOcclusionStateNotification, object: sourceWindow)
+            }
+        }
+    }
+
+    init() {
+        super.init(contentRect: .zero, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: true)
+        isOpaque = false
+        backgroundColor = .clear
+        hasShadow = false
+        isReleasedWhenClosed = false
+        hidesOnDeactivate = false
+        animationBehavior = .none
+        collectionBehavior = [.fullScreenAuxiliary, .transient, .ignoresCycle]
+        setAccessibilityElement(false)
+    }
+
+    override var canBecomeKey: Bool {
+        false
+    }
+
+    override var canBecomeMain: Bool {
+        false
+    }
+
+    var isHidden: Bool {
+        get { !isVisible }
+        set {
+            wantsVisible = !newValue
+            newValue ? hide() : show()
+        }
+    }
+
+    func show() {
+        guard let sourceWindow, sourceWindow.isVisible else { return }
+        matchSourceWindow()
+        if parent !== sourceWindow {
+            parent?.removeChildWindow(self)
+            sourceWindow.addChildWindow(self, ordered: .above)
+        }
+        orderFront(nil)
+        onShow?()
+    }
+
+    func hide() {
+        parent?.removeChildWindow(self)
+        orderOut(nil)
+    }
+
+    func matchSourceWindow() {
+        guard let sourceWindow else { return }
+        setFrame(sourceWindow.convertToScreen(sourceWindow.contentLayoutRect), display: false)
+    }
+
+    @objc private func sourceWindowDidResize(_ notification: Notification) {
+        matchSourceWindow()
+    }
+
+    @objc private func sourceWindowDidChangeOcclusionState(_ notification: Notification) {
+        guard wantsVisible, !isVisible else { return }
+        show()
+    }
+}
+#endif

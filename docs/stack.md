@@ -22,6 +22,7 @@ Version numbers below are the pins in the repo today. When a pin moves, the sour
 | Platform | Minimum | Compile / target | Source |
 |---|---|---|---|
 | iOS | iOS 15 | Xcode 26.6 SDK | `Package.swift` (`.iOS(.v15)`), `.xcode-version` |
+| macOS (Swift package only, no demo app) | macOS 13 | Xcode 26.6 SDK | `Package.swift` (`.macOS(.v13)`); see [consumers/macos-getting-started.md](consumers/macos-getting-started.md) |
 | Android | API 26 (`MIN_SDK`) | `COMPILE_SDK` / `TARGET_SDK` 36 | `android/build-logic/convention/src/main/kotlin/ProjectExtensions.kt` (`DsBuildConstants`) |
 
 Raising either minimum is a major release (see [guides/deprecation-policy.md](guides/deprecation-policy.md)).

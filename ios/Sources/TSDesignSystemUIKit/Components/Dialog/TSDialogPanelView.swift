@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class TSDialogPanelView: UIView {
@@ -185,3 +186,4 @@ final class TSDialogPanelView: UIView {
         setNeedsLayout()
     }
 }
+#endif

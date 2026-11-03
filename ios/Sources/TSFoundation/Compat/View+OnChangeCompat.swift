@@ -16,7 +16,7 @@ struct TSOnChangeModifier<Value: Equatable>: ViewModifier {
     let action: (Value, Value) -> Void
 
     func body(content: Content) -> some View {
-        if #available(iOS 17, *) {
+        if #available(iOS 17, macOS 14, *) {
             content.onChange(of: value, initial: initial, action)
         } else {
             content

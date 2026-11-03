@@ -1,7 +1,9 @@
 import type { ColorToken } from "../../model/types.ts";
 import { toCamelName } from "../../transforms/naming.ts";
 import { swiftIdentifier, swiftPrefixedName, swiftRgbaHex, swiftString } from "../../transforms/swift.ts";
-import { active, block, currentCamel, deprecation, staticLet, swiftFile, tokenList } from "./swift-file.ts";
+import { active, block, currentCamel, deprecation, platformSplit, staticLet, swiftFile, tokenList } from "./swift-file.ts";
+
+const DARK_APPEARANCE = "appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua";
 
 const RGBA_TYPE = block("public struct TSRGBA: Hashable, Sendable", [
   "public let red: UInt8",
@@ -24,9 +26,18 @@ const RGBA_TYPE = block("public struct TSRGBA: Hashable, Sendable", [
   "    Double(alpha) / 255",
   "}",
   "",
-  "public var uiColor: UIColor {",
-  "    UIColor(red: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: CGFloat(alpha) / 255)",
-  "}",
+  ...platformSplit(
+    [
+      "public var uiColor: UIColor {",
+      "    UIColor(red: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: CGFloat(alpha) / 255)",
+      "}",
+    ],
+    [
+      "public var nsColor: NSColor {",
+      "    NSColor(srgbRed: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: CGFloat(alpha) / 255)",
+      "}",
+    ],
+  ),
 ]);
 
 const COLOR_TYPE = block("public struct TSColor: Hashable, Sendable", [
@@ -34,21 +45,42 @@ const COLOR_TYPE = block("public struct TSColor: Hashable, Sendable", [
   "public let light: TSRGBA",
   "public let dark: TSRGBA",
   "",
-  "public func rgba(for style: UIUserInterfaceStyle) -> TSRGBA {",
-  "    style == .dark ? dark : light",
-  "}",
-  "",
-  "public var uiColor: UIColor {",
-  "    let light = light",
-  "    let dark = dark",
-  "    return UIColor(dynamicProvider: { traits in",
-  "        traits.userInterfaceStyle == .dark ? dark.uiColor : light.uiColor",
-  "    })",
-  "}",
-  "",
-  "public var color: Color {",
-  "    Color(uiColor: uiColor)",
-  "}",
+  ...platformSplit(
+    [
+      "public func rgba(for style: UIUserInterfaceStyle) -> TSRGBA {",
+      "    style == .dark ? dark : light",
+      "}",
+      "",
+      "public var uiColor: UIColor {",
+      "    let light = light",
+      "    let dark = dark",
+      "    return UIColor(dynamicProvider: { traits in",
+      "        traits.userInterfaceStyle == .dark ? dark.uiColor : light.uiColor",
+      "    })",
+      "}",
+      "",
+      "public var color: Color {",
+      "    Color(uiColor: uiColor)",
+      "}",
+    ],
+    [
+      "public func rgba(for appearance: NSAppearance) -> TSRGBA {",
+      `    ${DARK_APPEARANCE} ? dark : light`,
+      "}",
+      "",
+      "public var nsColor: NSColor {",
+      "    let light = light",
+      "    let dark = dark",
+      "    return NSColor(name: nil, dynamicProvider: { appearance in",
+      `        ${DARK_APPEARANCE} ? dark.nsColor : light.nsColor`,
+      "    })",
+      "}",
+      "",
+      "public var color: Color {",
+      "    Color(nsColor: nsColor)",
+      "}",
+    ],
+  ),
 ]);
 
 function tsName(token: string): string {
@@ -66,6 +98,10 @@ export function swiftColors(tokens: ColorToken[]): string {
     ...deprecation(token, tsName),
     `public static var ${tsName(token.name.token)}: UIColor { TSColor.${swiftIdentifier(currentCamel(token))}.uiColor }`,
   ]);
+  const nsColors = tokens.flatMap((token) => [
+    ...deprecation(token, tsName),
+    `public static var ${tsName(token.name.token)}: NSColor { TSColor.${swiftIdentifier(currentCamel(token))}.nsColor }`,
+  ]);
   const colors = tokens.flatMap((token) => [
     ...deprecation(token, tsName),
     `public static var ${tsName(token.name.token)}: Color { TSColor.${swiftIdentifier(currentCamel(token))}.color }`,
@@ -76,7 +112,7 @@ export function swiftColors(tokens: ColorToken[]): string {
       RGBA_TYPE,
       COLOR_TYPE,
       block("extension TSColor", [...constants, "", ...catalog]),
-      block("extension UIColor", uiColors),
+      platformSplit([block("extension UIColor", uiColors)], [block("extension NSColor", nsColors)]).join("\n"),
       block("extension ShapeStyle where Self == Color", colors),
     ],
   );

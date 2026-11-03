@@ -12,7 +12,7 @@
 - Each platform has one non-rendering shared layer (`TSFoundation` on iOS, `:core` on Android) that resolves variant × size × state into tokens. Both UI toolkits of a platform read the same spec.
 - The UI toolkits are **native parallel implementations** (C-06): SwiftUI and UIKit render natively, and so do Compose and Views. No toolkit wraps another.
 - Library targets have **no third-party runtime dependency**. Test-only packages stay on test targets.
-- iOS 15 and Android API 26 are the minimums. Newer-OS APIs go through compat shims (tables below).
+- iOS 15 and Android API 26 are the minimums. Newer-OS APIs go through compat shims (tables below). The Swift package also builds for macOS 13. The AppKit branches and the iOS-only pieces are listed in [consumers/macos-getting-started.md](consumers/macos-getting-started.md).
 - The four demo apps sit outside the library (`demos/`) and consume only the public products and coordinates.
 
 ## Layers
@@ -86,6 +86,7 @@ The library owns the toast queue, the timer and the host (C-10). Data flows **qu
 
 - **Queue:** `TSToastQueue` (FIFO, one `current` item). The timeout is fixed: 4 s, or 10 s when the toast has an action, on both platforms (iOS `TSToastTimeout.standard` / `.extended` via `TSToastQueue.timeout(for:)`, which also honours a longer custom `duration`; Android `TSToastTimeouts.DEFAULT_MILLIS` / `EXTENDED_MILLIS`, fixed at enqueue). It does not depend on screen-reader state.
 - **iOS hosts are separate windows.** SwiftUI `.tsToastHost()` opens an internal `TSToastOverlayWindow`; UIKit uses the public `TSToastWindow`. Both sit at `UIWindow.Level.alert + 1`, are never key, pass touches through outside the toast, and therefore cover any sheet or dialog presented in the app window. The overlay window does its own keyboard avoidance (`TSToastWindowing.keyboardInset` → `additionalSafeAreaInsets.bottom`; UIKit pins to `keyboardLayoutGuide`), including a floating iPad keyboard in SwiftUI.
+- **macOS host is a child panel.** SwiftUI `.tsToastHost()` opens an internal `TSToastOverlayPanel`: a borderless, non-activating, transparent `NSPanel` attached above the host window and sized to its content area. It orders in only while the host window is visible. Clicks on its transparent pixels go to the host window.
 - **Android hosts are layers.** Compose `TSToastHost(state) { content }` draws a pass-through layer over the content, and each `TSDialog` adds its own layer inside its window. Views `TSToastHost.install(activity)` adds a layer to `android.R.id.content`; `TSDialogFragment` / `TSBottomSheetDialogFragment` attach an overlay layer in `onStart`. The top-most layer shows the toast, so a toast opened under a dialog moves into the dialog's window.
 - **One host per scene (iOS) or Activity (Android).** Toasts post no accessibility announcements.
 

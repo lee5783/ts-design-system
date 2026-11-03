@@ -87,7 +87,7 @@ struct TSToastActionLabel: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
-        let lineHeight = resolved.actionFont.lineHeight(for: UIContentSizeCategory(dynamicTypeSize))
+        let lineHeight = resolved.actionFont.lineHeight(dynamicTypeSize: dynamicTypeSize)
         configuration.label
             .foregroundColor(resolved.actionColor.color)
             .fixedSize()

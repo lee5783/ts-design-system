@@ -18,7 +18,7 @@ struct TSSheetPresentationModifier: ViewModifier {
     let path: TSCompatPath
 
     func body(content: Content) -> some View {
-        if path == .native, #available(iOS 16.4, *) {
+        if path == .native, #available(iOS 16.4, macOS 13.3, *) {
             content
                 .presentationDetents(fitHeight.map { [.height($0), .large] } ?? [.medium, .large])
                 .presentationDragIndicator(.visible)

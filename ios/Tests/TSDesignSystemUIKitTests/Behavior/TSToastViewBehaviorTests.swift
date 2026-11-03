@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -80,3 +81,4 @@ struct TSToastViewBehaviorTests {
         #expect(toast.iconView.tintColor == color.uiColor.resolvedColor(with: toast.traitCollection))
     }
 }
+#endif

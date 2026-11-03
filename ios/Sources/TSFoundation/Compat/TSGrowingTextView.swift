@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 package final class TSGrowingTextView: UITextView {
@@ -158,3 +159,4 @@ package final class TSGrowingTextView: UITextView {
         onTextChange?(text ?? "")
     }
 }
+#endif

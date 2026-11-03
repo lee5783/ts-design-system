@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public enum TSSampleIconImage {
@@ -25,3 +26,4 @@ public enum TSSampleIconImage {
         }
     }
 }
+#endif

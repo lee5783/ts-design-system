@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSDesignSystemUIKit
 import UIKit
@@ -49,3 +50,4 @@ struct TSBadgeViewBehaviorTests {
         #expect(large.bounds.width > regular.bounds.width)
     }
 }
+#endif

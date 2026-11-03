@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -56,3 +57,4 @@ struct TSCheckboxBehaviorTests {
         #expect(size.width >= (isLabelHidden ? 20 : 44))
     }
 }
+#endif

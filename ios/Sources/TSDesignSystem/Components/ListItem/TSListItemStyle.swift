@@ -133,7 +133,7 @@ struct TSListItemContent<Leading: View, Trailing: View>: View {
     private func trailingSlot(_ resolved: TSListItemStyleSpec.Resolved) -> some View {
         trailing
             .foregroundColor(resolved.trailingColor.color)
-            .font(resolved.trailingFont.font(for: UIContentSizeCategory(dynamicTypeSize)))
+            .font(resolved.trailingFont.font(dynamicTypeSize: dynamicTypeSize))
             .lineLimit(resolved.isStacked ? nil : 1)
     }
 

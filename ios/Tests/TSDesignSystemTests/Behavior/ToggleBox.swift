@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import UIKit
 
@@ -58,3 +59,4 @@ enum RenderedPixels {
         return pixel[0] > 230 && pixel[1] > 230 && pixel[2] > 230
     }
 }
+#endif

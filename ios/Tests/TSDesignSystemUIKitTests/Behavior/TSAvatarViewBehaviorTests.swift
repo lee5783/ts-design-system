@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSDesignSystemUIKit
 import UIKit
@@ -63,3 +64,4 @@ struct TSAvatarViewBehaviorTests {
         #expect(visible(UILabel.self, in: avatar) == nil)
     }
 }
+#endif

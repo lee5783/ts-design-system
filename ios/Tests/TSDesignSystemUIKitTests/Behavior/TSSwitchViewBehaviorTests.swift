@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -94,3 +95,4 @@ struct TSSwitchViewBehaviorTests {
         #expect(view.trackView.backgroundColor == TSColor.borderStrong.uiColor.resolvedColor(with: traits))
     }
 }
+#endif

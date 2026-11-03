@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import UIKit
 
@@ -41,3 +42,4 @@ struct TSOverFullScreenBridge: UIViewControllerRepresentable {
         hosting.view.backgroundColor = .clear
     }
 }
+#endif

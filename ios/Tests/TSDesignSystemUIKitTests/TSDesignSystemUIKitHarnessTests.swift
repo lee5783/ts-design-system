@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSDesignSystemUIKit
 import TSTestSupport
@@ -21,3 +22,4 @@ struct TSDesignSystemUIKitHarnessTests {
         #expect(resolved[0] != resolved[1])
     }
 }
+#endif

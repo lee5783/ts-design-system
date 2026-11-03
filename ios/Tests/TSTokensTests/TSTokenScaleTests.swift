@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import TSTokens
@@ -76,3 +77,4 @@ struct TSTokenScaleTests {
         #expect(TSIconName.logout.flipsForRightToLeftLayoutDirection)
     }
 }
+#endif

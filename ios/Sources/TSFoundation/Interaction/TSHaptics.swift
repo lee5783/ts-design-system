@@ -1,4 +1,6 @@
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public enum TSHapticEvent: String, CaseIterable, Hashable, Sendable {
     case selection
@@ -6,6 +8,7 @@ public enum TSHapticEvent: String, CaseIterable, Hashable, Sendable {
     case warning
     case error
 
+    #if canImport(UIKit)
     public var notificationType: UINotificationFeedbackGenerator.FeedbackType? {
         switch self {
         case .selection: nil
@@ -14,6 +17,7 @@ public enum TSHapticEvent: String, CaseIterable, Hashable, Sendable {
         case .error: .error
         }
     }
+    #endif
 }
 
 @MainActor
@@ -35,6 +39,7 @@ public final class TSHaptics {
     }
 
     public static func playSystemFeedback(_ event: TSHapticEvent) {
+        #if canImport(UIKit)
         if let type = event.notificationType {
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(type)
@@ -42,5 +47,6 @@ public final class TSHaptics {
             let generator = UISelectionFeedbackGenerator()
             generator.selectionChanged()
         }
+        #endif
     }
 }

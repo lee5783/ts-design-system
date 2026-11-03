@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -94,3 +95,4 @@ struct TSTabsBehaviorTests {
         #expect(size.height >= 44)
     }
 }
+#endif

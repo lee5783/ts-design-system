@@ -9,6 +9,7 @@ IOS_PINNED_OS := $(shell sed -nE 's/^os=(.+)$$/\1/p' '$(IOS_SIMULATOR_FILE)' 2>/
 IOS_SIM_DEVICE ?= $(IOS_PINNED_DEVICE)
 IOS_SIM_OS ?= $(IOS_PINNED_OS)
 IOS_DERIVED_DATA ?= .build/xcode
+MACOS_DERIVED_DATA ?= .build/xcode-macos
 IOS_RUNTIMES ?= pinned
 IOS_TESTS ?=
 IOS_REQUIRE_OLDEST ?=
@@ -57,6 +58,7 @@ ios_no_older_runtime = $(if $(IOS_REQUIRE_OLDEST),printf '$(call ci_annotation,e
 
 .PHONY: help ds-sync codegen codegen-check test tools-deps tools-test \
 	ios-build ios-build-for-testing ios-golden-typecheck ios-test ios-test-only \
+	macos-build macos-golden-typecheck macos-test \
 	android-build android-test \
 	android-publish-local \
 	api-check android-api-check ios-api-check ios-api-check-record ios-api-check-last-tag \
@@ -84,6 +86,9 @@ help:
 		'ios-build-for-testing' 'Build the Swift package tests once for the iOS simulator; ios-test and ios-test-only reuse the build' \
 		'ios-test' 'Run the iOS unit and behaviour tests (IOS_RUNTIMES=pinned|oldest, default pinned)' \
 		'ios-test-only' 'Run IOS_TESTS=<Target/Suite ...> on the iOS simulator without rebuilding; run ios-build-for-testing first' \
+		'macos-build' 'Build the Swift package for macOS (TSDesignSystemUIKit compiles empty there)' \
+		'macos-golden-typecheck' 'Type-check the Swift golden fixtures of tools/codegen at macOS 13' \
+		'macos-test' 'Run the platform-neutral Swift package tests on macOS' \
 		'android-build' 'Assemble the Android library modules' \
 		'android-test' 'Run the Android unit and behaviour tests' \
 		'android-publish-local' 'Publish the Android artifacts and the BOM to ~/.m2 (mavenLocal)' \
@@ -149,6 +154,15 @@ ios-test: ios-golden-typecheck ios-build-for-testing
 ios-test-only:
 	@$(call on_pinned_ios,ios_test_on)
 	@$(call on_oldest_ios,ios_test_on)
+
+macos-build:
+	xcodebuild build -scheme $(IOS_SCHEME) -destination 'platform=macOS' -derivedDataPath $(MACOS_DERIVED_DATA)
+
+macos-golden-typecheck:
+	$(XCRUN) --sdk macosx swiftc -typecheck -swift-version 6 -target $(shell uname -m)-apple-macos13.0 $(SWIFT_GOLDENS_DIR)/*.swift
+
+macos-test: macos-golden-typecheck
+	xcodebuild test -scheme $(IOS_SCHEME) -destination 'platform=macOS' -derivedDataPath $(MACOS_DERIVED_DATA)
 
 android-build:
 	cd android && ./gradlew assemble lint apiCheck$(gradle_flags)

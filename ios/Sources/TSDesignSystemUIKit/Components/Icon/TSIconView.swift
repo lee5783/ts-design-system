@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSIconView: UIImageView {
@@ -39,3 +40,4 @@ public final class TSIconView: UIImageView {
         image = name.image()?.withRenderingMode(.alwaysTemplate)
     }
 }
+#endif

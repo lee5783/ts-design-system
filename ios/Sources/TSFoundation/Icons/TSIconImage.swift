@@ -1,6 +1,11 @@
 import TSTokens
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
+#if canImport(UIKit)
 public extension TSIconName {
     func image(compatibleWith traitCollection: UITraitCollection? = nil) -> UIImage? {
         UIImage(named: assetName, in: TSFoundationResources.bundle, compatibleWith: traitCollection)
@@ -31,3 +36,17 @@ package extension UIImage {
         return flipsForRightToLeftLayoutDirection ? template.imageFlippedForRightToLeftLayoutDirection() : template
     }
 }
+#elseif canImport(AppKit)
+public extension TSIconName {
+    func image() -> NSImage? {
+        TSFoundationResources.bundle.image(forResource: assetName)
+    }
+
+    func templateImage(pointSize: CGFloat) -> NSImage? {
+        guard let template = image()?.copy() as? NSImage else { return nil }
+        template.size = CGSize(width: pointSize, height: pointSize)
+        template.isTemplate = true
+        return template
+    }
+}
+#endif
