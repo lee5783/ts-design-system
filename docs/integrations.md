@@ -79,7 +79,7 @@ Not applicable at runtime. CI failure artifacts (14-day retention):
 | Workflow | Triggers | Jobs | Aggregator (required check) |
 |---|---|---|---|
 | `codegen-check.yml` | PR, push to `master`, dispatch, `workflow_call` | `tools`: `tools-test`, `actionlint`, `codegen-check`, `ds-sync` | `codegen-check-ok` |
-| `ios.yml` | same | `changes`; `test` (matrix `pinned`, `oldest`, as `IOS_RUNTIMES`); `api-check` (`ios-api-check` against the PR base, `ios-api-check-last-tag`) | `ios-ok` |
+| `ios.yml` | same | `changes`; `test` (matrix `pinned`, `oldest`, as `IOS_RUNTIMES`); `api-check` (`ios-api-check` against the PR base, `ios-api-check-last-tag`); `macos` (`test (macOS)`: `macos-build`, `macos-test`) | `ios-ok` |
 | `android.yml` | same | `changes`; `build` (`assemble lint apiCheck`, Ubuntu); `test` (`android-test`, macOS) | `android-ok` |
 | `demos.yml` | same | `changes`; `boundaries`; `ios-demo-support`; `ios-demo` (per demo on the pinned runtime, light, then the dark `ThemeOverrideTests`); `android-demo` (per demo on an API 36 emulator) | `demos-ok` |
 | `release.yml` | push of a `vX.Y.Z` tag | `verify` → the 4 gate workflows (reusable) → `android-packages` (the two debug demo APKs) → `github-release` (notes + those APKs) | none |

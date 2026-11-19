@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import UIKit
 
@@ -55,3 +56,4 @@ struct TSSheetBridge: UIViewControllerRepresentable {
         }
     }
 }
+#endif

@@ -1,6 +1,8 @@
 import CoreGraphics
 import TSTokens
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public struct TSBottomNavItem: Identifiable, Hashable, Sendable {
     public let id: String
@@ -70,7 +72,9 @@ public enum TSBottomNavStyleSpec: TSStyleSpec {
     }
 
     public static let itemCountRange = 3...5
+    #if canImport(UIKit)
     public static let labelMaximumSizeCategory: UIContentSizeCategory = .extraExtraExtraLarge
+    #endif
 
     public static let states: [TSControlState] = [.normal, .pressed, .disabled, .focused]
 
@@ -122,6 +126,7 @@ public enum TSBottomNavStyleSpec: TSStyleSpec {
         )
     }
 
+    #if canImport(UIKit)
     public static func labelSizeCategory(for sizeCategory: UIContentSizeCategory) -> UIContentSizeCategory {
         guard let index = sizeCategoryOrder.firstIndex(of: sizeCategory) else { return .large }
         let maximum = sizeCategoryOrder.firstIndex(of: labelMaximumSizeCategory) ?? index
@@ -146,4 +151,5 @@ public enum TSBottomNavStyleSpec: TSStyleSpec {
     public static func badgeFont() -> UIFont {
         UIFont.systemFont(ofSize: badge.fontSize, weight: TSFontWeight.uiFontWeight(badge.fontWeight))
     }
+    #endif
 }

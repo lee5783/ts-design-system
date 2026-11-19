@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 
 struct TSBottomNavItemStyle: ButtonStyle {
@@ -80,3 +81,4 @@ struct TSBottomNavBadge: View {
             .accessibilityHidden(true)
     }
 }
+#endif

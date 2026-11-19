@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import TSTokens
@@ -74,3 +75,4 @@ struct TSColorTests {
         #expect(rgba.hex == 0x18181B66)
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 extension UIBackgroundConfiguration {
@@ -17,3 +18,4 @@ extension UIView {
         layer.borderColor = border?.uiColor.resolvedColor(with: traitCollection).cgColor
     }
 }
+#endif

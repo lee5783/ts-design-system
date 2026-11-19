@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSButtonView: UIButton {
@@ -218,3 +219,4 @@ public final class TSButtonView: UIButton {
         return leadingIcon?.templateImage(pointSize: resolved.iconSize)
     }
 }
+#endif

@@ -4,12 +4,19 @@ struct TSTextInputTraitsModifier: ViewModifier {
     let traits: TSTextInputTraits
 
     func body(content: Content) -> some View {
+        #if canImport(UIKit)
         content
             .keyboardType(traits.keyboardType)
             .textContentType(traits.textContentType)
             .textInputAutocapitalization(traits.textInputAutocapitalization)
             .disableAutocorrection(!traits.isAutocorrectionEnabled)
             .submitLabel(traits.returnKey.submitLabel)
+        #else
+        content
+            .textContentType(traits.textContentType)
+            .disableAutocorrection(!traits.isAutocorrectionEnabled)
+            .submitLabel(traits.returnKey.submitLabel)
+        #endif
     }
 }
 
@@ -19,6 +26,7 @@ extension View {
     }
 }
 
+#if canImport(UIKit)
 extension TSTextInputTraits {
     var textInputAutocapitalization: TextInputAutocapitalization {
         switch autocapitalization {
@@ -29,6 +37,7 @@ extension TSTextInputTraits {
         }
     }
 }
+#endif
 
 extension TSReturnKey {
     var submitLabel: SubmitLabel {

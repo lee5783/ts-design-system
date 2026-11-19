@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -48,3 +49,4 @@ struct TSIconButtonBehaviorTests {
         #expect(try sut.inspect().find(TSIcon.self).actualView().pointSize == TSIconButtonStyleSpec.resolve(.init()).iconSize)
     }
 }
+#endif

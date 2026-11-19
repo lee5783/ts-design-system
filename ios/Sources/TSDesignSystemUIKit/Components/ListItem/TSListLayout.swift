@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public enum TSListLayout {
@@ -27,3 +28,4 @@ public enum TSListLayout {
         }
     }
 }
+#endif

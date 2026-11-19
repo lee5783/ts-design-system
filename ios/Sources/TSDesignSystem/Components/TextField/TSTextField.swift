@@ -179,16 +179,10 @@ public struct TSTextField<Trailing: View>: View {
 
     @ViewBuilder
     private func multilineInput(_ resolved: TSTextFieldStyleSpec.Resolved) -> some View {
-        if multilinePath == .native, #available(iOS 16, *) {
-            TextField(label, text: $text, prompt: prompt(resolved), axis: .vertical)
-                .lineLimit(TSTextFieldStyleSpec.minimumLines ... TSTextFieldStyleSpec.maximumLines)
-                .foregroundColor(resolved.inputColor.color)
-                .font(resolved.inputFont.font(for: UIContentSizeCategory(dynamicTypeSize)))
-                .padding(.vertical, resolved.verticalPadding)
-                .focused($isFocused)
-                .tsFocusEffectDisabled()
-                .tsTextInputTraits(inputTraits)
+        if multilinePath == .native, #available(iOS 16, macOS 13, *) {
+            nativeMultilineInput(resolved)
         } else {
+            #if canImport(UIKit)
             TSMultilineTextView(
                 text: $text,
                 isEditing: $isEditingMultiline,
@@ -202,7 +196,22 @@ public struct TSTextField<Trailing: View>: View {
                 sizeCategory: UIContentSizeCategory(dynamicTypeSize),
                 layoutDirection: layoutDirection
             )
+            #else
+            nativeMultilineInput(resolved)
+            #endif
         }
+    }
+
+    @available(iOS 16, macOS 13, *)
+    private func nativeMultilineInput(_ resolved: TSTextFieldStyleSpec.Resolved) -> some View {
+        TextField(label, text: $text, prompt: prompt(resolved), axis: .vertical)
+            .lineLimit(TSTextFieldStyleSpec.minimumLines ... TSTextFieldStyleSpec.maximumLines)
+            .foregroundColor(resolved.inputColor.color)
+            .font(resolved.inputFont.font(dynamicTypeSize: dynamicTypeSize))
+            .padding(.vertical, resolved.verticalPadding)
+            .focused($isFocused)
+            .tsFocusEffectDisabled()
+            .tsTextInputTraits(inputTraits)
     }
 
     private func readOnlyText(_ resolved: TSTextFieldStyleSpec.Resolved) -> some View {

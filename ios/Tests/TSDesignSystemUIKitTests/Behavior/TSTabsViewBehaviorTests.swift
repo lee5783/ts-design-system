@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -133,3 +134,4 @@ struct TSTabsViewBehaviorTests {
         #expect(layout(TSTabsView(items: items)).bounds.height >= 44)
     }
 }
+#endif

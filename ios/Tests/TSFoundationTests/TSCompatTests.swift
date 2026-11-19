@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import UIKit
@@ -66,3 +67,4 @@ struct TSCompatTests {
         #expect(TSTrackingCompat.attributedString("A", tracking: 1.5).kern == 1.5)
     }
 }
+#endif

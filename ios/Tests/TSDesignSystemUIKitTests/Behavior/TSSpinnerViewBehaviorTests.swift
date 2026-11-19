@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -38,3 +39,4 @@ struct TSSpinnerViewBehaviorTests {
         #expect(view.layer.animation(forKey: "ts.spinner.rotation") == nil)
     }
 }
+#endif

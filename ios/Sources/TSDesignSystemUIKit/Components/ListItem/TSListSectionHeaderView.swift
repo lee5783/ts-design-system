@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSListSectionHeaderView: UICollectionReusableView {
@@ -49,3 +50,4 @@ public final class TSListSectionHeaderView: UICollectionReusableView {
         )
     }
 }
+#endif

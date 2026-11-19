@@ -6,7 +6,7 @@ The TS design system ships as one Swift package with three products. Distributio
 
 ## Requirements
 
-- iOS 15 or later.
+- iOS 15 or later. The same package also builds for macOS 13 or later: see [macos-getting-started.md](macos-getting-started.md).
 - Xcode 26.x with the Swift 6 toolchain (the package declares `swift-tools-version: 6.0`).
 
 ## 1. Add the package

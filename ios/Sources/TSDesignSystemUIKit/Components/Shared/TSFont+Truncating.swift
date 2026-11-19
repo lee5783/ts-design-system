@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 extension TSFont {
@@ -15,3 +16,4 @@ extension TSFont {
         return NSAttributedString(string: text(string), attributes: attributes)
     }
 }
+#endif

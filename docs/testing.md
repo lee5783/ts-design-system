@@ -69,7 +69,8 @@ Run only the tests for what you touched. Full suites (`make test`, a bare `make 
 - iOS: `ios/Tests/<Target>Tests/Behavior/TS<Name>BehaviorTests.swift`; UIKit files use `TS<Name>View…`. Shared helpers sit next to them (`TraitHost.swift`, `ManualToastScheduler.swift`, `RenderedInk.swift`, `RenderedPixels`). `ios/Tests/TSTestSupport` holds the cross-target helpers (`TSSampleIconImage`, `TSTestAppearance`).
 - Android: `android/<module>/src/test/kotlin/com/tinysol/designsystem/<module>/components/<name>/TS<Name>Test.kt` (Compose) / `TS<Name>ViewTest.kt` (Views).
 - Spec tests: `ios/Tests/TSFoundationTests/TS<Name>StyleSpecTests.swift`, `android/core/src/test/kotlin/com/tinysol/designsystem/core/style/TS<Name>StyleSpecTest.kt`.
-- Codegen: `tools/codegen/test/unit/*.test.ts`, `tools/codegen/test/golden/*.test.ts` against `tools/codegen/test/fixtures/expected/**`. `make ios-golden-typecheck` type-checks the Swift goldens at iOS 15; `android/golden-check` compiles the Compose goldens.
+- Codegen: `tools/codegen/test/unit/*.test.ts`, `tools/codegen/test/golden/*.test.ts` against `tools/codegen/test/fixtures/expected/**`. `make ios-golden-typecheck` type-checks the Swift goldens at iOS 15 and `make macos-golden-typecheck` at macOS 13; `android/golden-check` compiles the Compose goldens.
+- macOS: `make macos-test` runs `macos-golden-typecheck`, then the platform-neutral suites through `xcodebuild -destination platform=macOS`. Test files that need UIKit are compiled out with `#if canImport(UIKit)`. Use `xcodebuild`, not `swift test`: the SwiftPM command line does not compile `.xcstrings` or asset catalogs, so the `TSStrings` tests fail there.
 
 ## Patterns
 
@@ -142,7 +143,7 @@ None enforced. Completeness comes from the spec matrices (`allConfigurations`), 
 | Workflow | Runs |
 |---|---|
 | `codegen-check.yml` | `tools-test`, `actionlint`, `codegen-check`, `ds-sync` |
-| `ios.yml` | `ios-test` per runtime leg (`IOS_RUNTIMES=pinned`, `oldest`); `ios-api-check` and `ios-api-check-last-tag` |
+| `ios.yml` | `ios-test` per runtime leg (`IOS_RUNTIMES=pinned`, `oldest`); `ios-api-check` and `ios-api-check-last-tag`; `test (macOS)`: `macos-build`, `macos-test` |
 | `android.yml` | `android-build` (Ubuntu); `android-test` (macOS) |
 | `demos.yml` | boundaries, iOS demo support, each iOS demo on the pinned runtime (plus the dark theme test), each Android demo on API 36 |
 

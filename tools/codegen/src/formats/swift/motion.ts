@@ -1,6 +1,6 @@
 import type { DurationToken, EasingToken } from "../../model/types.ts";
 import { msToSeconds, swiftIdentifier, swiftNumber, swiftString } from "../../transforms/swift.ts";
-import { active, block, staticLet, swiftFile, tokenList } from "./swift-file.ts";
+import { active, block, platformSplit, staticLet, swiftFile, tokenList } from "./swift-file.ts";
 
 const BEZIER_TYPE = block("public struct TSCubicBezier: Hashable, Sendable", [
   "public let x1: Double",
@@ -8,10 +8,19 @@ const BEZIER_TYPE = block("public struct TSCubicBezier: Hashable, Sendable", [
   "public let x2: Double",
   "public let y2: Double",
   "",
-  "@MainActor",
-  "public var timingParameters: UICubicTimingParameters {",
-  "    UICubicTimingParameters(controlPoint1: CGPoint(x: x1, y: y1), controlPoint2: CGPoint(x: x2, y: y2))",
-  "}",
+  ...platformSplit(
+    [
+      "@MainActor",
+      "public var timingParameters: UICubicTimingParameters {",
+      "    UICubicTimingParameters(controlPoint1: CGPoint(x: x1, y: y1), controlPoint2: CGPoint(x: x2, y: y2))",
+      "}",
+    ],
+    [
+      "public var timingFunction: CAMediaTimingFunction {",
+      "    CAMediaTimingFunction(controlPoints: Float(x1), Float(y1), Float(x2), Float(y2))",
+      "}",
+    ],
+  ),
   "",
   "public func animation(duration: TimeInterval) -> Animation {",
   "    .timingCurve(x1, y1, x2, y2, duration: duration)",

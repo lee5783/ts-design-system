@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSDividerView: UIView {
@@ -34,3 +35,4 @@ public final class TSDividerView: UIView {
         CGSize(width: UIView.noIntrinsicMetric, height: TSListItemStyleSpec.group.dividerThickness)
     }
 }
+#endif

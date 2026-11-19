@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -103,3 +104,4 @@ struct TSListItemBehaviorTests {
         #expect((0..<48).allSatisfy { RenderedPixels.isLight(single, at: CGPoint(x: 195, y: CGFloat($0) + 0.5)) })
     }
 }
+#endif

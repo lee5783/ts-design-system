@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSTokens
 import UIKit
@@ -47,3 +48,4 @@ struct TSIconImageTests {
         #expect(monogram.renderingMode != .alwaysTemplate)
     }
 }
+#endif

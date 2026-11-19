@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSTabsView: UIControl {
@@ -257,3 +258,4 @@ public final class TSTabsView: UIControl {
         scrollView.scrollRectToVisible(frame, animated: animated)
     }
 }
+#endif

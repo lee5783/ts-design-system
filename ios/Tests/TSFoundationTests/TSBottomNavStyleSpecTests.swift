@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Foundation
 import Testing
 import UIKit
@@ -110,3 +111,4 @@ struct TSBottomNavStyleSpecTests {
         #expect(item.badged(5).badgeText == "5")
     }
 }
+#endif

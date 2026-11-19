@@ -5,11 +5,19 @@ public struct TSAvatar: View {
     let image: Image?
     let size: TSAvatarSize
 
+    #if canImport(UIKit)
     public init(name: String, image: UIImage? = nil, size: TSAvatarSize = .md) {
         self.name = name
         self.image = TSAvatarImage.usable(image).map(Image.init(uiImage:))
         self.size = size
     }
+    #elseif canImport(AppKit)
+    public init(name: String, image: NSImage? = nil, size: TSAvatarSize = .md) {
+        self.name = name
+        self.image = TSAvatarImage.usable(image).map(Image.init(nsImage:))
+        self.size = size
+    }
+    #endif
 
     public init(name: String, phase: AsyncImagePhase, size: TSAvatarSize = .md) {
         self.name = name

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -58,3 +59,4 @@ struct TSSwitchBehaviorTests {
         #expect(size.width >= 44)
     }
 }
+#endif

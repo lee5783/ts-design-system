@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -82,3 +83,4 @@ struct TSCheckboxViewBehaviorTests {
         #expect(checkbox.markView.bounds.size == CGSize(width: 20, height: 20))
     }
 }
+#endif

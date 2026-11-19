@@ -1,6 +1,6 @@
 import type { ShadowLayer, ShadowToken } from "../../model/types.ts";
 import { assertIosShadowLayer, swiftIdentifier, swiftNumber, swiftRgbaHex, swiftString } from "../../transforms/swift.ts";
-import { active, block, indent, staticLet, swiftFile, tokenList } from "./swift-file.ts";
+import { active, block, indent, platformSplit, staticLet, swiftFile, tokenList } from "./swift-file.ts";
 
 const LAYER_TYPE = block("public struct TSShadowLayer: Hashable, Sendable", [
   "public let offsetX: CGFloat",
@@ -27,9 +27,18 @@ const TOKEN_TYPE = block("public struct TSShadowToken: Hashable, Sendable", [
   "public let light: [TSShadowLayer]",
   "public let dark: [TSShadowLayer]",
   "",
-  "public func layers(for style: UIUserInterfaceStyle) -> [TSShadowLayer] {",
-  "    style == .dark ? dark : light",
-  "}",
+  ...platformSplit(
+    [
+      "public func layers(for style: UIUserInterfaceStyle) -> [TSShadowLayer] {",
+      "    style == .dark ? dark : light",
+      "}",
+    ],
+    [
+      "public func layers(for appearance: NSAppearance) -> [TSShadowLayer] {",
+      "    appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? dark : light",
+      "}",
+    ],
+  ),
 ]);
 
 function layerInit(token: string, layer: ShadowLayer): string {

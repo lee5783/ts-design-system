@@ -62,7 +62,7 @@ ts-design-system/
 | `TSTokens` | `ios/Sources/TSTokens/Generated/*.swift` | `TSTokens` | 100% generated: `TSColor`, `TSSpacing`, `TSRadius`, `TSSize`, `TSOpacity`, `TSShadowTokens`, `TSTypographyTokens`, `TSMotion`, `TSComponentTokens`, `TSDimensionToken`, `TSIconName`, and the separate controller palette `TSControllerColor` / `TSControllerSize`. `TSExperimentalProbe.swift` sits outside `Generated/` |
 | `TSFoundation` | `ios/Sources/TSFoundation/` | none (re-exported) | Shared, non-rendering layer, see the folder map below |
 | `TSDesignSystem` | `ios/Sources/TSDesignSystem/` | `TSDesignSystem` | SwiftUI: `Components/<Name>/`, `Components/Shared/`, `Presentation/` |
-| `TSDesignSystemUIKit` | `ios/Sources/TSDesignSystemUIKit/` | `TSDesignSystemUIKit` | UIKit: `Components/<Name>/`, `Components/Shared/` |
+| `TSDesignSystemUIKit` | `ios/Sources/TSDesignSystemUIKit/` | `TSDesignSystemUIKit` | UIKit: `Components/<Name>/`, `Components/Shared/`. Compiles to an empty module on macOS |
 | `TSTestSupport` | `ios/Tests/TSTestSupport/` | none (test only) | Shared test helpers: `TSSampleIconImage`, `TSTestAppearance` |
 | test targets | `ios/Tests/{TSTokensTests,TSFoundationTests,TSDesignSystemTests,TSDesignSystemUIKitTests}/` | — | UI targets keep their suites in `Behavior/` |
 

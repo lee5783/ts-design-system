@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class TSBottomNavItemView: UIControl {
@@ -162,3 +163,4 @@ final class TSBottomNavItemView: UIControl {
         setNeedsLayout()
     }
 }
+#endif

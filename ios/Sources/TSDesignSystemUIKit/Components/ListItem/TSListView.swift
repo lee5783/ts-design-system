@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSListView: UIView {
@@ -73,3 +74,4 @@ final class TSListDividerView: UIView {
         fatalError("init(coder:) is not supported")
     }
 }
+#endif

@@ -1,6 +1,8 @@
 import SwiftUI
 import TSTokens
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public enum TSFocusRing {
     public static var gap: CGFloat {
@@ -22,6 +24,7 @@ public enum TSFocusRing {
         cornerRadius + outset
     }
 
+    #if canImport(UIKit)
     @MainActor
     public static func haloEffect(for view: UIView, cornerRadius: CGFloat) -> UIFocusHaloEffect {
         let effect = UIFocusHaloEffect(roundedRect: view.bounds, cornerRadius: cornerRadius, curve: .continuous)
@@ -35,6 +38,7 @@ public enum TSFocusRing {
     public static func applyHalo(to view: UIView, cornerRadius: CGFloat) {
         view.focusEffect = haloEffect(for: view, cornerRadius: cornerRadius)
     }
+    #endif
 }
 
 public extension View {

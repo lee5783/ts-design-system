@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -159,3 +160,4 @@ struct TSToastBehaviorTests {
         #expect(window.hitTest(CGPoint(x: 195, y: 806), with: nil) == nil)
     }
 }
+#endif

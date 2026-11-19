@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSListItemCell: UICollectionViewListCell {
@@ -73,3 +74,4 @@ public final class TSListItemCell: UICollectionViewListCell {
         borderView.position = groupPosition
     }
 }
+#endif

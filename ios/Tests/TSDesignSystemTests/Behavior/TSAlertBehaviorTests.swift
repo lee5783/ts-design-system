@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -61,3 +62,4 @@ struct TSAlertBehaviorTests {
         #expect(abs(height(of: TSAlert(title: "Saved", onDismiss: {})) - (13 + 20 + 13)) < 1)
     }
 }
+#endif

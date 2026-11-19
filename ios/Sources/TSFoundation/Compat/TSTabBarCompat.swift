@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 package enum TSTabBarCompat {
@@ -13,3 +14,4 @@ package enum TSTabBarCompat {
         controller.tabBar.accessibilityElementsHidden = true
     }
 }
+#endif

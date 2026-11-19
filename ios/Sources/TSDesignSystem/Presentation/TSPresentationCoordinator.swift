@@ -1,5 +1,9 @@
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 struct TSPresentationEnvironment: Equatable {
     var colorScheme: ColorScheme = .light
@@ -7,9 +11,15 @@ struct TSPresentationEnvironment: Equatable {
     var layoutDirection: LayoutDirection = .leftToRight
     var locale: Locale = .current
 
+    #if canImport(UIKit)
     var userInterfaceStyle: UIUserInterfaceStyle {
         colorScheme == .dark ? .dark : .light
     }
+    #elseif canImport(AppKit)
+    var appearance: NSAppearance? {
+        NSAppearance(named: colorScheme == .dark ? .darkAqua : .aqua)
+    }
+    #endif
 }
 
 extension View {
@@ -22,6 +32,7 @@ extension View {
     }
 }
 
+#if canImport(UIKit)
 @MainActor
 final class TSPresentationCoordinator: NSObject, UIAdaptivePresentationControllerDelegate {
     var onUserDismiss: () -> Void = {}
@@ -130,3 +141,4 @@ final class TSPresentationAnchorViewController: UIViewController {
         self.view = view
     }
 }
+#endif

@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-import UIKit
 
 public enum TSToastTone: String, CaseIterable, Hashable, Sendable {
     case neutral

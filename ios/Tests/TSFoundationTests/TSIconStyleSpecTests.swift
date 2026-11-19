@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import TSFoundation
 import TSTokens
@@ -18,3 +19,4 @@ struct TSIconStyleSpecTests {
         #expect(image.flipsForRightToLeftLayoutDirection == name.flipsForRightToLeftLayoutDirection)
     }
 }
+#endif

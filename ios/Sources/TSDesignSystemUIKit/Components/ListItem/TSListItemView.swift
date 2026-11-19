@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSListItemView: UIControl {
@@ -78,3 +79,4 @@ public final class TSListItemView: UIControl {
         itemContentView.configuration = effectiveConfiguration
     }
 }
+#endif

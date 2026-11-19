@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Foundation
 import Testing
 import UIKit
@@ -186,3 +187,4 @@ struct TSTextInputTraitsTests {
         #expect(textView.autocorrectionType == .no)
     }
 }
+#endif

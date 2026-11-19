@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 
 public struct TSBottomNavShell<Content: View>: View {
@@ -30,3 +31,4 @@ public struct TSBottomNavShell<Content: View>: View {
         }
     }
 }
+#endif

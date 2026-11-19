@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -15,3 +16,4 @@ struct TSSpinnerBehaviorTests {
         #expect(size(of: TSSpinner(size: spinnerSize)) == CGSize(width: expected, height: expected))
     }
 }
+#endif

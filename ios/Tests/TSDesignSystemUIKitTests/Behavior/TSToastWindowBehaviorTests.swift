@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -131,3 +132,4 @@ struct TSToastWindowBehaviorTests {
         #expect(toast.effectiveUserInterfaceLayoutDirection == .rightToLeft)
     }
 }
+#endif

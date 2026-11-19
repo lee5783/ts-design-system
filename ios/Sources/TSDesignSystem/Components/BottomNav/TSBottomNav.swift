@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 
 public struct TSBottomNav: View {
@@ -68,3 +69,4 @@ public struct TSBottomNav: View {
         selection = item.id
     }
 }
+#endif

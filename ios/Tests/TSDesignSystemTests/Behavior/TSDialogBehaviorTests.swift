@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import UIKit
@@ -516,3 +517,4 @@ private func detentIdentifiers(_ sheet: UISheetPresentationController) -> [UIShe
     }
     return sheet.detents.isEmpty ? [] : [.medium, .large]
 }
+#endif

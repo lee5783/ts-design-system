@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -87,3 +88,4 @@ struct TSButtonBehaviorTests {
         #expect(wrapping.height > single.height)
     }
 }
+#endif

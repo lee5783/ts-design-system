@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import TSTokens
@@ -107,3 +108,4 @@ struct TSShadowTests {
         #expect(secondary.shadowPath == nil)
     }
 }
+#endif

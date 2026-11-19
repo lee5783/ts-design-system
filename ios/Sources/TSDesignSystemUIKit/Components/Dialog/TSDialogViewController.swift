@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSDialogViewController: UIViewController, UIAdaptivePresentationControllerDelegate, UIGestureRecognizerDelegate {
@@ -358,3 +359,4 @@ private struct ExplicitTraits {
         layoutDirection = layoutDirection || overridden.layoutDirection
     }
 }
+#endif

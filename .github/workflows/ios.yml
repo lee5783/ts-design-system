@@ -65,6 +65,29 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+  macos:
+    name: test (macOS)
+    needs: changes
+    if: needs.changes.outputs.ios == 'true'
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - run: make ci-xcode
+      - uses: actions/cache@v6
+        with:
+          path: .build/xcode-macos/SourcePackages
+          key: spm-library-macos-${{ runner.os }}-${{ hashFiles('.xcode-version', 'Package.resolved') }}
+      - run: make macos-build
+      - run: make macos-test
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-test
+          path: .build/xcode-macos/Logs/Test
+          if-no-files-found: ignore
+          retention-days: 14
+
   api-check:
     needs: changes
     if: needs.changes.outputs.ios == 'true'
@@ -89,7 +112,7 @@ jobs:
 
   ios-ok:
     if: always()
-    needs: [changes, test, api-check]
+    needs: [changes, test, macos, api-check]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

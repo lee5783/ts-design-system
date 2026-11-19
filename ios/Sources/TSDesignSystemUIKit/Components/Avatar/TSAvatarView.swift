@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSAvatarView: UIView {
@@ -107,3 +108,4 @@ public final class TSAvatarView: UIView {
         placeholderView.tintColor = foreground
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import Testing
 import ViewInspector
@@ -138,3 +139,4 @@ private struct DimmingProbeView: View {
         return Text("Body")
     }
 }
+#endif

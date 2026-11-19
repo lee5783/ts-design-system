@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class TSListGroupBorderView: UIView {
@@ -74,3 +75,4 @@ final class TSListGroupBorderView: UIView {
         dividerLayer.fillColor = group.divider.uiColor.resolvedColor(with: traitCollection).cgColor
     }
 }
+#endif

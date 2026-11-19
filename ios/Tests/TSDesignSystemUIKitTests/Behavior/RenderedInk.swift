@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 @MainActor
@@ -37,3 +38,4 @@ enum RenderedInk {
             && abs(lhs.alpha - rhs.alpha) <= tolerance
     }
 }
+#endif

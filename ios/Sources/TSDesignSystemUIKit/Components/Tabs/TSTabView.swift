@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 final class TSTabView: UIControl {
@@ -134,3 +135,4 @@ final class TSTabView: UIControl {
         isAccessibilityElement = false
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSToastView: UIView {
@@ -192,3 +193,4 @@ final class TSToastActionButton: UIControl {
         TSHitArea.expandedRect(bounds).contains(point)
     }
 }
+#endif

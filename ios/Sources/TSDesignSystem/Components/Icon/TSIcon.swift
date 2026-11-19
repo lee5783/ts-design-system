@@ -26,8 +26,8 @@ public struct TSIcon: View {
 
     @ViewBuilder
     private var image: some View {
-        if let uiImage = name.image() {
-            Image(uiImage: uiImage)
+        if let platformImage = name.image() {
+            swiftUIImage(platformImage)
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
@@ -35,4 +35,14 @@ public struct TSIcon: View {
             Color.clear
         }
     }
+
+    #if canImport(UIKit)
+    private func swiftUIImage(_ uiImage: UIImage) -> Image {
+        Image(uiImage: uiImage)
+    }
+    #elseif canImport(AppKit)
+    private func swiftUIImage(_ nsImage: NSImage) -> Image {
+        Image(nsImage: nsImage)
+    }
+    #endif
 }

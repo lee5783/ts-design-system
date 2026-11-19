@@ -1,10 +1,26 @@
 import SwiftUI
 import TSTokens
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public enum TSShadow {
     public static func layers(_ token: TSShadowToken, for colorScheme: ColorScheme) -> [TSShadowLayer] {
+        #if canImport(UIKit)
         token.layers(for: colorScheme == .dark ? .dark : .light)
+        #else
+        colorScheme == .dark ? token.dark : token.light
+        #endif
+    }
+
+    static func color(of layer: TSShadowLayer) -> Color {
+        #if canImport(UIKit)
+        Color(uiColor: layer.color.uiColor)
+        #else
+        Color(nsColor: layer.color.nsColor)
+        #endif
     }
 
     public static func shadowRect(for bounds: CGRect, spread: CGFloat) -> CGRect {
@@ -14,7 +30,11 @@ public enum TSShadow {
     public static func shadowPath(for bounds: CGRect, cornerRadius: CGFloat, spread: CGFloat) -> CGPath {
         let rect = shadowRect(for: bounds, spread: spread)
         let radius = max(0, min(cornerRadius + spread, min(rect.width, rect.height) / 2))
+        #if canImport(UIKit)
         return UIBezierPath(roundedRect: rect, cornerRadius: radius).cgPath
+        #else
+        return CGPath(roundedRect: rect, cornerWidth: radius, cornerHeight: radius, transform: nil)
+        #endif
     }
 
     @MainActor
@@ -25,13 +45,18 @@ public enum TSShadow {
             return
         }
         let color = shadowLayer.color
+        #if canImport(UIKit)
         layer.shadowColor = TSRGBA(hex: color.hex | 0xFF).uiColor.cgColor
+        #else
+        layer.shadowColor = TSRGBA(hex: color.hex | 0xFF).nsColor.cgColor
+        #endif
         layer.shadowOpacity = shadowLayer.opacity
         layer.shadowRadius = shadowLayer.radius
         layer.shadowOffset = shadowLayer.offset
         layer.shadowPath = shadowPath(for: layer.bounds, cornerRadius: cornerRadius, spread: shadowLayer.spread)
     }
 
+    #if canImport(UIKit)
     @MainActor
     public static func apply(
         _ token: TSShadowToken,
@@ -44,6 +69,20 @@ public enum TSShadow {
             apply(index < shadowLayers.count ? shadowLayers[index] : nil, to: layer, cornerRadius: cornerRadius)
         }
     }
+    #elseif canImport(AppKit)
+    @MainActor
+    public static func apply(
+        _ token: TSShadowToken,
+        appearance: NSAppearance,
+        to layers: [CALayer],
+        cornerRadius: CGFloat
+    ) {
+        let shadowLayers = token.layers(for: appearance)
+        for (index, layer) in layers.enumerated() {
+            apply(index < shadowLayers.count ? shadowLayers[index] : nil, to: layer, cornerRadius: cornerRadius)
+        }
+    }
+    #endif
 }
 
 public extension View {
@@ -68,7 +107,7 @@ struct TSShadowModifier: ViewModifier {
 private extension View {
     func shadow(_ layer: TSShadowLayer?) -> some View {
         shadow(
-            color: layer.map { Color(uiColor: $0.color.uiColor) } ?? .clear,
+            color: layer.map { TSShadow.color(of: $0) } ?? .clear,
             radius: layer?.radius ?? 0,
             x: layer?.offsetX ?? 0,
             y: layer?.offsetY ?? 0

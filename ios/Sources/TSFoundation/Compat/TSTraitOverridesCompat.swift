@@ -1,4 +1,6 @@
+#if canImport(UIKit)
 import UIKit
+#endif
 
 package struct TSOverriddenTraits: Hashable, Sendable {
     package var userInterfaceStyle = false
@@ -12,6 +14,7 @@ package struct TSOverriddenTraits: Hashable, Sendable {
     }
 }
 
+#if canImport(UIKit)
 package enum TSTraitOverridesCompat {
     @MainActor
     package static func overriddenTraits(of controller: UIViewController, path: TSCompatPath = TSCompat.traitOverrides) -> TSOverriddenTraits {
@@ -24,3 +27,4 @@ package enum TSTraitOverridesCompat {
         )
     }
 }
+#endif

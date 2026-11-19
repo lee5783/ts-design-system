@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 enum TSAnimation {
@@ -22,3 +23,4 @@ enum TSAnimation {
         animator.startAnimation()
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import UIKit
 
@@ -70,3 +71,4 @@ struct TSMultilineTextView: UIViewRepresentable {
         }
     }
 }
+#endif

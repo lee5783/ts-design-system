@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import Testing
 import UIKit
 @testable import TSDesignSystemUIKit
@@ -104,3 +105,4 @@ struct TSDisclosureListItemViewBehaviorTests {
         #expect(line?.backgroundColor?.resolvedColor(with: divider.traitCollection) == TSListItemStyleSpec.group.divider.uiColor.resolvedColor(with: divider.traitCollection))
     }
 }
+#endif

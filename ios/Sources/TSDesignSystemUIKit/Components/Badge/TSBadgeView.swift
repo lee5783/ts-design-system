@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import UIKit
 
 public final class TSBadgeView: UIView {
@@ -103,3 +104,4 @@ public final class TSBadgeView: UIView {
         return NSAttributedString(string: font.text(text), attributes: attributes)
     }
 }
+#endif

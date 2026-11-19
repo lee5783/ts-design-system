@@ -6,7 +6,8 @@ let package = Package(
     name: "TSDesignSystem",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .macOS(.v13)
     ],
     products: [
         .library(name: "TSDesignSystem", targets: ["TSDesignSystem"]),
